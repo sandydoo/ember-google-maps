@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-6">
+    <h5 id="creating-a-map">Creating a map</h5>
+
+    <p>Creating a map is easy. The only required arguments are the coordinates for
+    the center.</p>
+
+    {{code-snippet name="basic-map.hbs"}}
+
+    <p>To get the map to render, the map canvas needs to be styled with dimensions. For example:</p>
+
+    {{code-snippet name="map-canvas-style.css"}}
+
+    <p>Most of the components in this addon accept <tt>lat</tt> and <tt>lng</tt> parameters for
+    convenience and consistency. This lets you avoid the hassle of remembering whether to use <tt>position</tt> or <tt>center</tt> and lets you provide the coordinates separately, as that's how you are likely storing them if you're using Ember Data. We don't assert the usage of <tt>lat</tt> and <tt>lng</tt>, so you can still use the native Google Maps options if you wish. {{google-docs "MapOptions"}}</p>
+
+    <p>The <tt>g-map</tt> component accepts all of the options you would pass to a Google Map instance. These are automatically watched for changes.</p>
+
+    {{code-snippet name="map-passing-options.hbs"}}
+
+    <p>You can also pass an <tt>options</tt> object, but note that <b>it will NOT be watched for changes</b>. You can use the <tt>hash</tt> helper instead if you need the options to be watched.</p>
+
+    <h5 id="events">Handling events 💥</h5>
+
+    <p>Parameters prefixed by <tt>on</tt> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google's API docs for each component.</p>
+    <p><span class="badge badge-primary">Test</span> The sample map has some event listeners set up – see if you can find them all!</p>
+
+    {{code-snippet name="map-events.hbs"}}
+
+    <p>Each event returns the following:</p>
+    <ul>
+      <li>Any curried params passed to the bound action</li>
+      <li>A hash containing:</li>
+      <ul>
+        <li>event: the original event.</li>
+        <li>target: the instance of the map component that triggered the event. This could be the map itself or a marker.</li>
+        <li>map: the target component's parent map instance.</li>
+      </ul>
+    </ul>
+
+    <h5 id="map-instance">Accessing the map instance</h5>
+
+    <p>If you need access the map instance – to call <tt>panTo</tt> for example – you can use the <tt>onLoad</tt> hook. It will return the map instance once the map has been initialised.</p>
+
+    <h5 id="components">Contextual components</h5>
+
+    <p>In block form, the <tt>g-map</tt> component yields all sorts of map components: markers, circles, polygons, infoWindows, and so on. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready! Learn more about what you can do with these components in the next section.</p>
+    {{link-to "Markers ›" "docs.markers" tagName="button" role="button" classNames="btn btn-primary"}}
+  </div>
+  <div class="col-md-6 sticky-top sticky-map">
+    {{g-map lat=london.lat lng=london.lng zoom=12
+      styles=mapStyle
+      classNames="ember-google-map-responsive"
+      onBoundsChanged=(action "flashMessageThrottle" "The bounds have changed!")
+      onClick=(action "flashMessage" "You clicked the map!")
+      onDblclick=(action "flashMessage" "Ooh, a double click!!")
+      onZoomChanged=(action "flashMessageThrottle" "Zoooooom!")
+    }}
+  </div>
+</div>

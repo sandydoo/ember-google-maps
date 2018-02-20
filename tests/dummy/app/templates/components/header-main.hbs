@@ -1,0 +1,16 @@
+<div class="col-12 col-sm-12 col-md-6 mx-auto text-center">
+  {{#link-to "index" class="no-link-decor"}}
+    <h1 class="ember">ember google maps</h1>
+    <h6>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</h6>
+  {{/link-to}}
+</div>
+
+<nav>
+  <ul class="nav justify-content-center">
+    {{#each links as |l|}}
+      <li class="nav-item">
+        {{link-to l.title l.path class="nav-link"}}
+      </li>
+    {{/each}}
+  </ul>
+</nav>

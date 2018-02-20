@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-6">
+
+	<h5 id='about-overlays'>What's an overlay?</h5>
+
+	<p>The Google docs actually call this an <tt>OverlayView</tt>. You can basically add any HTML element to the map as an "overlay" and the guides have an example where they overlay a terrain map or something along those lines – very cool 🤔. Seriously though, when was the last time you actually saw anyone do that? What this feature is <i>way</i> more useful for are custom HTML markers! And not just plain old markers, but markers with bound data and actions and CSS animations!</p>
+
+	<p>Let's first talk about <i>how</i> the <tt>OverlayView</tt> actually works. The {{google-docs 'OverlayView'}} reveal that it requires us to define 3 methods: <tt>onAdd</tt>, <tt>draw</tt> and <tt>onRemove</tt>. Since <tt>on</tt>-prefixed parameters are reserved in our case, we rename the methods to <tt>add</tt> and <tt>remove</tt>. Now in <span class="ember">ember</span>-speak, these are basically equivalent to <tt>insert</tt>, <tt>render</tt> and <tt>destroy</tt> – three tasks <span class="ember">ember</span> components absolutely excel at! All we really have to do is wait for the map to initialise before we insert the component into the DOM and register it with the map. The <tt>overlay</tt> component does this and more to make it dead easy to create complex custom map elements.</p>
+
+	<h5 id='creating-overlays'>Creating custom overlays</h5>
+
+	<p>Create your custom overlay using the <tt>overlay</tt> component. It works like most of the other components in this addon, except for one twist: you can pass a block template to the component that will be rendered on the map. This makes overlays incredibly powerful in <span class="ember">ember</span>.</p>
+
+	{{code-snippet name='basic-overlays.hbs'}}
+
+  <h5>Private API usage</h5>
+
+  <p><span class="badge badge-danger">Warning</span> The overlay component uses the experimental <tt>in-element</tt> Glimmer feature to teleport the component into the map's overlay pane. It works like a charm and will soon be part of the public API, but is still currently an experimental, private feature. You've been warned. 😉</p>
+
+	<p>Let your imagination go wild! Let's look at a more complex UI example next.</p>
+
+	{{link-to 'Complex UI ›' 'complex-ui' tagName="button" role="button" classNames="btn btn-primary"}}
+  </div>
+  <div class="col-md-6 sticky-top sticky-map">
+  	{{#g-map lat=london.lat lng=london.lng
+  	  zoom=13
+  	  styles=mapStyle
+  	  classNames='ember-google-map-responsive' as |g|}}
+  	  {{#each londonLocations as |l|}}
+    		{{#g.overlay lat=l.lat lng=l.lng
+    			onMouseover=(action (mut l.active) true)
+    			onMouseleave=(action (mut l.active) false)}}
+          <div class="tooltip {{if l.active 'active'}}">
+    			  £{{l.price}}
+          </div>
+    		{{/g.overlay}}
+  	  {{/each}}
+  	{{/g-map}}
+  </div>
+</div>

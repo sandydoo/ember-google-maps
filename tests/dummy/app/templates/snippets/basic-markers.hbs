@@ -1,0 +1,9 @@
+{{#g-map lat="51.507568" lng="-0.127762" zoom=9 styles=mapStyle as |g|}}
+  {{#each londonLocations as |l|}}
+    {{g.marker
+      lat=l.lat
+      lng=l.lng
+      draggable=true
+      onClick=(action "onClick")}}
+  {{/each}}
+{{/g-map}}

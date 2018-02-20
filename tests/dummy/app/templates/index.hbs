@@ -1,0 +1,13 @@
+<div class="container pt-4">
+  {{header-main}}
+
+  <main>
+    {{#g-map lat=london.lat lng=london.lng zoom=12 styles=mapStyle mapTypeControl=false streetViewControl=false as |g|}}
+      {{#g.overlay lat=london.lat lng=london.lng}}
+        <div class="tooltip bs-tooltip-top"><div class="tooltip-inner"><span style="white-space: nowrap;" class="emoji">🐹🗺🌧☂</span></div></div>
+      {{/g.overlay}}
+    {{/g-map}}
+  </main>
+
+  {{footer-main}}
+</div>

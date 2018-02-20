@@ -7,6 +7,21 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('index', { path: '/' });
+
+  this.route('docs', function() {
+    this.route('about');
+    this.route('map');
+    this.route('markers');
+    this.route('circles');
+    this.route('overlays');
+    this.route('complex-ui');
+    this.route('polylines');
+  });
+
+  this.route('examples', function() {
+    this.route('sweet-rentals');
+  });
 });
 
 export default Router;

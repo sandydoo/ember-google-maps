@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-6">
+    <h5>Creating circles</h5>
+
+    <p>Circles are pretty much markers with a radius. Use the <tt>circle</tt> component to create a circle.</p>
+
+    {{code-snippet name="basic-circles.hbs"}}
+
+    <p><span class="badge badge-primary">Test</span> You can play around with the circle options:</p>
+    <div class="form-group">
+        <label class="col-form-label" for="radius-input">Radius</label>
+        {{input id="radius-input" name="radius" class="form-control" type="number" value=radius step="100" min="100" max="1500"}}
+
+        <label class="col-form-label" for="fill-color-input">Fill color</label>
+        {{input id="fill-color-input" name="fillColor" class="form-control" value=fillColor}}
+    </div>
+
+    <p>Onto polylines!</p>
+    {{link-to "Polylines ›" "docs.polylines" tagName="button" role="button" classNames="btn btn-primary"}}
+  </div>
+  <div class="col-md-6 sticky-top sticky-map">
+    {{#g-map lat=london.lat lng=london.lng
+      zoom=14
+      styles=mapStyle
+      classNames="ember-google-map-responsive" as |g|}}
+      {{g.circle lat="51.507568" lng="-0.127762"
+        radius=radius
+        fillColor=fillColor
+        fillOpacity=0.3
+        strokeColor="darkgreen"
+        strokeOpacity=0.5
+        strokeWeight=1}}
+    {{/g-map}}
+  </div>
+</div>
