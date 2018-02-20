@@ -1,0 +1,13 @@
+{{yield (hash
+  map=map
+  canvas=(component 'g-map/canvas' _internalAPI=_internalAPI id=mapId classNames=classNames _isCustomCanvas=true)
+  marker=(component 'g-map/marker' map _internalAPI)
+  circle=(component 'g-map/circle' map _internalAPI)
+  polyline=(component 'g-map/polyline' map _internalAPI)
+  overlay=(component 'g-map/overlay' map _internalAPI)
+  control=(component 'g-map/control' map _internalAPI)
+  autocomplete=(component 'g-map/searchbox' map _internalAPI))}}
+
+{{#unless (unbound _customCanvasRegistered)}}
+  {{g-map/canvas _internalAPI=_internalAPI id=mapId classNames=classNames}}
+{{/unless}}

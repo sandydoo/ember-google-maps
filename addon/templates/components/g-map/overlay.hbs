@@ -1,0 +1,7 @@
+{{#-in-element _targetPane}}
+  <div id={{_contentId}} style={{markerStyle}}>
+    {{#_private-api/detect-render didRender=(action updateComponent)}}
+      {{yield}}
+    {{/_private-api/detect-render}}
+  </div>
+{{/-in-element}}

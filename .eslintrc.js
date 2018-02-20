@@ -8,6 +8,10 @@ module.exports = {
   env: {
     browser: true
   },
+  globals: {
+    google: false
+  },
   rules: {
+    'no-console': 'off'
   }
 };
