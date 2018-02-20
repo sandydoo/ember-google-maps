@@ -8,7 +8,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
   display: block;
   overflow-x: auto;
   padding: 1em;
-  background: lighten($yellow, 10);
+  background: lighten($floral-white, 3);
   color: #657b83;
   border-radius: 6px;
 }
@@ -51,7 +51,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .hljs-template-variable,
 .hljs-class .hljs-title,
 .hljs-type {
-  color: #b58900;
+  color: $dark-orange;
 }
 
 /* Solarized Orange */

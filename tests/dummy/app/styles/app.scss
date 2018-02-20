@@ -1,18 +1,19 @@
 $yellow: #f8e08e;
 $blue: #6083f2;
-$purple: #2F3061;
+$purple: #2f3061;
 $blue-gray: #545677;
-$orange: #F4845F;
-$dark-orange: #F27059;
-$red: #DB2B39;
-$gray: #65737E;
+$orange: #f4845f;
+$dark-orange: darken($orange, 10);
+$red: #db2b39;
+$gray: #65737e;
+$floral-white: #fffaf0;
 
 $primary:       $blue-gray;
 $info:          $yellow;
 
-$body-bg: $yellow;
+$body-bg: $floral-white;
 $body-color: $blue-gray;
-$link-color: $red;
+$link-color: $dark-orange;
 
 $line-height-base: 1.56;
 $font-family-sans-serif: 'Noto Sans', 'Open Sans', sans-serif;
@@ -21,7 +22,7 @@ $font-family-cursive: 'Pacifico', 'Nunito', cursive;
 $headings-font-family: 'Nunito', 'Noto Sans', 'Open Sans', sans-serif;
 $headings-font-weight: 800;
 
-$input-bg: lighten($yellow, 10);
+$input-bg: lighten($floral-white, 3);
 
 @import 'bootstrap-custom';
 @import 'solarized-light';
@@ -43,7 +44,7 @@ body.white {
   font-family: $font-family-cursive;
 }
 tt {
-  color: $red;
+  color: $dark-orange;
   font-family: $font-family-monospace;
 }
 .nav {
