@@ -22,6 +22,8 @@ $font-family-cursive: 'Pacifico', 'Nunito', cursive;
 $headings-font-family: 'Nunito', 'Noto Sans', 'Open Sans', sans-serif;
 $headings-font-weight: 800;
 
+$grid-gutter-width: 32px;
+
 $input-bg: lighten($floral-white, 3);
 
 @import 'bootstrap-custom';
@@ -47,9 +49,6 @@ tt {
   color: $dark-orange;
   font-family: $font-family-monospace;
 }
-.nav {
-  margin-bottom: 20px;
-}
 .nav-link {
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
@@ -61,8 +60,8 @@ tt {
 }
 .alerts-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: $grid-gutter-width;
+  right: $grid-gutter-width;
   z-index: 2000;
 }
 .alert {
@@ -78,18 +77,17 @@ tt {
   }
 }
 footer {
-  padding-top: 2.5rem;
+  padding-top: 2rem;
 }
 .sticky-map {
   height: 100%;
-  top: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
+  top: $grid-gutter-width;
+  padding: $grid-gutter-width / 2;
+  padding-bottom: $grid-gutter-width;
 
   @include media-breakpoint-down(sm) {
-    width: 45%;
-    margin-left: auto;
-    bottom: 10px;
+    position: relative;
+    top: 0;
   }
 }
 .ember-google-map {
@@ -137,7 +135,6 @@ footer {
   font-size: 1rem;
   font-weight: 500;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  // opacity: 0;
   will-change: transform;
   transition: transform 0.2s cubic-bezier(0.485, 1.65, 0.545, 0.835);
 

@@ -14,9 +14,10 @@ Router.map(function() {
     this.route('map');
     this.route('markers');
     this.route('circles');
+    this.route('polylines');
+    this.route('controls');
     this.route('overlays');
     this.route('complex-ui');
-    this.route('polylines');
   });
 
   this.route('examples', function() {

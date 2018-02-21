@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 order-2 order-md-1">
     <h5>Creating polylines</h5>
     <p>Use the <tt>polyline</tt> component to create a new polyline.</p>
 
@@ -13,10 +13,10 @@
 
     <p>To combat this issue, the addon defines the <tt>_watchedOptions</tt> concatenated array. The <tt>polygon</tt> component populates it with the <tt>path.[]</tt> key, which is used to dynamically create an observer.</p>
 
-    <p>Enough about basic map components. Let's learn to create custom HTML markers!</p>
-    {{link-to "Custom overlays ›" "docs.overlays" tagName="button" role="button" classNames="btn btn-primary"}}
+    <p>Next, let's look at how we can modify the default map UI.</p>
+    {{link-to "Controls ›" "docs.controls" tagName="button" role="button" classNames="btn btn-primary"}}
   </div>
-  <div class="col-md-6 sticky-top sticky-map">
+  <div class="col-md-6 order-1 order-md-2 sticky-top sticky-map">
     {{#g-map lat=london.lat lng=london.lng
       zoom=10
       styles=mapStyle

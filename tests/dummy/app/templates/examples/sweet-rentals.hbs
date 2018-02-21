@@ -1,11 +1,3 @@
-{{!-- <div class="browser-window mt-2">
-  <div class="browser-content">
-    <div class="browser-nav">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
- --}}
 <div class="navbar fixed-top navbar-light">
   <div class="navbar-brand ember">sweet rentals</div>
   <ul class="navbar-nav">
@@ -16,7 +8,7 @@
 <div class="container-cover">
   <div class="content-column">
     {{#each boundedLondonLocations as |l|}}
-      <div class="col-4 col-rental-card">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-rental-card">
         {{rental-card rental=l}}
       </div>
     {{/each}}

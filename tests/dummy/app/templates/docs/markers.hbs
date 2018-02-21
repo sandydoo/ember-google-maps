@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 order-2 order-md-1">
     <h5 id="markers">Creating markers</h5>
 
     <p>You can create a basic marker with the yielded <tt>marker</tt> component. Once again, you can use either <tt>lat</tt> and <tt>lng</tt> or <tt>position</tt> to set the position.</p>
@@ -11,7 +11,7 @@
     <p>On to circles!</p>
     {{link-to "Circles ›" "docs.circles" tagName="button" role="button" classNames="btn btn-primary"}}
   </div>
-  <div class="col-md-6 sticky-top sticky-map">
+  <div class="col-md-6 order-1 order-md-2 sticky-top sticky-map">
     {{#g-map lat=london.lat lng=london.lng
       zoom=12
       styles=mapStyle

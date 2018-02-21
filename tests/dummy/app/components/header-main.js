@@ -10,6 +10,7 @@ export default Component.extend({
     { title: 'Markers', path: 'docs.markers' },
     { title: 'Circles', path: 'docs.circles' },
     { title: 'Polylines', path: 'docs.polylines' },
+    { title: 'Controls', path: 'docs.controls' },
     { title: 'Custom overlays', path: 'docs.overlays' },
     { title: 'Complex UI', path: 'docs.complex-ui' }
   ]

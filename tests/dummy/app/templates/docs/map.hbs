@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 order-2 order-md-1">
     <h5 id="creating-a-map">Creating a map</h5>
 
     <p>Creating a map is easy. The only required arguments are the coordinates for
@@ -47,7 +47,7 @@
     <p>In block form, the <tt>g-map</tt> component yields all sorts of map components: markers, circles, polygons, infoWindows, and so on. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready! Learn more about what you can do with these components in the next section.</p>
     {{link-to "Markers ›" "docs.markers" tagName="button" role="button" classNames="btn btn-primary"}}
   </div>
-  <div class="col-md-6 sticky-top sticky-map">
+  <div class="col-md-6 order-1 order-md-2 sticky-top sticky-map">
     {{g-map lat=london.lat lng=london.lng zoom=12
       styles=mapStyle
       classNames="ember-google-map-responsive"

@@ -11,11 +11,13 @@ function randomInt(min, max) {
 export default Mixin.create({
   googleMapsApi: service(),
 
+  google: reads('googleMapsApi.google'),
+
   mapStyle: darkStyle,
 
   london: {
-    lat: '51.507568',
-    lng: '-0.127762'
+    lat: 51.507568,
+    lng: -0.127762
   },
 
   googleLoaded: reads('googleMapsApi.google.isFulfilled'),
