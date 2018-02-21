@@ -25,14 +25,16 @@ moduleForMap('Integration | Component | g map', function() {
   test('it binds events to the map', async function(assert) {
     assert.expect(1);
 
-    this.set('onBoundsChanged', ({ eventName }) => {
-      assert.equal(eventName, 'bounds_changed', 'bounds changed');
+    this.set('onZoomChanged', ({ eventName }) => {
+      assert.equal(eventName, 'zoom_changed', 'zoom changed');
     });
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12 onBoundsChanged=(action onBoundsChanged)}}
+      {{g-map lat=lat lng=lng zoom=12 onZoomChanged=(action onZoomChanged)}}
     `);
 
-    await this.get('map');
+    const { map } = await this.get('map');
+
+    map.setZoom(10);
   });
 });
