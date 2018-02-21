@@ -6,6 +6,7 @@ export default Component.extend({
 
   links: [
     { title: 'About', path: 'docs.about' },
+    { title: 'Getting started', path: 'docs.getting-started' },
     { title: 'Map', path: 'docs.map' },
     { title: 'Markers', path: 'docs.markers' },
     { title: 'Circles', path: 'docs.circles' },

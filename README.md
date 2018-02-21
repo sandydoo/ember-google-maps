@@ -14,15 +14,15 @@
 * ❌ A bulky, verbose wrapper that reimplements the entire Google Maps API.
 * ❌ A whitelist or option validator that is tightly coupled to Google's API.
 
-#### Documentation
+### 📎 Documentation
 
 [View guides and documentation ›](https://ember-google-maps.sandydoo.me/)
 
-#### Maintainers
+### 👷‍ Maintainers
 
 This addon is maintained by [campusboard](https://www.campusboard.co.uk).
 
-#### 👀 Alternatives
+### 👀 Alternatives
 
 The two *maintained* alternatives are [ember-g-map](https://github.com/asennikov/ember-g-map) and [ember-cli-g-maps](https://github.com/Matt-Jensen/ember-cli-g-maps).
 
@@ -45,7 +45,7 @@ Here's a *very subjective* 😬 comparison of the Ember + Google Maps integratio
 
 If you don't need the Google API specifically, check out [ember-leaflet](https://github.com/miguelcobain/ember-leaflet).
 
-#### Basic usage
+### Basic usage
 
 Display a map centered around a set of coordinates 🗺.
 
@@ -80,6 +80,38 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 
 [Learn more](https://ember-google-maps.sandydoo.me/)
 
+### Contributing
+
+#### Installation 
+
+* `git clone https://github.com/sandydoo/ember-google-maps.git` this repository
+* `cd ember-google-maps`
+* `npm install`
+
+#### Setting up API keys
+
+The dummy app and test suite is run using a live map instance, which means you need an API key. I do not provide API keys for testing – you need to generate your own.
+
+You can create an API key by following the instructions here: [Create API key](https://developers.google.com/maps/documentation/javascript/get-api-key).
+
+Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run this line, making sure to replace `INSERT_YOUR_KEY_HERE` with your actual key.
+
+`touch .env & echo 'GOOGLE_MAPS_API_KEY=<INSERT_YOUR_KEY_HERE>' > .env`
+
+#### Running tests
+
+Run live tests:
+
+`ember test --server`
+
+Run test suite against all target versions:
+
+`ember try:each`
+
+#### Serving documentation/dummy app
+
+`ember serve`
+
 ## License
 
-[MIT](https://github.com/sandydoo/ember-google-maps/blob/master/LICENSE.md) © Sander Melnikov.
+[MIT](https://github.com/sandydoo/ember-google-maps/blob/master/LICENSE.md) © [Sander Melnikov](https://github.com/sandydoo).

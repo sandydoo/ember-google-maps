@@ -30,13 +30,10 @@
     <p>Each event returns the following:</p>
     <ul>
       <li>Any curried params passed to the bound action</li>
-      <li>A hash containing:</li>
-      <ul>
-        <li>event: the original event.</li>
-        <li>target: the instance of the map component that triggered the event. This could be the map itself or a marker.</li>
-        <li>map: the target component's parent map instance.</li>
-      </ul>
+      <li>An event object of following format:</li>
     </ul>
+
+    {{code-snippet name="event.js"}}
 
     <h5 id="map-instance">Accessing the map instance</h5>
 
