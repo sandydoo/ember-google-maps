@@ -3,8 +3,11 @@
 
 module.exports = function(deployTarget) {
   let ENV = {
-    build: {}
+    build: {},
     // include other plugin configuration that applies to all deploy targets here
+    pipeline: {
+      activateOnDeploy: true
+    }
   };
 
   if (deployTarget === 'development') {
@@ -23,8 +26,12 @@ module.exports = function(deployTarget) {
 
     ENV.s3 = {
       bucket: 'ember-google-maps',
-      region: 'eu-west-1',
-      filePattern: '**/*'
+      region: 'eu-west-1'
+    }
+
+    ENV['s3-index'] = {
+      bucket: 'ember-google-maps',
+      region: 'eu-west-1'
     }
   }
 
