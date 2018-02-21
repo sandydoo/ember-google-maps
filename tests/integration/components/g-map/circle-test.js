@@ -1,24 +1,19 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
+import { test } from 'qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('g-map/circle', 'Integration | Component | g map/circle', {
-  integration: true
-});
+moduleForMap('Integration | Component | g map/circle', function() {
+  test('it renders a circle', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng as |g|}}
+        {{g.circle lat=lat lng=lng}}
+      {{/g-map}}
+    `);
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    let { publicAPI, map } = await this.get('map');
 
-  this.render(hbs`{{g-map/circle}}`);
-
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#g-map/circle}}
-      template block text
-    {{/g-map/circle}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+    assert.equal(publicAPI.circles.length, 1);
+    assert.equal(publicAPI.circles[0].mapComponent.map, map);
+  });
 });

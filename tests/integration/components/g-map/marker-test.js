@@ -1,24 +1,49 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { moduleForMap, trigger } from 'dummy/tests/helpers/g-map-helpers';
+import { test } from 'qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('g-map/marker', 'Integration | Component | g map/marker', {
-  integration: true
-});
+moduleForMap('Integration | Component | g map/marker', function() {
+  test('it renders a marker', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng as |g|}}
+        {{g.marker lat=lat lng=lng}}
+      {{/g-map}}
+    `);
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    let { publicAPI, map } = await this.get('map');
 
-  this.render(hbs`{{g-map/marker}}`);
+    assert.equal(publicAPI.markers.length, 1);
+    assert.equal(publicAPI.markers[0].mapComponent.map, map);
+  });
 
-  assert.equal(this.$().text().trim(), '');
+  test('it attaches an event to a marker', async function(assert) {
+    assert.expect(1);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#g-map/marker}}
-      template block text
-    {{/g-map/marker}}
-  `);
+    this.set('onClick', () => assert.ok('It binds events to actions'));
 
-  assert.equal(this.$().text().trim(), 'template block text');
+    await render(hbs`
+      {{#g-map lat=lat lng=lng as |g|}}
+        {{g.marker lat=lat lng=lng onClick=(action onClick)}}
+      {{/g-map}}
+    `);
+
+    const { publicAPI } = await this.get('map');
+
+    const marker = publicAPI.markers[0].mapComponent;
+    trigger(marker, 'click');
+  });
+
+  test('it sets options on a marker', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng as |g|}}
+        {{g.marker lat=lat lng=lng draggable=true}}
+      {{/g-map}}
+    `);
+
+    const { publicAPI } = await this.get('map');
+
+    const marker = publicAPI.markers[0].mapComponent;
+    assert.equal(marker.draggable, true);
+  });
 });

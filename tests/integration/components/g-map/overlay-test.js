@@ -1,24 +1,41 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
+import { test } from 'qunit';
+import { find, render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { run } from '@ember/runloop';
+import GMapOverlay from 'ember-google-maps/components/g-map/overlay';
 
-moduleForComponent('g-map/overlay', 'Integration | Component | g map/overlay', {
-  integration: true
-});
+moduleForMap('Integration | Component | g map/overlay', function(hooks) {
+  /**
+   * This is a hack for ember 2.12, which complains about runloop sideeffects
+   * from the add() method in the overlay component. Wrapping the test in `run`
+   * wasn't working, so here's a little hack.
+   */
+  hooks.beforeEach(function() {
+    this.owner.register('component:g-map/overlay', GMapOverlay.extend({
+      add() {
+        run(() => this._super(...arguments));
+      }
+    }));
+  });
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  test('it renders a custom overlay', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng zoom=12 as |g|}}
+        {{#g.overlay lat=lat lng=lng}}
+          <div id="custom-overlay"></div>
+        {{/g.overlay}}
+      {{/g-map}}
+    `);
 
-  this.render(hbs`{{g-map/overlay}}`);
+    const { publicAPI } = await this.get('map');
 
-  assert.equal(this.$().text().trim(), '');
+    assert.equal(publicAPI.overlays.length, 1, 'overlay registered');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#g-map/overlay}}
-      template block text
-    {{/g-map/overlay}}
-  `);
+    const overlay = await waitFor('#custom-overlay');
+    assert.ok(overlay, 'overlay rendered');
 
-  assert.equal(this.$().text().trim(), 'template block text');
+    const mapDiv = find(`#${publicAPI.id}`);
+    assert.ok(mapDiv.contains(overlay), 'overlay is child of map node');
+  });
 });

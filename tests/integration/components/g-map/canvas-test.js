@@ -1,26 +1,14 @@
-import { moduleForComponent, test } from 'ember-qunit';
-import { london } from '../../../helpers/locations'
+import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
+import { test } from 'qunit';
+import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { find } from 'ember-native-dom-helpers';
-import { defer } from 'rsvp';
 
-moduleForComponent('g-map/canvas', 'Integration | Component | g map/canvas', {
-  integration: true,
+moduleForMap('Integration | Component | g map/canvas', function() {
+  test('it renders a canvas div', async function(assert) {
+    this.set('_internalAPI', { _registerCanvas: () => {} });
 
-  beforeEach() {
-    this.setProperties(london);
-    this.set('mapPromise', defer());
-    this.set('registerMap', (result) => this.get('mapPromise').resolve(result));
+    await render(hbs`{{g-map/canvas _internalAPI=_internalAPI}}`);
 
-    this.inject.service('googleMapsApi');
-    return this.get('googleMapsApi')._loadMapsAPI();
-  }
+    assert.ok(find('.ember-google-map'), 'canvas rendered');
+  });
 });
-
-test('it renders a canvas div', function(assert) {
-  this.set('_internalAPI', { _registerCanvas: () => {} });
-
-  this.render(hbs`{{g-map/canvas _internalAPI=_internalAPI}}`);
-  assert.ok(find('.ember-google-map'));
-});
-

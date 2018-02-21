@@ -1,24 +1,30 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('g-map/base', 'Integration | Component | g map/base', {
-  integration: true
-});
+module('Integration | Component | g map/base', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  test('it registers with the parent map when created', async function(assert) {
+    assert.expect(1);
 
-  this.render(hbs`{{g-map/base}}`);
+    this.set('_internalAPI', {
+      _registerComponent: (type) => assert.equal(type, 'test', 'it registers'),
+      _unregisterComponent: () => {}
+    });
 
-  assert.equal(this.$().text().trim(), '');
+    await render(hbs`{{g-map/base map _internalAPI _type="test"}}`);
+  });
 
-  // Template block usage:
-  this.render(hbs`
-    {{#g-map/base}}
-      template block text
-    {{/g-map/base}}
-  `);
+  test('it unregisters with the parent map when destroyed', async function(assert) {
+    assert.expect(1);
 
-  assert.equal(this.$().text().trim(), 'template block text');
+    this.set('_internalAPI', {
+      _registerComponent: () => {},
+      _unregisterComponent: (type) => assert.equal(type, 'test', 'it unregisters'),
+    });
+
+    await render(hbs`{{g-map/base map _internalAPI _type="test"}}`);
+  });
 });

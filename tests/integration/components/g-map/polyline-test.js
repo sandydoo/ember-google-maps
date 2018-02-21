@@ -1,24 +1,31 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
+import { test } from 'qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { A } from '@ember/array';
 
-moduleForComponent('g-map/polyline', 'Integration | Component | g map/polyline', {
-  integration: true
-});
+moduleForMap('Integration | Component | g map/polyline', function() {
+  test('it updates a polylines when the path attribute changes', async function(assert) {
+    this.set('path', A([
+      { lat: 51.56742722687343, lng: -0.25783538818359375 },
+      { lat: 51.51917163898047, lng: -0.23586273193359375 },
+      { lat: 51.46680134633284, lng: -0.09922027587890625 },
+      { lat: 51.476892649684764, lng: -0.0006866455078125 }
+    ]));
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    await render(hbs`
+      {{#g-map lat=lat lng=lng as |g|}}
+        {{g.polyline path=path}}
+      {{/g-map}}
+    `);
 
-  this.render(hbs`{{g-map/polyline}}`);
+    const { publicAPI } = await this.get('map');
+    const polyline = publicAPI.polylines[0].mapComponent;
+    assert.ok(polyline, 'polyline exists');
 
-  assert.equal(this.$().text().trim(), '');
+    const newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };
+    this.get('path').pushObject(newCoords);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#g-map/polyline}}
-      template block text
-    {{/g-map/polyline}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+    assert.deepEqual(polyline.getPath().getAt(4).toJSON(), newCoords);
+  });
 });
