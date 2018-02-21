@@ -9,6 +9,7 @@ import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { all } from 'rsvp';
+import { next } from '@ember/runloop';
 
 export default Component.extend(RegisterEvents, MapComponent, {
   layout,
@@ -67,7 +68,7 @@ export default Component.extend(RegisterEvents, MapComponent, {
 
   didInsertElement() {
     this._super(...arguments);
-    get(this, 'google').then(() => this._initMap());
+    get(this, 'google').then(() => next(this, '_initMap'));
   },
 
   _initMap() {
