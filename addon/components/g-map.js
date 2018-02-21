@@ -38,13 +38,14 @@ export default Component.extend(RegisterEvents, MapComponent, {
   init() {
     this._super(...arguments);
 
-    const componentNames = ['markers', 'circles', 'polylines', 'overlays', 'controls', 'autocomplete'];
+    const componentNames = ['markers', 'circles', 'polylines', 'overlays', 'controls', 'autocompletes'];
     this.components = {}
     componentNames.forEach((name) => {
       this.components[name] = A();
     });
 
     const publicAPI = {
+      id: get(this, 'mapId'),
       actions: {
         update: () => this._updateMap(),
         trigger: () => this._trigger()

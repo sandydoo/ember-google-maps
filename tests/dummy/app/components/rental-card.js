@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import layout from '../templates/components/rental-card';
-import { computed, set } from '@ember/object';
+import { set } from '@ember/object';
 
 export default Component.extend({
   layout,
@@ -9,7 +9,6 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    console.log(this.rental)
     set(this, 'elementId', `rental-${this.rental.id}`);
   },
 
