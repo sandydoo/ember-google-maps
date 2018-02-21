@@ -1,17 +1,23 @@
 {
   "name": "ember-google-maps",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "A lightweight, declarative, composable API for building ambitious map UIs in your Ember apps.",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "google-maps",
+    "emberjs"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Sander Melnikov <sander@sandydoo.me>",
+  "homepage": "https://ember-google-maps.sandydoo.me",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sandydoo/ember-google-maps"
+  },
   "scripts": {
     "build": "ember build",
     "start": "ember server",
