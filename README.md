@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sandydoo/ember-google-maps.svg?branch=master)](https://travis-ci.org/sandydoo/ember-google-maps)
+
 # 📍 Ember Google Maps
 
 > A *lightweight*, *declarative*, *composable* API for building ambitious map UIs in your Ember apps.
