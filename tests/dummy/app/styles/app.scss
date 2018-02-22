@@ -16,10 +16,10 @@ $body-color: $blue-gray;
 $link-color: $dark-orange;
 
 $line-height-base: 1.56;
-$font-family-sans-serif: 'Noto Sans', 'Open Sans', sans-serif;
+$font-family-sans-serif: 'Noto Sans', 'Open Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 $font-family-cursive: 'Pacifico', 'Nunito', cursive;
 
-$headings-font-family: 'Nunito', 'Noto Sans', 'Open Sans', sans-serif;
+$headings-font-family: 'Nunito', 'Noto Sans', 'Open Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 $headings-font-weight: 800;
 
 $grid-gutter-width: 32px;
@@ -124,6 +124,10 @@ footer {
 
 .emoji {
   margin-right: -0.2em;
+}
+// Overwrite Roboto to allow emoji!
+div.gm-style {
+  font-family: $font-family-sans-serif !important;
 }
 .tooltip {
   position: relative;
