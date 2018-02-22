@@ -41,9 +41,10 @@ export default Base.extend({
   },
 
   _onSearch() {
-    let places = this.mapComponent.getPlace();
-    if (places.geometry) {
-      tryInvoke(this, 'onSearch', [places]);
+    const place = this.mapComponent.getPlace();
+    const map = get(this, 'map');
+    if (place.geometry) {
+      tryInvoke(this, 'onSearch', [{ place, map }]);
     }
   }
 });
