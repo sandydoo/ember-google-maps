@@ -66,7 +66,7 @@ export default Base.extend({
     const height = this.height;
     const width = this.width / 2;
 
-    this.content.style = `display: block; position: absolute; left: ${point.x - width}px; top: ${point.y - height}px; opacity: 1;`;
+    this.content.style.cssText = `display: block; position: absolute; left: ${point.x - width}px; top: ${point.y - height}px; opacity: 1;`;
 
     if (!this._isInitialized) { this._didAddComponent(); }
   },
