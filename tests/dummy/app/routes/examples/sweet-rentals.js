@@ -1,14 +1,16 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
+  document: service('-document'),
+
   actions: {
     didTransition() {
-
-      document.body.classList.add('white');
+      this.get('document').body.setAttribute('class', 'white');
     },
 
     willTransition() {
-      document.body.classList.remove('white');
+      this.get('document').body.setAttribute('class');
     }
   }
 });

@@ -18,6 +18,24 @@ module.exports = function(defaults) {
       'bootstrapVersion': 4,
       'importBootstrapFont': false,
       'importBootstrapCSS': false
+    },
+
+    prember: {
+      baseRoot: 'https://ember-google-maps.sandydoo.me',
+      urls: [
+        '/',
+        '/docs',
+        '/docs/about',
+        '/docs/getting-started',
+        '/docs/map',
+        '/docs/markers',
+        '/docs/circles',
+        '/docs/polylines',
+        '/docs/controls',
+        '/docs/overlays',
+        '/docs/complex-ui',
+        'examples/sweet-rentals'
+      ]
     }
   });
 

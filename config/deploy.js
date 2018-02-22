@@ -26,7 +26,8 @@ module.exports = function(deployTarget) {
 
     ENV.s3 = {
       bucket: 'ember-google-maps',
-      region: 'eu-west-1'
+      region: 'eu-west-1',
+      filePattern: '**/*.{js,css,png,gif,ico,jpg,map,xml,txt,svg,swf,eot,ttf,woff,woff2,otf,html}'
     }
 
     ENV['s3-index'] = {

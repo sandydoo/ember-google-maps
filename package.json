@@ -45,6 +45,7 @@
     "ember-cli-deploy-s3-index": "^1.0.1",
     "ember-cli-dotenv": "^2.0.0",
     "ember-cli-eslint": "^4.2.1",
+    "ember-cli-fastboot": "^1.1.3",
     "ember-cli-flash": "^1.6.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
@@ -66,7 +67,9 @@
     "eslint-plugin-disable-features": "^0.1.3",
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "prember": "^0.2.2",
+    "prember-sitemap-generator": "0.0.3"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
