@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { computed } from '@ember/object';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
-import { Promise, resolve } from 'rsvp';
+import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
 import { bind } from '@ember/runloop';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
@@ -20,6 +20,8 @@ export default Service.extend({
    * Return or load the Google Maps API.
    */
   _loadMapsAPI() {
+    if (typeof document === 'undefined') { return reject(); }
+
     const google = window.google;
     if (google) { return resolve(google); }
 
