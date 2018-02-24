@@ -28,7 +28,7 @@ module.exports = function(environment) {
     },
 
     'ember-composable-helpers': {
-      only: ['array', 'join']
+      only: ['array', 'join', 'toggle']
     },
 
     'ember-google-maps': {

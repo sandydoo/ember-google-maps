@@ -38,7 +38,7 @@ export default Component.extend(RegisterEvents, MapComponent, {
   init() {
     this._super(...arguments);
 
-    const componentNames = ['markers', 'circles', 'polylines', 'overlays', 'controls', 'autocompletes'];
+    const componentNames = ['markers', 'circles', 'polylines', 'overlays', 'controls', 'autocompletes', 'infoWindows'];
     this.components = {}
     componentNames.forEach((name) => {
       this.components[name] = A();
