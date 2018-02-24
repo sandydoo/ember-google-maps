@@ -2,6 +2,13 @@ import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
 import { test } from 'qunit';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { Promise } from 'rsvp';
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
 
 moduleForMap('Integration | Component | g-map/info-window', function() {
   test('it registers an info window', async function(assert) {
@@ -95,6 +102,10 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
     const domIsReady = () => this.domIsReady;
     await waitUntil(domIsReady);
+
+    // There is some lag between the infoWindow rendering and updating its
+    // position. It's probably not worth investigating, so we just wait a bit.
+    await wait(500);
 
     const infoWindow = publicAPI.infoWindows[0].mapComponent;
     assert.deepEqual(infoWindow.getPosition().toJSON(), { lat: 55, lng: 2 });
