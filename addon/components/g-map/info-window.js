@@ -1,7 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/info-window';
 import { computed, get, getProperties, observer, set } from '@ember/object';
-import { reads } from '@ember/object/computed';
 import { schedule } from '@ember/runloop';
 
 export default Base.extend({
