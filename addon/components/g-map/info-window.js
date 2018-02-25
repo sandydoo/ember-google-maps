@@ -1,6 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/info-window';
-import { computed, get, getProperties, observer, set } from '@ember/object';
+import { computed, get, getProperties, set, setProperties } from '@ember/object';
 import { schedule } from '@ember/runloop';
 
 export default Base.extend({
@@ -18,22 +18,23 @@ export default Base.extend({
     return new google.maps.LatLng(lat, lng);
   }),
 
-  // This can be done using didReceiveAttrs + _didAddComponent, but this ends up
-  // being less code.
-  isOpenObserver: observer('isOpen', '_isInitialized', function() {
-    if (this._isInitialized) {
-      if (get(this, 'isOpen')) {
-        this.open();
-      } else {
-        this.close();
-      }
-    }
-  }),
-
   init() {
     this._super(...arguments);
     if (!get(this, 'target')) {
       this._requiredOptions = this._requiredOptions.concat(['position']);
+    }
+    setProperties(this.publicAPI.actions, {
+      open: () => this.open(),
+      close: () => this.close()
+    });
+  },
+
+  didReceiveAttrs() {
+    this._super(...arguments);
+    if (get(this, 'isOpen')) {
+      this.open();
+    } else {
+      this.close();
     }
   },
 
@@ -43,6 +44,13 @@ export default Base.extend({
     delete options.map;
     set(this, 'mapComponent', new google.maps.InfoWindow(options));
     this._didAddComponent();
+  },
+
+  _didAddComponent() {
+    if (get(this, 'isOpen')) {
+      this.open();
+    }
+    this._super(...arguments);
   },
 
   _prepareContent() {
