@@ -1,0 +1,23 @@
+{{#g-map lat=london.lat lng=london.lng zoom=12
+  styles=mapStyle
+  classNames="ember-google-map-cover"
+  scrollwheel=false
+  gestureHandling="greedy"
+  disableDefaultUI=true
+  zoomControl=true
+  zoomControlOptions=(hash
+    position=google.maps.ControlPosition.TOP_LEFT)
+  fullscreenControl=true
+  onLoad=(action "saveBounds")
+  onBoundsChanged=(action "saveBounds") as |g|}}
+  {{#each boundedLondonLocations as |l|}}
+    {{#g.overlay lat=l.lat lng=l.lng
+      onClick=(action "scrollToListing" l)
+      onMouseover=(action (mut l.active) true)
+      onMouseleave=(action (mut l.active) false)}}
+      <div class="tooltip {{if l.active "active"}}">
+        £{{l.price}}
+      </div>
+    {{/g.overlay}}
+  {{/each}}
+{{/g-map}}

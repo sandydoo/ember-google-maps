@@ -1,9 +1,15 @@
 import Controller from '@ember/controller';
 import CommonMapData from '../../mixins/common-map-data';
+import { inject as service } from '@ember/service';
 import { computed, get, getProperties, set } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import { throttle } from '@ember/runloop';
 
 export default Controller.extend(CommonMapData, {
+  googleMapsApi: service(),
+
+  google: reads('googleMapsApi.google'),
+
   boundedLondonLocations: computed('mapBounds', function() {
     let londonLocations = get(this, 'londonLocations');
     return londonLocations.filter((location) => {

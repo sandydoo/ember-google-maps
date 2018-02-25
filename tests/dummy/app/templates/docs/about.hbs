@@ -1,4 +1,8 @@
-<div class="col-12 col-md-8 m-auto">
+<div class="col-text">
+  <h5>Why does this exist?</h5>
+
+  <p>Working with the Google Maps API can be a pain. Even for the simplest of mapping needs, you end up writing a bunch of JavaScript tailored to your problem and pray you'll never have to look at it again. Attempt to manage complex map state this way and I guarantee you'll produce one flavour or another of spaghetti code. This addon is proof that it doesn't have to be that way. We can leverage handlebars templates and Ember components to create a dead simple API to manage maps and markers without having to touch JavaScript in most cases.</p>
+
   <p><span class="ember">ember-google-maps</span> tries to satisfy 3 main criteria:</p>
   <ol>
     <li>Lightweight</li>
@@ -14,11 +18,11 @@
 
   <h5>Declarative</h5>
 
-  <p>90% of your mapping needs can be satisfied with just a few lines of handlebars and some actions. By using the <span class="ember">ember</span> tools we love so much, you can stop worrying about the how and focus on the what. This is especially true for the more complex features like custom HTML markers!</p>
+  <p>90% of your mapping needs can be satisfied with just a few lines of handlebars and some actions. By using the <span class="ember">ember</span> tools we love so much, you can stop worrying about managing map state in JavaScript, and focus on building your application. This is especially true for the more complex features, like custom HTML markers!</p>
 
   <h5>Composable</h5>
 
-  <p>Contextual components make it easy to create and build up your map.</p>
+  <p>Contextual components make it easy to create and build up your map. Together with the basic <tt>\{{each}}</tt> and <tt>\{{if}}</tt> helpers, you can create the bulk of your mapping logic without a drop of JavaScript.</p>
 
-  {{link-to "Get started ›" "docs.getting-started" classNames="btn btn-primary"}}
+  {{link-to-next nextPage}}
 </div>

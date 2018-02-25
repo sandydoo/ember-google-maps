@@ -1,14 +1,22 @@
-<div class="container pt-4">
-  {{header-main}}
+<div class="container-fluid">
+  <div class="navbar mt-3 mb-3">
+    {{header-main}}
+  </div>
 
   <div class="alerts-container">
     {{#each flashMessages.queue as |flash|}}
       {{flash-message flash=flash}}
     {{/each}}
   </div>
-  <main>
-    {{outlet}}
-  </main>
-
-  {{footer-main}}
+  <div class="d-sm-flex">
+    <div class="col-sidebar">
+      {{nav-main links=links}}
+    </div>
+    <div class="col flex-1">
+      <main>
+        {{outlet}}
+      </main>
+      {{footer-main}}
+    </div>
+  </div>
 </div>

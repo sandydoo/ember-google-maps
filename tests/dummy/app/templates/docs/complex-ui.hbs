@@ -1,11 +1,29 @@
-<div class="row">
-  <div class="col-12 col-md-8 m-auto">
-    <p>It's time to show what we can accomplish with these tools! It seems like the most popular examples are Airbnb-like interfaces – a list of data on one side and a map visualising it on the other side. Even the <span class="ember">ember</span> guides create a rentals website!</p>
+<div class="col-text">
+  <h5>Building a rentals website</h5>
+  <p>It's time to show what we can accomplish with these tools! It seems like the most popular examples are Airbnb-like interfaces – a list of data on one side and a map visualising it on the other side. Heck, even the <span class="ember">ember</span> guides create a rentals website! This example showcases a large chunk of the power of this addon and how it can positively affect a developer's productivity and the quality of the their code.</p>
 
-    <p>Keep in mind this is just a visual example. Let's simulate fetching a geo-bound ajax query from a BE server by filtering an array of random locations as you pan the map. Let's also attach some mouseover effects!</p>
+  <p>Keep in mind this is just a visual example. Let's simulate fetching a geo-bound AJAX query from a BE server by filtering an array of random locations as you pan the map. Let's also attach some mouseover effects!</p>
 
-    <p><span class="badge badge-primary">Tip</span> You might want to view this demo on a device with a larger screen.</p>
+  <p><span class="badge badge-primary">Tip</span> You might want to view this demo on a device with a larger screen.</p>
 
-    {{link-to "View rentals example ›" "examples.sweet-rentals" classNames="btn btn-primary"}}
-  </div>
+  {{link-to "View rentals example ›" "examples.sweet-rentals" classNames="btn btn-primary"}}
+
+  <h5 class="mt-4">Breakdown of the demo</h5>
+
+  <p>Let's quickly discuss what is happening in the demo. You can view the code for the entire demo in the repo, but most of the work is happening in the template.
+    <ol>
+      <li>We set the center of the map and the zoom level in the first line.</li>
+      <li>We then set a bunch of map options: we modify the look of the map tiles with <tt>styles</tt>, disable the scroll wheel to force the feed to scroll down instead, and mess around with the map controls to achieve a minimalist look.</li>
+      <li>We use <tt>onLoad</tt> and <tt>onBoundsChanged</tt> events to fetch the current map bounds. We use these bounds to filter the random array of markers on the map. This filtered array is called <tt>boundedLondonLocations</tt>. This simulates loading external data when panning or zooming the map.</li>
+      <li>We use the <tt>\{{each}}</tt> helper to loop over the locations and display an <tt>overlay</tt> with custom content at the given location coordinates. Inside the overlay, we render a custom, styled tooltip <tt>div</tt>, containing the price of the rental.</li>
+      <li>The <tt>onMouseover</tt> and <tt>onMouseleave</tt> events modify the <tt>active</tt> property on the rental, which lets us animate the tooltip and the card in the feed. Finally, the <tt>onClick</tt> event receives the clicked rental and scrolls to its card in the feed.</li>
+    </ol>
+  </p>
+
+  {{code-snippet name="sweet-rentals-map.hbs"}}
+
+  <h5>Leave your feedback on GitHub</h5>
+
+  <p>That's it, folks. This demo took just a few minutes to create. It would have taken less time, but, alas, my typing speed is nothing to be proud of! 🤣</p>
+  <p>If you liked this addon, leave a ⭐ on GitHub – it helps out immensely. If you have questions, concerns, problems, issues, debatable topics – use the issue/PR tracker.</p>
 </div>

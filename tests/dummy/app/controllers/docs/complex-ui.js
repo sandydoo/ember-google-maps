@@ -1,9 +1,9 @@
-import Controller from '@ember/controller';
+import DocsController from '../docs';
 import CommonMapData from '../../mixins/common-map-data';
 import { computed, get, getProperties, set } from '@ember/object';
 import { throttle } from '@ember/runloop';
 
-export default Controller.extend(CommonMapData, {
+export default DocsController.extend(CommonMapData, {
   boundedLondonLocations: computed('mapBounds', function() {
     let londonLocations = get(this, 'londonLocations');
     return londonLocations.filter((location) => {

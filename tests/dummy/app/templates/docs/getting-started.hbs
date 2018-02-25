@@ -1,17 +1,17 @@
-<div class="row">
-  <div class="col-12 col-md-8 m-auto">
-    <h5>Installation</h5>
+<div class="col-text">
+  <h5>Installation</h5>
 
-    {{code-snippet name="installation.sh"}}
+  {{code-snippet name="installation.sh"}}
 
-    <h5>Configuration</h5>
+  <h5>Configuration</h5>
 
-    <p>You can configure the options used for loading the Google Maps SDK in your app's <tt>config/environment.js</tt>. Only the <tt>key</tt> option is <b>required</b>, however, from first-hand experience, I would suggest explicitly setting the language and version to avoid any nasty surprises.</p>
+  <p>You can configure the options used for loading the Google Maps SDK in your app's <tt>config/environment.js</tt>. Only the <tt>key</tt> option is <b>required</b>, however, from first-hand experience, I would suggest explicitly setting the language and version to avoid any nasty surprises.</p>
 
-    {{code-snippet name="config.js"}}
+  <p>During the build process, these options will be used to generate the url to load the SDK, which will then be lazily loaded <b>on-demand</b>. No render-blocking script tags on every page. No jQuery. 👌</p>
 
-    <p>That's it. You're now ready to create a map.</p>
+  {{code-snippet name="config.js"}}
 
-    {{link-to "Create map ›" "docs.map" classNames="btn btn-primary"}}
-  </div>
+  <p>{{nextPage.text}}</p>
+
+  {{link-to-next nextPage}}
 </div>

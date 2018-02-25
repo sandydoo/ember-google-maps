@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6 order-2 order-md-1">
+  <div class="col-md-7 order-2 order-md-1">
     <h5>Creating circles</h5>
 
     <p>Circles are pretty much markers with a radius. Use the <tt>circle</tt> component to create a circle.</p>
@@ -15,10 +15,10 @@
         {{input id="fill-color-input" name="fillColor" class="form-control" value=fillColor}}
     </div>
 
-    <p>Onto polylines!</p>
-    {{link-to "Polylines ›" "docs.polylines" classNames="btn btn-primary"}}
+    <p>{{nextPage.text}}</p>
+    {{link-to-next nextPage}}
   </div>
-  <div class="col-md-6 order-1 order-md-2 sticky-top sticky-map">
+  <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{#g-map lat=london.lat lng=london.lng
       zoom=14
       styles=mapStyle

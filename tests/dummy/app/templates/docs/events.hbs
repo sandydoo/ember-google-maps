@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-7 order-2 order-md-1">
+    <h5 id="events">Handling events 💥</h5>
+
+    <p>Parameters prefixed by <tt>on</tt> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google's API docs for each component.</p>
+
+    <p>As an example, to register an action for the <tt>bounds_changed</tt> event, you would pass an action to the <tt>onBoundsChanged</tt> attribute. For <tt>dragend</tt>, you would use <tt>onDragend</tt>.</p>
+
+    {{code-snippet name="map-events.hbs"}}
+
+    <p><span class="badge badge-danger">Warning</span> Some Google event names break the expected naming style. Notice how <tt>dragend</tt> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <tt>e</tt> in <tt>onDragend</tt>.</p>
+
+    <p>Each event returns the following:</p>
+    <ul>
+      <li>Any curried params passed to the bound action</li>
+      <li>An event object of following format:</li>
+    </ul>
+
+    {{code-snippet name="event.js"}}
+
+    <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
+
+    <p><span class="badge badge-primary">Test</span> The sample map has some event listeners set up – see if you can find them all!</p>
+
+    {{link-to-next nextPage}}
+  </div>
+  <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
+    {{g-map lat=london.lat lng=london.lng zoom=12
+      styles=mapStyle
+      classNames="ember-google-map-responsive"
+      onBoundsChanged=(action "flashMessageThrottle" "The bounds have changed!")
+      onClick=(action "flashMessage" "You clicked the map!")
+      onDblclick=(action "flashMessage" "Ooh, a double click!!")
+      onZoomChanged=(action "flashMessageThrottle" "Zoooooom!")
+    }}
+  </div>
+</div>

@@ -10,7 +10,7 @@ export default Route.extend({
     },
 
     willTransition() {
-      this.get('document').body.setAttribute('class');
+      this.get('document').body.setAttribute('class', '');
     }
   }
 });

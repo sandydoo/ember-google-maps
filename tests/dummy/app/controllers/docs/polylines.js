@@ -1,9 +1,9 @@
-import Controller from '@ember/controller';
+import DocsController from '../docs';
 import CommonMapData from '../../mixins/common-map-data';
 import { get } from '@ember/object';
 import { A } from '@ember/array';
 
-export default Controller.extend(CommonMapData, {
+export default DocsController.extend(CommonMapData, {
   fillColor: 'orange',
 
   flightCoordinates: A([

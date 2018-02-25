@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6 order-2 order-md-1">
+  <div class="col-md-7 order-2 order-md-1">
     <h5>Adding, removing and modifying map controls</h5>
 
     <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <tt>true</tt> or <tt>false</tt>. You can also pass in a <tt>hash</tt> to set further options. Learn more by following the guides at {{google-docs "controls" type="guides"}}.</p>
@@ -26,16 +26,17 @@
 
     {{code-snippet name="recenter-map-controller.js"}}
 
-    <p>Enough about the basic components. Give me those custom HTML markers!</p>
-    {{link-to "Custom overlays ›" "docs.overlays" classNames="btn btn-primary"}}
+    <p>{{nextPage.text}}</p>
+    {{link-to-next nextPage}}
   </div>
-  <div class="col-md-6 order-1 order-md-2 sticky-top sticky-map">
+  <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{#g-map lat=london.lat lng=london.lng zoom=12
       styles=mapStyle
       disableDefaultUI=true
       mapTypeControl=false
       zoomControl=true
-      zoomControlOptions=(hash position=google.maps.ControlPosition.TOP_LEFT) as |g|}}
+      zoomControlOptions=(hash position=google.maps.ControlPosition.TOP_LEFT)
+      classNames="ember-google-map-responsive" as |g|}}
       {{g.marker lat=london.lat lng=london.lng}}
       {{#g.control position="TOP_CENTER"}}
         <div class="map-control">

@@ -17,12 +17,15 @@
     {{#g-map lat=london.lat lng=london.lng zoom=12
       styles=mapStyle
       classNames="ember-google-map-cover"
-      onLoad=(action "saveBounds")
-      onBoundsChanged=(action "saveBounds")
       scrollwheel=false
-      zoomControlOptions=(hash position=1)
-      mapTypeControl=false
-      gestureHandling="greedy" as |g|}}
+      gestureHandling="greedy"
+      disableDefaultUI=true
+      zoomControl=true
+      zoomControlOptions=(hash
+        position=google.maps.ControlPosition.TOP_LEFT)
+      fullscreenControl=true
+      onLoad=(action "saveBounds")
+      onBoundsChanged=(action "saveBounds") as |g|}}
       {{#each boundedLondonLocations as |l|}}
         {{#g.overlay lat=l.lat lng=l.lng
           onClick=(action "scrollToListing" l)

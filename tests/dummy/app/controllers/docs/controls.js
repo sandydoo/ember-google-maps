@@ -1,7 +1,7 @@
-import Controller from '@ember/controller';
+import DocsController from '../docs';
 import CommonMapData from '../../mixins/common-map-data';
 
-export default Controller.extend(CommonMapData, {
+export default DocsController.extend(CommonMapData, {
   actions: {
     recenterMap(map) {
       const { lat, lng } = this.london;

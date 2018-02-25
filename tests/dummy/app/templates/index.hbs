@@ -1,13 +1,23 @@
-<div class="container pt-4">
-  {{header-main}}
+<div class="container">
+  <div class="col-12 col-sm-12 col-md-6 mx-auto text-center mt-3 mb-3">
+    {{#link-to "index" class="no-link-decor"}}
+      <h1 class="ember mb-3">ember google maps</h1>
+      <h6>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</h6>
+    {{/link-to}}
+    {{link-to "Explore docs ›" "docs.getting-started" class="btn btn-primary mt-2"}}
+  </div>
 
   <main>
-    {{#g-map lat=london.lat lng=london.lng zoom=12 styles=mapStyle mapTypeControl=false streetViewControl=false as |g|}}
+    {{#g-map lat=london.lat lng=london.lng zoom=12
+      styles=mapStyle
+      mapTypeControl=false
+      streetViewControl=false
+      scrollwheel=false as |g|}}
       {{#g.overlay lat=london.lat lng=london.lng}}
         <div class="tooltip bs-tooltip-top"><div class="tooltip-inner"><span style="white-space: nowrap;" class="emoji">🐹🗺️🌧️☂️</span></div></div>
       {{/g.overlay}}
     {{/g-map}}
   </main>
 
-  {{footer-main}}
+  {{footer-main classNames="text-center"}}
 </div>
