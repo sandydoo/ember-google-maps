@@ -1,4 +1,4 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
+import { moduleForMap, trigger } from 'dummy/tests/helpers/g-map-helpers';
 import { test } from 'qunit';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -112,28 +112,52 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
   });
 
   test('it closes the info window when isOpen is set to false', async function(assert) {
-    assert.expect(1);
-
     this.set('isOpen', true);
     this.set('onDomReady', () => this.set('domIsReady', true));
 
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=6 as |g|}}
         {{#g.marker lat=55 lng=2 as |m|}}
-          {{m.infoWindow isOpen=isOpen content="marker-test" onDomready=(action onDomReady)}}
+          {{m.infoWindow isOpen=isOpen content="<div id='info-window-test'></div>" onDomready=(action onDomReady)}}
+        {{/g.marker}}
+      {{/g-map}}
+    `);
+
+    await this.get('map');
+
+    const domIsReady = () => this.domIsReady;
+    await waitUntil(domIsReady);
+
+    assert.ok(find('#info-window-test'), 'info window open');
+
+    this.set('isOpen', false);
+
+    assert.notOk(find('#info-window-test'), 'info window closed');
+  });
+
+  test('it closes the info window when the close button is clicked', async function(assert) {
+    this.set('isOpen', true);
+    this.set('onDomReady', () => this.set('domIsReady', true));
+
+    await render(hbs`
+      {{#g-map lat=lat lng=lng zoom=6 as |g|}}
+        {{#g.marker lat=55 lng=2 as |m|}}
+          {{m.infoWindow isOpen=isOpen content="<div id='info-window-test'></div>" onDomready=(action onDomReady)}}
         {{/g.marker}}
       {{/g-map}}
     `);
 
     const { publicAPI} = await this.get('map');
+    const infoWindow = publicAPI.infoWindows[0].mapComponent;
 
     const domIsReady = () => this.domIsReady;
     await waitUntil(domIsReady);
 
-    const infoWindow = publicAPI.infoWindows[0].mapComponent;
-    infoWindow.close = () => assert.ok('info window closed');
+    assert.ok(find('#info-window-test'), 'info window open');
 
-    this.set('isOpen', false);
+    trigger(infoWindow, 'closeclick');
+
+    assert.notOk(find('#info-window-test'), 'info window closed');
   });
 });
 
