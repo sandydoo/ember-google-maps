@@ -14,6 +14,10 @@ module.exports = function(defaults) {
       ]
     },
 
+    'ember-composable-helpers': {
+      only: ['array', 'join', 'toggle']
+    },
+
     'ember-bootstrap': {
       'bootstrapVersion': 4,
       'importBootstrapFont': false,

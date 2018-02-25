@@ -27,10 +27,6 @@ module.exports = function(environment) {
       extendedTimeout: 500
     },
 
-    'ember-composable-helpers': {
-      only: ['array', 'join', 'toggle']
-    },
-
     'ember-google-maps': {
       language: 'en',
       libraries: ['geometry', 'places'],
