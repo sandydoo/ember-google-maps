@@ -19,16 +19,16 @@ Router.map(function() {
     this.route('about');
     this.route('getting-started');
     this.route('map');
-    this.route('markers');
-    this.route('circles');
-    this.route('polylines');
-    this.route('controls');
-    this.route('overlays');
-    this.route('complex-ui');
-    this.route('info-windows');
     this.route('events');
     this.route('components');
     this.route('canvas');
+    this.route('markers');
+    this.route('circles');
+    this.route('polylines');
+    this.route('info-windows');
+    this.route('controls');
+    this.route('overlays');
+    this.route('complex-ui');
   });
 
   this.route('examples', function() {
