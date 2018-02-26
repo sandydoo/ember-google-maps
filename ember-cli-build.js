@@ -17,6 +17,10 @@ module.exports = function(defaults) {
       ]
     },
 
+    autoprefixer: {
+      remove: false
+    },
+
     'ember-composable-helpers': {
       only: ['array', 'join', 'toggle']
     },
