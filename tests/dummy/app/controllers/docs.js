@@ -22,7 +22,8 @@ export default ApplicationController.extend(CommonMapData, {
       { title: 'Polylines', path: 'docs.polylines', text: 'Onto polylines!' },
       { title: 'Info windows', path: 'docs.info-windows', text: "Let's learn how to add info windows or tooltips to the map." },
       { title: 'Controls', path: 'docs.controls', text: "Next, let's look at how we can modify the default map UI." },
-      { title: 'Custom overlays', path: 'docs.overlays', text: "Enough about the basic components. Give me those custom HTML markers!" },
+      { title: 'Directions', path: 'docs.directions', text: "Let's look at how to query and display routing information."},
+      { title: 'Custom overlays', path: 'docs.overlays', text: "It's finally time to learn how to create custom HTML markers!" },
       { title: 'Complex UI', path: 'docs.complex-ui' }
     ];
   }).readOnly(),

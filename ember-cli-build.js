@@ -37,6 +37,7 @@ module.exports = function(defaults) {
         '/docs/polylines',
         '/docs/info-windows',
         '/docs/controls',
+        '/docs/directions',
         '/docs/overlays',
         '/docs/complex-ui',
         'examples/sweet-rentals'
