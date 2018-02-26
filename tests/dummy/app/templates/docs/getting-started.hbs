@@ -3,13 +3,21 @@
 
   {{code-snippet name="installation.sh"}}
 
-  <h5>Configuration</h5>
+  <h5>Loading Google Maps</h5>
 
   <p>You can configure the options used for loading the Google Maps SDK in your app's <tt>config/environment.js</tt>. Only the <tt>key</tt> option is <b>required</b>, however, from first-hand experience, I would suggest explicitly setting the language and version to avoid any nasty surprises.</p>
 
   <p>During the build process, these options will be used to generate the url to load the SDK, which will then be lazily loaded <b>on-demand</b>. No render-blocking script tags on every page. No jQuery. 👌</p>
 
   {{code-snippet name="config.js"}}
+
+  <h5>Treeshaking</h5>
+
+  <p>Ember apps can be notoriously bloaty and part of that bloat comes from the addon ecosystem. Everyone's needs are different and it's unlikely you'll use every single component in this addon. Without proper treeshaking support at build time, your builds end up full of stuff you never needed or, even worse, code you don't even know about!</p>
+
+  <p>In your <tt>ember-cli-build.js</tt>, you can specify which components to include or exclude from the build using <tt>only</tt> and <tt>exclude</tt>.</p>
+
+  {{code-snippet name="ember-cli-build.js"}}
 
   <p>{{nextPage.text}}</p>
 
