@@ -9,6 +9,8 @@ import { defer } from 'rsvp';
 const Base = Component.extend(RegisterEvents, MapComponent, {
   tagName: '',
 
+  _requiredOptions: ['map'],
+
   init() {
     this._super(...arguments);
     this.isInitialized = defer();

@@ -14,12 +14,12 @@ export default Mixin.create({
 
   concatenatedProperties: ['_requiredOptions', '_watchedOptions', '_ignoreAttrs'],
 
-  _requiredOptions: ['map'],
+  _requiredOptions: [],
   _watchedOptions: [],
 
   options: computed('attrs', 'events', function() {
     let attrs = Object.keys(this.attrs).filter((k) => {
-      return [...get(this, '_ignoreAttrs'), ...get(this, 'events')].indexOf(k) < 0;
+      return [...get(this, '_ignoreAttrs'), ...(get(this, 'events') || [])].indexOf(k) < 0;
     });
     return getProperties(this, attrs);
   }),

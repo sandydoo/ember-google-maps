@@ -8,7 +8,7 @@
   overlay=(component 'g-map/overlay' map _internalAPI)
   control=(component 'g-map/control' map _internalAPI)
   autocomplete=(component 'g-map/autocomplete' map _internalAPI)
-  route=(component 'g-map/route' map _internalAPI))}}
+  directions=(component 'g-map/directions' map _internalAPI))}}
 
 {{#unless (unbound _customCanvasRegistered)}}
   {{g-map/canvas _internalAPI=_internalAPI id=mapId classNames=classNames}}
