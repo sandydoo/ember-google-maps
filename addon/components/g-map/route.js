@@ -11,13 +11,19 @@ export default Base.extend({
 
   _requiredOptions: ['directions'],
 
+  didReceiveAttrs() {
+    this._super(...arguments);
+
+    if (!this._isInitialized && get(this, '_options.directions')) {
+      this._didAddComponent();
+    }
+  },
+
   _addComponent() {
     const options = get(this, '_options');
     if (!options.directions) {
       delete options.directions
     }
     set(this, 'mapComponent', new google.maps.DirectionsRenderer(options));
-
-    this._didAddComponent();
   }
 });

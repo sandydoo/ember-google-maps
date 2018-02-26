@@ -39,7 +39,7 @@ moduleForMap('Integration | Component | g-map/route', function() {
     this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
     this.set('origin', 'Holborn Station');
     const directionsChanged = () => this.get('directionsChanged');
-    await waitUntil(directionsChanged, { timeout: 5000 });
+    await waitUntil(directionsChanged, { timeout: 10000 });
 
     const route = publicAPI.routes[0].mapComponent;
     assert.equal(route.directions.request.origin.query, this.origin);

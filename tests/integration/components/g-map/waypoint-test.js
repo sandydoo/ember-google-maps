@@ -49,7 +49,7 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
     this.set('addWaypoint', false);
 
     const directionsChanged = () => this.get('directionsChanged');
-    await waitUntil(directionsChanged, { timeout: 5000 });
+    await waitUntil(directionsChanged, { timeout: 10000 });
 
     const request = publicAPI.directions[0].directions.request;
 
