@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { computed } from '@ember/object';
+import { computed, get } from '@ember/object';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise, reject, resolve } from 'rsvp';
@@ -13,6 +13,14 @@ export default Service.extend({
   google: computed(function() {
     return ObjectPromiseProxy.create({
       promise: this._loadMapsAPI()
+    });
+  }).readOnly(),
+
+  directionsService: computed(function() {
+    return ObjectPromiseProxy.create({
+      promise: get(this, 'google').then(() => {
+        return new google.maps.DirectionsService;
+      })
     });
   }).readOnly(),
 
