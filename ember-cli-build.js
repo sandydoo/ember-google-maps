@@ -9,19 +9,16 @@ module.exports = function(defaults) {
     includeHighlightStyle: false,
 
     sassOptions: {
+      precision: 10,
+      onlyIncluded: true,
       includePaths: [
-        'tests/dummy/app/styles'
+        'tests/dummy/app/styles',
+        'node_modules/bootstrap/scss'
       ]
     },
 
     'ember-composable-helpers': {
       only: ['array', 'join', 'toggle']
-    },
-
-    'ember-bootstrap': {
-      'bootstrapVersion': 4,
-      'importBootstrapFont': false,
-      'importBootstrapCSS': false
     },
 
     prember: {
