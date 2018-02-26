@@ -23,21 +23,20 @@ export default Base.extend({
     this._super(...arguments);
     this.waypoints = A();
 
-    setProperties(this.publicAPI, {
-      waypoints: this.waypoints
-    });
+    this.publicAPI.waypoints = this.waypoints;
+    this.publicAPI.actions.route = () => this.route();
   },
 
   _addComponent() {
-    this.getRoute().then(() => this._didAddComponent());
+    this.route().then(() => this._didAddComponent());
   },
 
   _updateComponent() {
-    this.getRoute();
+    this.route();
   },
 
-  getRoute() {
-    return this.route().then((directions) => {
+  route() {
+    return this._route().then((directions) => {
       const newDirections = {
         directions,
         mapComponent: directions
@@ -48,7 +47,7 @@ export default Base.extend({
     });
   },
 
-  route() {
+  _route() {
     return get(this, 'directionsService').then((directionsService) => {
       const options = get(this, '_options');
       delete options.map;

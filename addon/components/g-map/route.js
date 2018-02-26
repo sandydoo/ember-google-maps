@@ -1,6 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/route';
-import { get, set } from '@ember/object';
+import { get, set } from '@ember/object'
 
 export default Base.extend({
   layout,
@@ -14,7 +14,7 @@ export default Base.extend({
   didReceiveAttrs() {
     this._super(...arguments);
 
-    if (!this._isInitialized && get(this, '_options.directions')) {
+    if (!this._isInitialized && this.mapComponent && get(this, '_options.directions')) {
       this._didAddComponent();
     }
   },

@@ -28,8 +28,6 @@
 
     <p>Let's recreate one of the more complex examples from {{google-docs "directions-complex" type="examples"}}. We want to walk from Covent Garden to Clerkenwell. We're going to fetch the route and display markers along the route for each step of the route. Each marker has an <tt>{{link-to "infoWindow" "docs.info-windows"}}</tt> attached to it that displays the instructions for the specific step. You know what? Let's also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
 
-    <p><span class="badge badge-primary">Test</span> Drag the <tt>A</tt>, <tt>B</tt> or <tt>C</tt> markers to update the directions.</p>
-
     {{code-snippet name="complex-routes.hbs"}}
 
     <p>If you're doing complex routing like in the example above, you might find that manipulating the directions object in Handlebars can be a bit of a pain. In this case, I would suggest creating your own helpers. Here we've defined a <tt>get-route-steps</tt> helper that extracts the route steps.</p>
@@ -49,7 +47,6 @@
         destination="Clerkenwell"
         travelMode="WALKING" as |d|}}
         {{#d.route
-          draggable=true
           polylineOptions=(hash
             strokeColor="green"
             strokeWeight=8
