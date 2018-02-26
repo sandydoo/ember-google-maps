@@ -17,6 +17,7 @@ export default Base.extend({
 
   _ignoreAttrs: ['onDirectionsChanged'],
   _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
+  _watchedOptions: ['waypoints.[]'],
 
   init() {
     this._super(...arguments);
