@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { get, setProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { A } from '@ember/array';
+import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 
 export default Base.extend({
@@ -14,6 +15,7 @@ export default Base.extend({
   googleMapsApi: service(),
   directionsService: reads('googleMapsApi.directionsService'),
 
+  _ignoreAttrs: ['onDirectionsChanged'],
   _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
 
   init() {
@@ -21,8 +23,7 @@ export default Base.extend({
     this.waypoints = A();
 
     setProperties(this.publicAPI, {
-      waypoints: this.waypoints,
-      directions: reads(this, 'directions')
+      waypoints: this.waypoints
     });
   },
 
@@ -36,10 +37,13 @@ export default Base.extend({
 
   getRoute() {
     return this.route().then((directions) => {
-      setProperties(this, {
+      const newDirections = {
         directions,
         mapComponent: directions
-      });
+      };
+      setProperties(this, newDirections);
+      setProperties(this.publicAPI, newDirections);
+      tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]);
     });
   },
 
