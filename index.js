@@ -3,6 +3,7 @@
 
 const Funnel = require('broccoli-funnel');
 const path = require('path');
+const chalk = require('chalk');
 
 function intersection(a, b) {
   const intersection = new Set();
@@ -54,52 +55,9 @@ module.exports = {
   },
 
   config(env, config) {
-    let src = '//maps.googleapis.com/maps/api/js';
-    let mapConfig = config['ember-google-maps'] || {};
-    let params = [];
-
-    let key = mapConfig.key;
-    if (key) {
-      params.push('key=' + encodeURIComponent(key));
-    }
-
-    let version = mapConfig.version;
-    if (version) {
-      params.push('v=' + encodeURIComponent(version));
-    }
-
-    let client = mapConfig.client;
-    if (client) {
-      params.push('client=' + encodeURIComponent(client));
-    }
-
-    let channel = mapConfig.channel;
-    if (channel) {
-      params.push('channel=' + encodeURIComponent(channel));
-    }
-
-    let libraries = mapConfig.libraries;
-    if (libraries && libraries.length) {
-      params.push('libraries=' + encodeURIComponent(libraries.join(',')));
-    }
-
-    let language = mapConfig.language;
-    if (language) {
-      params.push('language=' + encodeURIComponent(language));
-    }
-
-    let protocol = mapConfig.protocol;
-    if (protocol) {
-      src = protocol + ':' + src;
-    }
-
-    src += '?' + params.join('&');
-
-    mapConfig['src'] = src;
-
-    config['ember-google-maps'] = mapConfig;
-
-    return config;
+    const mapConfig = config['ember-google-maps'] || {};
+    mapConfig['src'] = this.buildGoogleMapsUrl(mapConfig);
+    return { 'ember-google-maps': mapConfig };
   },
 
   treeForAddon() {
@@ -181,5 +139,62 @@ module.exports = {
     }
 
     return Array.from(except);
+  },
+
+  buildGoogleMapsUrl(config) {
+    if (!(config && config.key)) {
+      this.warn('You must provide at least a Google Maps API key to ember-google-maps. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+    }
+
+    let src = config.baseUrl || '//maps.googleapis.com/maps/api/js';
+    const params = [];
+
+    const version = config.version;
+    if (version) {
+      params.push('v=' + encodeURIComponent(version));
+    }
+
+    const client = config.client;
+    if (client) {
+      params.push('client=' + encodeURIComponent(client));
+    }
+
+    const channel = config.channel;
+    if (channel) {
+      params.push('channel=' + encodeURIComponent(channel));
+    }
+
+    const libraries = config.libraries;
+    if (libraries && libraries.length) {
+      params.push('libraries=' + encodeURIComponent(libraries.join(',')));
+    }
+
+    const region = config.region;
+    if (region) {
+      params.push('region=' + encodeURIComponent(region));
+    }
+
+    const language = config.language;
+    if (language) {
+      params.push('language=' + encodeURIComponent(language));
+    }
+
+    const key = config.key;
+    if (key) {
+      params.push('key=' + encodeURIComponent(key));
+    }
+
+    const protocol = config.protocol;
+    if (protocol) {
+      src = protocol + ':' + src;
+    }
+
+    src += '?' + params.join('&');
+
+    return src;
+  },
+
+  warn(message) {
+    this.ui.writeLine(chalk.yellow(message));
   }
 };
