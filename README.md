@@ -4,8 +4,6 @@
 
 > A *lightweight*, *declarative*, *composable* API for building ambitious map UIs in your Ember apps.
 
-⚠ **This addon is in active development. APIs may change.** ⚠
-
 ##### What this addon *is*:
 
 * ✅ A lightweight Ember API for working with Google Maps.
@@ -22,7 +20,7 @@
 
 ### 👷‍ Maintainers
 
-This addon is maintained by [campusboard](https://www.campusboard.co.uk).
+This addon is maintained by [Sander Melnikov](https://github.com/sandydoo) @ [campusboard](https://www.campusboard.co.uk).
 
 ### 👀 Alternatives
 
