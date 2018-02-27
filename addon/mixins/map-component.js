@@ -1,5 +1,6 @@
 import Mixin from '@ember/object/mixin';
 import { computed, get, getProperties } from '@ember/object';
+import { assign } from '@ember/polyfills';
 
 function addObservers(obj, keys, callback) {
   keys.forEach((key) => obj.addObserver(key, callback));
@@ -27,7 +28,7 @@ export default Mixin.create({
   _options: computed('map', 'options', function() {
     let options = get(this, 'options');
     let required = getProperties(this, get(this, '_requiredOptions'));
-    return Object.assign(required, options);
+    return assign(required, options);
   }),
 
   init() {

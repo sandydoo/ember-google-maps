@@ -10,6 +10,7 @@ import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { all } from 'rsvp';
 import { next } from '@ember/runloop';
+import { assign } from '@ember/polyfills';
 
 export default Component.extend(RegisterEvents, MapComponent, {
   layout,
@@ -51,7 +52,7 @@ export default Component.extend(RegisterEvents, MapComponent, {
         trigger: () => this._trigger()
       }
     };
-    set(this, 'publicAPI', Object.assign({}, this.components, publicAPI));
+    set(this, 'publicAPI', assign({}, this.components, publicAPI));
 
     set(this, '_internalAPI', {
       _registerCanvas: this._registerCanvas.bind(this),
