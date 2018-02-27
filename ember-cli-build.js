@@ -44,7 +44,7 @@ module.exports = function(defaults) {
         '/docs/directions',
         '/docs/overlays',
         '/docs/complex-ui',
-        'examples/sweet-rentals'
+        '/examples/sweet-rentals'
       ]
     }
   });
