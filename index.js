@@ -142,15 +142,17 @@ module.exports = {
   },
 
   buildGoogleMapsUrl(config) {
-    if (!(config && config.key) || !(config && config.client)) {
+    config = config || {};
+    
+    if (!config.key && !config.client) {
       this.warn('You must provide either a Google Maps API key or a Google Maps Premium Plan Client ID to ember-google-maps. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
     }
     
-    if (config && config.key && config.client) {
+    if (config.key && config.client) {
       this.warn('You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
     }
     
-    if (config && config.channel && !config.client) {
+    if (config.channel && !config.client) {
       this.warn('The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
     }
 
