@@ -22,26 +22,17 @@
 
 This addon is maintained by [Sander Melnikov](https://github.com/sandydoo) @ [campusboard](https://www.campusboard.co.uk).
 
-### 👀 Alternatives
+### ⭐ Features
 
-The two *maintained* alternatives are [ember-g-map](https://github.com/asennikov/ember-g-map) and [ember-cli-g-maps](https://github.com/Matt-Jensen/ember-cli-g-maps).
-
-Here's a *very subjective* 😬 comparison of the Ember + Google Maps integration addons available today:
-
-|                           | ember-google-maps | ember-g-map       | ember-cli-g-maps  |
-| ------------------------- | ----------------- | ----------------- | ----------------- |
-| Lightweight               | ✅                | ✅                | ❌               |
-| Minimal wrapping          | ✅                | ❌                | ❌               |
-| Async API loading         | ✅                | ❌                | ✅               |
-| Official Google API       | ✅                | ✅                | ❌               |
-| Leverages templates       | ✅                | ✅                | ❌               |
-| Contextual components     | ✅                | ❌                | ❌               |
-| Minimal observer usage    | ✅                | ❌                | ❌               |
-| Native Ember HTML markers | ✅                | ❌                | ❌               |
-
-**ember-g-map** provides a great template-oriented API for working with maps. It is however a bit long in the tooth for some refactoring and upgrades, like supporting contextual components and more Google Maps components. The current architecture makes adding these features quite involved. It also doesn't support loading the Google Maps API asynchronously and by default inserts a render-blocking script tag into your HTML!
-
-**ember-cli-gmaps** actually uses a [custom fork](https://github.com/Matt-Jensen/gmaps-for-apps) of [gmaps](https://github.com/hpneo/gmaps) – a wrapper for the Google Maps API. That's 3 whole layers of complex wrappers tightly coupled to their API all to render a map and some markers in Ember – be wary of this if you are conscious of build sizes and/or technical debt. It also doesn't utilize any of the paradigms that we love about Ember, like templates, contextual components, closure actions, etc.
+| Feature                   |                   |
+| :------------------------ | :---------------: |
+| Lightweight wrapper       | ✅                |
+| Async API loading         | ✅                |
+| Official Google API       | ✅                |
+| Leverages templates       | ✅                |
+| Contextual components     | ✅                |
+| Minimal observer usage    | ✅                |
+| Native Ember HTML markers | ✅                |
 
 If you don't need the Google API specifically, check out [ember-leaflet](https://github.com/miguelcobain/ember-leaflet).
 
@@ -78,11 +69,11 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 {{/g-map}}
 ```
 
-[Learn more](https://ember-google-maps.sandydoo.me/)
+[Learn more ›](https://ember-google-maps.sandydoo.me/)
 
 ### Contributing
 
-#### Installation 
+#### Installation
 
 * `git clone https://github.com/sandydoo/ember-google-maps.git` this repository
 * `cd ember-google-maps`
@@ -94,9 +85,10 @@ The dummy app and test suite is run using a live map instance, which means you n
 
 You can create an API key by following the instructions here: [Create API key](https://developers.google.com/maps/documentation/javascript/get-api-key).
 
-Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run this line, making sure to replace `INSERT_YOUR_KEY_HERE` with your actual key.
+Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run these lines, making sure to replace `INSERT_YOUR_KEY_HERE` with your actual key.
 
 `touch .env & echo 'GOOGLE_MAPS_API_KEY=<INSERT_YOUR_KEY_HERE>' > .env`
+`cp .env .env.test`
 
 #### Running tests
 
