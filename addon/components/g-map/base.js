@@ -13,6 +13,7 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
 
   init() {
     this._super(...arguments);
+
     this.isInitialized = defer();
     this.publicAPI = {
       id: guidFor(this),
@@ -27,10 +28,21 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
   didInsertElement() {
     this._super(...arguments);
     this._internalAPI._registerComponent(this._type, this.publicAPI);
+    this._updateOrAddComponent();
   },
 
-  didReceiveAttrs() {
+  didUpdateAttrs() {
     this._super(...arguments);
+    this._updateOrAddComponent();
+  },
+
+  willDestroyElement() {
+    tryInvoke(this.mapComponent, 'setMap', [null]);
+    this._internalAPI._unregisterComponent(this._type, this.publicAPI);
+    this._super(...arguments);
+  },
+
+  _updateOrAddComponent() {
     if (get(this, 'map')) {
       if (this._isInitialized) {
         this._updateComponent();
@@ -40,15 +52,9 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
     }
   },
 
-  willDestroyElement() {
-    tryInvoke(this.mapComponent, 'setMap', [null]);
-    this._internalAPI._unregisterComponent(this._type, this.publicAPI);
-    this._super(...arguments);
-  },
-
   _didAddComponent() {
     set(this, 'publicAPI.mapComponent', this.mapComponent);
-    this.trigger('didAddComponent');
+    this.registerEvents();
     set(this, '_isInitialized', true);
     this.isInitialized.resolve();
   },
