@@ -9,6 +9,14 @@ export function trigger(component, eventName, ...options) {
   });
 }
 
+import { Promise } from 'rsvp';
+
+export function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
 import { module } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import GMapComponent from 'ember-google-maps/components/g-map';

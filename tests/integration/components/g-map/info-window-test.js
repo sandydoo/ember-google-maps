@@ -1,14 +1,7 @@
-import { moduleForMap, trigger } from 'dummy/tests/helpers/g-map-helpers';
+import { moduleForMap, trigger, wait } from 'dummy/tests/helpers/g-map-helpers';
 import { test } from 'qunit';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { Promise } from 'rsvp';
-
-function wait(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), ms);
-  });
-}
 
 moduleForMap('Integration | Component | g-map/info-window', function() {
   test('it registers an info window', async function(assert) {
