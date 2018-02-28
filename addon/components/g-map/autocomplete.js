@@ -1,6 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/autocomplete';
-import { get, set } from '@ember/object';
+import { computed, get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
 import { guidFor } from '@ember/object/internals';
 
@@ -17,6 +17,10 @@ export default Base.extend({
     this._super(...arguments);
     this.inputId = `pac-input-${guidFor(this)}`;
   },
+
+  inputClasses: computed('classNames', function() {
+    return get(this, 'classNames').join(' ');
+  }),
 
   _onInput(value) {
     tryInvoke(this, 'onInput', [value]);
