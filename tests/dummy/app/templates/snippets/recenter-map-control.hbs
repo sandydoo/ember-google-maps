@@ -5,7 +5,7 @@
   zoomControlOptions=(hash
     position=google.maps.ControlPosition.TOP_LEFT) as |g|}}
   {{g.marker lat=london.lat lng=london.lng}}
-  {{#g.control position="TOP CENTER"}}
+  {{#g.control position="TOP_CENTER"}}
     <div class="map-control">
       <button {{action "recenterMap" g.map}} role="button" class="btn btn-light m-2">
         Recenter map
