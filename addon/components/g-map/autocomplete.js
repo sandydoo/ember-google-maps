@@ -1,34 +1,24 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/autocomplete';
-import { computed, get, set } from '@ember/object';
+import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
-import { guidFor } from '@ember/object/internals';
+import { assert } from '@ember/debug';
 
 export default Base.extend({
   layout,
 
-  tagName: '',
-  classNames: ['ember-google-maps-autocomplete'],
+  tagName: 'div',
 
   _type: 'autocomplete',
-  _ignoreAttrs: ['onSearch', 'onInput'],
-
-  init() {
-    this._super(...arguments);
-    this.inputId = `pac-input-${guidFor(this)}`;
-  },
-
-  inputClasses: computed('classNames', function() {
-    return get(this, 'classNames').join(' ');
-  }),
-
-  _onInput(value) {
-    tryInvoke(this, 'onInput', [value]);
-  },
+  _ignoreAttrs: ['onSearch'],
 
   _addComponent() {
     let map = get(this, 'map');
-    let inputElement = document.getElementById(this.inputId);
+
+    let inputElement = this.element.querySelector('input');
+
+    assert('You must define your own input within the ember-google-maps autocomplete block.', inputElement);
+
     let autocomplete = new google.maps.places.Autocomplete(inputElement, get(this, '_options'));
     set(this, 'mapComponent', autocomplete);
 

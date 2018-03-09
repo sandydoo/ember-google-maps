@@ -7,7 +7,9 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
   test('it renders a pac-input', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{g.autocomplete}}
+        {{#g.autocomplete}}
+          <input id="pac-input">
+        {{/g.autocomplete}}
       {{/g-map}}
     `);
 
@@ -15,7 +17,7 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
 
     const input = find('input');
     assert.ok(input, 'input rendered');
-    assert.ok(input.id.startsWith('pac-input-'), 'input initialized');
+    assert.equal('pac-input', input.id);
     assert.equal(publicAPI.autocompletes.length, 1);
   });
 
@@ -26,7 +28,9 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{g.autocomplete onInput=(action onInput)}}
+        {{#g.autocomplete}}
+          <input oninput={{action onInput value="target.value"}}>
+        {{/g.autocomplete}}
       {{/g-map}}
     `);
 
@@ -40,7 +44,9 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{g.autocomplete onSearch=(action onSearch)}}
+        {{#g.autocomplete onSearch=(action onSearch)}}
+          <input>
+        {{/g.autocomplete}}
       {{/g-map}}
     `);
 
