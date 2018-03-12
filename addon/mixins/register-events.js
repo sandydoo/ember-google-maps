@@ -2,7 +2,6 @@ import Mixin from '@ember/object/mixin';
 import { computed, get } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { decamelize } from '@ember/string';
-import { schedule } from '@ember/runloop';
 
 /**
  * Register Google Maps events on any map component.
@@ -16,7 +15,7 @@ import { schedule } from '@ember/runloop';
  * call the function passed in as `onClick`.
  */
 export default Mixin.create({
-  domComponent: reads('mapComponent'),
+  _eventTarget: reads('mapComponent'),
 
   events: computed(function() {
     const attrs = Object.keys(this.attrs);
@@ -28,27 +27,34 @@ export default Mixin.create({
   },
 
   willDestroyElement() {
-    const domComponent = get(this, 'domComponent');
-    if (domComponent && typeof google !== 'undefined') {
-      google.maps.event.clearInstanceListeners(domComponent);
+    const eventTarget = get(this, '_eventTarget');
+    if (eventTarget && typeof google !== 'undefined') {
+      google.maps.event.clearInstanceListeners(eventTarget);
     }
     this._super(...arguments);
   },
 
   registerEvents() {
     const eventsToRegister = get(this, 'events');
-    eventsToRegister.forEach((event) => {
-      const eventName = decamelize(event).slice(3);
-      const domComponent = get(this, 'domComponent');
-      google.maps.event.addDomListener(domComponent, eventName, (e) => {
-        if (e && e.stopPropagation) { e.stopPropagation(); }
-        schedule('actions',
-          this,
-          event,
+    eventsToRegister.forEach((action) => {
+      const eventName = decamelize(action).slice(3);
+      const eventTarget = get(this, '_eventTarget');
+
+      google.maps.event.addDomListener(eventTarget, eventName, (googleEvent) => {
+        if (event && event.stopPropagation) {
+          event.stopPropagation();
+        }
+
+        if (googleEvent && googleEvent.stop) {
+          googleEvent.stop();
+        }
+
+        get(this, action)(
           {
-            event: e,
+            event,
+            googleEvent,
             eventName: eventName,
-            target: domComponent,
+            target: eventTarget,
             publicAPI: this.publicAPI,
             map: get(this, 'map')
           }
