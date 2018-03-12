@@ -16,8 +16,14 @@ export default Base.extend({
   height: 0,
   paneName: 'overlayMouseTarget',
 
-  domComponent: reads('content'),
+  _eventTarget: reads('content'),
+  _elementDestination: null,
   _targetPane: null,
+
+  init() {
+    this._super(...arguments);
+    this.publicAPI.actions.cachedBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
+  },
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
@@ -26,6 +32,11 @@ export default Base.extend({
   position: computed('lat', 'lng', function() {
     const { lat, lng } = getProperties(this, 'lat', 'lng');
     return new google.maps.LatLng(lat, lng);
+  }),
+
+  cachedBoundingClientRect: computed('content', function() {
+    if (!this.content || this.isDestroyed || this.isDestroying) { return; }
+    return this.content.getBoundingClientRect();
   }),
 
   _addComponent() {
@@ -40,14 +51,16 @@ export default Base.extend({
 
   updateComponent() {
     if (!this.mapComponent) { return; }
-    this.computeDimensions();
+    this.notifyPropertyChange('cachedBoundingClientRect');
     this.mapComponent.draw();
   },
 
   add() {
     if (this.isDestroyed || this.isDestroying) { return; }
     const panes = this.mapComponent.getPanes();
+    const _elementDestination = set(this, '_elementDestination', document.createElement('div'));
     set(this, '_targetPane', get(panes, this.paneName));
+    this._targetPane.appendChild(_elementDestination);
 
     schedule('afterRender', () => {
       this.fetchOverlayContent();
@@ -63,8 +76,8 @@ export default Base.extend({
     const position = get(this, 'position');
     const point = overlayProjection.fromLatLngToDivPixel(position);
 
-    const height = this.height;
-    const width = this.width / 2;
+    let { width, height } = get(this, 'cachedBoundingClientRect');
+    width = width / 2;
 
     this.content.style.cssText = `display: block; position: absolute; left: ${point.x - width}px; top: ${point.y - height}px; opacity: 1;`;
 
@@ -75,13 +88,6 @@ export default Base.extend({
     if (this.isDestroyed || this.isDestroying) { return; }
     let element = document.getElementById(get(this, '_contentId'));
     set(this, 'content', element);
-  },
-
-  computeDimensions() {
-    if (!this.content || this.isDestroyed || this.isDestroying) { return; }
-    const { width, height } = this.content.getBoundingClientRect();
-    this.width = width;
-    this.height = height;
   },
 
   getPosition() {
