@@ -11,11 +11,11 @@ export default Base.extend({
   _requiredOptions: ['position'],
 
   _addComponent() {
-    const _targetPane = set(this, '_targetPane', document.createElement('div'));
+    const _elementDestination = set(this, '_elementDestination', document.createElement('div'));
     const map = get(this, 'map');
     const controlPosition = google.maps.ControlPosition[get(this, 'position')];
-    map.controls[controlPosition].push(_targetPane);
-    set(this, 'mapComponent', _targetPane);
+    map.controls[controlPosition].push(_elementDestination);
+    set(this, 'mapComponent', _elementDestination);
     this._didAddComponent();
   }
 });
