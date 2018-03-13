@@ -43,7 +43,7 @@ export default Base.extend({
 
   init() {
     this._super(...arguments);
-    this.publicAPI.actions.cachedBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
+    this.publicAPI.actions.getBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
   },
 
   _addComponent() {
