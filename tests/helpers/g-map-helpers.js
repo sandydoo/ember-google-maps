@@ -1,4 +1,15 @@
+import { module } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import GMapComponent from 'ember-google-maps/components/g-map';
+import { london } from './locations';
+
+import ObjectProxy from '@ember/object/proxy';
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+
+import { Promise, defer } from 'rsvp';
 import { run } from '@ember/runloop';
+
+const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 /**
  * Wrap the Google Maps trigger method in an Ember runloop.
@@ -9,24 +20,11 @@ export function trigger(component, eventName, ...options) {
   });
 }
 
-import { Promise } from 'rsvp';
-
 export function wait(ms) {
   return new Promise((resolve) => {
     setTimeout(() => resolve(), ms);
   });
 }
-
-import { module } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import GMapComponent from 'ember-google-maps/components/g-map';
-import { london } from './locations';
-
-import ObjectProxy from '@ember/object/proxy';
-import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
-import { defer } from 'rsvp';
-
-const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 /**
  * Set up for map component testing:

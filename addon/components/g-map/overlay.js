@@ -19,19 +19,13 @@ export default Base.extend({
 
   _type: 'overlay',
 
-  markerStyle: htmlSafe('position: absolute; opacity: 0.01;'),
-  width: 0,
-  height: 0,
   paneName: 'overlayMouseTarget',
 
-  _eventTarget: reads('content'),
   _elementDestination: null,
   _targetPane: null,
 
-  init() {
-    this._super(...arguments);
-    this.publicAPI.actions.cachedBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
-  },
+  markerStyle: htmlSafe('position: absolute; opacity: 0.01;'),
+  _eventTarget: reads('content'),
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
@@ -46,6 +40,11 @@ export default Base.extend({
     if (!this.content || this.isDestroyed || this.isDestroying) { return; }
     return this.content.getBoundingClientRect();
   }),
+
+  init() {
+    this._super(...arguments);
+    this.publicAPI.actions.cachedBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
+  },
 
   _addComponent() {
     const Overlay = new google.maps.OverlayView();
@@ -85,7 +84,7 @@ export default Base.extend({
     const point = overlayProjection.fromLatLngToDivPixel(position);
 
     let { width, height } = get(this, 'cachedBoundingClientRect');
-    width = width / 2;
+    width /= 2;
 
     this.content.style.cssText = `display: block; position: absolute; left: ${point.x - width}px; top: ${point.y - height}px; opacity: 1;`;
 

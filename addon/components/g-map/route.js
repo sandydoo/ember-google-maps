@@ -1,6 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/route';
-import { get, set } from '@ember/object'
+import { get, set } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.DirectionsRenderer class.
@@ -30,7 +30,7 @@ export default Base.extend({
   _addComponent() {
     const options = get(this, '_options');
     if (!options.directions) {
-      delete options.directions
+      delete options.directions;
     }
     set(this, 'mapComponent', new google.maps.DirectionsRenderer(options));
   }

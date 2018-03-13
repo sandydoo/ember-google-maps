@@ -17,7 +17,7 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
 
     const input = find('input');
     assert.ok(input, 'input rendered');
-    assert.equal('pac-input', input.id);
+    assert.equal(input.id, 'pac-input');
     assert.equal(publicAPI.autocompletes.length, 1);
   });
 
@@ -54,7 +54,7 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
     // Fetch the initialized Autocomplete component and shim the getPlace
     // function.
     const autocomplete = publicAPI.autocompletes[0].mapComponent;
-    autocomplete.getPlace = () => { return { geometry: true } };
+    autocomplete.getPlace = () => { return { geometry: true }; };
 
     trigger(autocomplete, 'place_changed');
   });

@@ -35,7 +35,7 @@ export default Service.extend({
   directionsService: computed(function() {
     return ObjectPromiseProxy.create({
       promise: get(this, 'google').then(() => {
-        return new google.maps.DirectionsService;
+        return new google.maps.DirectionsService();
       })
     });
   }).readOnly(),

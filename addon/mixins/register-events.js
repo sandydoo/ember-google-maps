@@ -88,7 +88,7 @@ export default Mixin.create({
           {
             event,
             googleEvent,
-            eventName: eventName,
+            eventName,
             target: eventTarget,
             publicAPI: this.publicAPI,
             map: get(this, 'map')

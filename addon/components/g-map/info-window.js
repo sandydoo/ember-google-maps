@@ -82,7 +82,7 @@ export default Base.extend({
 
   close() {
     schedule('actions', () => {
-      this.mapComponent && this.mapComponent.close();
+      if (this.mapComponent) { this.mapComponent.close(); }
     });
   }
 });

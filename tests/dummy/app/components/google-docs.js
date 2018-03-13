@@ -3,7 +3,7 @@ import layout from '../templates/components/google-docs';
 import { computed, get } from '@ember/object';
 import { capitalize } from '@ember/string';
 
-const GoogleDocs =  Component.extend({
+const GoogleDocs = Component.extend({
   layout,
   tagName: 'a',
   attributeBindings: ['href', 'rel', 'target'],

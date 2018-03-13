@@ -16,16 +16,16 @@ import { Promise } from 'rsvp';
  * @extends GMap.Base
  */
 export default Base.extend({
+  googleMapsApi: service(),
+
   layout,
 
   _type: 'direction',
-
-  googleMapsApi: service(),
-  directionsService: reads('googleMapsApi.directionsService'),
-
   _ignoreAttrs: ['onDirectionsChanged'],
   _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
   _watchedOptions: ['waypoints.[]'],
+
+  directionsService: reads('googleMapsApi.directionsService'),
 
   init() {
     this._super(...arguments);

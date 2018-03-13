@@ -4,12 +4,10 @@ module.exports = {
     ecmaVersion: 2017,
     sourceType: 'module'
   },
-  plugins: [
-    'ember'
-  ],
+  plugins: [],
   extends: [
-    'eslint:recommended',
-    'plugin:ember/recommended'
+    'simplabs',
+    'simplabs/plugins/ember'
   ],
   env: {
     browser: true
@@ -18,8 +16,7 @@ module.exports = {
     google: false
   },
   rules: {
-    'no-console': 'off',
-    'ember/avoid-leaking-state-in-ember-objects': 'warn',
+    'ember/avoid-leaking-state-in-components': 'warn',
     'ember/no-attrs-in-components': 'off'
   },
   overrides: [

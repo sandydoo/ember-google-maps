@@ -18,21 +18,21 @@ export default Controller.extend(CommonMapData, {
     });
   }),
 
-  _saveBounds(map) {
-    set(this, 'mapBounds', map.getBounds());
-  },
-
   actions: {
     saveBounds({ map }) {
       throttle(this, this._saveBounds, map, 100);
     },
 
     scrollToListing(listing) {
-      const id = 'rental-' + listing.id;
+      const id = `rental-${listing.id}`;
       let el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
     }
+  },
+
+  _saveBounds(map) {
+    set(this, 'mapBounds', map.getBounds());
   }
 });

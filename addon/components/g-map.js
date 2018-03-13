@@ -20,14 +20,14 @@ import { assign } from '@ember/polyfills';
  * @uses MapComponent
  */
 export default Component.extend(RegisterEvents, MapComponent, {
-  layout,
-
   /**
    * @property googleMapsApi
    * @type GoogleMapsApi
    * @readOnly
    */
   googleMapsApi: service(),
+
+  layout,
 
   tagName: '',
 
@@ -82,7 +82,7 @@ export default Component.extend(RegisterEvents, MapComponent, {
     this._super(...arguments);
 
     const componentNames = ['markers', 'circles', 'polylines', 'overlays', 'controls', 'autocompletes', 'infoWindows', 'routes', 'directions'];
-    this.components = {}
+    this.components = {};
     componentNames.forEach((name) => {
       this.components[name] = A();
     });

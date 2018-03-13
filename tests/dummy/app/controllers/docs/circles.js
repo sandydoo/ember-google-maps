@@ -7,6 +7,6 @@ export default DocsController.extend(CommonMapData, {
 
   radius: computed({
     get: () => 1000,
-    set: (_k, v) => parseInt(v)
+    set: (_k, v) => parseInt(v, 10)
   })
 });

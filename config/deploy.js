@@ -28,12 +28,12 @@ module.exports = function(deployTarget) {
       bucket: 'ember-google-maps',
       region: 'eu-west-1',
       filePattern: '**/*.{js,css,png,gif,ico,jpg,map,xml,txt,svg,swf,eot,ttf,woff,woff2,otf,html}'
-    }
+    };
 
     ENV['s3-index'] = {
       bucket: 'ember-google-maps',
       region: 'eu-west-1'
-    }
+    };
   }
 
   // Note: if you need to build some configuration asynchronously, you can return

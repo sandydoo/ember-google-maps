@@ -17,6 +17,6 @@ export default function coordinatesEqual(latLng1, latLng2, message = '') {
     result: isEqual,
     actual: latLng1,
     expected: latLng2,
-    message: message
+    message
   });
 }

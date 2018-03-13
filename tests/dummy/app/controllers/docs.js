@@ -9,6 +9,16 @@ export default ApplicationController.extend(CommonMapData, {
 
   routeName: reads('router.currentRouteName'),
 
+  currentPage: computed('routeName', function() {
+    return get(this, 'links').find((l) => l.path === get(this, 'routeName'));
+  }),
+
+  nextPage: computed('links', 'currentPage', function() {
+    const links = get(this, 'links');
+    let index = links.indexOf(get(this, 'currentPage'));
+    return links[++index];
+  }),
+
   links: computed(function() {
     return [
       { title: 'About', path: 'docs.about', text: '' },
@@ -22,19 +32,9 @@ export default ApplicationController.extend(CommonMapData, {
       { title: 'Polylines', path: 'docs.polylines', text: 'Onto polylines!' },
       { title: 'Info windows', path: 'docs.info-windows', text: "Let's learn how to add info windows or tooltips to the map." },
       { title: 'Controls', path: 'docs.controls', text: "Next, let's look at how we can modify the default map UI." },
-      { title: 'Directions', path: 'docs.directions', text: "Let's look at how to query and display routing information."},
+      { title: 'Directions', path: 'docs.directions', text: "Let's look at how to query and display routing information." },
       { title: 'Custom overlays', path: 'docs.overlays', text: "It's finally time to learn how to create custom HTML markers!" },
       { title: 'Complex UI', path: 'docs.complex-ui', text: "Let's see what we can build with these components." }
     ];
-  }).readOnly(),
-
-  currentPage: computed('routeName', function() {
-    return get(this, 'links').find((l) => l.path === get(this, 'routeName'));
-  }),
-
-  nextPage: computed('links', 'currentPage', function() {
-    const links = get(this, 'links');
-    let index = links.indexOf(get(this, 'currentPage'));
-    return links[++index];
-  }),
+  }).readOnly()
 });

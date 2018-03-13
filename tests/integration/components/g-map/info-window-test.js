@@ -37,7 +37,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
     this.set('isOpen', true);
   });
 
-   test('it renders an info window with custom html passed using the content attribute', async function(assert) {
+  test('it renders an info window with custom html passed using the content attribute', async function(assert) {
     this.set('isOpen', false);
     this.set('onDomReady', () => true);
 
@@ -89,7 +89,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI} = await this.get('map');
+    const { publicAPI } = await this.get('map');
 
     this.set('isOpen', true);
 
@@ -140,7 +140,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI} = await this.get('map');
+    const { publicAPI } = await this.get('map');
     const infoWindow = publicAPI.infoWindows[0].mapComponent;
 
     const domIsReady = () => this.domIsReady;
