@@ -8,5 +8,10 @@ import Component from '@ember/component';
  * As a result, it's not possible to tell what causes the rerender – changes in
  * the template or setting the new position. This separate component wrapper
  * lets us decouple the content block's rendering logic from the marker.
+ *
+ * @class DetectRender
+ * @module ember-google-maps/components/-private-api/detect-render
+ * @extends Component
+ * @private
  */
 export default Component.extend();

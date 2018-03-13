@@ -12,25 +12,67 @@ import { all } from 'rsvp';
 import { next } from '@ember/runloop';
 import { assign } from '@ember/polyfills';
 
+/**
+ * @class GMap
+ * @module ember-google-maps/components/g-map
+ * @extends Ember.Component
+ * @uses RegisterEvents
+ * @uses MapComponent
+ */
 export default Component.extend(RegisterEvents, MapComponent, {
   layout,
 
-  googleMapsAPI: service(),
+  /**
+   * @property googleMapsApi
+   * @type GoogleMapsApi
+   * @readOnly
+   */
+  googleMapsApi: service(),
 
   tagName: '',
 
   _requiredOptions: ['center', 'zoom'],
+
+  /**
+   * Track whether a custom canvas is used instead of the default one.
+   *
+   * @property _customCanvasRegistered
+   * @type {Boolean}
+   * @private
+   */
   _customCanvasRegistered: false,
 
+  /**
+   * Zoom level for the map
+   *
+   * @property zoom
+   * @type {Number}
+   * @default 8
+   * @public
+   */
   zoom: 8,
 
-  google: reads('googleMapsAPI.google'),
+  google: reads('googleMapsApi.google'),
   mapComponent: reads('map'),
 
+  /**
+   * A unique id for the current map instance.
+   *
+   * @property mapId
+   * @type {String}
+   * @public
+   */
   mapId: computed(function() {
     return `ember-google-map-${guidFor(this)}`;
   }),
 
+  /**
+   * The latitude and longitude of the center of the map.
+   *
+   * @property center
+   * @type {google.maps.LatLng}
+   * @public
+   */
   center: computed('lat', 'lng', function() {
     const { lat, lng } = getProperties(this, 'lat', 'lng');
     return new google.maps.LatLng(lat, lng);
@@ -73,6 +115,13 @@ export default Component.extend(RegisterEvents, MapComponent, {
     get(this, 'google').then(() => next(this, '_initMap'));
   },
 
+  /**
+   * Initialize the map, register events and prep internal components.
+   *
+   * @method _initMap
+   * @private
+   * @return
+   */
   _initMap() {
     if (this.isDestroying || this.isDestroyed) { return; }
 
@@ -104,11 +153,24 @@ export default Component.extend(RegisterEvents, MapComponent, {
     });
   },
 
+  /**
+   * Update the map options.
+   *
+   * @method _updateMap
+   * @return
+   */
   _updateMap() {
     const options = get(this, '_options');
     get(this, 'map').setOptions(options);
   },
 
+  /**
+   * Helper method to trigger Google Maps events.
+   *
+   * @method _trigger
+   * @param {String} event Event name
+   * @return
+   */
   _trigger(event) {
     google.maps.event.trigger(get(this, 'map'), event);
   },
@@ -118,10 +180,26 @@ export default Component.extend(RegisterEvents, MapComponent, {
     set(this, '_customCanvasRegistered', isCustomCanvas);
   },
 
+  /**
+   * Register a contextual component with the map component.
+   *
+   * @method _registerComponent
+   * @param {String} type Name of the component
+   * @param {Ember.Component} component
+   * @return
+   */
   _registerComponent(type, component) {
     get(this, `components.${type}s`).pushObject(component);
   },
 
+  /**
+   * Unregister a contextual component with the map component.
+   *
+   * @method _unregisterComponent
+   * @param {String} type Name of the component
+   * @param {Ember.Component} component
+   * @return
+   */
   _unregisterComponent(type, component) {
     get(this, `components.${type}s`).removeObject(component);
   }

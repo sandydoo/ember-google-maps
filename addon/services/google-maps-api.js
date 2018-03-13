@@ -9,13 +9,29 @@ import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
 
 let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
+/**
+ * @class GoogleMapsApi
+ * @extends Ember.Service
+ * @module ember-google-maps/services/google-maps-api
+ * @public
+ */
 export default Service.extend({
+  /**
+   * @method google
+   * @readOnly
+   * @return {Ember.ObjectProxy}
+   */
   google: computed(function() {
     return ObjectPromiseProxy.create({
       promise: this._loadMapsAPI()
     });
   }).readOnly(),
 
+  /**
+   * @method directionsService
+   * @readOnly
+   * @return {Ember.ObjectProxy}
+   */
   directionsService: computed(function() {
     return ObjectPromiseProxy.create({
       promise: get(this, 'google').then(() => {
@@ -26,6 +42,10 @@ export default Service.extend({
 
   /**
    * Return or load the Google Maps API.
+   *
+   * @method _loadMapsAPI
+   * @private
+   * @return {RSVP.Promise}
    */
   _loadMapsAPI() {
     if (typeof document === 'undefined') { return reject(); }

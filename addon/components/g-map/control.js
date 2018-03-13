@@ -2,6 +2,12 @@ import Base from './base';
 import layout from '../../templates/components/g-map/control';
 import { get, set } from '@ember/object';
 
+/**
+ * @class Control
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/control
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 

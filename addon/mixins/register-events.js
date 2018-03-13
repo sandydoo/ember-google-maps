@@ -13,15 +13,43 @@ import { decamelize } from '@ember/string';
  *
  * For example, passing `onClick` will add a `click` event that will
  * call the function passed in as `onClick`.
+ *
+ * @class RegisterEvents
+ * @module ember-google-maps/mixins/register-events
+ * @extends Ember.Mixin
  */
 export default Mixin.create({
+  /**
+   * The target DOM node or Google Maps object to which to attach event
+   * listeners.
+   *
+   * @property eventTarget
+   * @type {HTMLNode|MVCObject}
+   * @private
+   */
   _eventTarget: reads('mapComponent'),
 
+  /**
+   * Filter the array of passed attributes for attributes that begin with `on`.
+   *
+   * @property events
+   * @type {Array}
+   * @public
+   */
   events: computed(function() {
     const attrs = Object.keys(this.attrs);
     return attrs.filter((attr) => this._filterEventsByName(attr));
   }),
 
+  /**
+   * Return true if the passed attribute matches the syntax for an event, i.e.
+   * begins with `on` and is not explicitly ignored in `_ignoreAttrs`.
+   *
+   * @method _filterEventsByName
+   * @param {String} attr
+   * @private
+   * @return {Boolean}
+   */
   _filterEventsByName(attr) {
     return attr.startsWith('on') && get(this, '_ignoreAttrs').indexOf(attr) < 0;
   },
@@ -34,6 +62,13 @@ export default Mixin.create({
     this._super(...arguments);
   },
 
+  /**
+   * Register an event listener on the eventTarget for each event provided.
+   *
+   * @method registerEvents
+   * @private
+   * @return
+   */
   registerEvents() {
     const eventsToRegister = get(this, 'events');
     eventsToRegister.forEach((action) => {

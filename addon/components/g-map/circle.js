@@ -5,8 +5,10 @@ import { reads } from '@ember/object/computed';
 /**
  * Circle marker component.
  *
- * @class
- * @extends Base
+ * @class Circle
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/circle
+ * @extends GMap.Marker
  */
 export default Marker.extend({
   _type: 'circle',

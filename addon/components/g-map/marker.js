@@ -2,6 +2,14 @@ import Base from './base';
 import layout from '../../templates/components/g-map/marker';
 import { computed, get, getProperties, set } from '@ember/object';
 
+/**
+ * A wrapper for the google.maps.Marker class.
+ *
+ * @class Marker
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/marker
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
   tagName: '',

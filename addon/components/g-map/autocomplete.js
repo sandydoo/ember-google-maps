@@ -4,6 +4,12 @@ import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
 import { assert } from '@ember/debug';
 
+/**
+ * @class Autocomplete
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/autocomplete
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 

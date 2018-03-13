@@ -2,6 +2,14 @@ import Base from './base';
 import layout from '../../templates/components/g-map/route';
 import { get, set } from '@ember/object'
 
+/**
+ * A wrapper for the google.maps.DirectionsRenderer class.
+ *
+ * @class Route
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/route
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 

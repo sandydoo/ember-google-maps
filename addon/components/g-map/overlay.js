@@ -6,6 +6,14 @@ import { htmlSafe } from '@ember/string';
 import { schedule } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
 
+/**
+ * A wrapper for the google.maps.Overlay class.
+ *
+ * @class Overlay
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/overlay
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 

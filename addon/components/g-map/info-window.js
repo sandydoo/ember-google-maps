@@ -3,6 +3,14 @@ import layout from '../../templates/components/g-map/info-window';
 import { computed, get, getProperties, set, setProperties } from '@ember/object';
 import { schedule } from '@ember/runloop';
 
+/**
+ * A wrapper for the google.maps.InfoWindow class.
+ *
+ * @class InfoWindow
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/info-window
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 

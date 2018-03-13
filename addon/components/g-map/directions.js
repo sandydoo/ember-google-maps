@@ -7,6 +7,14 @@ import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 
+/**
+ * A wrapper for the google.maps.directionsService API.
+ *
+ * @class Directions
+ * @namespace GMap
+ * @module ember-google-maps/components/g-map/directions
+ * @extends GMap.Base
+ */
 export default Base.extend({
   layout,
 
