@@ -54,6 +54,8 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
     this.set('isOpen', true);
 
     await waitUntil(this.onDomReady);
+    await wait(500);
+
     assert.ok(find('#info-window-test'));
   });
 
@@ -74,6 +76,8 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
     this.set('isOpen', true);
 
     await waitUntil(this.onDomReady);
+    await wait(500);
+
     assert.ok(find('#info-window-test'));
   });
 
