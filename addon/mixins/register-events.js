@@ -76,6 +76,8 @@ export default Mixin.create({
       const eventTarget = get(this, '_eventTarget');
 
       google.maps.event.addDomListener(eventTarget, eventName, (googleEvent) => {
+        let event = window.event;
+
         if (event && event.stopPropagation) {
           event.stopPropagation();
         }
