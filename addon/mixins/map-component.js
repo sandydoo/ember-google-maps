@@ -58,7 +58,7 @@ export default Mixin.create({
    */
   options: computed('attrs', 'events', function() {
     let attrs = Object.keys(this.attrs).filter((k) => {
-      return [...get(this, '_ignoreAttrs'), ...(get(this, 'events') || [])].indexOf(k) < 0;
+      return [...get(this, '_ignoreAttrs'), ...(get(this, 'events') || [])].indexOf(k) === -1;
     });
     return getProperties(this, attrs);
   }),
