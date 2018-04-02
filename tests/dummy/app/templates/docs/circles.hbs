@@ -11,8 +11,8 @@
         <label class="col-form-label" for="radius-input">Radius</label>
         {{input id="radius-input" name="radius" class="form-control" type="number" value=radius step="100" min="100" max="1500"}}
 
-        <label class="col-form-label" for="fill-color-input">Fill color</label>
-        {{input id="fill-color-input" name="fillColor" class="form-control" value=fillColor}}
+        <label class="col-form-label" for="fill-color-input">Fill color (hex)</label>
+        {{input id="fill-color-input" name="fillColor" type="color" class="form-control" value=fillColor}}
     </div>
 
     <p>{{nextPage.text}}</p>

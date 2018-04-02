@@ -36,6 +36,10 @@ body {
 body.white {
   background: #fff;
 }
+// Fix color inputs
+input[type=color].form-control {
+  height: $input-height;
+}
 .no-link-decor {
   color: inherit;
   &:hover {
