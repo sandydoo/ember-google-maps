@@ -4,8 +4,13 @@
   "description": "A lightweight, declarative, composable API for building ambitious map UIs in your Ember apps.",
   "keywords": [
     "ember-addon",
+    "emberjs",
+    "google-map",
     "google-maps",
-    "emberjs"
+    "g-map",
+    "google",
+    "map",
+    "maps"
   ],
   "license": "MIT",
   "author": "Sander Melnikov <sander@sandydoo.me>",
