@@ -22,6 +22,20 @@
 
     <p><span class="badge badge-primary">Test</span> The sample map has some event listeners set up – see if you can find them all!</p>
 
+    <h5>Event propagation</h5>
+
+    <p>You may run into situations where you need to disable the propagation of an event up the DOM tree.</p>
+
+    <p>A common scenario is handling click events on markers and overlays. If you bind a click handler to the marker to display a tooltip and then bind a second click handler on the map to close all open tooltips, your tooltips will never open. A click on the marker will trigger the tooltip, but the same click event will then bubble up the DOM tree to the map and trigger the map click handler, closing all open tooltips.</p>
+
+    <p>There are two ways to avoid this issue: refactor your code to eliminate the unintended effects of bubbling or disable bubbling.</p>
+
+    <p>You can disable bubbling by calling <tt>stopPropagation</tt> on the event object you receive as an argument.</p>
+
+    {{code-snippet name="event-stop-propagation.js"}}
+
+    <p>If you eventually get tired of writing this, you can create a template helper similar to the one suggested in the <a href="https://www.emberjs.com/api/ember/release/classes/Ember.Templates.helpers/methods/action?anchor=action"><span class="ember">ember</span> docs for the action helper</a>.</p>
+
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
