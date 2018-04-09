@@ -103,20 +103,15 @@ export default Component.extend(RegisterEvents, MapComponent, {
     });
   },
 
-  didReceiveAttrs() {
-    this._super(...arguments);
-    if (get(this, 'map')) {
-      this.notifyPropertyChange('options');
-    }
-  },
-
   didInsertElement() {
     this._super(...arguments);
+
     get(this, 'google').then(() => next(this, '_initMap'));
   },
 
   didUpdateAttrs() {
     this._super(...arguments);
+
     if (get(this, 'map')) {
       this._updateMap();
     }

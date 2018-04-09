@@ -49,7 +49,7 @@ export default Mixin.create({
   _watchedOptions: [],
 
   /**
-   * Combined objecto of options and events used to set and update the options
+   * Combined object of options and events used to set and update the options
    * on the map component.
    *
    * @property options

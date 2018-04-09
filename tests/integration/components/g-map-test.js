@@ -22,6 +22,22 @@ moduleForMap('Integration | Component | g map', function() {
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
+  test('it updates the map when attributes are changed', async function(assert) {
+    this.set('zoom', 12);
+
+    await render(hbs`
+      {{g-map lat=lat lng=lng zoom=zoom}}
+    `);
+
+    const { map } = await this.get('map');
+
+    assert.equal(map.zoom, this.zoom);
+
+    this.set('zoom', 15);
+
+    assert.equal(map.zoom, this.zoom);
+  });
+
   test('it binds events to the map', async function(assert) {
     assert.expect(1);
 
