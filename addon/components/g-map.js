@@ -115,6 +115,13 @@ export default Component.extend(RegisterEvents, MapComponent, {
     get(this, 'google').then(() => next(this, '_initMap'));
   },
 
+  didUpdateAttrs() {
+    this._super(...arguments);
+    if (get(this, 'map')) {
+      this._updateMap();
+    }
+  },
+
   /**
    * Initialize the map, register events and prep internal components.
    *
