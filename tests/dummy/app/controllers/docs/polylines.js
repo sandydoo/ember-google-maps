@@ -15,8 +15,9 @@ export default DocsController.extend(CommonMapData, {
   ]),
 
   actions: {
-    appendPolyline({ event }) {
-      let latLng = event.latLng;
+    appendPolyline({ googleEvent }) {
+      let latLng = googleEvent.latLng;
+
       get(this, 'flightCoordinates').pushObject({
         lat: latLng.lat(),
         lng: latLng.lng()
