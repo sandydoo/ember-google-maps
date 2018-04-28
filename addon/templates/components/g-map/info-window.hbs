@@ -1,7 +1,9 @@
-{{#-in-element _targetPane}}
-  {{#if hasBlock}}
-    {{yield publicAPI}}
-  {{else}}
-    {{content}}
-  {{/if}}
-{{/-in-element}}
+{{#if _targetPane}}
+  {{#-in-element _targetPane}}
+    {{#if hasBlock}}
+      {{yield publicAPI}}
+    {{else}}
+      {{content}}
+    {{/if}}
+  {{/-in-element}}
+{{/if}}

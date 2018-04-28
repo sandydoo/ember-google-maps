@@ -27,7 +27,7 @@ export default Mixin.create({
     const { lat, lng } = get(this, 'london');
     const origin = new google.maps.LatLng(lat, lng);
 
-    return Array(25).fill().map((_e, i) => {
+    return Array(42).fill().map((_e, i) => {
       const heading = randomInt(1, 360);
       const distance = randomInt(100, 5000);
       const price = randomInt(0, 2000);

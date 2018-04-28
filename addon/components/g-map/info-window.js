@@ -1,7 +1,6 @@
 import Base from './base';
 import layout from '../../templates/components/g-map/info-window';
 import { computed, get, getProperties, set, setProperties } from '@ember/object';
-import { schedule } from '@ember/runloop';
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -16,14 +15,17 @@ export default Base.extend({
 
   _type: 'infoWindow',
 
-  _ignoreAttrs: ['isOpen'],
+  _ignoreAttrs: ['isOpen', 'target'],
   _requiredOptions: ['content'],
 
   isOpen: false,
+  _cachedIsOpen: false,
 
   position: computed('lat', 'lng', function() {
     const { lat, lng } = getProperties(this, 'lat', 'lng');
-    return new google.maps.LatLng(lat, lng);
+    if (lat && lng) {
+      return new google.maps.LatLng(lat, lng);
+    }
   }),
 
   init() {
@@ -39,11 +41,17 @@ export default Base.extend({
 
   didReceiveAttrs() {
     this._super(...arguments);
-    if (get(this, 'isOpen')) {
+
+    let isOpen = get(this, 'isOpen');
+    let isOpenChanged = this._cachedIsOpen !== isOpen;
+
+    if (isOpenChanged && isOpen) {
       this.open();
-    } else {
+    } else if (isOpenChanged && !isOpen) {
       this.close();
     }
+
+    set(this, '_cachedIsOpen', isOpen);
   },
 
   _addComponent() {
@@ -61,6 +69,14 @@ export default Base.extend({
     this._super(...arguments);
   },
 
+  _updateComponent() {
+    let options = get(this, '_options');
+    if (!get(this, 'isOpen')) {
+      delete options.content;
+    }
+    this.mapComponent.setOptions(options);
+  },
+
   _prepareContent() {
     if (!get(this, 'content')) {
       const content = document.createElement('div');
@@ -70,19 +86,17 @@ export default Base.extend({
   },
 
   open() {
-    schedule('actions', () => {
-      if (this.mapComponent) {
-        google.maps.event.addListenerOnce(this.mapComponent, 'closeclick', () => {
-          set(this, 'isOpen', false);
-        });
-        this.mapComponent.open(get(this, 'map'), get(this, 'target'));
-      }
-    });
+    if (this.mapComponent) {
+      google.maps.event.addListenerOnce(this.mapComponent, 'closeclick', () => {
+        set(this, 'isOpen', false);
+      });
+      this.mapComponent.open(get(this, 'map'), get(this, 'target'));
+    }
   },
 
   close() {
-    schedule('actions', () => {
-      if (this.mapComponent) { this.mapComponent.close(); }
-    });
+    if (this.mapComponent) {
+      this.mapComponent.close();
+    }
   }
 });
