@@ -1,20 +1,27 @@
 <div class="container">
-  <div class="col-12 col-sm-12 col-md-6 mx-auto text-center mt-3 mb-3">
-    {{#link-to "docs.about" class="no-link-decor"}}
-      <h1 class="ember mb-3">ember google maps</h1>
-      <h6>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</h6>
-    {{/link-to}}
-    {{link-to "Explore docs ›" "docs.about" class="btn btn-primary mt-2"}}
+  <div class="mb-2" style="padding: 2rem 0;">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <h1 style="font-size: 2rem; font-weight: 700">Create maps – the Ember way.</h1>
+        <p>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</p>
+        {{link-to "Get started ›" "docs.about" class="btn btn-primary mt-2"}}
+      </div>
+    </div>
   </div>
 
   <main>
     {{#g-map lat=london.lat lng=london.lng zoom=12
-      styles=mapStyle
-      mapTypeControl=false
-      streetViewControl=false
+      classNames="ember-google-map-full-width"
+      styles=lightStyle
+      disableDefaultUI=true
+      zoomControl=true
       scrollwheel=false as |g|}}
       {{#g.overlay lat=london.lat lng=london.lng}}
-        <div class="tooltip bs-tooltip-top"><div class="tooltip-inner"><span style="white-space: nowrap;" class="emoji">🐹🗺️🌧️☂️</span></div></div>
+        <div class="tooltip bs-tooltip-top" style="width: 120px; height: 4em;">
+          <div class="tooltip-inner text-center">
+            <h6 class="m-0">Made for <span class="ember">ember</span></h6>
+          </div>
+        </div>
       {{/g.overlay}}
     {{/g-map}}
   </main>

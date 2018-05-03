@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { computed, get } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import darkStyle from '../map-styles/dark';
+import lightStyle from '../map-styles/light';
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -13,7 +14,8 @@ export default Mixin.create({
 
   google: reads('googleMapsApi.google'),
 
-  mapStyle: darkStyle,
+  primaryMapStyle: darkStyle,
+  lightStyle,
 
   london: {
     lat: 51.507568,
