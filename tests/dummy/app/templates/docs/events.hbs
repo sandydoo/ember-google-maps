@@ -1,46 +1,53 @@
 <div class="row">
   <div class="col-md-7 order-2 order-md-1">
-    <h5 id="events">Handling events 💥</h5>
+    <section>
+      <h5 id="events">Handling events 💥</h5>
 
-    <p>Parameters prefixed by <tt>on</tt> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google's API docs for each component.</p>
+      <p>Parameters prefixed by <tt>on</tt> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google's API docs for each component.</p>
 
-    <p>As an example, to register an action for the <tt>bounds_changed</tt> event, you would pass an action to the <tt>onBoundsChanged</tt> attribute. For <tt>dragend</tt>, you would use <tt>onDragend</tt>.</p>
+      <p>As an example, to register an action for the <tt>bounds_changed</tt> event, you would pass an action to the <tt>onBoundsChanged</tt> attribute. For <tt>dragend</tt>, you would use <tt>onDragend</tt>.</p>
 
-    {{code-snippet name="map-events.hbs"}}
+      {{code-snippet name="map-events.hbs"}}
 
-    <p><span class="badge badge-danger">Warning</span> Some Google event names break the expected naming style. Notice how <tt>dragend</tt> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <tt>e</tt> in <tt>onDragend</tt>.</p>
+      {{#doc-danger}}
+        Some Google event names break the expected naming style. Notice how <tt>dragend</tt> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <tt>e</tt> in <tt>onDragend</tt>.
+      {{/doc-danger}}
 
-    <p>Each event returns the following:</p>
-    <ul>
-      <li>Any curried params passed to the bound action</li>
-      <li>An event object of following format:</li>
-    </ul>
+      <p>Each event returns the following:</p>
+      <ul>
+        <li>Any curried params passed to the bound action</li>
+        <li>An event object of following format:</li>
+      </ul>
 
-    {{code-snippet name="event.js"}}
+      {{code-snippet name="event.js"}}
 
-    <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
+      <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
 
-    <p><span class="badge badge-primary">Test</span> The sample map has some event listeners set up – see if you can find them all!</p>
+      {{#doc-tip badgeText="Test"}}
+        The sample map has some event listeners set up – see if you can find them all!
+      {{/doc-tip}}
+    </section>
+    <section>
+      <h5>Event propagation</h5>
 
-    <h5>Event propagation</h5>
+      <p>You may run into situations where you need to disable the propagation of an event up the DOM tree.</p>
 
-    <p>You may run into situations where you need to disable the propagation of an event up the DOM tree.</p>
+      <p>A common scenario is handling click events on markers and overlays. If you bind a click handler to the marker to display a tooltip and then bind a second click handler on the map to close all open tooltips, your tooltips will never open. A click on the marker will trigger the tooltip, but the same click event will then bubble up the DOM tree to the map and trigger the map click handler, closing all open tooltips.</p>
 
-    <p>A common scenario is handling click events on markers and overlays. If you bind a click handler to the marker to display a tooltip and then bind a second click handler on the map to close all open tooltips, your tooltips will never open. A click on the marker will trigger the tooltip, but the same click event will then bubble up the DOM tree to the map and trigger the map click handler, closing all open tooltips.</p>
+      <p>There are two ways to avoid this issue: refactor your code to eliminate the unintended effects of bubbling or disable bubbling.</p>
 
-    <p>There are two ways to avoid this issue: refactor your code to eliminate the unintended effects of bubbling or disable bubbling.</p>
+      <p>You can disable bubbling by calling <tt>stopPropagation</tt> on the event object you receive as an argument.</p>
 
-    <p>You can disable bubbling by calling <tt>stopPropagation</tt> on the event object you receive as an argument.</p>
+      {{code-snippet name="event-stop-propagation.js"}}
 
-    {{code-snippet name="event-stop-propagation.js"}}
-
-    <p>If you eventually get tired of writing this, you can create a template helper similar to the one suggested in the <a href="https://www.emberjs.com/api/ember/release/classes/Ember.Templates.helpers/methods/action?anchor=action"><span class="ember">ember</span> docs for the action helper</a>.</p>
+      <p>If you eventually get tired of writing this, you can create a template helper similar to the one suggested in the <a href="https://www.emberjs.com/api/ember/release/classes/Ember.Templates.helpers/methods/action?anchor=action"><span class="ember">ember</span> docs for the action helper</a>.</p>
+    </section>
 
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{g-map lat=london.lat lng=london.lng zoom=12
-      styles=mapStyle
+      styles=primaryMapStyle
       classNames="ember-google-map-responsive"
       onBoundsChanged=(action "flashMessageThrottle" "The bounds have changed!")
       onClick=(action "flashMessage" "You clicked the map!")

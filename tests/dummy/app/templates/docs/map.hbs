@@ -1,34 +1,37 @@
 <div class="row">
   <div class="col-md-7 order-2 order-md-1">
-    <h5 id="creating-a-map">Creating a map</h5>
+    <section>
+      <h5 id="creating-a-map">Creating a map</h5>
 
-    <p>Creating a map is easy. The only required arguments are the coordinates for
-    the center.</p>
+      <p>Creating a map is easy. The only required arguments are the coordinates for
+      the center.</p>
 
-    {{code-snippet name="basic-map.hbs"}}
+      {{code-snippet name="basic-map.hbs"}}
 
-    <p>To get the map to render, the map canvas needs to be styled with dimensions. For example:</p>
+      <p>To get the map to render, the map canvas needs to be styled with dimensions. For example:</p>
 
-    {{code-snippet name="map-canvas-style.css"}}
+      {{code-snippet name="map-canvas-style.css"}}
 
-    <p>Most of the components in this addon accept <tt>lat</tt> and <tt>lng</tt> parameters for
-    convenience and consistency. This lets you avoid the hassle of remembering whether to use <tt>position</tt> or <tt>center</tt> and lets you provide the coordinates separately, as that's how you are likely storing them if you're using Ember Data. We don't assert the usage of <tt>lat</tt> and <tt>lng</tt>, so you can still use the native Google options if you wish.</p>
+      <p>Most of the components in this addon accept <tt>lat</tt> and <tt>lng</tt> parameters for
+      convenience and consistency. This lets you avoid the hassle of remembering whether to use <tt>position</tt> or <tt>center</tt> and lets you provide the coordinates separately, as that's how you are likely storing them if you're using Ember Data. We don't assert the usage of <tt>lat</tt> and <tt>lng</tt>, so you can still use the native Google options if you wish.</p>
 
-    <p>The <tt>g-map</tt> component accepts all of the {{google-docs "MapOptions"}} options you would pass to a Google Map instance. These are automatically watched for changes.</p>
+      <p>The <tt>g-map</tt> component accepts all of the {{google-docs "MapOptions"}} options you would pass to a Google Map instance. These are automatically watched for changes.</p>
 
-    {{code-snippet name="map-passing-options.hbs"}}
+      {{code-snippet name="map-passing-options.hbs"}}
 
-    <p>You can also pass an <tt>options</tt> object, but note that <b>it will not be watched for changes</b>. You can use the <tt>hash</tt> helper instead if you need the options to be watched.</p>
+      <p>You can also pass an <tt>options</tt> object, but note that <b>it will not be watched for changes</b>. You can use the <tt>hash</tt> helper instead if you need the options to be watched.</p>
+    </section>
+    <section>
+      <h5 id="map-instance">Accessing the map instance</h5>
 
-    <h5 id="map-instance">Accessing the map instance</h5>
-
-    <p>If you need access the map instance – to call <tt>panTo</tt> for example – you can use the <tt>onLoad</tt> hook. It will return the map instance once the map has been initialised.</p>
+      <p>If you need access the map instance – to call <tt>panTo</tt> for example – you can use the <tt>onLoad</tt> hook. It will return the map instance once the map has been initialised.</p>
+    </section>
 
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{g-map lat=london.lat lng=london.lng zoom=12
-      styles=mapStyle
+      styles=primaryMapStyle
       classNames="ember-google-map-responsive"}}
   </div>
 </div>

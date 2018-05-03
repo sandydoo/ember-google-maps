@@ -1,38 +1,43 @@
 <div class="row">
   <div class="col-md-7 order-2 order-md-1">
-    <h5>Fetching directions</h5>
+    <section>
+      <h5>Fetching directions</h5>
 
-    <p>The <tt>directions</tt> component can be used to fetch directions between locations. This is a convenience wrapper for {{google-docs "DirectionsService"}}. The component fetches the service from the addon's <tt>googleMapsApi</tt> service and makes a request. The resulting directions are yielded as <tt>directions</tt>.</p>
+      <p>The <tt>directions</tt> component can be used to fetch directions between locations. This is a convenience wrapper for {{google-docs "DirectionsService"}}. The component fetches the service from the addon's <tt>googleMapsApi</tt> service and makes a request. The resulting directions are yielded as <tt>directions</tt>.</p>
 
-    <p>You must provide at least 3 of the {{google-docs "DirectionsRequest"}} options: <tt>origin</tt>, <tt>destination</tt>, and <tt>travelMode</tt>.</p>
+      <p>You must provide at least 3 of the {{google-docs "DirectionsRequest"}} options: <tt>origin</tt>, <tt>destination</tt>, and <tt>travelMode</tt>.</p>
 
-    {{code-snippet name="basic-directions.hbs"}}
+      {{code-snippet name="basic-directions.hbs"}}
 
-    <p>For convenience, you can provide an <tt>onDirectionsChanged</tt> action, which will be called when the directions are updated. This is a custom event provided by the addon, similar to the native event on the {{google-docs "DirectionsRenderer"}}.</p>
+      <p>For convenience, you can provide an <tt>onDirectionsChanged</tt> action, which will be called when the directions are updated. This is a custom event provided by the addon, similar to the native event on the {{google-docs "DirectionsRenderer"}}.</p>
+    </section>
+    <section>
+      <h5>Adding waypoints</h5>
 
-    <h5>Adding waypoints</h5>
+      <p>The <tt>directions</tt> component yields a simple <tt>waypoint</tt> component that accepts a <tt>location</tt> and an optional <tt>stopover</tt> attribute. You also provide the <tt>waypoints</tt> as an option to <tt>directions</tt>.</p>
 
-    <p>The <tt>directions</tt> component yields a simple <tt>waypoint</tt> component that accepts a <tt>location</tt> and an optional <tt>stopover</tt> attribute. You also provide the <tt>waypoints</tt> as an option to <tt>directions</tt>.</p>
+      {{code-snippet name="basic-waypoint.hbs"}}
+    </section>
+    <section>
+      <h5>Displaying routes</h5>
 
-    {{code-snippet name="basic-waypoint.hbs"}}
+      <p>You may have noticed that the the <tt>directions</tt> component doesn't actually display the route on the map. This is deliberate. The results returned by the <tt>DirectionsService</tt> are complex and you may not want to display the first route by default.</p>
 
-    <h5>Displaying routes</h5>
+      <p>To actually display routes, the <tt>directions</tt> component yields a <tt>route</tt> component, which uses the {{google-docs "DirectionsRenderer"}} under the hood to display directions results.</p>
 
-    <p>You may have noticed that the the <tt>directions</tt> component doesn't actually display the route on the map. This is deliberate. The results returned by the <tt>DirectionsService</tt> are complex and you may not want to display the first route by default.</p>
+      {{code-snippet name="basic-routes.hbs"}}
+    </section>
+    <section>
+      <h5>Complex routing</h5>
 
-    <p>To actually display routes, the <tt>directions</tt> component yields a <tt>route</tt> component, which uses the {{google-docs "DirectionsRenderer"}} under the hood to display directions results.</p>
+      <p>Let's recreate one of the more complex examples from {{google-docs "directions-complex" type="examples"}}. We want to walk from Covent Garden to Clerkenwell. We're going to fetch the route and display markers along the route for each step of the route. Each marker has an <tt>{{link-to "infoWindow" "docs.info-windows"}}</tt> attached to it that displays the instructions for the specific step. You know what? Let's also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
 
-    {{code-snippet name="basic-routes.hbs"}}
+      {{code-snippet name="complex-routes.hbs"}}
 
-    <h5>Complex routing</h5>
+      <p>If you're doing complex routing like in the example above, you might find that manipulating the directions object in Handlebars can be a bit of a pain. In this case, I would suggest creating your own helpers. Here we've defined a <tt>get-route-steps</tt> helper that extracts the route steps.</p>
 
-    <p>Let's recreate one of the more complex examples from {{google-docs "directions-complex" type="examples"}}. We want to walk from Covent Garden to Clerkenwell. We're going to fetch the route and display markers along the route for each step of the route. Each marker has an <tt>{{link-to "infoWindow" "docs.info-windows"}}</tt> attached to it that displays the instructions for the specific step. You know what? Let's also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
-
-    {{code-snippet name="complex-routes.hbs"}}
-
-    <p>If you're doing complex routing like in the example above, you might find that manipulating the directions object in Handlebars can be a bit of a pain. In this case, I would suggest creating your own helpers. Here we've defined a <tt>get-route-steps</tt> helper that extracts the route steps.</p>
-
-    {{code-snippet name="get-route-steps.js"}}
+      {{code-snippet name="get-route-steps.js"}}
+    </section>
 
     <p>{{nextPage.text}}</p>
     {{link-to-next nextPage}}
@@ -40,7 +45,7 @@
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{#g-map lat=london.lat lng=london.lng
       zoom=12
-      styles=mapStyle
+      styles=primaryMapStyle
       classNames="ember-google-map-responsive" as |g|}}
       {{#g.directions
         origin="Covent Garden"
