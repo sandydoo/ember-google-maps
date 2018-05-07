@@ -1,10 +1,19 @@
 import Component from '@ember/component';
 import ProcessOptions from '../../mixins/process-options';
 import RegisterEvents from '../../mixins/register-events';
+import PublicAPI from '../../utils/public-api';
 import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
-import { guidFor } from '@ember/object/internals';
 import { defer, resolve } from 'rsvp';
+
+const MapComponentAPI = {
+  map: 'map',
+  mapComponent: 'mapComponent',
+  isInitialized: 'isInitialized',
+  actions: {
+    update: '_updateComponent'
+  }
+};
 
 /**
  * @class MapComponent
@@ -23,14 +32,9 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
     this._super(...arguments);
 
     this.isInitialized = defer();
-    this.publicAPI = {
-      id: guidFor(this),
-      isInitialized: this.isInitialized,
-      actions: {
-        update: () => this._updateComponent(),
-        getPosition: () => this.getPosition(),
-      }
-    };
+    this.isInitialized.promise.then(() => set(this, '_isInitialized', true));
+
+    this.publicAPI = new PublicAPI(this, MapComponentAPI);
   },
 
   didInsertElement() {
@@ -73,15 +77,13 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
 
   /**
    * Run after the map component has been initialized. This hook should be used
-   * to register events, expose the mapComponent, etc.
+   * to register events, etc.
    *
    * @method _didAddComponent
    * @return
    */
   _didAddComponent() {
-    set(this, 'publicAPI.mapComponent', this.mapComponent);
     this.registerEvents();
-    set(this, '_isInitialized', true);
     this.isInitialized.resolve();
   },
 
