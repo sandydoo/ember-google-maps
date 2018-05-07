@@ -20,7 +20,7 @@
 
 ### 👷‍ Maintainers
 
-This addon is maintained by [Sander Melnikov](https://github.com/sandydoo) @ [campusboard](https://www.campusboard.co.uk).
+This addon is maintained by [Sander Melnikov](https://github.com/sandydoo).
 
 ### ⭐ Features
 
