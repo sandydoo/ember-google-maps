@@ -58,6 +58,9 @@ export default MapComponent.extend({
     this._prepareContent();
     let options = get(this, '_options');
     delete options.map;
+    if (!get(this, 'isOpen')) {
+      delete options.content;
+    }
     set(this, 'mapComponent', new google.maps.InfoWindow(options));
   },
 
