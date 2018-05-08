@@ -20,11 +20,11 @@ export default Controller.extend(CommonMapData, {
 
   actions: {
     saveBounds({ map }) {
-      throttle(this, this._saveBounds, map, 100);
+      throttle(this, this._saveBounds, map, 30);
     },
 
     scrollToListing(listing) {
-      const id = `rental-${listing.id}`;
+      let id = `rental-${listing.id}`;
       let el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
