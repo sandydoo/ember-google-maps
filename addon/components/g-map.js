@@ -1,6 +1,6 @@
 import Component from '@ember/component';
+import ProcessOptions from '../mixins/process-options';
 import RegisterEvents from '../mixins/register-events';
-import MapComponent from '../mixins/map-component';
 import layout from '../templates/components/g-map';
 import { inject as service } from '@ember/service';
 import { computed, get, getProperties, set } from '@ember/object';
@@ -16,10 +16,10 @@ import { assign } from '@ember/polyfills';
  * @class GMap
  * @module ember-google-maps/components/g-map
  * @extends Ember.Component
+ * @uses ProcessOptions
  * @uses RegisterEvents
- * @uses MapComponent
  */
-export default Component.extend(RegisterEvents, MapComponent, {
+export default Component.extend(ProcessOptions, RegisterEvents, {
   /**
    * @property googleMapsApi
    * @type GoogleMapsApi

@@ -11,8 +11,8 @@ function removeObservers(obj, keys, callback) {
 }
 
 /**
- * @class MapComponent
- * @module ember-google-maps/mixins/map-component
+ * @class ProcessOptions
+ * @module ember-google-maps/mixins/process-options
  * @extends Ember.Mixin
  */
 export default Mixin.create({
@@ -20,13 +20,13 @@ export default Mixin.create({
    * Specify which attributes on the component should be ignored and never
    * considered as a Google Maps option or event.
    *
-   * @property _ignoreAttrs
+   * @property _ignoredAttrs
    * @private
    * @type {String[]}
    */
-  _ignoreAttrs: ['map', '_internalAPI', 'lat', 'lng'],
+  _ignoredAttrs: ['map', '_internalAPI', 'lat', 'lng'],
 
-  concatenatedProperties: ['_requiredOptions', '_watchedOptions', '_ignoreAttrs'],
+  concatenatedProperties: ['_requiredOptions', '_watchedOptions', '_ignoredAttrs'],
 
   /**
    * Required options that are always included in the options object passed to
@@ -58,7 +58,7 @@ export default Mixin.create({
    */
   options: computed('attrs', 'events', function() {
     let attrs = Object.keys(this.attrs).filter((k) => {
-      return [...get(this, '_ignoreAttrs'), ...(get(this, 'events') || [])].indexOf(k) === -1;
+      return [...get(this, '_ignoredAttrs'), ...(get(this, 'events') || [])].indexOf(k) === -1;
     });
     return getProperties(this, attrs);
   }),

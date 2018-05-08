@@ -1,4 +1,4 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/info-window';
 import { computed, get, getProperties, set, setProperties } from '@ember/object';
 
@@ -8,14 +8,14 @@ import { computed, get, getProperties, set, setProperties } from '@ember/object'
  * @class InfoWindow
  * @namespace GMap
  * @module ember-google-maps/components/g-map/info-window
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
 
   _type: 'infoWindow',
 
-  _ignoreAttrs: ['isOpen', 'target'],
+  _ignoredAttrs: ['isOpen', 'target'],
   _requiredOptions: ['content'],
 
   isOpen: false,
@@ -59,7 +59,6 @@ export default Base.extend({
     let options = get(this, '_options');
     delete options.map;
     set(this, 'mapComponent', new google.maps.InfoWindow(options));
-    this._didAddComponent();
   },
 
   _didAddComponent() {

@@ -1,20 +1,20 @@
 import Component from '@ember/component';
+import ProcessOptions from '../../mixins/process-options';
 import RegisterEvents from '../../mixins/register-events';
-import MapComponent from '../../mixins/map-component';
 import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
 import { guidFor } from '@ember/object/internals';
-import { defer } from 'rsvp';
+import { defer, resolve } from 'rsvp';
 
 /**
- * @class Base
- * @module ember-google-maps/components/g-map/base
+ * @class MapComponent
+ * @module ember-google-maps/components/g-map/map-component
  * @namespace GMap
  * @extends Component
+ * @uses ProcessOptions
  * @uses RegisterEvents
- * @uses MapComponent
  */
-const Base = Component.extend(RegisterEvents, MapComponent, {
+const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   tagName: '',
 
   _requiredOptions: ['map'],
@@ -45,9 +45,9 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
   },
 
   willDestroyElement() {
+    this._super(...arguments);
     tryInvoke(this.mapComponent, 'setMap', [null]);
     this._internalAPI._unregisterComponent(this._type, this.publicAPI);
-    this._super(...arguments);
   },
 
   _updateOrAddComponent() {
@@ -55,7 +55,8 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
       if (this._isInitialized) {
         this._updateComponent();
       } else {
-        this._addComponent();
+        let addComponent = this._addComponent() || resolve();
+        addComponent.then(this._didAddComponent.bind(this));
       }
     }
   },
@@ -67,6 +68,7 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
    * @method _addComponent
    * @return
    */
+  _addComponent() {},
 
   /**
    * Run after the map component has been initialized. This hook should be used
@@ -91,20 +93,11 @@ const Base = Component.extend(RegisterEvents, MapComponent, {
   _updateComponent() {
     let options = get(this, '_options');
     this.mapComponent.setOptions(options);
-  },
-
-  /**
-   * @method getPosition
-   * @public
-   * @return {[google.maps.LatLng]}
-   */
-  getPosition() {
-    return this.mapComponent && this.mapComponent.getPosition();
   }
 });
 
-Base.reopenClass({
+MapComponent.reopenClass({
   positionalParams: ['map', '_internalAPI']
 });
 
-export default Base;
+export default MapComponent;

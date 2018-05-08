@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g map/base', function(hooks) {
+module('Integration | Component | g map/map-component', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it registers with the parent map when created', async function(assert) {
@@ -14,7 +14,7 @@ module('Integration | Component | g map/base', function(hooks) {
       _unregisterComponent: () => {}
     });
 
-    await render(hbs`{{g-map/base map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
   });
 
   test('it unregisters with the parent map when destroyed', async function(assert) {
@@ -25,6 +25,6 @@ module('Integration | Component | g map/base', function(hooks) {
       _unregisterComponent: (type) => assert.equal(type, 'test', 'it unregisters'),
     });
 
-    await render(hbs`{{g-map/base map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
   });
 });

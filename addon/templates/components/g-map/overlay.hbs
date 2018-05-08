@@ -1,7 +1,9 @@
-{{#-in-element _elementDestination}}
-  <div id={{_contentId}} style={{markerStyle}}>
-    {{#_private-api/detect-render didRender=(action updateComponent)}}
-      {{yield}}
-    {{/_private-api/detect-render}}
-  </div>
-{{/-in-element}}
+{{#if _elementDestination}}
+  {{#-in-element _elementDestination}}
+    <div id={{_contentId}} style="position: absolute; opacity: 0.01;">
+      {{#_private-api/detect-render didRender=(action _updateComponent)}}
+        {{yield}}
+      {{/_private-api/detect-render}}
+    </div>
+  {{/-in-element}}
+{{/if}}
