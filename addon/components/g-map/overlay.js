@@ -4,6 +4,7 @@ import { computed, get, getProperties, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { schedule } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
+import { htmlSafe } from '@ember/string';
 import { Promise } from 'rsvp';
 
 /**
@@ -26,6 +27,8 @@ export default MapComponent.extend({
 
   _eventTarget: reads('content'),
 
+  innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
+
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
@@ -34,15 +37,6 @@ export default MapComponent.extend({
     const { lat, lng } = getProperties(this, 'lat', 'lng');
     return new google.maps.LatLng(lat, lng);
   }),
-
-  cachedBoundingClientRect: computed('content', function() {
-    return this.content.getBoundingClientRect();
-  }),
-
-  init() {
-    this._super(...arguments);
-    this.publicAPI.actions.getBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
-  },
 
   _addComponent() {
     const Overlay = new google.maps.OverlayView();
@@ -59,14 +53,12 @@ export default MapComponent.extend({
 
   _initialDraw(overlayCallback) {
     this.fetchOverlayContent();
-    get(this, 'cachedBoundingClientRect');
     this.mapComponent.draw = () => this.draw();
     this._updateComponent();
     overlayCallback();
   },
 
   _updateComponent() {
-    this.notifyPropertyChange('cachedBoundingClientRect');
     this.mapComponent.draw();
   },
 
@@ -82,15 +74,12 @@ export default MapComponent.extend({
     let position = get(this, 'position');
     let point = overlayProjection.fromLatLngToDivPixel(position);
 
-    let { width, height } = get(this, 'cachedBoundingClientRect');
-    width /= 2;
-
     this.content.style.cssText = `
-      display: block;
       position: absolute;
-      left: ${point.x - width}px;
-      top: ${point.y - height}px;
-      opacity: 1;
+      left: 0;
+      top: 0;
+      height: 0;
+      transform: translateX(${point.x}px) translateY(${point.y}px);
     `;
   },
 
