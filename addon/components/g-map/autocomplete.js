@@ -12,7 +12,6 @@ import { assert } from '@ember/debug';
  */
 export default MapComponent.extend({
   layout,
-
   tagName: 'div',
 
   _type: 'autocomplete',

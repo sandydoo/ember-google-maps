@@ -13,11 +13,9 @@ import { reject } from 'rsvp';
  */
 export default MapComponent.extend({
   layout,
-
   tagName: '',
 
   _type: 'route',
-
   _requiredOptions: ['directions'],
 
   _addComponent() {

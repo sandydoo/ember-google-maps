@@ -40,7 +40,7 @@ export default MapComponent.extend({
   },
 
   _updateComponent() {
-    this.route();
+    return this.route();
   },
 
   route() {

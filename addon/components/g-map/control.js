@@ -10,10 +10,9 @@ import { get, set } from '@ember/object';
  */
 export default MapComponent.extend({
   layout,
-
   tagName: 'div',
-  _type: 'control',
 
+  _type: 'control',
   _requiredOptions: ['position'],
 
   _addComponent() {
