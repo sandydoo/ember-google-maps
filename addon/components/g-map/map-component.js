@@ -51,13 +51,14 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   },
 
   _updateOrAddComponent() {
-    if (get(this, 'map')) {
-      if (this._isInitialized) {
-        this._updateComponent();
-      } else {
-        let addComponent = this._addComponent() || resolve();
-        addComponent.then(this._didAddComponent.bind(this));
-      }
+    if (!get(this, 'map')) { return; }
+
+    if (this._isInitialized) {
+      this._updateComponent();
+    } else {
+      (this._addComponent() || resolve())
+        .then(() => this._didAddComponent())
+        .catch(() => {});
     }
   },
 
