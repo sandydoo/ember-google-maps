@@ -1,6 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/info-window';
-import { computed, get, getProperties, set, setProperties } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { get, set, setProperties } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -21,12 +22,7 @@ export default MapComponent.extend({
   isOpen: false,
   _cachedIsOpen: false,
 
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    if (lat && lng) {
-      return new google.maps.LatLng(lat, lng);
-    }
-  }),
+  position,
 
   init() {
     this._super(...arguments);

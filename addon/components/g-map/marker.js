@@ -1,6 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/marker';
-import { computed, get, getProperties, set } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { get, set } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.Marker class.
@@ -18,10 +19,7 @@ export default MapComponent.extend({
 
   _type: 'marker',
 
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    return new google.maps.LatLng(lat, lng);
-  }),
+  position,
 
   _addComponent() {
     set(this, 'mapComponent', new google.maps.Marker(get(this, '_options')));

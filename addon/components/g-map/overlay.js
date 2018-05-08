@@ -1,6 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/overlay';
-import { computed, get, getProperties, set } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { computed, get, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { schedule } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
@@ -20,6 +21,8 @@ export default MapComponent.extend({
 
   _type: 'overlay',
 
+  position,
+
   paneName: 'overlayMouseTarget',
 
   _elementDestination: null,
@@ -31,11 +34,6 @@ export default MapComponent.extend({
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
-  }),
-
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    return new google.maps.LatLng(lat, lng);
   }),
 
   _addComponent() {
