@@ -1,4 +1,4 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/autocomplete';
 import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
@@ -8,15 +8,14 @@ import { assert } from '@ember/debug';
  * @class Autocomplete
  * @namespace GMap
  * @module ember-google-maps/components/g-map/autocomplete
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
-
   tagName: 'div',
 
   _type: 'autocomplete',
-  _ignoreAttrs: ['onSearch'],
+  _ignoredAttrs: ['onSearch'],
 
   _addComponent() {
     let map = get(this, 'map');
@@ -36,8 +35,6 @@ export default Base.extend({
     });
 
     autocomplete.addListener('place_changed', this._onSearch.bind(this));
-
-    this._didAddComponent();
   },
 
   _onSearch() {

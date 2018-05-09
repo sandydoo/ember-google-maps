@@ -1,6 +1,7 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/info-window';
-import { computed, get, getProperties, set, setProperties } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { get, set, setProperties } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -8,25 +9,20 @@ import { computed, get, getProperties, set, setProperties } from '@ember/object'
  * @class InfoWindow
  * @namespace GMap
  * @module ember-google-maps/components/g-map/info-window
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
 
   _type: 'infoWindow',
 
-  _ignoreAttrs: ['isOpen', 'target'],
+  _ignoredAttrs: ['isOpen', 'target'],
   _requiredOptions: ['content'],
 
   isOpen: false,
   _cachedIsOpen: false,
 
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    if (lat && lng) {
-      return new google.maps.LatLng(lat, lng);
-    }
-  }),
+  position,
 
   init() {
     this._super(...arguments);
@@ -58,8 +54,10 @@ export default Base.extend({
     this._prepareContent();
     let options = get(this, '_options');
     delete options.map;
+    if (!get(this, 'isOpen')) {
+      delete options.content;
+    }
     set(this, 'mapComponent', new google.maps.InfoWindow(options));
-    this._didAddComponent();
   },
 
   _didAddComponent() {

@@ -20,6 +20,5 @@ export default Marker.extend({
 
   _addComponent() {
     set(this, 'mapComponent', new google.maps.Circle(get(this, '_options')));
-    this._didAddComponent();
   }
 });

@@ -1,6 +1,7 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/route';
 import { get, set } from '@ember/object';
+import { reject } from 'rsvp';
 
 /**
  * A wrapper for the google.maps.DirectionsRenderer class.
@@ -8,29 +9,19 @@ import { get, set } from '@ember/object';
  * @class Route
  * @namespace GMap
  * @module ember-google-maps/components/g-map/route
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
-
   tagName: '',
 
   _type: 'route',
-
   _requiredOptions: ['directions'],
-
-  didReceiveAttrs() {
-    this._super(...arguments);
-
-    if (!this._isInitialized && this.mapComponent && get(this, '_options.directions')) {
-      this._didAddComponent();
-    }
-  },
 
   _addComponent() {
     const options = get(this, '_options');
     if (!options.directions) {
-      delete options.directions;
+      return reject();
     }
     set(this, 'mapComponent', new google.maps.DirectionsRenderer(options));
   }

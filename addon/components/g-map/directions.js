@@ -1,4 +1,4 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/directions';
 import { inject as service } from '@ember/service';
 import { get, setProperties } from '@ember/object';
@@ -13,15 +13,15 @@ import { Promise } from 'rsvp';
  * @class Directions
  * @namespace GMap
  * @module ember-google-maps/components/g-map/directions
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   googleMapsApi: service(),
 
   layout,
 
   _type: 'direction',
-  _ignoreAttrs: ['onDirectionsChanged'],
+  _ignoredAttrs: ['onDirectionsChanged'],
   _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
   _watchedOptions: ['waypoints.[]'],
 
@@ -36,11 +36,11 @@ export default Base.extend({
   },
 
   _addComponent() {
-    this.route().then(() => this._didAddComponent());
+    return this.route();
   },
 
   _updateComponent() {
-    this.route();
+    return this.route();
   },
 
   route() {

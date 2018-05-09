@@ -7,7 +7,7 @@ import { decamelize } from '@ember/string';
  * Register Google Maps events on any map component.
  *
  * The mixin filters the component attributes for those that begin with `on` and
- * are not on the `_ignoreAttrs` list. The attribute name is decamelize and the
+ * are not on the `_ignoredAttrs` list. The attribute name is decamelize and the
  * `on` prefixed is dropped to generate the event name. The attribute function
  * is then bound to that event by name.
  *
@@ -43,7 +43,7 @@ export default Mixin.create({
 
   /**
    * Return true if the passed attribute matches the syntax for an event, i.e.
-   * begins with `on` and is not explicitly ignored in `_ignoreAttrs`.
+   * begins with `on` and is not explicitly ignored in `_ignoredAttrs`.
    *
    * @method _filterEventsByName
    * @param {String} attr
@@ -51,7 +51,7 @@ export default Mixin.create({
    * @return {Boolean}
    */
   _filterEventsByName(attr) {
-    return attr.startsWith('on') && get(this, '_ignoreAttrs').indexOf(attr) === -1;
+    return attr.startsWith('on') && get(this, '_ignoredAttrs').indexOf(attr) === -1;
   },
 
   willDestroyElement() {

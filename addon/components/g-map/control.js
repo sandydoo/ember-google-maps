@@ -1,4 +1,4 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/control';
 import { get, set } from '@ember/object';
 
@@ -6,14 +6,13 @@ import { get, set } from '@ember/object';
  * @class Control
  * @namespace GMap
  * @module ember-google-maps/components/g-map/control
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
-
   tagName: 'div',
-  _type: 'control',
 
+  _type: 'control',
   _requiredOptions: ['position'],
 
   _addComponent() {
@@ -22,6 +21,5 @@ export default Base.extend({
     const controlPosition = google.maps.ControlPosition[get(this, 'position')];
     map.controls[controlPosition].push(_elementDestination);
     set(this, 'mapComponent', _elementDestination);
-    this._didAddComponent();
   }
 });

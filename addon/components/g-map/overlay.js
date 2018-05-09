@@ -1,10 +1,12 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/overlay';
-import { computed, get, getProperties, set } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { computed, get, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
-import { htmlSafe } from '@ember/string';
 import { schedule } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
+import { htmlSafe } from '@ember/string';
+import { Promise } from 'rsvp';
 
 /**
  * A wrapper for the google.maps.Overlay class.
@@ -12,87 +14,74 @@ import { guidFor } from '@ember/object/internals';
  * @class Overlay
  * @namespace GMap
  * @module ember-google-maps/components/g-map/overlay
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
 
   _type: 'overlay',
+
+  position,
 
   paneName: 'overlayMouseTarget',
 
   _elementDestination: null,
   _targetPane: null,
 
-  markerStyle: htmlSafe('position: absolute; opacity: 0.01;'),
   _eventTarget: reads('content'),
+
+  innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
 
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    return new google.maps.LatLng(lat, lng);
-  }),
-
-  cachedBoundingClientRect: computed('content', function() {
-    if (!this.content || this.isDestroyed || this.isDestroying) { return; }
-    return this.content.getBoundingClientRect();
-  }),
-
-  init() {
-    this._super(...arguments);
-    this.publicAPI.actions.getBoundingClientRect = () => get(this, 'cachedBoundingClientRect');
-  },
-
   _addComponent() {
     const Overlay = new google.maps.OverlayView();
-    Overlay.onAdd = () => this.add();
-    Overlay.draw = () => {};
-    Overlay.onRemove = () => this.destroy();
 
-    set(this, 'mapComponent', Overlay);
-    this.mapComponent.setMap(get(this, 'map'));
+    return new Promise((resolve) => {
+      Overlay.onAdd = () => this.add();
+      Overlay.draw = () => schedule('render', this, '_initialDraw', resolve);
+      Overlay.onRemove = () => this.destroy();
+
+      set(this, 'mapComponent', Overlay);
+      this.mapComponent.setMap(get(this, 'map'));
+    });
   },
 
-  updateComponent() {
-    if (!this.mapComponent) { return; }
-    this.notifyPropertyChange('cachedBoundingClientRect');
+  _initialDraw(overlayCallback) {
+    this.fetchOverlayContent();
+    this.mapComponent.draw = () => this.draw();
+    this._updateComponent();
+    overlayCallback();
+  },
+
+  _updateComponent() {
     this.mapComponent.draw();
   },
 
   add() {
-    if (this.isDestroyed || this.isDestroying) { return; }
-    const panes = this.mapComponent.getPanes();
-    const _elementDestination = set(this, '_elementDestination', document.createElement('div'));
+    let panes = this.mapComponent.getPanes();
+    let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
     set(this, '_targetPane', get(panes, this.paneName));
     this._targetPane.appendChild(_elementDestination);
-
-    schedule('afterRender', () => {
-      this.fetchOverlayContent();
-      this.mapComponent.draw = () => this.draw();
-      this.updateComponent();
-    });
   },
 
   draw() {
-    if (!this.content || this.isDestroyed || this.isDestroying) { return; }
+    let overlayProjection = this.mapComponent.getProjection();
+    let position = get(this, 'position');
+    let point = overlayProjection.fromLatLngToDivPixel(position);
 
-    const overlayProjection = this.mapComponent.getProjection();
-    const position = get(this, 'position');
-    const point = overlayProjection.fromLatLngToDivPixel(position);
-
-    let { width, height } = get(this, 'cachedBoundingClientRect');
-    width /= 2;
-
-    this.content.style.cssText = `display: block; position: absolute; left: ${point.x - width}px; top: ${point.y - height}px; opacity: 1;`;
-
-    if (!this._isInitialized) { this._didAddComponent(); }
+    this.content.style.cssText = `
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 0;
+      transform: translateX(${point.x}px) translateY(${point.y}px);
+    `;
   },
 
   fetchOverlayContent() {
-    if (this.isDestroyed || this.isDestroying) { return; }
     let element = document.getElementById(get(this, '_contentId'));
     set(this, 'content', element);
   },

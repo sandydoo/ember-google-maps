@@ -14,4 +14,6 @@ import Component from '@ember/component';
  * @extends Component
  * @private
  */
-export default Component.extend();
+export default Component.extend({
+  attributeBindings: ['style']
+});

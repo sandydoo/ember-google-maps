@@ -1,6 +1,7 @@
-import Base from './base';
+import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/marker';
-import { computed, get, getProperties, set } from '@ember/object';
+import { position } from '../../utils/helpers';
+import { get, set } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.Marker class.
@@ -8,9 +9,9 @@ import { computed, get, getProperties, set } from '@ember/object';
  * @class Marker
  * @namespace GMap
  * @module ember-google-maps/components/g-map/marker
- * @extends GMap.Base
+ * @extends GMap.MapComponent
  */
-export default Base.extend({
+export default MapComponent.extend({
   layout,
   tagName: '',
 
@@ -18,13 +19,18 @@ export default Base.extend({
 
   _type: 'marker',
 
-  position: computed('lat', 'lng', function() {
-    const { lat, lng } = getProperties(this, 'lat', 'lng');
-    return new google.maps.LatLng(lat, lng);
-  }),
+  position,
 
   _addComponent() {
     set(this, 'mapComponent', new google.maps.Marker(get(this, '_options')));
-    this._didAddComponent();
+  },
+
+  /**
+   * @method getPosition
+   * @public
+   * @return {[google.maps.LatLng]}
+   */
+  getPosition() {
+    return this.mapComponent && this.mapComponent.getPosition();
   }
 });
