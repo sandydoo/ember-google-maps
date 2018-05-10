@@ -16,9 +16,9 @@ moduleForMap('Integration | Component | g-map/route', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    assert.equal(publicAPI.routes.length, 1);
+    assert.equal(components.routes.length, 1);
   });
 
   test('it updates a route when the directions change', async function(assert) {
@@ -34,14 +34,14 @@ moduleForMap('Integration | Component | g-map/route', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
     this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
     this.set('origin', 'Holborn Station');
-    const directionsChanged = () => this.get('directionsChanged');
+    let directionsChanged = () => this.get('directionsChanged');
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    const route = publicAPI.routes[0].mapComponent;
+    let route = components.routes[0].mapComponent;
     assert.equal(route.directions.request.origin.query, this.origin);
   });
 });

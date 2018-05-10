@@ -9,7 +9,7 @@ moduleForMap('Integration | Component | g map', function() {
       {{g-map lat=lat lng=lng zoom=12}}
     `);
 
-    const { map } = await this.get('map');
+    let { map } = await this.get('map');
     assert.ok(map, 'map initialized');
   });
 
@@ -18,7 +18,7 @@ moduleForMap('Integration | Component | g map', function() {
       {{g-map lat=lat lng=lng zoom=12 zoomControl=false}}
     `);
 
-    const { map } = await this.get('map');
+    let { map } = await this.get('map');
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
@@ -29,7 +29,7 @@ moduleForMap('Integration | Component | g map', function() {
       {{g-map lat=lat lng=lng zoom=zoom}}
     `);
 
-    const { map } = await this.get('map');
+    let { map } = await this.get('map');
 
     assert.equal(map.zoom, this.zoom);
 
@@ -49,7 +49,7 @@ moduleForMap('Integration | Component | g map', function() {
       {{g-map lat=lat lng=lng zoom=12 onZoomChanged=(action onZoomChanged)}}
     `);
 
-    const { map } = await this.get('map');
+    let { map } = await this.get('map');
 
     map.setZoom(10);
   });

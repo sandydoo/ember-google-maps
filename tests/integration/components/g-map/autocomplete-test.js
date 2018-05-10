@@ -13,12 +13,12 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    const input = find('input');
+    let input = find('input');
     assert.ok(input, 'input rendered');
     assert.equal(input.id, 'pac-input');
-    assert.equal(publicAPI.autocompletes.length, 1);
+    assert.equal(components.autocompletes.length, 1);
   });
 
   test('it calls an action on input', async function(assert) {
@@ -50,10 +50,10 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
     // Fetch the initialized Autocomplete component and shim the getPlace
     // function.
-    const autocomplete = publicAPI.autocompletes[0].mapComponent;
+    let autocomplete = components.autocompletes[0].mapComponent;
     autocomplete.getPlace = () => { return { geometry: true }; };
 
     trigger(autocomplete, 'place_changed');

@@ -11,10 +11,10 @@ moduleForMap('Integration | Component | g map/marker', function() {
       {{/g-map}}
     `);
 
-    let { publicAPI, map } = await this.get('map');
+    let { components, map } = await this.get('map');
 
-    assert.equal(publicAPI.markers.length, 1);
-    assert.equal(publicAPI.markers[0].mapComponent.map, map);
+    assert.equal(components.markers.length, 1);
+    assert.equal(components.markers[0].mapComponent.map, map);
   });
 
   test('it attaches an event to a marker', async function(assert) {
@@ -28,9 +28,9 @@ moduleForMap('Integration | Component | g map/marker', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    const marker = publicAPI.markers[0].mapComponent;
+    let marker = components.markers[0].mapComponent;
     trigger(marker, 'click');
   });
 
@@ -41,9 +41,9 @@ moduleForMap('Integration | Component | g map/marker', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    const marker = publicAPI.markers[0].mapComponent;
+    let marker = components.markers[0].mapComponent;
     assert.equal(marker.draggable, true);
   });
 });

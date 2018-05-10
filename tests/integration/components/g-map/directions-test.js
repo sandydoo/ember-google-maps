@@ -14,11 +14,11 @@ moduleForMap('Integration | Component | g-map/directions', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    assert.equal(publicAPI.directions.length, 1);
-    const request = publicAPI.directions[0].directions.request;
-    const { origin: { query: origin }, destination: { query: destination } } = request;
+    assert.equal(components.directions.length, 1);
+    let request = components.directions[0].directions.request;
+    let { origin: { query: origin }, destination: { query: destination } } = request;
     assert.equal(origin, this.origin);
     assert.equal(destination, this.destination);
   });
@@ -34,17 +34,17 @@ moduleForMap('Integration | Component | g-map/directions', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
     this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
 
     this.set('origin', 'Holborn Station');
 
-    const directionsChanged = () => this.get('directionsChanged');
+    let directionsChanged = () => this.get('directionsChanged');
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    const request = publicAPI.directions[0].directions.request;
-    const { origin: { query: origin }, destination: { query: destination } } = request;
+    let request = components.directions[0].directions.request;
+    let { origin: { query: origin }, destination: { query: destination } } = request;
     assert.equal(origin, this.origin);
     assert.equal(destination, this.destination);
   });
