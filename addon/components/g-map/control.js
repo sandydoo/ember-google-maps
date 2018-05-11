@@ -16,10 +16,12 @@ export default MapComponent.extend({
   _requiredOptions: ['position'],
 
   _addComponent() {
-    const _elementDestination = set(this, '_elementDestination', document.createElement('div'));
-    const map = get(this, 'map');
-    const controlPosition = google.maps.ControlPosition[get(this, 'position')];
+    let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
+    let map = get(this, 'map');
+
+    let controlPosition = google.maps.ControlPosition[get(this, 'position')];
     map.controls[controlPosition].push(_elementDestination);
+
     set(this, 'mapComponent', _elementDestination);
   }
 });
