@@ -1,28 +1,33 @@
 [![Build Status](https://travis-ci.org/sandydoo/ember-google-maps.svg?branch=master)](https://travis-ci.org/sandydoo/ember-google-maps)
 
-# 📍 Ember Google Maps
+📍 Ember Google Maps
+------------------------------------------------------------------------------
 
 > A *lightweight*, *declarative*, *composable* API for building ambitious map UIs in your Ember apps.
 
 ##### What this addon *is*:
 
-* ✅ A lightweight Ember API for working with Google Maps.
-* ✅ An on-demand, asynchronous loader for the Google Maps API.
+* ✅  A lightweight Ember API for working with Google Maps.
+* ✅  An on-demand, asynchronous loader for the Google Maps API.
 
 ##### What this addon *is not*:
 
-* ❌ A bulky, verbose wrapper that reimplements the entire Google Maps API.
-* ❌ A whitelist or option validator that is tightly coupled to Google's API.
+* ❌  A bulky, verbose wrapper that reimplements the entire Google Maps API.
+* ❌  A whitelist or option validator that is tightly coupled to Google's API.
 
-### 📎 Documentation
+📎 Documentation
+------------------------------------------------------------------------------
 
-[View guides and documentation ›](https://ember-google-maps.sandydoo.me/)
+#### [View guides and documentation ›](https://ember-google-maps.sandydoo.me/)
 
-### 👷‍ Maintainers
+👷‍ Maintainers
+------------------------------------------------------------------------------
 
-This addon is maintained by [Sander Melnikov](https://github.com/sandydoo).
+This addon is maintained by **[Sander Melnikov](https://github.com/sandydoo)**.
 
-### ⭐ Features
+⭐ Features
+------------------------------------------------------------------------------
+
 
 | Feature                   |                   |
 | :------------------------ | :---------------: |
@@ -36,7 +41,8 @@ This addon is maintained by [Sander Melnikov](https://github.com/sandydoo).
 
 If you don't need the Google API specifically, check out [ember-leaflet](https://github.com/miguelcobain/ember-leaflet).
 
-### Basic usage
+Examples of what to expect
+------------------------------------------------------------------------------
 
 Display a map centered around a set of coordinates 🗺.
 
@@ -69,15 +75,21 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 {{/g-map}}
 ```
 
-[Learn more ›](https://ember-google-maps.sandydoo.me/)
+#### [Learn more ›](https://ember-google-maps.sandydoo.me/)
 
-### Contributing
+Contributing
+------------------------------------------------------------------------------
 
 #### Installation
 
 * `git clone https://github.com/sandydoo/ember-google-maps.git` this repository
 * `cd ember-google-maps`
-* `npm install`
+* `yarn`
+
+#### Linting
+
+* `yarn lint:js`
+* `yarn lint:js --fix `
 
 #### Setting up API keys
 
@@ -92,18 +104,19 @@ Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run thes
 
 #### Running tests
 
-Run live tests:
+* `ember test` – Runs the test suite on the current Ember version
+* `ember test --server` – Runs the test suite in "watch mode"
+* `ember try:each` – Runs the test suite against multiple Ember versions
 
-`ember test --server`
 
-Run test suite against all target versions:
+#### Running the dummy application
 
-`ember try:each`
+* `ember serve`
+* Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
-#### Serving documentation/dummy app
+For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
 
-`ember serve`
-
-## License
+License
+------------------------------------------------------------------------------
 
 [MIT](https://github.com/sandydoo/ember-google-maps/blob/master/LICENSE.md) © [Sander Melnikov](https://github.com/sandydoo).
