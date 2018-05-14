@@ -17,9 +17,9 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    const request = publicAPI.directions[0].directions.request;
+    let request = components.directions[0].directions.request;
 
     assert.equal(request.waypoints.length, 1);
     assert.equal(request.waypoints[0].location.query, this.waypointLocation);
@@ -42,18 +42,17 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
     this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
 
     this.set('addWaypoint', false);
 
-    const directionsChanged = () => this.get('directionsChanged');
+    let directionsChanged = () => this.get('directionsChanged');
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    const request = publicAPI.directions[0].directions.request;
+    let request = components.directions[0].directions.request;
 
     assert.equal(request.waypoints.length, 0);
   });
 });
-

@@ -1,7 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/info-window';
 import { position } from '../../utils/helpers';
-import { get, set, setProperties } from '@ember/object';
+import { get, set } from '@ember/object';
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -29,9 +29,12 @@ export default MapComponent.extend({
     if (!get(this, 'target')) {
       this._requiredOptions = this._requiredOptions.concat(['position']);
     }
-    setProperties(this.publicAPI.actions, {
-      open: () => this.open(),
-      close: () => this.close()
+
+    this.publicAPI.reopen({
+      actions: {
+        open: 'open',
+        close: 'close'
+      }
     });
   },
 

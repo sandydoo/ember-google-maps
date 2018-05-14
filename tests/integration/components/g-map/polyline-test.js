@@ -19,11 +19,11 @@ moduleForMap('Integration | Component | g map/polyline', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
-    const polyline = publicAPI.polylines[0].mapComponent;
+    let { components } = await this.get('map');
+    let polyline = components.polylines[0].mapComponent;
     assert.ok(polyline, 'polyline exists');
 
-    const newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };
+    let newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };
     this.get('path').pushObject(newCoords);
 
     assert.deepEqual(polyline.getPath().getAt(4).toJSON(), newCoords);

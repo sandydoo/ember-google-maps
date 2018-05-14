@@ -11,9 +11,9 @@ moduleForMap('Integration | Component | g map/circle', function() {
       {{/g-map}}
     `);
 
-    let { publicAPI, map } = await this.get('map');
+    let { map, components } = await this.get('map');
 
-    assert.equal(publicAPI.circles.length, 1);
-    assert.equal(publicAPI.circles[0].mapComponent.map, map);
+    assert.equal(components.circles.length, 1);
+    assert.equal(components.circles[0].mapComponent.map, map);
   });
 });

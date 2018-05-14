@@ -11,11 +11,11 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
-    assert.equal(publicAPI.infoWindows.length, 1);
+    assert.equal(components.infoWindows.length, 1);
 
-    const infoWindow = publicAPI.infoWindows[0].mapComponent;
+    let infoWindow = components.infoWindows[0].mapComponent;
     assert.ok(infoWindow);
   });
 
@@ -30,8 +30,8 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { publicAPI } = await this.get('map');
-    const infoWindow = publicAPI.infoWindows[0].mapComponent;
+    let { components } = await this.get('map');
+    let infoWindow = components.infoWindows[0].mapComponent;
     infoWindow.open = () => assert.ok('info window opened');
 
     this.set('isOpen', true);
@@ -93,18 +93,18 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
+    let { components } = await this.get('map');
 
     this.set('isOpen', true);
 
-    const domIsReady = () => this.domIsReady;
+    let domIsReady = () => this.domIsReady;
     await waitUntil(domIsReady);
 
     // There is some lag between the infoWindow rendering and updating its
     // position. It's probably not worth investigating, so we just wait a bit.
     await wait(500);
 
-    const infoWindow = publicAPI.infoWindows[0].mapComponent;
+    let infoWindow = components.infoWindows[0].mapComponent;
     assert.deepEqual(infoWindow.getPosition().toJSON(), { lat: 55, lng: 2 });
   });
 
@@ -122,7 +122,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
     await this.get('map');
 
-    const domIsReady = () => this.domIsReady;
+    let domIsReady = () => this.domIsReady;
     await waitUntil(domIsReady);
 
     assert.ok(find('#info-window-test'), 'info window open');
@@ -144,10 +144,10 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    const { publicAPI } = await this.get('map');
-    const infoWindow = publicAPI.infoWindows[0].mapComponent;
+    let { components } = await this.get('map');
+    let infoWindow = components.infoWindows[0].mapComponent;
 
-    const domIsReady = () => this.domIsReady;
+    let domIsReady = () => this.domIsReady;
     await waitUntil(domIsReady);
 
     assert.ok(find('#info-window-test'), 'info window open');

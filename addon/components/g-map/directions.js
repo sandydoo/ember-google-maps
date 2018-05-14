@@ -31,8 +31,13 @@ export default MapComponent.extend({
     this._super(...arguments);
     this.waypoints = A();
 
-    this.publicAPI.waypoints = this.waypoints;
-    this.publicAPI.actions.route = () => this.route();
+    this.publicAPI.reopen({
+      directions: 'directions',
+      waypoints: 'waypoints',
+      actions: {
+        route: 'route'
+      }
+    });
   },
 
   _addComponent() {
@@ -45,19 +50,18 @@ export default MapComponent.extend({
 
   route() {
     return this._route().then((directions) => {
-      const newDirections = {
+      setProperties(this, {
         directions,
         mapComponent: directions
-      };
-      setProperties(this, newDirections);
-      setProperties(this.publicAPI, newDirections);
+      });
+
       tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]);
     });
   },
 
   _route() {
     return get(this, 'directionsService').then((directionsService) => {
-      const options = get(this, '_options');
+      let options = get(this, '_options');
       delete options.map;
 
       return new Promise((resolve, reject) => {
