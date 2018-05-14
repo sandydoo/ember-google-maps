@@ -61,6 +61,34 @@ module.exports = {
     return { 'ember-google-maps': mapConfig };
   },
 
+  setupPreprocessorRegistry(type, registry) {
+    let { PluginProcessor, sendPluginsToProcessor } = require('./lib/plugin-processor');
+    let PluginRegistry = require('./lib/plugin-registry');
+
+    let plugins = new PluginRegistry(this.project).components;
+
+    plugins = plugins.concat([
+      { key: 'marker', component: 'g-map/marker' },
+      { key: 'circle', component: 'g-map/circle' },
+      { key: 'polyline', component: 'g-map/polyline' },
+      { key: 'infoWindow', component: 'g-map/info-window' },
+      { key: 'overlay', component: 'g-map/overlay' },
+      { key: 'control', component: 'g-map/control' },
+      { key: 'autocomplete', component: 'g-map/autocomplete' },
+      { key: 'directions', component: 'g-map/directions' }
+    ]);
+
+    sendPluginsToProcessor(plugins);
+
+    registry.add('htmlbars-ast-plugin', {
+      name: 'ember-google-maps-plugins',
+      plugin: PluginProcessor,
+      baseDir() {
+        return __dirname;
+      }
+    });
+  },
+
   treeForAddon() {
     const tree = this._super.treeForAddon.apply(this, arguments);
     return this.filterComponents(tree);
