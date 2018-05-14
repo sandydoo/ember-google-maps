@@ -14,7 +14,7 @@ module('Integration | Component | g map/map-component', function(hooks) {
     assert.expect(1);
 
     this._internalAPI = {
-      _registerComponent: (type) => assert.equal(type, 'test', 'it registers'),
+      _registerComponent: (type) => assert.equal(type, 'tests', 'it registers'),
       _unregisterComponent: () => {}
     };
 
@@ -26,7 +26,7 @@ module('Integration | Component | g map/map-component', function(hooks) {
 
     this._internalAPI = {
       _registerComponent: () => {},
-      _unregisterComponent: (type) => assert.equal(type, 'test', 'it unregisters'),
+      _unregisterComponent: (type) => assert.equal(type, 'tests', 'it unregisters'),
     };
 
     await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);

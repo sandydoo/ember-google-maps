@@ -35,6 +35,8 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
 
     assert('You must set a _type property on the map component.', this._type);
 
+    this._registrationType = this._pluralType || `${this._type}s`;
+
     this.isInitialized = defer();
     this.isInitialized.promise.then(() => set(this, '_isInitialized', true));
 
@@ -44,7 +46,8 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   didInsertElement() {
     this._super(...arguments);
 
-    this._internalAPI._registerComponent(this._type, this.publicAPI);
+    this._internalAPI._registerComponent(this._registrationType, this.publicAPI);
+
     this._updateOrAddComponent();
   },
 
@@ -58,7 +61,8 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
     this._super(...arguments);
 
     tryInvoke(this.mapComponent, 'setMap', [null]);
-    this._internalAPI._unregisterComponent(this._type, this.publicAPI);
+
+    this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
   },
 
   _updateOrAddComponent() {

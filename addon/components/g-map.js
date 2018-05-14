@@ -89,22 +89,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   init() {
     this._super(...arguments);
 
-    const componentNames = [
-      'markers',
-      'circles',
-      'polylines',
-      'overlays',
-      'controls',
-      'autocompletes',
-      'infoWindows',
-      'routes',
-      'directions'
-    ];
-
     this.components = {};
-    componentNames.forEach((name) => {
-      this.components[name] = A();
-    });
 
     this.publicAPI = new PublicAPI(this, GMapAPI);
 
@@ -197,12 +182,13 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    * Register a contextual component with the map component.
    *
    * @method _registerComponent
-   * @param {String} type Name of the component
-   * @param {Ember.Component} component
+   * @param {String} type Plural name of the component
+   * @param {Object} componentAPI
    * @return
    */
-  _registerComponent(type, component) {
-    get(this, `components.${type}s`).pushObject(component);
+  _registerComponent(type, componentAPI) {
+    this.components[type] = this.components[type] || A();
+    this.components[type].pushObject(componentAPI);
   },
 
   /**
@@ -210,10 +196,10 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    *
    * @method _unregisterComponent
    * @param {String} type Name of the component
-   * @param {Ember.Component} component
+   * @param {Object} componentAPI
    * @return
    */
-  _unregisterComponent(type, component) {
-    get(this, `components.${type}s`).removeObject(component);
+  _unregisterComponent(type, componentAPI) {
+    this.components[type].removeObject(componentAPI);
   }
 });
