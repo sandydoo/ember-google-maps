@@ -28,14 +28,14 @@ moduleForMap('Integration | Component | g map/overlay', function(hooks) {
       {{/g-map}}
     `);
 
-    let { id, components } = await this.get('map');
-
-    assert.equal(components.overlays.length, 1, 'overlay registered');
-
+    let { id, components: { overlays } } = this;
     let overlay = await waitFor('#custom-overlay');
+    let mapDiv = find(`#${id}`);
+
+    assert.equal(overlays.length, 1, 'overlay registered');
+
     assert.ok(overlay, 'overlay rendered');
 
-    let mapDiv = find(`#${id}`);
     assert.ok(mapDiv.contains(overlay), 'overlay is child of map node');
   });
 });

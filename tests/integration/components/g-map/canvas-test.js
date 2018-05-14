@@ -5,7 +5,7 @@ import hbs from 'htmlbars-inline-precompile';
 
 moduleForMap('Integration | Component | g map/canvas', function() {
   test('it renders a canvas div', async function(assert) {
-    this.set('_internalAPI', { _registerCanvas: () => {} });
+    this._internalAPI = { _registerCanvas: () => {} };
 
     await render(hbs`{{g-map/canvas _internalAPI=_internalAPI}}`);
 

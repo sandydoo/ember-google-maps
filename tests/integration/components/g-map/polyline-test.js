@@ -6,12 +6,12 @@ import { A } from '@ember/array';
 
 moduleForMap('Integration | Component | g map/polyline', function() {
   test('it updates a polylines when the path attribute changes', async function(assert) {
-    this.set('path', A([
+    this.path = A([
       { lat: 51.56742722687343, lng: -0.25783538818359375 },
       { lat: 51.51917163898047, lng: -0.23586273193359375 },
       { lat: 51.46680134633284, lng: -0.09922027587890625 },
       { lat: 51.476892649684764, lng: -0.0006866455078125 }
-    ]));
+    ]);
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -19,8 +19,9 @@ moduleForMap('Integration | Component | g map/polyline', function() {
       {{/g-map}}
     `);
 
-    let { components } = await this.get('map');
-    let polyline = components.polylines[0].mapComponent;
+    let { components: { polylines } } = this;
+    let polyline = polylines[0].mapComponent;
+
     assert.ok(polyline, 'polyline exists');
 
     let newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };

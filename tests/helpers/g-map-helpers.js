@@ -1,15 +1,4 @@
-import { module } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import GMapComponent from 'ember-google-maps/components/g-map';
-import { london } from './locations';
-
-import ObjectProxy from '@ember/object/proxy';
-import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
-
-import { Promise, defer } from 'rsvp';
 import { run } from '@ember/runloop';
-
-const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 /**
  * Wrap the Google Maps trigger method in an Ember runloop.
@@ -26,6 +15,13 @@ export function wait(ms) {
   });
 }
 
+import { module } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setProperties } from '@ember/object';
+import { registerWaiter } from '@ember/test';
+import GMapComponent from 'ember-google-maps/components/g-map';
+import { london } from './locations';
+
 /**
  * Set up for map component testing:
  *
@@ -40,15 +36,26 @@ export function moduleForMap(name, tests) {
     setupRenderingTest(hooks);
 
     hooks.beforeEach(function() {
-      this.setProperties(london);
+      setProperties(this, london);
 
-      const promise = defer();
-      this.set('map', ObjectPromiseProxy.create({ promise: promise.promise }));
+      let testContext = this;
+      let waiterFulfilled = false;
 
       this.owner.register('component:g-map', GMapComponent.extend({
         init() {
           this._super(...arguments);
-          this.set('onComponentsLoad', (result) => promise.resolve(result));
+
+          registerWaiter(() => {
+            if (this._componentsInitialized === true) {
+              if (!waiterFulfilled) {
+                let { id, components, map } = this.publicAPI;
+                setProperties(testContext, { id, components, map });
+                waiterFulfilled = true;
+              }
+
+              return true;
+            }
+          });
         }
       }));
     });

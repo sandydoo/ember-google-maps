@@ -13,14 +13,14 @@ moduleForMap('Integration | Component | g map/control', function() {
       {{/g-map}}
     `);
 
-    let { map, components } = await this.get('map');
+    let { map, components: { controls } } = this;
 
-    assert.equal(components.controls.length, 1);
+    assert.equal(controls.length, 1);
 
     let control = await waitFor('#custom-control');
     assert.ok(control, 'control rendered');
 
-    let controls = map.controls[google.maps.ControlPosition.TOP_CENTER];
-    assert.equal(components.controls[0].mapComponent, controls.getAt(0), 'control rendered in correct position');
+    let mapControls = map.controls[google.maps.ControlPosition.TOP_CENTER];
+    assert.equal(controls[0].mapComponent, mapControls.getAt(0), 'control rendered in correct position');
   });
 });

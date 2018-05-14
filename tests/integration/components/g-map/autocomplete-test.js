@@ -13,18 +13,18 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    let { components } = await this.get('map');
+    let { autocompletes } = this.components;
+    assert.equal(autocompletes.length, 1);
 
     let input = find('input');
     assert.ok(input, 'input rendered');
     assert.equal(input.id, 'pac-input');
-    assert.equal(components.autocompletes.length, 1);
   });
 
   test('it calls an action on input', async function(assert) {
     assert.expect(1);
 
-    this.set('onInput', (value) => assert.equal(value, 'test'));
+    this.onInput = (value) => assert.equal(value, 'test');
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -40,7 +40,7 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
   test('it returns place results on search', async function(assert) {
     assert.expect(1);
 
-    this.set('onSearch', () => assert.ok(true, 'place'));
+    this.onSearch = () => assert.ok(true, 'place');
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -50,10 +50,11 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    let { components } = await this.get('map');
+    let { autocompletes } = this.components;
+
     // Fetch the initialized Autocomplete component and shim the getPlace
     // function.
-    let autocomplete = components.autocompletes[0].mapComponent;
+    let autocomplete = autocompletes[0].mapComponent;
     autocomplete.getPlace = () => { return { geometry: true }; };
 
     trigger(autocomplete, 'place_changed');
