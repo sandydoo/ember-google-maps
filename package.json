@@ -82,7 +82,7 @@
     "prember-sitemap-generator": "0.0.3"
   },
   "engines": {
-    "node": "^4.5 || 6.* || >= 7.*"
+    "node": "6.* || >= 8.*"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
