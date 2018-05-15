@@ -62,12 +62,12 @@ module.exports = {
   },
 
   setupPreprocessorRegistry(type, registry) {
-    let { PluginProcessor, sendPluginsToProcessor } = require('./lib/plugin-processor');
-    let PluginRegistry = require('./lib/plugin-registry');
+    let { AddonProcessor, sendAddonsToProcessor } = require('./lib/addon-processor');
+    let AddonRegistry = require('./lib/addon-registry');
 
-    let plugins = new PluginRegistry(this.project).components;
+    let addons = new AddonRegistry(this.project).components;
 
-    plugins = plugins.concat([
+    addons = addons.concat([
       { key: 'marker', component: 'g-map/marker' },
       { key: 'circle', component: 'g-map/circle' },
       { key: 'polyline', component: 'g-map/polyline' },
@@ -78,11 +78,11 @@ module.exports = {
       { key: 'directions', component: 'g-map/directions' }
     ]);
 
-    sendPluginsToProcessor(plugins);
+    sendAddonsToProcessor(addons);
 
     registry.add('htmlbars-ast-plugin', {
-      name: 'ember-google-maps-plugins',
-      plugin: PluginProcessor,
+      name: 'ember-google-maps-addons',
+      plugin: AddonProcessor,
       baseDir() {
         return __dirname;
       }
