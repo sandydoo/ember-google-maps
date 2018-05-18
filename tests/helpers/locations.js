@@ -1,3 +1,10 @@
-export const london = { lat: '51.507568', lng: '-0.127762' };
+const london = { lat: '51.507568', lng: '-0.127762' };
 
-export default { london };
+function setupLocations(hooks) {
+  hooks.beforeEach(function() {
+    this.lat = london.lat;
+    this.lng = london.lng;
+  });
+}
+
+export { setupLocations, london };

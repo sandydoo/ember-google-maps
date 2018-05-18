@@ -1,9 +1,15 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g-map/directions', function() {
+module('Integration | Component | g-map/directions', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it fetches directions', async function(assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
@@ -14,7 +20,7 @@ moduleForMap('Integration | Component | g-map/directions', function() {
       {{/g-map}}
     `);
 
-    let { components: { directions } } = this;
+    let { components: { directions } } = this.gMapAPI;
 
     assert.equal(directions.length, 1);
 
@@ -38,13 +44,13 @@ moduleForMap('Integration | Component | g-map/directions', function() {
       {{/g-map}}
     `);
 
-    let { components: { directions } } = this;
+    let { components: { directions } } = this.gMapAPI;
 
-    this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
+    this.set('onDirectionsChanged', () => { this.directionsChanged = true; });
 
     this.set('origin', 'Holborn Station');
 
-    let directionsChanged = () => this.get('directionsChanged');
+    let directionsChanged = () => this.directionsChanged;
     await waitUntil(directionsChanged, { timeout: 10000 });
 
     let {

@@ -1,9 +1,21 @@
-import { moduleForMap, trigger, wait } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest, trigger } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
+import wait from 'dummy/tests/helpers/wait';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g-map/info-window', function() {
+module('Integration | Component | g-map/info-window', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
+  hooks.beforeEach(function() {
+    this.onDomReady = () => { this._domReady = true; };
+    this.domIsReady = () => this._domReady;
+  });
+
   test('it registers an info window', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -11,7 +23,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { components: { infoWindows } } = this;
+    let { components: { infoWindows } } = this.gMapAPI;
 
     assert.equal(infoWindows.length, 1);
 
@@ -30,7 +42,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { components: { infoWindows } } = this;
+    let { components: { infoWindows } } = this.gMapAPI;
 
     let infoWindow = infoWindows[0].mapComponent;
     infoWindow.open = () => assert.ok('info window opened');
@@ -40,7 +52,6 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
   test('it renders an info window with custom html passed using the content attribute', async function(assert) {
     this.isOpen = false;
-    this.onDomReady = () => true;
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -52,7 +63,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
     this.set('isOpen', true);
 
-    await waitUntil(this.onDomReady);
+    await waitUntil(this.domIsReady);
     await wait(500);
 
     assert.ok(find('#info-window-test'));
@@ -60,7 +71,6 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
   test('it renders an info window with custom html passed as a block', async function(assert) {
     this.isOpen = false;
-    this.onDomReady = () => true;
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -72,7 +82,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
     this.set('isOpen', true);
 
-    await waitUntil(this.onDomReady);
+    await waitUntil(this.domIsReady);
     await wait(500);
 
     assert.ok(find('#info-window-test'));
@@ -80,7 +90,6 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
   test('it attaches an info window to a marker', async function(assert) {
     this.isOpen = false;
-    this.onDomReady = () => this.set('domIsReady', true);
 
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=6 as |g|}}
@@ -90,12 +99,11 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { components: { infoWindows } } = this;
+    let { components: { infoWindows } } = this.gMapAPI;
 
     this.set('isOpen', true);
 
-    let domIsReady = () => this.domIsReady;
-    await waitUntil(domIsReady);
+    await waitUntil(this.domIsReady);
 
     // There is some lag between the infoWindow rendering and updating its
     // position. It's probably not worth investigating, so we just wait a bit.
@@ -107,7 +115,6 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
   test('it closes the info window when isOpen is set to false', async function(assert) {
     this.isOpen = true;
-    this.onDomReady = () => this.set('domIsReady', true);
 
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=6 as |g|}}
@@ -117,8 +124,7 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let domIsReady = () => this.domIsReady;
-    await waitUntil(domIsReady);
+    await waitUntil(this.domIsReady);
 
     assert.ok(find('#info-window-test'), 'info window open');
 
@@ -129,7 +135,6 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
 
   test('it closes the info window when the close button is clicked', async function(assert) {
     this.isOpen = true;
-    this.onDomReady = () => this.set('domIsReady', true);
 
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=6 as |g|}}
@@ -139,11 +144,10 @@ moduleForMap('Integration | Component | g-map/info-window', function() {
       {{/g-map}}
     `);
 
-    let { components: { infoWindows } } = this;
+    let { components: { infoWindows } } = this.gMapAPI;
     let infoWindow = infoWindows[0].mapComponent;
 
-    let domIsReady = () => this.domIsReady;
-    await waitUntil(domIsReady);
+    await waitUntil(this.domIsReady);
 
     assert.ok(find('#info-window-test'), 'info window open');
 

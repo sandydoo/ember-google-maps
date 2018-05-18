@@ -1,9 +1,15 @@
-import { moduleForMap, trigger } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest, trigger } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { fillIn, find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g map/autocomplete', function() {
+module('Integration | Component | g map/autocomplete', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it renders a pac-input', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -13,10 +19,12 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    let { autocompletes } = this.components;
+    let { autocompletes } = this.gMapAPI.components;
+
     assert.equal(autocompletes.length, 1);
 
     let input = find('input');
+
     assert.ok(input, 'input rendered');
     assert.equal(input.id, 'pac-input');
   });
@@ -50,7 +58,7 @@ moduleForMap('Integration | Component | g map/autocomplete', function() {
       {{/g-map}}
     `);
 
-    let { autocompletes } = this.components;
+    let { autocompletes } = this.gMapAPI.components;
 
     // Fetch the initialized Autocomplete component and shim the getPlace
     // function.

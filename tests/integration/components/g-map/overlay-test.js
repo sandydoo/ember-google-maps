@@ -1,11 +1,17 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { run } from '@ember/runloop';
 import GMapOverlay from 'ember-google-maps/components/g-map/overlay';
 
-moduleForMap('Integration | Component | g map/overlay', function(hooks) {
+module('Integration | Component | g map/overlay', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   /**
    * This is a hack for ember 2.12, which complains about runloop sideeffects
    * from the add() method in the overlay component. Wrapping the test in `run`
@@ -28,7 +34,7 @@ moduleForMap('Integration | Component | g map/overlay', function(hooks) {
       {{/g-map}}
     `);
 
-    let { id, components: { overlays } } = this;
+    let { id, components: { overlays } } = this.gMapAPI;
     let overlay = await waitFor('#custom-overlay');
     let mapDiv = find(`#${id}`);
 

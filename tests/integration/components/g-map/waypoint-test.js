@@ -1,9 +1,15 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g-map/waypoint', function() {
+module('Integration | Component | g-map/waypoint', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it adds a waypoint to the directions', async function(assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
@@ -17,7 +23,7 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
       {{/g-map}}
     `);
 
-    let { components: { directions } } = this;
+    let { components: { directions } } = this.gMapAPI;
     let request = directions[0].directions.request;
 
     assert.equal(request.waypoints.length, 1);
@@ -40,7 +46,11 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions origin=origin destination=destination travelMode="WALKING" onDirectionsChanged=(action onDirectionsChanged) as |d|}}
+        {{#g.directions
+          origin=origin
+          destination=destination
+          travelMode="WALKING"
+          onDirectionsChanged=(action onDirectionsChanged) as |d|}}
           {{#if addWaypoint}}
             {{d.waypoint location=waypointLocation}}
           {{/if}}
@@ -50,7 +60,7 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
 
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    let { components: { directions } } = this;
+    let { components: { directions } } = this.gMapAPI;
     let waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 1);
@@ -60,7 +70,7 @@ moduleForMap('Integration | Component | g-map/waypoint', function() {
 
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    directions = this.components.directions;
+    directions = this.gMapAPI.components.directions;
     waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 0);
