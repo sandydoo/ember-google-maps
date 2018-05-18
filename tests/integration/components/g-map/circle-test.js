@@ -1,9 +1,15 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g map/circle', function() {
+module('Integration | Component | g map/circle', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it renders a circle', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -11,9 +17,9 @@ moduleForMap('Integration | Component | g map/circle', function() {
       {{/g-map}}
     `);
 
-    let { map, components } = await this.get('map');
+    let { map, components: { circles } } = this.gMapAPI;
 
-    assert.equal(components.circles.length, 1);
-    assert.equal(components.circles[0].mapComponent.map, map);
+    assert.equal(circles.length, 1);
+    assert.equal(circles[0].mapComponent.map, map);
   });
 });

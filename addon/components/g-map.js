@@ -159,6 +159,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
 
       all(componentInitPromises)
         .then(() => {
+          this._componentsInitialized = true;
           tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
         });
     });

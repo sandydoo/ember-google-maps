@@ -1,9 +1,15 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g map/control', function() {
+module('Integration | Component | g map/control', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it renders a custom control', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=12 as |g|}}
@@ -13,14 +19,14 @@ moduleForMap('Integration | Component | g map/control', function() {
       {{/g-map}}
     `);
 
-    let { map, components } = await this.get('map');
+    let { map, components: { controls } } = this.gMapAPI;
 
-    assert.equal(components.controls.length, 1);
+    assert.equal(controls.length, 1);
 
     let control = await waitFor('#custom-control');
     assert.ok(control, 'control rendered');
 
-    let controls = map.controls[google.maps.ControlPosition.TOP_CENTER];
-    assert.equal(components.controls[0].mapComponent, controls.getAt(0), 'control rendered in correct position');
+    let mapControls = map.controls[google.maps.ControlPosition.TOP_CENTER];
+    assert.equal(controls[0].mapComponent, mapControls.getAt(0), 'control rendered in correct position');
   });
 });

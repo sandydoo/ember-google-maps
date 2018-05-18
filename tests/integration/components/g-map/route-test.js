@@ -1,12 +1,18 @@
-import { moduleForMap } from 'dummy/tests/helpers/g-map-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForMap('Integration | Component | g-map/route', function() {
+module('Integration | Component | g-map/route', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
+  setupLocations(hooks);
+
   test('it renders a route', async function(assert) {
-    this.set('origin', 'Covent Garden');
-    this.set('destination', 'Clerkenwell');
+    this.origin = 'Covent Garden';
+    this.destination = 'Clerkenwell';
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -16,32 +22,46 @@ moduleForMap('Integration | Component | g-map/route', function() {
       {{/g-map}}
     `);
 
-    let { components } = await this.get('map');
+    let { components: { routes } } = this.gMapAPI;
 
-    assert.equal(components.routes.length, 1);
+    assert.equal(routes.length, 1);
   });
 
   test('it updates a route when the directions change', async function(assert) {
-    this.set('origin', 'Covent Garden');
-    this.set('destination', 'Clerkenwell');
-    this.set('onDirectionsChanged', () => {});
+    this.origin = 'Covent Garden';
+    this.destination = 'Clerkenwell';
+    this.directionsChanged = false;
+    this.onDirectionsChanged = () => { this.directionsChanged = true; };
+
+    let directionsChanged = () => this.directionsChanged;
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions origin=origin destination=destination travelMode="WALKING" as |d|}}
-          {{d.route onDirectionsChanged=(action onDirectionsChanged)}}
+        {{#g.directions
+          origin=origin
+          destination=destination
+          travelMode="WALKING"
+          onDirectionsChanged=(action onDirectionsChanged) as |d|}}
+          {{d.route}}
         {{/g.directions}}
       {{/g-map}}
     `);
 
-    let { components } = await this.get('map');
-
-    this.set('onDirectionsChanged', () => this.set('directionsChanged', true));
-    this.set('origin', 'Holborn Station');
-    let directionsChanged = () => this.get('directionsChanged');
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    let route = components.routes[0].mapComponent;
+    let { components: { routes } } = this.gMapAPI;
+    let route = routes[0].mapComponent;
+
+    assert.equal(route.directions.request.origin.query, this.origin);
+
+    this.directionsChanged = false;
+    this.set('origin', 'Holborn Station');
+
+    await waitUntil(directionsChanged, { timeout: 10000 });
+
+    routes = this.gMapAPI.components.routes;
+    route = routes[0].mapComponent;
+
     assert.equal(route.directions.request.origin.query, this.origin);
   });
 });
