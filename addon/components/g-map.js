@@ -153,7 +153,8 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
       tryInvoke(this, 'onLoad', [this.publicAPI]);
 
       let componentInitPromises =
-        Object.values(this.components)
+        Object.keys(this.components)
+          .map((key) => this.components[key])
           .reduce((a, b) => a.concat(b))
           .map((a) => get(a, 'isInitialized.promise'));
 
