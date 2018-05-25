@@ -19,7 +19,7 @@ const GMapAPI = {
   components: 'components',
   actions: {
     update: '_updateMap',
-    trigger: 'trigger',
+    trigger: '_trigger',
   }
 };
 
@@ -184,8 +184,8 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    * @param {String} event Event name
    * @return
    */
-  _trigger(event) {
-    google.maps.event.trigger(get(this, 'map'), event);
+  _trigger(...args) {
+    google.maps.event.trigger(get(this, 'map'), ...args);
   },
 
   _registerCanvas(canvas, isCustomCanvas = false) {

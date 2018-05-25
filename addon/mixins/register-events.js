@@ -1,7 +1,8 @@
 import Mixin from '@ember/object/mixin';
-import { computed, get } from '@ember/object';
+import { computed, get, getProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { decamelize } from '@ember/string';
+import { assign } from '@ember/polyfills';
 
 /**
  * Register Google Maps events on any map component.
@@ -20,6 +21,12 @@ import { decamelize } from '@ember/string';
  */
 export default Mixin.create({
   /**
+   * @property events
+   * @type {Object}
+   * @public
+   */
+
+  /**
    * The target DOM node or Google Maps object to which to attach event
    * listeners.
    *
@@ -32,13 +39,28 @@ export default Mixin.create({
   /**
    * Filter the array of passed attributes for attributes that begin with `on`.
    *
-   * @property events
-   * @type {Array}
-   * @public
+   * @property _eventAttrs
+   * @private
+   * @return {Array} An array of extracted event names.
    */
-  events: computed(function() {
-    const attrs = Object.keys(this.attrs);
-    return attrs.filter((attr) => this._filterEventsByName(attr));
+  _eventAttrs: computed('attrs', function() {
+    let attrNames = Object.keys(this.attrs);
+    return attrNames.filter((attr) => this._filterEventsByName(attr));
+  }),
+
+  /**
+   * A combination of events passed via the `events` hash and extracted from the
+   * component's attributes. Events registered via an attribute take precedence.
+   *
+   * @property _events
+   * @private
+   * @return {Object}
+   */
+  _events: computed('events', '_eventAttrs', function() {
+    let events = get(this, 'events');
+    let extractedEvents = getProperties(this, get(this, '_eventAttrs'));
+
+    return assign({}, events, extractedEvents);
   }),
 
   /**
@@ -55,10 +77,12 @@ export default Mixin.create({
   },
 
   willDestroyElement() {
-    const eventTarget = get(this, '_eventTarget');
+    let eventTarget = get(this, '_eventTarget');
+
     if (eventTarget && typeof google !== 'undefined') {
       google.maps.event.clearInstanceListeners(eventTarget);
     }
+
     this._super(...arguments);
   },
 
@@ -70,24 +94,25 @@ export default Mixin.create({
    * @return
    */
   registerEvents() {
-    const eventsToRegister = get(this, 'events');
-    eventsToRegister.forEach((action) => {
-      const eventName = decamelize(action).slice(3);
-      const eventTarget = get(this, '_eventTarget');
+    let events = get(this, '_events');
+
+    Object.keys(events).forEach((eventName) => {
+      let action = events[eventName];
+      let eventTarget = get(this, '_eventTarget');
+      eventName = decamelize(eventName).slice(3);
 
       google.maps.event.addDomListener(eventTarget, eventName, (googleEvent) => {
         let event = window.event;
+        let params = {
+          event,
+          googleEvent,
+          eventName,
+          target: eventTarget,
+          publicAPI: this.publicAPI,
+          map: get(this, 'map')
+        };
 
-        get(this, action)(
-          {
-            event,
-            googleEvent,
-            eventName,
-            target: eventTarget,
-            publicAPI: this.publicAPI,
-            map: get(this, 'map')
-          }
-        );
+        action(params);
       });
     });
   }

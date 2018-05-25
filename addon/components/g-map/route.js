@@ -19,10 +19,12 @@ export default MapComponent.extend({
   _requiredOptions: ['directions'],
 
   _addComponent() {
-    const options = get(this, '_options');
+    let options = get(this, '_options');
+
     if (!options.directions) {
       return reject();
     }
+
     set(this, 'mapComponent', new google.maps.DirectionsRenderer(options));
   }
 });

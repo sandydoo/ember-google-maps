@@ -17,6 +17,14 @@ export default MapComponent.extend({
   _type: 'autocomplete',
   _ignoredAttrs: ['onSearch'],
 
+  init() {
+    this._super(...arguments);
+
+    this.publicAPI.reopen({
+      place: 'place'
+    });
+  },
+
   _addComponent() {
     let map = get(this, 'map');
 
@@ -38,10 +46,10 @@ export default MapComponent.extend({
   },
 
   _onSearch() {
-    const place = this.mapComponent.getPlace();
-    const map = get(this, 'map');
-    if (place.geometry) {
-      tryInvoke(this, 'onSearch', [{ place, map }]);
+    this.place = this.mapComponent.getPlace();
+
+    if (this.place.geometry) {
+      tryInvoke(this, 'onSearch', [this.publicAPI]);
     }
   }
 });

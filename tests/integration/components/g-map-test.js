@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -20,9 +20,19 @@ module('Integration | Component | g map', function(hooks) {
     assert.ok(map, 'map initialized');
   });
 
-  test('it passes options to the map', async function(assert) {
+  test('it passes attributes as options to the map', async function(assert) {
     await render(hbs`
       {{g-map lat=lat lng=lng zoom=12 zoomControl=false}}
+    `);
+
+    let { map } = this.gMapAPI;
+
+    assert.notOk(map.zoomControl, 'zoom control disabled');
+  });
+
+  test('it accepts an options hash', async function(assert) {
+    await render(hbs`
+      {{g-map lat=lat lng=lng options=(hash zoom=12 zoomControl=false)}}
     `);
 
     let { map } = this.gMapAPI;
@@ -46,11 +56,11 @@ module('Integration | Component | g map', function(hooks) {
     assert.equal(map.zoom, this.zoom);
   });
 
-  test('it binds events to the map', async function(assert) {
+  test('it extracts events from attributes and binds them to the map', async function(assert) {
     assert.expect(1);
 
     this.onZoomChanged = ({ eventName }) => {
-      assert.equal(eventName, 'zoom_changed', 'zoom changed');
+      assert.equal(eventName, 'zoom_changed', 'zoom changed event');
     };
 
     await render(hbs`
@@ -58,6 +68,30 @@ module('Integration | Component | g map', function(hooks) {
     `);
 
     let { map } = this.gMapAPI;
+
+    map.setZoom(10);
+  });
+
+  test('it accepts both an events hash and individual attribute events', async function(assert) {
+    assert.expect(2);
+
+    this.onClick = ({ eventName }) => {
+      assert.equal(eventName, 'click', 'click attribute event');
+    };
+
+    this.onZoomChanged = ({ eventName }) => {
+      assert.equal(eventName, 'zoom_changed', 'zoom changed event from events hash');
+    };
+
+    await render(hbs`
+      {{g-map lat=lat lng=lng zoom=12
+        onClick=(action onClick)
+        events=(hash onZoomChanged=(action onZoomChanged))}}
+    `);
+
+    let { map } = this.gMapAPI;
+
+    trigger(map, 'click');
 
     map.setZoom(10);
   });
