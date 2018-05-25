@@ -5,6 +5,7 @@ import PublicAPI from '../../utils/public-api';
 import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
 import { defer, resolve } from 'rsvp';
+import { assert } from '@ember/debug';
 
 const MapComponentAPI = {
   map: 'map',
@@ -26,10 +27,13 @@ const MapComponentAPI = {
 const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   tagName: '',
 
+  _type: null,
   _requiredOptions: ['map'],
 
   init() {
     this._super(...arguments);
+
+    assert('You must set a _type property on the map component.', this._type);
 
     this.isInitialized = defer();
     this.isInitialized.promise.then(() => set(this, '_isInitialized', true));
@@ -39,17 +43,20 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
 
   didInsertElement() {
     this._super(...arguments);
+
     this._internalAPI._registerComponent(this._type, this.publicAPI);
     this._updateOrAddComponent();
   },
 
   didUpdateAttrs() {
     this._super(...arguments);
+
     this._updateOrAddComponent();
   },
 
   willDestroyElement() {
     this._super(...arguments);
+
     tryInvoke(this.mapComponent, 'setMap', [null]);
     this._internalAPI._unregisterComponent(this._type, this.publicAPI);
   },
@@ -60,9 +67,9 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
     if (this._isInitialized) {
       this._updateComponent();
     } else {
-      (this._addComponent() || resolve())
-        .then(() => this._didAddComponent())
-        .catch(() => {});
+      resolve()
+        .then(() => this._addComponent())
+        .then(() => this._didAddComponent());
     }
   },
 
@@ -73,7 +80,9 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
    * @method _addComponent
    * @return
    */
-  _addComponent() {},
+  _addComponent() {
+    assert('Map components must implement the _addComponent hook.');
+  },
 
   /**
    * Run after the map component has been initialized. This hook should be used

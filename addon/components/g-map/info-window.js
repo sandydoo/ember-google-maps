@@ -26,6 +26,7 @@ export default MapComponent.extend({
 
   init() {
     this._super(...arguments);
+
     if (!get(this, 'target')) {
       this._requiredOptions = this._requiredOptions.concat(['position']);
     }
@@ -55,11 +56,14 @@ export default MapComponent.extend({
 
   _addComponent() {
     this._prepareContent();
+
     let options = get(this, '_options');
     delete options.map;
+
     if (!get(this, 'isOpen')) {
       delete options.content;
     }
+
     set(this, 'mapComponent', new google.maps.InfoWindow(options));
   },
 
@@ -67,20 +71,24 @@ export default MapComponent.extend({
     if (get(this, 'isOpen')) {
       this.open();
     }
+
     this._super(...arguments);
   },
 
   _updateComponent() {
     let options = get(this, '_options');
+
     if (!get(this, 'isOpen')) {
       delete options.content;
     }
+
     this.mapComponent.setOptions(options);
   },
 
   _prepareContent() {
     if (!get(this, 'content')) {
-      const content = document.createElement('div');
+      let content = document.createElement('div');
+
       set(this, '_targetPane', content);
       set(this, 'content', content);
     }
@@ -91,6 +99,7 @@ export default MapComponent.extend({
       google.maps.event.addListenerOnce(this.mapComponent, 'closeclick', () => {
         set(this, 'isOpen', false);
       });
+
       this.mapComponent.open(get(this, 'map'), get(this, 'target'));
     }
   },

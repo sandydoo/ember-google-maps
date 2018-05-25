@@ -16,6 +16,8 @@ function removeObservers(obj, keys, callback) {
  * @extends Ember.Mixin
  */
 export default Mixin.create({
+  concatenatedProperties: ['_requiredOptions', '_watchedOptions', '_ignoredAttrs'],
+
   /**
    * Specify which attributes on the component should be ignored and never
    * considered as a Google Maps option or event.
@@ -24,9 +26,7 @@ export default Mixin.create({
    * @private
    * @type {String[]}
    */
-  _ignoredAttrs: ['map', '_internalAPI', 'lat', 'lng'],
-
-  concatenatedProperties: ['_requiredOptions', '_watchedOptions', '_ignoredAttrs'],
+  _ignoredAttrs: ['map', '_internalAPI', 'lat', 'lng', 'events'],
 
   /**
    * Required options that are always included in the options object passed to
@@ -57,29 +57,41 @@ export default Mixin.create({
    * @return {Object}
    */
   options: computed('attrs', 'events', function() {
-    let attrs = Object.keys(this.attrs).filter((k) => {
-      return [...get(this, '_ignoredAttrs'), ...(get(this, 'events') || [])].indexOf(k) === -1;
+    let { _ignoredAttrs, _eventAttrs } = getProperties(this, '_ignoredAttrs', '_eventAttrs');
+    let ignoredAttrs = [..._ignoredAttrs, ..._eventAttrs];
+
+    let attrs = Object.keys(this.attrs).filter((attr) => {
+      return ignoredAttrs.indexOf(attr) === -1;
     });
+
     return getProperties(this, attrs);
   }),
 
   _options: computed('map', 'options', function() {
     let options = get(this, 'options');
-    let required = getProperties(this, get(this, '_requiredOptions'));
+    let _requiredOptions = get(this, '_requiredOptions');
+    let required = getProperties(this, _requiredOptions);
+
     return assign(required, options);
   }),
 
   init() {
     this._super(...arguments);
-    let watched = get(this, '_watchedOptions');
 
-    if (watched.length > 0) {
-      addObservers(this, watched, this._updateComponent);
+    if (!this._eventAttrs) {
+      this._eventAttrs = [];
+    }
+
+    let _watchedOptions = get(this, '_watchedOptions');
+    if (_watchedOptions.length > 0) {
+      addObservers(this, _watchedOptions, this._updateComponent);
     }
   },
 
   willDestroyElement() {
-    removeObservers(this, get(this, '_watchedOptions'), this._updateComponent);
+    let _watchedOptions = get(this, '_watchedOptions');
+    removeObservers(this, _watchedOptions, this._updateComponent);
+
     this._super(...arguments);
   }
 });

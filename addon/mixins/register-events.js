@@ -1,5 +1,5 @@
 import Mixin from '@ember/object/mixin';
-import { computed, get } from '@ember/object';
+import { computed, get, getProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { decamelize } from '@ember/string';
 
@@ -29,6 +29,11 @@ export default Mixin.create({
    */
   _eventTarget: reads('mapComponent'),
 
+  _eventAttrs: computed('attrs', function() {
+    let attrNames = Object.keys(this.attrs);
+    return attrNames.filter((attr) => this._filterEventsByName(attr));
+  }),
+
   /**
    * Filter the array of passed attributes for attributes that begin with `on`.
    *
@@ -36,9 +41,8 @@ export default Mixin.create({
    * @type {Array}
    * @public
    */
-  events: computed(function() {
-    const attrs = Object.keys(this.attrs);
-    return attrs.filter((attr) => this._filterEventsByName(attr));
+  events: computed('_eventAttrs', function() {
+    return getProperties(this, get(this, '_eventAttrs'));
   }),
 
   /**
@@ -55,10 +59,12 @@ export default Mixin.create({
   },
 
   willDestroyElement() {
-    const eventTarget = get(this, '_eventTarget');
+    let eventTarget = get(this, '_eventTarget');
+
     if (eventTarget && typeof google !== 'undefined') {
       google.maps.event.clearInstanceListeners(eventTarget);
     }
+
     this._super(...arguments);
   },
 
@@ -70,24 +76,25 @@ export default Mixin.create({
    * @return
    */
   registerEvents() {
-    const eventsToRegister = get(this, 'events');
-    eventsToRegister.forEach((action) => {
-      const eventName = decamelize(action).slice(3);
-      const eventTarget = get(this, '_eventTarget');
+    let events = get(this, 'events');
+
+    Object.keys(events).forEach((eventName) => {
+      let action = events[eventName];
+      let eventTarget = get(this, '_eventTarget');
+      eventName = decamelize(eventName).slice(3);
 
       google.maps.event.addDomListener(eventTarget, eventName, (googleEvent) => {
         let event = window.event;
+        let params = {
+          event,
+          googleEvent,
+          eventName,
+          target: eventTarget,
+          publicAPI: this.publicAPI,
+          map: get(this, 'map')
+        };
 
-        get(this, action)(
-          {
-            event,
-            googleEvent,
-            eventName,
-            target: eventTarget,
-            publicAPI: this.publicAPI,
-            map: get(this, 'map')
-          }
-        );
+        action(params);
       });
     });
   }

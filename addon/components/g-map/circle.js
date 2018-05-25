@@ -15,7 +15,6 @@ export default Marker.extend({
   _requiredOptions: ['center', 'radius'],
 
   radius: 500,
-
   center: reads('position'),
 
   _addComponent() {

@@ -19,11 +19,13 @@ export default Component.extend(ProcessOptions, {
 
   didReceiveAttrs() {
     this._super(...arguments);
+
     this._registerWaypoint(get(this, '_options'));
   },
 
   willDestroyElement() {
     this._super(...arguments);
+
     this._unregisterWaypoint(get(this, '_options'));
   }
 });

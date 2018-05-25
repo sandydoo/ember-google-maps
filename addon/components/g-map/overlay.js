@@ -37,7 +37,7 @@ export default MapComponent.extend({
   }),
 
   _addComponent() {
-    const Overlay = new google.maps.OverlayView();
+    let Overlay = new google.maps.OverlayView();
 
     return new Promise((resolve) => {
       Overlay.onAdd = () => this.add();

@@ -15,22 +15,12 @@ export default MapComponent.extend({
   layout,
   tagName: '',
 
-  _requiredOptions: ['position'],
-
   _type: 'marker',
+  _requiredOptions: ['position'],
 
   position,
 
   _addComponent() {
     set(this, 'mapComponent', new google.maps.Marker(get(this, '_options')));
-  },
-
-  /**
-   * @method getPosition
-   * @public
-   * @return {[google.maps.LatLng]}
-   */
-  getPosition() {
-    return this.mapComponent && this.mapComponent.getPosition();
   }
 });
