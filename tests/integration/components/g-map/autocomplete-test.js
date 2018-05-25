@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { fillIn, find, render } from '@ember/test-helpers';
+import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | g map/autocomplete', function(hooks) {
@@ -27,22 +27,6 @@ module('Integration | Component | g map/autocomplete', function(hooks) {
 
     assert.ok(input, 'input rendered');
     assert.equal(input.id, 'pac-input');
-  });
-
-  test('it calls an action on input', async function(assert) {
-    assert.expect(1);
-
-    this.onInput = (value) => assert.equal(value, 'test');
-
-    await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.autocomplete}}
-          <input oninput={{action onInput value="target.value"}}>
-        {{/g.autocomplete}}
-      {{/g-map}}
-    `);
-
-    await fillIn('input', 'test');
   });
 
   test('it returns place results on search', async function(assert) {
