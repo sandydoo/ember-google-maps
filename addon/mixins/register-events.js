@@ -2,6 +2,7 @@ import Mixin from '@ember/object/mixin';
 import { computed, get, getProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { decamelize } from '@ember/string';
+import { assign } from '@ember/polyfills';
 
 /**
  * Register Google Maps events on any map component.
@@ -20,6 +21,12 @@ import { decamelize } from '@ember/string';
  */
 export default Mixin.create({
   /**
+   * @property events
+   * @type {Object}
+   * @public
+   */
+
+  /**
    * The target DOM node or Google Maps object to which to attach event
    * listeners.
    *
@@ -29,20 +36,31 @@ export default Mixin.create({
    */
   _eventTarget: reads('mapComponent'),
 
+  /**
+   * Filter the array of passed attributes for attributes that begin with `on`.
+   *
+   * @property _eventAttrs
+   * @private
+   * @return {Array} An array of extracted event names.
+   */
   _eventAttrs: computed('attrs', function() {
     let attrNames = Object.keys(this.attrs);
     return attrNames.filter((attr) => this._filterEventsByName(attr));
   }),
 
   /**
-   * Filter the array of passed attributes for attributes that begin with `on`.
+   * A combination of events passed via the `events` hash and extracted from the
+   * component's attributes. Events registered via an attribute take precedence.
    *
-   * @property events
-   * @type {Array}
-   * @public
+   * @property _events
+   * @private
+   * @return {Object}
    */
-  events: computed('_eventAttrs', function() {
-    return getProperties(this, get(this, '_eventAttrs'));
+  _events: computed('events', '_eventAttrs', function() {
+    let events = get(this, 'events');
+    let extractedEvents = getProperties(this, get(this, '_eventAttrs'));
+
+    return assign({}, events, extractedEvents);
   }),
 
   /**
@@ -76,7 +94,7 @@ export default Mixin.create({
    * @return
    */
   registerEvents() {
-    let events = get(this, 'events');
+    let events = get(this, '_events');
 
     Object.keys(events).forEach((eventName) => {
       let action = events[eventName];
