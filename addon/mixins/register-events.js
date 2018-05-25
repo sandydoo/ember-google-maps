@@ -51,7 +51,7 @@ export default Mixin.create({
    * @return {Boolean}
    */
   _filterEventsByName(attr) {
-    return attr.startsWith('on') && get(this, '_ignoredAttrs').indexOf(attr) === -1;
+    return attr.slice(0, 2) === 'on' && get(this, '_ignoredAttrs').indexOf(attr) === -1;
   },
 
   willDestroyElement() {

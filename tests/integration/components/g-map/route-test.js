@@ -59,9 +59,6 @@ module('Integration | Component | g-map/route', function(hooks) {
 
     await waitUntil(directionsChanged, { timeout: 10000 });
 
-    routes = this.gMapAPI.components.routes;
-    route = routes[0].mapComponent;
-
     assert.equal(route.directions.request.origin.query, this.origin);
   });
 });

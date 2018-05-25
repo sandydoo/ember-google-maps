@@ -9,6 +9,10 @@ module.exports = function(defaults) {
     snippetPaths: ['tests/dummy/app/templates/snippets'],
     includeHighlightStyle: false,
 
+    'ember-cli-babel': {
+      includePolyfill: true
+    },
+
     sassOptions: {
       precision: 10,
       onlyIncluded: true,

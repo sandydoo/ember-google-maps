@@ -3,7 +3,7 @@
 import { get } from '@ember/object';
 
 // Private properties
-let proxy, revoke;
+let proxy;
 
 /**
  * Create a public API object whose properties map to private properties on a
@@ -24,14 +24,17 @@ let proxy, revoke;
  */
 export default class PublicAPI {
   constructor(instance, schema) {
-    ({ proxy, revoke } = Proxy.revocable(instance, this));
+    proxy = instance;
+
+    proxy.on('willDestroyElement', () => {
+      proxy = null;
+    });
 
     this.defineProxyProperty(schema, proxy);
   }
 
   get(target, prop) {
-    if (target.isDestroyed || target.isDestroying) {
-      revoke();
+    if (!target || target.isDestroyed || target.isDestroying) {
       throw Error(`Cannot access property ${prop} on the instance because it has been destroyed.`);
     }
 
@@ -48,11 +51,12 @@ export default class PublicAPI {
       let pointer = schema[prop];
 
       if (typeof pointer === 'object') {
-        let nestedProp = (Object.hasOwnProperty(this, prop)) ? this[prop] : {};
-        this.defineProxyProperty(pointer, proxy, nestedProp);
+        let nestedProp = Object.hasOwnProperty(this, prop) ? this[prop] : {};
         descriptor['get'] = function() { return nestedProp; };
+
+        this.defineProxyProperty(pointer, proxy, nestedProp);
       } else {
-        descriptor['get'] = function() { return proxy[pointer]; };
+        descriptor['get'] = function() { return this.get(proxy, pointer); };
       }
 
       Object.defineProperty(target, prop, descriptor);
