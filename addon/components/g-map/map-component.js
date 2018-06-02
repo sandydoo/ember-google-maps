@@ -112,8 +112,4 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   }
 });
 
-MapComponent.reopenClass({
-  positionalParams: ['map', '_internalAPI']
-});
-
 export default MapComponent;

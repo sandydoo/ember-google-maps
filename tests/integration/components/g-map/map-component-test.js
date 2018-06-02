@@ -18,7 +18,7 @@ module('Integration | Component | g map/map-component', function(hooks) {
       _unregisterComponent: () => {}
     };
 
-    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test"}}`);
   });
 
   test('it unregisters with the parent map when destroyed', async function(assert) {
@@ -29,6 +29,6 @@ module('Integration | Component | g map/map-component', function(hooks) {
       _unregisterComponent: (type) => assert.equal(type, 'tests', 'it unregisters'),
     };
 
-    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test"}}`);
   });
 });
