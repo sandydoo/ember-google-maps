@@ -1,10 +1,22 @@
-{{g-map-addons (hash
-  addonTemplate=(component "" map _internalAPI)
-  map=map
-  publicAPI=publicAPI
-  _internalAPI=_internalAPI
-  canvas=(component "g-map/canvas" _internalAPI=_internalAPI id=mapId classNames=classNames _isCustomCanvas=true))}}
+{{#-private-api/addon-factory
+  gMap=this.gMap
+  map=this.map
+  _internalAPI=this._internalAPI as |addons|}}
 
-{{#unless (unbound _customCanvasRegistered)}}
-  {{g-map/canvas _internalAPI=_internalAPI id=mapId classNames=classNames}}
+  {{yield (merge-objects addons (hash
+    publicAPI=this.publicAPI
+    map=this.map
+    _internalAPI=this._internalAPI
+    canvas=(component "g-map/canvas"
+      _internalAPI=this._internalAPI
+      id=this.mapId
+      classNames=this.classNames
+      _isCustomCanvas=true)
+    )
+  )}}
+
+{{/-private-api/addon-factory}}
+
+{{#unless (unbound this._customCanvasRegistered)}}
+  {{g-map/canvas _internalAPI=this._internalAPI id=this.mapId classNames=this.classNames}}
 {{/unless}}

@@ -3,8 +3,12 @@
 'use strict';
 
 const Funnel = require('broccoli-funnel');
+const MergeTrees = require('broccoli-merge-trees');
 const path = require('path');
 const chalk = require('chalk');
+const Handlebars = require('handlebars');
+const stripIndent = require('strip-indent');
+const writeFile = require('broccoli-file-creator');
 
 function intersection(a, b) {
   const intersection = new Set();
@@ -56,13 +60,18 @@ module.exports = {
   },
 
   config(env, config) {
-    const mapConfig = config['ember-google-maps'] || {};
+    let mapConfig = config['ember-google-maps'] || {};
     mapConfig['src'] = this.buildGoogleMapsUrl(mapConfig);
+
     return { 'ember-google-maps': mapConfig };
   },
 
-  setupPreprocessorRegistry(type, registry) {
-    let { AddonProcessor, sendAddonsToProcessor } = require('./lib/addon-processor');
+  treeForAddon() {
+    let tree = this._super.treeForAddon.apply(this, arguments);
+    return this.filterComponents(tree);
+  },
+
+  treeForAddonTemplates() {
     let AddonRegistry = require('./lib/addon-registry');
 
     let addons = new AddonRegistry(this.project).components;
@@ -75,27 +84,26 @@ module.exports = {
       { key: 'overlay', component: 'g-map/overlay' },
       { key: 'control', component: 'g-map/control' },
       { key: 'autocomplete', component: 'g-map/autocomplete' },
-      { key: 'directions', component: 'g-map/directions' }
+      { key: 'directions', component: 'g-map/directions' },
+      { key: 'route', component: 'g-map/route' }
     ]);
 
-    sendAddonsToProcessor(addons);
+    let template = Handlebars.compile(stripIndent(`
+      \\{{yield (merge-objects gMap
+          (hash
+            {{#each addons as |addon|}}
+              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap)
+            {{/each}}
+          )
+        )}}
+    `));
 
-    registry.add('htmlbars-ast-plugin', {
-      name: 'ember-google-maps-addons',
-      plugin: AddonProcessor,
-      baseDir() {
-        return __dirname;
-      }
-    });
-  },
+    let addonFactoryTree = writeFile('components/-private-api/addon-factory.hbs', template({ addons }));
 
-  treeForAddon() {
-    const tree = this._super.treeForAddon.apply(this, arguments);
-    return this.filterComponents(tree);
-  },
+    let tree = this._super.treeForAddonTemplates.apply(this, arguments);
 
-  treeForAddonTemplates() {
-    const tree = this._super.treeForAddonTemplates.apply(this, arguments);
+    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
+
     return this.filterComponents(tree);
   },
 

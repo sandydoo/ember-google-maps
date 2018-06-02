@@ -90,6 +90,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     this._super(...arguments);
 
     this.components = {};
+    this.gMap = {};
 
     this.publicAPI = new PublicAPI(this, GMapAPI);
 
@@ -140,7 +141,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
       let componentInitPromises =
         Object.keys(this.components)
           .map((key) => this.components[key])
-          .reduce((a, b) => a.concat(b))
+          .reduce((a, b) => a.concat(b), [])
           .map((a) => get(a, 'isInitialized.promise'));
 
       all(componentInitPromises)
