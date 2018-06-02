@@ -20,7 +20,8 @@ export default MapComponent.extend({
 
   layout,
 
-  _type: 'direction',
+  _type: 'directions',
+  _pluralType: 'directions',
   _ignoredAttrs: ['onDirectionsChanged'],
   _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
   _watchedOptions: ['waypoints.[]'],
