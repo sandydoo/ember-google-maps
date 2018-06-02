@@ -10,15 +10,19 @@ module('Integration | Component | g map/map-component', function(hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
+  hooks.before(function() {
+    this._addComponent = () => {};
+  });
+
   test('it registers with the parent map when created', async function(assert) {
     assert.expect(1);
 
     this._internalAPI = {
-      _registerComponent: (type) => assert.equal(type, 'test', 'it registers'),
+      _registerComponent: (type) => assert.equal(type, 'tests', 'it registers'),
       _unregisterComponent: () => {}
     };
 
-    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test" _addComponent=_addComponent}}`);
   });
 
   test('it unregisters with the parent map when destroyed', async function(assert) {
@@ -26,9 +30,9 @@ module('Integration | Component | g map/map-component', function(hooks) {
 
     this._internalAPI = {
       _registerComponent: () => {},
-      _unregisterComponent: (type) => assert.equal(type, 'test', 'it unregisters'),
+      _unregisterComponent: (type) => assert.equal(type, 'tests', 'it unregisters'),
     };
 
-    await render(hbs`{{g-map/map-component map _internalAPI _type="test"}}`);
+    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test" _addComponent=_addComponent}}`);
   });
 });

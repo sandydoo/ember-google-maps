@@ -1,17 +1,22 @@
-{{yield (hash
-  map=map
-  publicAPI=publicAPI
-  _internalAPI=_internalAPI
-  canvas=(component "g-map/canvas" _internalAPI=_internalAPI id=mapId classNames=classNames _isCustomCanvas=true)
-  marker=(component "g-map/marker" map _internalAPI)
-  circle=(component "g-map/circle" map _internalAPI)
-  polyline=(component "g-map/polyline" map _internalAPI)
-  infoWindow=(component "g-map/info-window" map _internalAPI)
-  overlay=(component "g-map/overlay" map _internalAPI)
-  control=(component "g-map/control" map _internalAPI)
-  autocomplete=(component "g-map/autocomplete" map _internalAPI)
-  directions=(component "g-map/directions" map _internalAPI))}}
+{{#-private-api/addon-factory
+  gMap=this.gMap
+  map=this.map
+  _internalAPI=this._internalAPI as |addons|}}
 
-{{#unless (unbound _customCanvasRegistered)}}
-  {{g-map/canvas _internalAPI=_internalAPI id=mapId classNames=classNames}}
+  {{yield (merge-objects addons (hash
+    publicAPI=this.publicAPI
+    map=this.map
+    _internalAPI=this._internalAPI
+    canvas=(component "g-map/canvas"
+      _internalAPI=this._internalAPI
+      id=this.mapId
+      classNames=this.classNames
+      _isCustomCanvas=true)
+    )
+  )}}
+
+{{/-private-api/addon-factory}}
+
+{{#unless (unbound this._customCanvasRegistered)}}
+  {{g-map/canvas _internalAPI=this._internalAPI id=this.mapId classNames=this.classNames}}
 {{/unless}}
