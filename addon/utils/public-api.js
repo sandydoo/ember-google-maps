@@ -3,7 +3,7 @@
 import { get } from '@ember/object';
 
 // Private properties
-let proxy;
+let proxy = new WeakMap();
 
 /**
  * Create a public API object whose properties map to private properties on a
@@ -24,16 +24,18 @@ let proxy;
  */
 export default class PublicAPI {
   constructor(instance, schema) {
-    proxy = instance;
+    proxy.set(this, instance);
 
-    proxy.on('willDestroyElement', () => {
-      proxy = null;
+    instance.on('willDestroyElement', () => {
+      proxy.set(this, null);
     });
 
-    this.defineProxyProperty(schema, proxy);
+    this.defineProxyProperties(schema);
   }
 
-  get(target, prop) {
+  get(prop) {
+    let target = proxy.get(this);
+
     if (!target || target.isDestroyed || target.isDestroying) {
       throw Error(`Cannot access property ${prop} on the instance because it has been destroyed.`);
     }
@@ -45,18 +47,19 @@ export default class PublicAPI {
     return get(target, prop);
   }
 
-  defineProxyProperty(schema, proxy, target = this) {
+  defineProxyProperties(schema, target = this) {
     Object.keys(schema).forEach((prop) => {
       let descriptor = { configurable: true };
       let pointer = schema[prop];
 
       if (typeof pointer === 'object') {
-        let nestedProp = Object.hasOwnProperty(this, prop) ? this[prop] : {};
+        let nestedProp = (this.actions) ? this[prop] : {};
         descriptor['get'] = function() { return nestedProp; };
 
-        this.defineProxyProperty(pointer, proxy, nestedProp);
+        this.defineProxyProperties(pointer, nestedProp);
       } else {
-        descriptor['get'] = function() { return this.get(proxy, pointer); };
+        let self = this;
+        descriptor['get'] = function() { return self.get(pointer); };
       }
 
       Object.defineProperty(target, prop, descriptor);
@@ -64,7 +67,7 @@ export default class PublicAPI {
   }
 
   reopen(schema) {
-    this.defineProxyProperty(schema, proxy);
+    this.defineProxyProperties(schema);
     return this;
   }
 }
