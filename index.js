@@ -47,7 +47,7 @@ module.exports = {
 
     // If a whitelist is used, ensure that we include the base map component.
     if (this.whitelist.length) {
-      this.whitelist.push('g-map', 'canvas', 'base');
+      this.whitelist.push('g-map', 'canvas', 'map-component');
       this.whitelist.forEach((w) => {
         const deps = dependencies[w];
         if (deps) {
@@ -86,7 +86,7 @@ module.exports = {
       { key: 'autocomplete', component: 'g-map/autocomplete' },
       { key: 'directions', component: 'g-map/directions' },
       { key: 'route', component: 'g-map/route' }
-    ]);
+    ]).filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist));
 
     let template = Handlebars.compile(stripIndent(`
       \\{{yield (merge-objects gMap
@@ -128,11 +128,20 @@ module.exports = {
       return false;
     }
 
+    // Always include addon-factory
+    if (/-private-api\/addon-factory/.test(name)) {
+      return false;
+    }
+
     let baseName = path.basename(name);
     baseName = baseName.split('.').shift();
 
-    let isWhiteListed = whitelist.indexOf(baseName) !== -1;
-    let isBlackListed = blacklist.indexOf(baseName) !== -1;
+    return this.excludeName(baseName, whitelist, blacklist);
+  },
+
+  excludeName(name, whitelist, blacklist) {
+    let isWhiteListed = whitelist.indexOf(name) !== -1;
+    let isBlackListed = blacklist.indexOf(name) !== -1;
 
     if (whitelist.length === 0 && blacklist.length === 0) {
       return false;
