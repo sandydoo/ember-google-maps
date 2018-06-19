@@ -86,7 +86,7 @@ module.exports = {
       { key: 'autocomplete', component: 'g-map/autocomplete' },
       { key: 'directions', component: 'g-map/directions' },
       { key: 'route', component: 'g-map/route' }
-    ]);
+    ]).filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist));
 
     let template = Handlebars.compile(stripIndent(`
       \\{{yield (merge-objects gMap
