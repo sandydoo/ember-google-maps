@@ -136,8 +136,12 @@ module.exports = {
     let baseName = path.basename(name);
     baseName = baseName.split('.').shift();
 
-    let isWhiteListed = whitelist.indexOf(baseName) !== -1;
-    let isBlackListed = blacklist.indexOf(baseName) !== -1;
+    return this.excludeName(baseName, whitelist, blacklist);
+  },
+
+  excludeName(name, whitelist, blacklist) {
+    let isWhiteListed = whitelist.indexOf(name) !== -1;
+    let isBlackListed = blacklist.indexOf(name) !== -1;
 
     if (whitelist.length === 0 && blacklist.length === 0) {
       return false;
