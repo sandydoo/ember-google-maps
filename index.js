@@ -47,7 +47,7 @@ module.exports = {
 
     // If a whitelist is used, ensure that we include the base map component.
     if (this.whitelist.length) {
-      this.whitelist.push('g-map', 'canvas', 'base');
+      this.whitelist.push('g-map', 'canvas', 'base', 'map-component');
       this.whitelist.forEach((w) => {
         const deps = dependencies[w];
         if (deps) {
