@@ -128,6 +128,11 @@ module.exports = {
       return false;
     }
 
+    // Always include addon-factory
+    if (/-private-api\/addon-factory/.test(name)) {
+      return false;
+    }
+
     let baseName = path.basename(name);
     baseName = baseName.split('.').shift();
 
