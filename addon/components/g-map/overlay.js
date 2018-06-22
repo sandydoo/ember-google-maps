@@ -25,9 +25,7 @@ export default MapComponent.extend({
 
   paneName: 'overlayMouseTarget',
 
-  _elementDestination: null,
   _targetPane: null,
-
   _eventTarget: reads('content'),
 
   innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
@@ -62,9 +60,7 @@ export default MapComponent.extend({
 
   add() {
     let panes = this.mapComponent.getPanes();
-    let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
     set(this, '_targetPane', get(panes, this.paneName));
-    this._targetPane.appendChild(_elementDestination);
   },
 
   draw() {
