@@ -10,15 +10,22 @@ module('Integration | Component | g-map/directions', function(hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
+  hooks.beforeEach(function() {
+    this.onDirectionsChanged = () => { this.directionsChanged = true; };
+    this.directionsHaveChanged = () => this.directionsChanged;
+  });
+
   test('it fetches directions', async function(assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{g.directions origin=origin destination=destination travelMode="WALKING"}}
+        {{g.directions origin=origin destination=destination travelMode="WALKING" onDirectionsChanged=(action onDirectionsChanged)}}
       {{/g-map}}
     `);
+
+    await waitUntil(this.directionsHaveChanged, { timeout: 10000 });
 
     let { components: { directions } } = this.gMapAPI;
 
@@ -36,7 +43,6 @@ module('Integration | Component | g-map/directions', function(hooks) {
   test('it updates the directions when one of the attributes changes', async function(assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
-    this.onDirectionsChanged = () => {};
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -44,14 +50,15 @@ module('Integration | Component | g-map/directions', function(hooks) {
       {{/g-map}}
     `);
 
+    await waitUntil(this.directionsHaveChanged, { timeout: 10000 });
+
     let { components: { directions } } = this.gMapAPI;
 
-    this.set('onDirectionsChanged', () => { this.directionsChanged = true; });
 
+    this.directionsChanged = false;
     this.set('origin', 'Holborn Station');
 
-    let directionsChanged = () => this.directionsChanged;
-    await waitUntil(directionsChanged, { timeout: 10000 });
+    await waitUntil(this.directionsHaveChanged, { timeout: 10000 });
 
     let {
       origin: { query: origin },
