@@ -89,13 +89,13 @@ module.exports = {
     ]).filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist));
 
     let template = Handlebars.compile(stripIndent(`
-      \\{{yield (merge-objects gMap
+      \\{{yield
           (hash
             {{#each addons as |addon|}}
               {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap)
             {{/each}}
           )
-        )}}
+        }}
     `));
 
     let addonFactoryTree = writeFile('components/-private-api/addon-factory.hbs', template({ addons }));

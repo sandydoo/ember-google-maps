@@ -202,5 +202,9 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    */
   _unregisterComponent(type, componentAPI) {
     this.components[type].removeObject(componentAPI);
+  },
+
+  _updateGMap(...props) {
+    return Object.assign(this.gMap, ...props);
   }
 });

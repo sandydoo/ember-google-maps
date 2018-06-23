@@ -1,22 +1,29 @@
-{{#-private-api/addon-factory
-  gMap=this.gMap
-  map=this.map
-  _internalAPI=this._internalAPI as |addons|}}
+{{#with (component "g-map/canvas"
+  id=this.mapId
+  classNames=this.classNames
+  _internalAPI=this._internalAPI) as |canvas|}}
 
-  {{yield (merge-objects addons (hash
-    publicAPI=this.publicAPI
-    map=this.map
-    _internalAPI=this._internalAPI
-    canvas=(component "g-map/canvas"
-      _internalAPI=this._internalAPI
-      id=this.mapId
-      classNames=this.classNames
-      _isCustomCanvas=true)
-    )
-  )}}
+  {{!-- Wait for the map to load before initializing any components. Otherwise, this code would have to run at least 3 times. --}}
+  {{#if this.map}}
 
-{{/-private-api/addon-factory}}
+    {{#-private-api/addon-factory
+      gMap=this.gMap
+      map=this.map
+      _internalAPI=this._internalAPI as |addons|}}
 
-{{#unless (unbound this._customCanvasRegistered)}}
-  {{g-map/canvas _internalAPI=this._internalAPI id=this.mapId classNames=this.classNames}}
-{{/unless}}
+      {{yield (g-map/compute (action this._updateGMap) addons (hash
+        publicAPI=this.publicAPI
+        map=this.map
+        _internalAPI=this._internalAPI
+        canvas=(component canvas _isCustomCanvas=true)
+        ))}}
+
+    {{/-private-api/addon-factory}}
+
+  {{/if}}
+
+  {{!-- Render the default canvas --}}
+  {{#unless (unbound this._customCanvasRegistered)}}
+    {{component canvas}}
+  {{/unless}}
+{{/with}}
