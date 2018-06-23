@@ -13,9 +13,7 @@ module('Integration | Addon System', function(hooks) {
   test('it registers the `sampleAddon` component from `ember-google-maps-sample-addon`', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.sampleAddon as |sampleAddon|}}
-          {{sampleAddon.marker}}
-        {{/g.sampleAddon}}
+        {{g.sampleAddon}}
       {{/g-map}}
     `);
 
