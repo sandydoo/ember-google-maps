@@ -23,5 +23,7 @@ export default MapComponent.extend({
     map.controls[controlPosition].push(_elementDestination);
 
     set(this, 'mapComponent', _elementDestination);
-  }
+  },
+
+  _updateComponent() {},
 });
