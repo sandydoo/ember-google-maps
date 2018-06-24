@@ -1,14 +1,19 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupMapTest } from 'ember-google-maps/test-support';
+import { setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { render, waitUntil } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+
+function getWaypoints(directions) {
+  return directions[0].directions.request.waypoints;
+}
 
 module('Integration | Component | g-map/waypoint', function(hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
+  setupActionTracking(hooks);
 
   test('it adds a waypoint to the directions', async function(assert) {
     this.origin = 'Covent Garden';
@@ -17,11 +22,17 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions origin=origin destination=destination travelMode="WALKING" as |d|}}
+        {{#g.directions
+          origin=origin
+          destination=destination
+          travelMode="WALKING"
+          onDirectionsChanged=(action trackAction 'directionsReady')as |d|}}
           {{d.waypoint location=waypointLocation}}
         {{/g.directions}}
       {{/g-map}}
     `);
+
+    await this.seenAction('directionsReady', { timeout: 10000 });
 
     let { components: { directions } } = this.gMapAPI;
     let request = directions[0].directions.request;
@@ -35,14 +46,6 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
     this.destination = 'Clerkenwell';
     this.waypointLocation = 'Leather Lane';
     this.addWaypoint = true;
-    this.directionsChanged = false;
-    this.onDirectionsChanged = () => { this.directionsChanged = true; };
-
-    let directionsChanged = () => this.directionsChanged;
-
-    function getWaypoints(directions) {
-      return directions[0].directions.request.waypoints;
-    }
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -50,7 +53,7 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
           origin=origin
           destination=destination
           travelMode="WALKING"
-          onDirectionsChanged=(action onDirectionsChanged) as |d|}}
+          onDirectionsChanged=(action trackAction 'directionsReady') as |d|}}
           {{#if addWaypoint}}
             {{d.waypoint location=waypointLocation}}
           {{/if}}
@@ -58,17 +61,16 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
       {{/g-map}}
     `);
 
-    await waitUntil(directionsChanged, { timeout: 10000 });
+    await this.seenAction('directionsReady', { timeout: 10000 });
 
     let { components: { directions } } = this.gMapAPI;
     let waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 1);
 
-    this.directionsChanged = false;
     this.set('addWaypoint', false);
 
-    await waitUntil(directionsChanged, { timeout: 10000 });
+    await this.seenAction('directionsReady', { timeout: 10000 });
 
     directions = this.gMapAPI.components.directions;
     waypoints = getWaypoints(directions);

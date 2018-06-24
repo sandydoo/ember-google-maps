@@ -1,4 +1,5 @@
+import setupActionTracking from './setup-action-tracking';
 import setupMapTest from './setup-map-test';
-import { trigger } from './helpers';
+import { getDirectionsQuery, trigger } from './helpers';
 
-export { setupMapTest, trigger };
+export { getDirectionsQuery, setupActionTracking, setupMapTest, trigger };

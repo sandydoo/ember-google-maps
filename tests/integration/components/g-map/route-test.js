@@ -1,14 +1,15 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupMapTest } from 'ember-google-maps/test-support';
+import { getDirectionsQuery, setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { render, waitUntil } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | g-map/route', function(hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
+  setupActionTracking(hooks);
 
   test('it renders a route', async function(assert) {
     this.origin = 'Covent Garden';
@@ -30,10 +31,6 @@ module('Integration | Component | g-map/route', function(hooks) {
   test('it updates a route when the directions change', async function(assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
-    this.directionsChanged = false;
-    this.onDirectionsChanged = () => { this.directionsChanged = true; };
-
-    let directionsChanged = () => this.directionsChanged;
 
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
@@ -41,24 +38,28 @@ module('Integration | Component | g-map/route', function(hooks) {
           origin=origin
           destination=destination
           travelMode="WALKING"
-          onDirectionsChanged=(action onDirectionsChanged) as |d|}}
+          onDirectionsChanged=(action trackAction 'directionsReady') as |d|}}
           {{d.route}}
         {{/g.directions}}
       {{/g-map}}
     `);
 
-    await waitUntil(directionsChanged, { timeout: 10000 });
+    await this.seenAction('directionsReady', { timeout: 10000 });
 
     let { components: { routes } } = this.gMapAPI;
-    let route = routes[0].mapComponent;
 
-    assert.equal(route.directions.request.origin.query, this.origin);
+    let directions = routes[0].mapComponent.directions;
+    let { origin } = getDirectionsQuery(directions);
 
-    this.directionsChanged = false;
+    assert.equal(origin, this.origin);
+
     this.set('origin', 'Holborn Station');
 
-    await waitUntil(directionsChanged, { timeout: 10000 });
+    await this.seenAction('directionsReady', { timeout: 10000 });
 
-    assert.equal(route.directions.request.origin.query, this.origin);
+    directions = routes[0].mapComponent.directions;
+    ({ origin } = getDirectionsQuery(directions));
+
+    assert.equal(origin, this.origin);
   });
 });
