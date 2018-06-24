@@ -6,6 +6,8 @@ import { reads } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
+import { scheduleOnce } from '@ember/runloop';
+import { task } from 'ember-concurrency';
 
 /**
  * A wrapper for the google.maps.directionsService API.
@@ -49,33 +51,42 @@ export default MapComponent.extend({
     return this.route();
   },
 
+  /**
+   * Fetch routing information from DirectionsService.
+   *
+   * This should be run after rendering to avoid triggering the request several
+   * times on initial render if there are several waypoints.
+   *
+   * @method route
+   * @public
+   */
   route() {
-    return this._route().then((directions) => {
-      setProperties(this, {
-        directions,
-        mapComponent: directions
-      });
-
-      tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]);
-    });
+    scheduleOnce('afterRender', get(this, '_route'), 'perform');
   },
 
-  _route() {
-    return get(this, 'directionsService').then((directionsService) => {
-      let options = get(this, '_options');
-      delete options.map;
+  _route: task(function *() {
+    let directionsService = yield get(this, 'directionsService');
 
-      return new Promise((resolve, reject) => {
-        directionsService.route(options, (response, status) => {
-          if (status === 'OK') {
-            resolve(response);
-          } else {
-            reject(status);
-          }
-        });
+    let options = get(this, '_options');
+    delete options.map;
+
+    let directions = yield new Promise((resolve, reject) => {
+      directionsService.route(options, (response, status) => {
+        if (status === 'OK') {
+          resolve(response);
+        } else {
+          reject(status);
+        }
       });
     });
-  },
+
+    setProperties(this, {
+      directions,
+      mapComponent: directions
+    });
+
+    tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]);
+  }).restartable(),
 
   _registerWaypoint(waypoint) {
     get(this, 'waypoints').pushObject(waypoint);
