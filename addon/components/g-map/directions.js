@@ -6,7 +6,7 @@ import { reads } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
-import { scheduleOnce } from '@ember/runloop';
+import { schedule, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 
 /**
@@ -85,7 +85,7 @@ export default MapComponent.extend({
       mapComponent: directions
     });
 
-    tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]);
+    schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
   }).restartable(),
 
   _registerWaypoint(waypoint) {
