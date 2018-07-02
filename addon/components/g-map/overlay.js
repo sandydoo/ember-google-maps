@@ -3,7 +3,7 @@ import layout from '../../templates/components/g-map/overlay';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
-import { schedule } from '@ember/runloop';
+import { join, next, schedule } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
 import { htmlSafe } from '@ember/string';
 import { Promise } from 'rsvp';
@@ -38,20 +38,24 @@ export default MapComponent.extend({
     let Overlay = new google.maps.OverlayView();
 
     return new Promise((resolve) => {
-      Overlay.onAdd = () => this.add();
-      Overlay.draw = () => schedule('render', this, '_initialDraw', resolve);
-      Overlay.onRemove = () => this.destroy();
+      Overlay.onAdd = () => join(this, 'add');
+      Overlay.draw = () => schedule('render', () => {
+        this._initialDraw();
+        resolve();
+      });
+      Overlay.onRemove = () => join(this, 'destroy');
 
       set(this, 'mapComponent', Overlay);
-      this.mapComponent.setMap(get(this, 'map'));
+      next(() => {
+        this.mapComponent.setMap(get(this, 'map'));
+      });
     });
   },
 
-  _initialDraw(overlayCallback) {
+  _initialDraw() {
     this.fetchOverlayContent();
     this.mapComponent.draw = () => this.draw();
     this._updateComponent();
-    overlayCallback();
   },
 
   _updateComponent() {
