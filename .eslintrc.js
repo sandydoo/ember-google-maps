@@ -16,8 +16,9 @@ module.exports = {
     google: false
   },
   rules: {
-    'ember/avoid-leaking-state-in-components': 'warn',
-    'ember/no-attrs-in-components': 'off'
+    'ember/avoid-leaking-state-in-components': 'off',
+    'ember/order-in-components': 'off',
+    'ember/no-attrs-in-components': 'off',
   },
   overrides: [
     // node files
