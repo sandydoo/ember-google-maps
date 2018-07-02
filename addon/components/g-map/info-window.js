@@ -39,9 +39,40 @@ export default MapComponent.extend({
     });
   },
 
-  didReceiveAttrs() {
-    this._super(...arguments);
+  _addComponent() {
+    this._prepareContent();
 
+    let options = this._getOptions();
+
+    set(this, 'mapComponent', new google.maps.InfoWindow(options));
+  },
+
+  _didAddComponent() {
+    this._openOrClose();
+
+    this._super(...arguments);
+  },
+
+  _updateComponent() {
+    let options = this._getOptions();
+
+    this.mapComponent.setOptions(options);
+
+    this._openOrClose();
+  },
+
+  _getOptions() {
+    let options = get(this, '_options');
+    delete options.map;
+
+    if (!get(this, 'isOpen')) {
+      delete options.content;
+    }
+
+    return options;
+  },
+
+  _openOrClose() {
     let isOpen = get(this, 'isOpen');
     let isOpenChanged = this._cachedIsOpen !== isOpen;
 
@@ -52,37 +83,6 @@ export default MapComponent.extend({
     }
 
     set(this, '_cachedIsOpen', isOpen);
-  },
-
-  _addComponent() {
-    this._prepareContent();
-
-    let options = get(this, '_options');
-    delete options.map;
-
-    if (!get(this, 'isOpen')) {
-      delete options.content;
-    }
-
-    set(this, 'mapComponent', new google.maps.InfoWindow(options));
-  },
-
-  _didAddComponent() {
-    if (get(this, 'isOpen')) {
-      this.open();
-    }
-
-    this._super(...arguments);
-  },
-
-  _updateComponent() {
-    let options = get(this, '_options');
-
-    if (!get(this, 'isOpen')) {
-      delete options.content;
-    }
-
-    this.mapComponent.setOptions(options);
   },
 
   _prepareContent() {
