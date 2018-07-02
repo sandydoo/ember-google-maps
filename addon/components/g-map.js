@@ -11,7 +11,7 @@ import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { all } from 'rsvp';
-import { next } from '@ember/runloop';
+import { scheduleOnce } from '@ember/runloop';
 
 const GMapAPI = {
   id: 'mapId',
@@ -104,7 +104,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   didInsertElement() {
     this._super(...arguments);
 
-    get(this, 'google').then(() => next(this, '_initMap'));
+    get(this, 'google').then(() => this._initMap());
   },
 
   didUpdateAttrs() {
@@ -123,8 +123,6 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    * @return
    */
   _initMap() {
-    if (this.isDestroying || this.isDestroyed) { return; }
-
     let canvas = get(this, 'canvas.element');
     let options = get(this, '_options');
 
@@ -138,18 +136,30 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
 
       tryInvoke(this, 'onLoad', [this.publicAPI]);
 
-      let componentInitPromises =
-        Object.keys(this.components)
-          .map((key) => this.components[key])
-          .reduce((a, b) => a.concat(b), [])
-          .map((a) => get(a, 'isInitialized.promise'));
+      scheduleOnce('afterRender', this, () => {
+        if (this.isDestroying || this.isDestroyed) { return; }
 
-      all(componentInitPromises)
-        .then(() => {
-          this._componentsInitialized = true;
-          tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
-        });
+        this._waitForComponents()
+          .then(() => {
+            this._componentsInitialized = true;
+            tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
+          });
+      });
     });
+  },
+
+  _waitForComponents() {
+    let componentsAreInitialized =
+      Object.keys(this.components)
+        .map((name) => this.components[name])
+        .reduce((array, componentGroup) => array.concat(componentGroup), [])
+        .map((components) => get(components, 'isInitialized.promise'));
+
+    return all(componentsAreInitialized)
+      .then(() => {
+        this._componentsInitialized = true;
+        tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
+      });
   },
 
   /**
@@ -205,6 +215,8 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   },
 
   _updateGMap(...props) {
-    return Object.assign(this.gMap, ...props);
+    let newGMap = Object.assign({}, this.gMap, ...props);
+    scheduleOnce('afterRender', () => set(this, 'gMap', newGMap));
+    return newGMap;
   }
 });
