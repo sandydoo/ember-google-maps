@@ -545,6 +545,10 @@ babel-plugin-htmlbars-inline-precompile@^0.2.3:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-0.2.4.tgz#54b48168432bbc03f1f26f2e9090cb222bc78c75"
 
+babel-plugin-htmlbars-inline-precompile@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-0.2.5.tgz#7a7c37cf22c73fb57a1f828c76520f0360c5c5f3"
+
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz#cad9cad1191b5ad634bf30ae0872391e0647be95"
@@ -2294,7 +2298,7 @@ ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.0.0-beta.7, ember-cli-babel@^6
     ember-cli-version-checker "^2.1.0"
     semver "^5.4.1"
 
-ember-cli-babel@^6.8.2:
+ember-cli-babel@^6.14.1, ember-cli-babel@^6.8.2:
   version "6.14.1"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-6.14.1.tgz#796339229035910b625593caffbc2683792ada68"
   dependencies:
@@ -2322,11 +2326,12 @@ ember-cli-broccoli-sane-watcher@^2.0.4:
     rsvp "^3.0.18"
     sane "^2.4.1"
 
-ember-cli-dependency-checker@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-cli-dependency-checker/-/ember-cli-dependency-checker-2.1.0.tgz#9d66286a7c778e94733eaf21320d129c4fd0dd64"
+ember-cli-dependency-checker@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/ember-cli-dependency-checker/-/ember-cli-dependency-checker-2.1.1.tgz#0421f9ca53fe8b237a53575be7dbe36e88ac83a6"
   dependencies:
-    chalk "^1.1.3"
+    chalk "^2.3.0"
+    find-yarn-workspace-root "^1.1.0"
     is-git-url "^1.0.0"
     resolve "^1.5.0"
     semver "^5.3.0"
@@ -2404,16 +2409,16 @@ ember-cli-deploy-s3-index@^1.0.1:
     mime-types "^2.1.9"
     rsvp "^3.0.18"
 
-ember-cli-deploy-s3@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/ember-cli-deploy-s3/-/ember-cli-deploy-s3-1.2.0.tgz#7e9e9621da4157fdcf09a2d56c42c61ef6b1f2e4"
+ember-cli-deploy-s3@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-deploy-s3/-/ember-cli-deploy-s3-1.3.0.tgz#d93537034af257713fb213d1e828ab964cc0f95f"
   dependencies:
     aws-sdk "^2.6.12"
     chalk "^1.0.0"
     core-object "^2.0.0"
     ember-cli-deploy-plugin "^0.2.2"
     lodash "^4.17.4"
-    mime "^1.3.4"
+    mime "^2.3.1"
     minimatch "^3.0.3"
     proxy-agent "^2.0.0"
     rsvp "^3.5.0"
@@ -2469,9 +2474,9 @@ ember-cli-fastboot@^1.1.3:
     md5-hex "^2.0.0"
     silent-error "^1.0.0"
 
-ember-cli-flash@^1.6.1:
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/ember-cli-flash/-/ember-cli-flash-1.6.3.tgz#837951a3a2c3c70f17cdf553c0ab4e41da62a73d"
+ember-cli-flash@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/ember-cli-flash/-/ember-cli-flash-1.6.4.tgz#9830e11f76d8b3863d37bbe604b3cb6b9a92d2f2"
   dependencies:
     ember-cli-babel "^6.10.0"
     ember-cli-htmlbars "^2.0.1"
@@ -2489,6 +2494,16 @@ ember-cli-htmlbars-inline-precompile@^1.0.0:
     ember-cli-version-checker "^2.0.0"
     hash-for-dep "^1.0.2"
     heimdalljs-logger "^0.1.7"
+    silent-error "^1.1.0"
+
+ember-cli-htmlbars-inline-precompile@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ember-cli-htmlbars-inline-precompile/-/ember-cli-htmlbars-inline-precompile-1.0.3.tgz#332ff96c06fc522965162f1090d78a615379c3c2"
+  dependencies:
+    babel-plugin-htmlbars-inline-precompile "^0.2.5"
+    ember-cli-version-checker "^2.1.2"
+    hash-for-dep "^1.2.3"
+    heimdalljs-logger "^0.1.9"
     silent-error "^1.1.0"
 
 ember-cli-htmlbars@^2.0.1:
@@ -2698,9 +2713,9 @@ ember-cli@~3.2.0:
     watch-detector "^0.1.0"
     yam "^0.0.24"
 
-ember-code-snippet@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-code-snippet/-/ember-code-snippet-2.1.0.tgz#d548ceaf7b6e3afc262790a931e27a65adf1081c"
+ember-code-snippet@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/ember-code-snippet/-/ember-code-snippet-2.2.1.tgz#f4ea7091a424de137833b418473b6f3e0a6a1cd7"
   dependencies:
     broccoli-flatiron "^0.1.2"
     broccoli-merge-trees "^1.0.0"
@@ -2778,9 +2793,9 @@ ember-qunit@^3.3.2:
     ember-cli-test-loader "^2.2.0"
     qunit "^2.5.0"
 
-ember-resolver@^4.0.0:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/ember-resolver/-/ember-resolver-4.5.5.tgz#6fef0597a42724e4960f37588df8a208ffd3365a"
+ember-resolver@^4.5.6:
+  version "4.5.6"
+  resolved "https://registry.yarnpkg.com/ember-resolver/-/ember-resolver-4.5.6.tgz#61cecc683fbe3464d759e6d0c2bab97b3914ee4b"
   dependencies:
     "@glimmer/resolver" "^0.4.1"
     babel-plugin-debug-macros "^0.1.10"
@@ -2790,13 +2805,13 @@ ember-resolver@^4.0.0:
     ember-cli-version-checker "^2.0.0"
     resolve "^1.3.3"
 
-ember-rfc176-data@^0.2.2:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/ember-rfc176-data/-/ember-rfc176-data-0.2.7.tgz#bd355bc9b473e08096b518784170a23388bc973b"
-
 ember-rfc176-data@^0.3.0, ember-rfc176-data@^0.3.1:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/ember-rfc176-data/-/ember-rfc176-data-0.3.2.tgz#bde5538939529b263c142b53a47402f8127f8dce"
+
+ember-rfc176-data@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/ember-rfc176-data/-/ember-rfc176-data-0.3.3.tgz#27fba08d540a7463a4366c48eaa19c5a44971a39"
 
 ember-router-generator@^1.2.3:
   version "1.2.3"
@@ -2997,12 +3012,11 @@ eslint-plugin-disable-features@^0.1.3:
   dependencies:
     requireindex "~1.1.0"
 
-eslint-plugin-ember@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-ember/-/eslint-plugin-ember-3.6.2.tgz#f0763a45c4a839d46ae197ab926134daf95f8fa2"
+eslint-plugin-ember@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ember/-/eslint-plugin-ember-5.2.0.tgz#fa436e0497dfc01d1d38608229cd616e7c5b6067"
   dependencies:
-    ember-rfc176-data "^0.2.2"
-    requireindex "^1.1.0"
+    ember-rfc176-data "^0.3.3"
     snake-case "^2.1.0"
 
 eslint-plugin-node@^6.0.1:
@@ -3014,9 +3028,9 @@ eslint-plugin-node@^6.0.1:
     resolve "^1.3.3"
     semver "^5.4.1"
 
-eslint-plugin-qunit@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-qunit/-/eslint-plugin-qunit-2.4.0.tgz#156f5b859256c0af20bebd6a1df3f6eaf069fc12"
+eslint-plugin-qunit@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-qunit/-/eslint-plugin-qunit-3.2.1.tgz#06cd468d598ca1ba2634b149c000349997dd43c2"
 
 eslint-scope@^3.7.1:
   version "3.7.1"
@@ -3272,7 +3286,7 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-express@^4.10.7, express@^4.12.3:
+express@^4.10.7, express@^4.12.3, express@^4.16.2:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
   dependencies:
@@ -3417,7 +3431,7 @@ fastboot-transform@^0.1.2:
     broccoli-stew "^1.5.0"
     convert-source-map "^1.5.1"
 
-fastboot@^1.1.0, fastboot@^1.1.2, fastboot@^1.1.3:
+fastboot@^1.1.2, fastboot@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/fastboot/-/fastboot-1.1.3.tgz#56c5f56415c5ae8de2db539c0d3ecbcd65538f8b"
   dependencies:
@@ -3515,7 +3529,7 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-find-yarn-workspace-root@^1.0.0:
+find-yarn-workspace-root@^1.0.0, find-yarn-workspace-root@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/find-yarn-workspace-root/-/find-yarn-workspace-root-1.1.0.tgz#9817b6748cb90719f4dc37b4538bb200c697356f"
   dependencies:
@@ -5439,9 +5453,9 @@ mime@1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
 
-mime@^1.3.4:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
+mime@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -6115,17 +6129,17 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-prember-sitemap-generator@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/prember-sitemap-generator/-/prember-sitemap-generator-0.0.3.tgz#7de73d5cb9b2d68f5d2f3c5d05746d4e9b98dbc2"
+prember-sitemap-generator@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/prember-sitemap-generator/-/prember-sitemap-generator-0.1.1.tgz#0d52789598caf41bd9fcf787e2611bfa3fd071ec"
   dependencies:
     broccoli-file-creator "^1.1.1"
     broccoli-funnel "^2.0.1"
     chalk "^2.3.0"
 
-prember@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/prember/-/prember-0.2.2.tgz#77e6c2984908165138b7c1538269e3a9e64d9377"
+prember@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/prember/-/prember-0.4.0.tgz#55607d74babe74958e0c08d78da66e002dc02bea"
   dependencies:
     broccoli-debug "^0.6.3"
     broccoli-merge-trees "^2.0.0"
@@ -6133,7 +6147,8 @@ prember@^0.2.2:
     chalk "^2.3.0"
     denodeify "^1.2.1"
     ember-cli-babel "^6.6.0"
-    fastboot "^1.1.0"
+    express "^4.16.2"
+    fastboot "^1.1.3"
     mkdirp "^0.5.1"
 
 prepend-http@^2.0.0:
@@ -6524,10 +6539,6 @@ require-uncached@^1.0.3:
   dependencies:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
-
-requireindex@^1.1.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
 
 requireindex@~1.1.0:
   version "1.1.0"
