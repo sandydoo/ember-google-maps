@@ -96,6 +96,7 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
    * @return
    */
   _didAddComponent() {
+    this._registerOptionObservers();
     this.registerEvents();
     this.isInitialized.resolve();
   },

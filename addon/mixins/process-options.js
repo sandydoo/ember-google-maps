@@ -81,17 +81,23 @@ export default Mixin.create({
     if (!this._eventAttrs) {
       this._eventAttrs = [];
     }
-
-    let _watchedOptions = get(this, '_watchedOptions');
-    if (_watchedOptions.length > 0) {
-      addObservers(this, _watchedOptions, this._updateComponent);
-    }
   },
 
   willDestroyElement() {
     let _watchedOptions = get(this, '_watchedOptions');
-    removeObservers(this, _watchedOptions, this._updateComponent);
+    removeObservers(this, _watchedOptions, () => {
+      if (this._isInitialized) { this._updateComponent(); }
+    });
 
     this._super(...arguments);
+  },
+
+  _registerOptionObservers() {
+    let _watchedOptions = get(this, '_watchedOptions');
+    if (_watchedOptions.length > 0) {
+      addObservers(this, _watchedOptions, () => {
+        if (this._isInitialized) { this._updateComponent(); }
+      });
+    }
   }
 });
