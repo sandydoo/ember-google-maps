@@ -3,16 +3,24 @@
   map=this.map
   _internalAPI=this._internalAPI as |addons|}}
 
-  {{yield (g-map/compute (action this._updateGMap) addons (hash
-    publicAPI=this.publicAPI
-    map=this.map
-    _internalAPI=this._internalAPI
-    canvas=(component "g-map/canvas"
-      id=this.mapId
-      classNames=this.classNames
+  {{#if this.map}}
+
+    {{g-map/compute (action this._updateGMap) addons (hash
+      publicAPI=this.publicAPI
+      map=this.map
       _internalAPI=this._internalAPI
-      _isCustomCanvas=true)
-    ))}}
+      canvas=(component "g-map/canvas"
+        id=this.mapId
+        classNames=this.classNames
+        _internalAPI=this._internalAPI
+        _isCustomCanvas=true)
+      )}}
+
+    {{#if this.gMap}}
+      {{yield this.gMap}}
+    {{/if}}
+
+  {{/if}}
 
 {{/-private-api/addon-factory}}
 

@@ -217,6 +217,5 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   _updateGMap(...props) {
     let newGMap = Object.assign({}, this.gMap, ...props);
     scheduleOnce('afterRender', () => set(this, 'gMap', newGMap));
-    return newGMap;
   }
 });
