@@ -6,12 +6,13 @@ import layout from '../templates/components/g-map';
 import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
 import { computed, get, set } from '@ember/object';
-import { reads } from '@ember/object/computed';
+import { not, reads } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
-import { all } from 'rsvp';
+import { all, defer } from 'rsvp';
 import { scheduleOnce } from '@ember/runloop';
+import { task } from 'ember-concurrency';
 
 const GMapAPI = {
   id: 'mapId',
@@ -43,15 +44,6 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   tagName: '',
 
   _requiredOptions: ['center', 'zoom'],
-
-  /**
-   * Track whether a custom canvas is used instead of the default one.
-   *
-   * @property _customCanvasRegistered
-   * @type {Boolean}
-   * @private
-   */
-  _customCanvasRegistered: false,
 
   /**
    * Zoom level for the map
@@ -86,6 +78,9 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     return `ember-google-map-${guidFor(this)}`;
   }),
 
+  _hasCustomCanvas: false,
+  _needsCanvas: not('_hasCustomCanvas'),
+
   init() {
     this._super(...arguments);
 
@@ -99,12 +94,10 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
       _registerComponent: this._registerComponent.bind(this),
       _unregisterComponent: this._unregisterComponent.bind(this)
     };
-  },
 
-  didInsertElement() {
-    this._super(...arguments);
+    this._canvasIsRendering = defer();
 
-    get(this, 'google').then(() => this._initMap());
+    get(this, '_initMap').perform();
   },
 
   didUpdateAttrs() {
@@ -122,11 +115,13 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    * @private
    * @return
    */
-  _initMap() {
-    let canvas = get(this, 'canvas.element');
-    let options = get(this, '_options');
+  _initMap: task(function *() {
+    yield get(this, 'google');
 
-    let map = new google.maps.Map(canvas, options);
+    let canvas = yield this._canvasIsRendering.promise;
+
+    let options = get(this, '_options');
+    let map = new google.maps.Map(canvas.element, options);
 
     google.maps.event.addListenerOnce(map, 'idle', () => {
       if (this.isDestroying || this.isDestroyed) { return; }
@@ -146,7 +141,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
           });
       });
     });
-  },
+  }),
 
   _waitForComponents() {
     let componentsAreInitialized =
@@ -184,9 +179,14 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     google.maps.event.trigger(get(this, 'map'), ...args);
   },
 
-  _registerCanvas(canvas, isCustomCanvas = false) {
+  _registerCanvas(canvas, isCustomCanvas) {
     set(this, 'canvas', canvas);
-    set(this, '_customCanvasRegistered', isCustomCanvas);
+    set(this, '_hasCustomCanvas', isCustomCanvas);
+    scheduleOnce('afterRender', this, '_notifyCanvasHasRendered');
+  },
+
+  _notifyCanvasHasRendered() {
+    this._canvasIsRendering.resolve(this.canvas);
   },
 
   /**
