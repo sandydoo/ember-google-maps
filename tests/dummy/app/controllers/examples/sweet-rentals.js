@@ -10,11 +10,17 @@ export default Controller.extend(CommonMapData, {
 
   google: reads('googleMapsApi.google'),
 
-  boundedLondonLocations: computed('mapBounds', function() {
+  boundedLondonLocations: computed('londonLocations', 'mapBounds', function() {
     let londonLocations = get(this, 'londonLocations');
+    let mapBounds = get(this, 'mapBounds');
+
     return londonLocations.filter((location) => {
-      let mapBounds = get(this, 'mapBounds');
-      return mapBounds && get(this, 'mapBounds').contains(new google.maps.LatLng(getProperties(location, 'lat', 'lng')));
+      if (mapBounds) {
+        let { lat, lng } = getProperties(location, 'lat', 'lng');
+        return mapBounds.contains(new google.maps.LatLng(lat, lng));
+      } else {
+        return true;
+      }
     });
   }),
 
