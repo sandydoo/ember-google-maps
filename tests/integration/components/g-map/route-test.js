@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { getDirectionsQuery, setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
+import wait from 'dummy/tests/helpers/wait';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
@@ -26,6 +27,8 @@ module('Integration | Component | g-map/route', function(hooks) {
     let { components: { routes } } = this.gMapAPI;
 
     assert.equal(routes.length, 1);
+
+    await wait(1000);
   });
 
   test('it updates a route when the directions change', async function(assert) {
@@ -53,6 +56,8 @@ module('Integration | Component | g-map/route', function(hooks) {
 
     assert.equal(origin, this.origin);
 
+    await wait(1000);
+
     this.set('origin', 'Holborn Station');
 
     await this.seenAction('directionsReady', { timeout: 10000 });
@@ -61,5 +66,7 @@ module('Integration | Component | g-map/route', function(hooks) {
     ({ origin } = getDirectionsQuery(directions));
 
     assert.equal(origin, this.origin);
+
+    await wait(1000);
   });
 });

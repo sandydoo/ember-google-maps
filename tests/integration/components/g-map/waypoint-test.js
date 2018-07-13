@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
+import wait from 'dummy/tests/helpers/wait';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
@@ -39,6 +40,8 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
 
     assert.equal(request.waypoints.length, 1);
     assert.equal(request.waypoints[0].location.query, this.waypointLocation);
+
+    await wait(1000);
   });
 
   test('it updates the current directions when added', async function(assert) {
@@ -68,6 +71,8 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
 
     assert.equal(waypoints.length, 1);
 
+    await wait(1000);
+
     this.set('addWaypoint', false);
 
     await this.seenAction('directionsReady', { timeout: 10000 });
@@ -76,5 +81,7 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
     waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 0);
+
+    await wait(1000);
   });
 });

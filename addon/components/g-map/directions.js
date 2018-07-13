@@ -7,7 +7,7 @@ import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 import { schedule, scheduleOnce } from '@ember/runloop';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 /**
  * A wrapper for the google.maps.directionsService API.
@@ -65,12 +65,25 @@ export default MapComponent.extend({
   },
 
   _route: task(function *() {
-    let directionsService = yield get(this, 'directionsService');
+    yield timeout(300);
 
     let options = get(this, '_options');
     delete options.map;
 
-    let directions = yield new Promise((resolve, reject) => {
+    let directions = yield get(this, 'fetchDirections').perform(options);
+
+    setProperties(this, {
+      directions,
+      mapComponent: directions
+    });
+
+    schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
+  }).restartable(),
+
+  fetchDirections: task(function *(options) {
+    let directionsService = yield get(this, 'directionsService');
+
+    let request = new Promise((resolve, reject) => {
       directionsService.route(options, (response, status) => {
         if (status === 'OK') {
           resolve(response);
@@ -80,13 +93,10 @@ export default MapComponent.extend({
       });
     });
 
-    setProperties(this, {
-      directions,
-      mapComponent: directions
-    });
+    let directions = yield request;
 
-    schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
-  }).restartable(),
+    return directions;
+  }),
 
   _registerWaypoint(waypoint) {
     get(this, 'waypoints').pushObject(waypoint);
