@@ -2719,9 +2719,9 @@ ember-export-application-global@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
 
-ember-google-maps-sample-addon@sandydoo/ember-google-maps-sample-addon:
+ember-google-maps-sample-addon@sandydoo/ember-google-maps-sample-addon#912b087510cecd02324c804d100da86486b12b80:
   version "0.0.0"
-  resolved "https://codeload.github.com/sandydoo/ember-google-maps-sample-addon/tar.gz/f9294766870d1673e68e1076a636ef525d9d1c75"
+  resolved "https://codeload.github.com/sandydoo/ember-google-maps-sample-addon/tar.gz/912b087510cecd02324c804d100da86486b12b80"
   dependencies:
     ember-cli-babel "^6.6.0"
     ember-cli-htmlbars "^2.0.1"
