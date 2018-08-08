@@ -40,6 +40,7 @@ export default MapComponent.extend({
     return new Promise((resolve) => {
       Overlay.onAdd = () => join(this, 'add');
       Overlay.draw = () => schedule('render', () => {
+        if (this.isDestroyed) { return; }
         this._initialDraw();
         resolve();
       });
@@ -63,6 +64,7 @@ export default MapComponent.extend({
   },
 
   add() {
+    if (this.isDestroyed) { return; }
     let panes = this.mapComponent.getPanes();
     set(this, '_targetPane', get(panes, this.paneName));
   },
