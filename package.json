@@ -71,7 +71,7 @@
     "ember-composable-helpers": "^2.0.3",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
-    "ember-google-maps-sample-addon": "sandydoo/ember-google-maps-sample-addon",
+    "ember-google-maps-sample-addon": "sandydoo/ember-google-maps-sample-addon#912b087510cecd02324c804d100da86486b12b80",
     "ember-load-initializers": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-resolver": "^4.5.6",
