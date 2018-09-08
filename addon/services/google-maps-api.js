@@ -42,7 +42,7 @@ export default Service.extend({
     if (typeof document === 'undefined') { return reject(); }
 
     let google = window.google;
-    if (google) { return resolve(google); }
+    if (google && google.maps) { return resolve(google); }
 
     // Pre-built url set to environment variable.
     let ENV = getOwner(this).resolveRegistration('config:environment');
