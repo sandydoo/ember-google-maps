@@ -62,6 +62,8 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
 
     tryInvoke(this.mapComponent, 'setMap', [null]);
 
+    this.publicAPI.remove(this);
+
     this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
   },
 

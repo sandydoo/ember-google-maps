@@ -26,10 +26,6 @@ export default class PublicAPI {
   constructor(instance, schema) {
     proxy.set(this, instance);
 
-    instance.on('willDestroyElement', () => {
-      proxy.set(this, null);
-    });
-
     this.defineProxyProperties(schema);
   }
 
@@ -64,6 +60,10 @@ export default class PublicAPI {
 
       Object.defineProperty(target, prop, descriptor);
     });
+  }
+
+  remove() {
+    proxy.set(this, null);
   }
 
   reopen(schema) {
