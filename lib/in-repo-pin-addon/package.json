@@ -1,0 +1,11 @@
+{
+  "name": "in-repo-pin-addon",
+  "keywords": [
+    "ember-addon",
+    "ember-google-maps-addon"
+  ],
+  "dependencies": {
+    "ember-cli-babel": "^6.14.1",
+    "ember-cli-htmlbars": "^2.0.1"
+  }
+}

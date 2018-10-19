@@ -72,7 +72,7 @@ module.exports = {
   },
 
   treeForAddonTemplates() {
-    let AddonRegistry = require('./lib/addon-registry');
+    let AddonRegistry = require('./lib/broccoli/addon-registry');
 
     let addons = new AddonRegistry(this.project).components;
 
