@@ -29,4 +29,17 @@ module('Integration | Component | g map/control', function(hooks) {
     let mapControls = map.controls[google.maps.ControlPosition.TOP_CENTER];
     assert.equal(controls[0].mapComponent, mapControls.getAt(0), 'control rendered in correct position');
   });
+
+  test('it renders a control with a class value', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng zoom=12 as |g|}}
+        {{#g.control position="TOP_CENTER" class="custom-control-holder"}}
+          <div id="custom-control"></div>
+        {{/g.control}}
+      {{/g-map}}
+    `);
+
+    let control = await waitFor('.custom-control-holder');
+    assert.ok(control, 'control rendered');
+  });
 });
