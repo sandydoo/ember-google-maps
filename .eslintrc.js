@@ -29,13 +29,14 @@ module.exports = {
         'testem.js',
         'blueprints/*/index.js',
         'config/**/*.js',
-        'lib/**/*.js',
+        'lib/broccoli/**/*.js',
         'tests/dummy/config/**/*.js'
       ],
       excludedFiles: [
         'addon/**',
         'addon-test-support/**',
         'app/**',
+        'lib/in-repo-pin-addon/**',
         'tests/dummy/app/**'
       ],
       parserOptions: {

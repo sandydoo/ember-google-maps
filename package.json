@@ -92,6 +92,9 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
-    "demoURL": "https://ember-google-maps.sandydoo.me"
+    "demoURL": "https://ember-google-maps.sandydoo.me",
+    "paths": [
+      "lib/in-repo-pin-addon"
+    ]
   }
 }
