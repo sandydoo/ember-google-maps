@@ -10,6 +10,7 @@ import { get, set } from '@ember/object';
  */
 export default MapComponent.extend({
   layout,
+  class: undefined,
   tagName: 'div',
 
   _type: 'control',
@@ -18,6 +19,10 @@ export default MapComponent.extend({
   _addComponent() {
     let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
     let map = get(this, 'map');
+
+    if (get(this, 'class')) {
+      _elementDestination.classList.add(get(this, 'class'));
+    }
 
     let controlPosition = google.maps.ControlPosition[get(this, 'position')];
     map.controls[controlPosition].push(_elementDestination);
