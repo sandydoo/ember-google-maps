@@ -1,5 +1,3 @@
-/* eslint-env node */
-/* eslint-disable prefer-template */
 'use strict';
 
 const Funnel = require('broccoli-funnel');
@@ -34,7 +32,7 @@ const dependencies = {
 };
 
 module.exports = {
-  name: 'ember-google-maps',
+  name: require('./package').name,
 
   included() {
     this._super.included.apply(this, arguments);
