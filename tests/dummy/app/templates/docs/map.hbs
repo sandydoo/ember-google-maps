@@ -32,6 +32,9 @@
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     {{g-map lat=london.lat lng=london.lng zoom=12
       styles=primaryMapStyle
+      minZoom=10
+      panControl=false
+      streetViewControl=false
       classNames="ember-google-map-responsive"}}
   </div>
 </div>
