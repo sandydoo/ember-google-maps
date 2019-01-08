@@ -13,15 +13,38 @@
         Some Google event names break the expected naming style. Notice how <tt>dragend</tt> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <tt>e</tt> in <tt>onDragend</tt>.
       {{/doc-danger}}
 
-      <p>Each event returns the following:</p>
-      <ul>
-        <li>Any curried params passed to the bound action</li>
-        <li>An event object of following format:</li>
-      </ul>
-
-      {{code-snippet name="event.js"}}
-
       <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
+
+      <p>Each action will receive any optional arguments you pass in the template and an event object. The event object serves two purposes. Firstly, it provides you with an abundance of information about the triggered event. Secondly, and more importantly, it provides access to a host of functions that allow you to immediately react to the event.</p>
+
+      <table class="table table-borderless">
+        <tbody>
+          <tr>
+            <td><b>event</b></td>
+            <td>The window.event object.</td>
+          </tr>
+          <tr>
+            <td><b>googleEvent</b></td>
+            <td>Google Maps provides its own event system. This object might contain extra, map-specific details.</td>
+          </tr>
+          <tr>
+            <td><b>eventName</b></td>
+            <td>The name of the triggered event.</td>
+          </tr>
+          <tr>
+            <td><b>target</b></td>
+            <td>The source element or component that triggered the event. This could be the map itself, a marker, or an HTML element.</td>
+          </tr>
+          <tr>
+            <td><b>publicAPI</b></td>
+            <td>A set of public objects and methods exposed by the map component that registered the event. This object should also provide the map component instance.</td>
+          </tr>
+          <tr>
+            <td><b>map</b></td>
+            <td>The parent map instance. See {{google-docs "map"}}.</td>
+          </tr>
+        </tbody>
+      </table>
 
       {{#doc-tip badgeText="Test"}}
         The sample map has some event listeners set up – see if you can find them all!
