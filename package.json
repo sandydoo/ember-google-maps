@@ -28,7 +28,8 @@
     "lint:js": "eslint .",
     "start": "ember serve",
     "test": "ember test",
-    "test:all": "ember try:each"
+    "test:all": "ember try:each",
+    "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
   "dependencies": {
     "broccoli-file-creator": "^2.1.1",
