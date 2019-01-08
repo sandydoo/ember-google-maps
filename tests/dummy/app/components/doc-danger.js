@@ -1,4 +1,4 @@
-import DocTipComponent from '@ember/component';
+import DocTipComponent from './doc-tip';
 
 export default DocTipComponent.extend({
   cardClassNames: 'doc-danger',
