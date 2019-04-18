@@ -1,6 +1,6 @@
 {{#if _targetPane}}
   {{#-in-element _targetPane}}
-    <div id={{_contentId}}>
+    <div id={{_contentId}} class={{innerContainerClassNames}}>
       {{#_private-api/detect-render
         style=innerContainerStyle
         didRender=(action _updateComponent)}}

@@ -28,7 +28,7 @@ module('Integration | Component | g map/overlay', function(hooks) {
   test('it renders a custom overlay', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng zoom=12 as |g|}}
-        {{#g.overlay lat=lat lng=lng}}
+        {{#g.overlay innerContainerClassNames="pastafano" lat=lat lng=lng}}
           <div id="custom-overlay"></div>
         {{/g.overlay}}
       {{/g-map}}
@@ -43,5 +43,7 @@ module('Integration | Component | g map/overlay', function(hooks) {
     assert.ok(overlay, 'overlay rendered');
 
     assert.ok(mapDiv.contains(overlay), 'overlay is child of map node');
+
+    assert.ok(overlay.parentElement.parentElement.getAttribute('class').includes('pastafano'));
   });
 });

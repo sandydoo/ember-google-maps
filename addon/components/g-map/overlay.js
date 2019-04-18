@@ -28,6 +28,7 @@ export default MapComponent.extend({
   _targetPane: null,
   _eventTarget: reads('content'),
 
+  innerContainerClassNames: undefined,
   innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
 
   _contentId: computed(function() {
