@@ -1,0 +1,4 @@
+/* Not a real class. For illustration purposes only. */
+.anchor-middle-bottom {
+  transform: translateX(-50%) translateY(-100%);
+}

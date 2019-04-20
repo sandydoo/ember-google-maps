@@ -9,7 +9,7 @@
 
     	<p>The Google docs actually call this an <tt>OverlayView</tt>. Basically, you can add any HTML element to the map as an "overlay" by messing around with DOM elements in javascript. I hope you can image that doing this manually can get messy real fast. The guides have an example where they overlay a section of a terrain map or something along those lines – very cool 🤔. What this feature is <i>way</i> more useful for are custom HTML markers! And not just plain old markers, but markers with bound data and actions and CSS animations!</p>
 
-    	<p>Let's first talk about <i>how</i> the <tt>OverlayView</tt> actually works. The {{google-docs "OverlayView"}} reveal that it requires us to define 3 methods: <tt>onAdd</tt>, <tt>draw</tt> and <tt>onRemove</tt>. Since <tt>on</tt>-prefixed parameters are reserved in our case, we rename the methods to <tt>add</tt> and <tt>remove</tt>. Now in <span class="ember">ember</span>-speak, these are basically equivalent to <tt>insert</tt>, <tt>render</tt> and <tt>destroy</tt> – three tasks <span class="ember">ember</span> components absolutely excel at! All we really have to do is wait for the map to initialise before we insert the component into the DOM and register it with the map. The <tt>overlay</tt> component does this and more to make it dead easy to create complex custom map elements.</p>
+    	<p>Let's first talk about <i>how</i> the <tt>OverlayView</tt> actually works. {{google-docs "OverlayView" "overlay-view"}} reveals that it requires us to define 3 methods: <tt>onAdd</tt>, <tt>draw</tt> and <tt>onRemove</tt>. Since <tt>on</tt>-prefixed parameters are reserved in our case, we rename the methods to <tt>add</tt> and <tt>remove</tt>. Now in <span class="ember">ember</span>-speak, these are basically equivalent to <tt>insert</tt>, <tt>render</tt> and <tt>destroy</tt> – three tasks <span class="ember">ember</span> components absolutely excel at! All we really have to do is wait for the map to initialise before we insert the component into the DOM and register it with the map. The <tt>overlay</tt> component does this and more to make it dead easy to create complex custom map elements.</p>
     </section>
     <section>
     	<h5 id="creating-overlays">Creating custom overlays</h5>
@@ -23,6 +23,23 @@
       {{/doc-tip}}
 
     	{{code-snippet name="basic-overlays.hbs"}}
+    </section>
+    <section>
+      <h5>Custom options</h5>
+
+      <p>There are also two custom options:</p>
+
+      <p><tt>paneName</tt> – Select which map pane to render your overlay in. See {{google-docs "MapPanes" "overlay-view#MapPanes"}} for the options. The default pane is <tt>overlayMouseTarget</tt>.</p>
+
+      <p><tt>innerContainerStyle</tt> – This lets you override the style applied to the container element holding your overlay content. By using the <tt>transform</tt> CSS property, you can move your overlay content relative to its coordinates. For example, the default transform centers the element horizontally and positions it above the coordinates. This is ideal for tooltips, which usually have the "tip" or "anchor" at the middle and bottom of their element.</p>
+
+      {{code-snippet name="overlay-inner-container-style.css"}}
+
+      <p>Notice how the transform uses percentages. This lets us define the offset using the dimensions of the overlay content. Here is what the transform should look like if you want your content centered on the coordinates.</p>
+
+      {{code-snippet name="overlay-inner-container-style.hbs"}}
+
+      <p>You can of course use other units of measurement, like pixels.</p>
     </section>
     <section>
       <h5>Private API usage</h5>
