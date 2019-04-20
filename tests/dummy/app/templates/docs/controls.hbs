@@ -3,7 +3,7 @@
     <section>
       <h5>Adding, removing and modifying map controls</h5>
 
-      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <tt>true</tt> or <tt>false</tt>. You can also pass in a <tt>hash</tt> to set further options. Learn more by following the guides at {{google-docs "controls" type="guides"}}.</p>
+      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <tt>true</tt> or <tt>false</tt>. You can also pass in a <tt>hash</tt> to set further options. Learn more by following the guides at {{google-docs "Controls Guide" "controls" type="guides"}}.</p>
 
       <p>Let's disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
 
@@ -24,7 +24,7 @@
         Try out the custom control to recenter the map.
       {{/doc-tip}}
 
-      <p>The <tt>control</tt> component accepts a <tt>position</tt> attribute and a block template. The <tt>position</tt> is a string that specifies the placement of the control on the map. It should be one of the control position constants defined in {{google-docs "ControlPosition"}}. The component will map these to the correct <tt>google.maps.controlPosition</tt> behind the scenes. In our case, to place the control in the top center, we use <tt>TOP_CENTER</tt>. From there, we just bind an action to the button and pass the yielded map object.</p>
+      <p>The <tt>control</tt> component accepts a <tt>position</tt> attribute and a block template. The <tt>position</tt> is a string that specifies the placement of the control on the map. It should be one of the control position constants defined in {{google-docs "ControlPosition" "control#ControlPosition"}}. The component will map these to the correct <tt>google.maps.controlPosition</tt> behind the scenes. In our case, to place the control in the top center, we use <tt>TOP_CENTER</tt>. From there, we just bind an action to the button and pass the yielded map object.</p>
 
       {{code-snippet name="recenter-map-control.hbs"}}
 

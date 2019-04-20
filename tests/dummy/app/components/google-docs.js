@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import layout from '../templates/components/google-docs';
 import { computed, get } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import { capitalize } from '@ember/string';
 
 const GoogleDocs = Component.extend({
@@ -9,10 +10,12 @@ const GoogleDocs = Component.extend({
   attributeBindings: ['href', 'rel', 'target'],
 
   type: 'reference',
-  referenceUrl: 'https://developers.google.com/maps/documentation/javascript/reference#',
+  referenceUrl: 'https://developers.google.com/maps/documentation/javascript/reference/',
   guideUrl: 'https://developers.google.com/maps/documentation/javascript/',
   rel: 'noopener',
   target: '_blank',
+
+  as: reads('section'),
 
   baseUrl: computed('type', function() {
     return (this.type === 'reference') ? this.referenceUrl : this.guideUrl;
@@ -28,7 +31,7 @@ const GoogleDocs = Component.extend({
 });
 
 GoogleDocs.reopenClass({
-  positionalParams: ['section']
+  positionalParams: ['as', 'section']
 });
 
 export default GoogleDocs;
