@@ -2,6 +2,8 @@ import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/marker';
 import { position } from '../../utils/helpers';
 import { get, set } from '@ember/object';
+import { resolve } from 'rsvp';
+
 
 /**
  * A wrapper for the google.maps.Marker class.
@@ -16,11 +18,20 @@ export default MapComponent.extend({
   tagName: '',
 
   _type: 'marker',
-  _requiredOptions: ['position'],
 
   position,
 
-  _addComponent() {
-    set(this, 'mapComponent', new google.maps.Marker(get(this, '_options')));
+  _createOptions(options) {
+    return {
+      ...options,
+      map: this.map,
+      position: get(this, 'position'),
+    };
+  },
+
+  _addComponent(options) {
+    return resolve(
+      set(this, 'mapComponent', new google.maps.Marker(options))
+    );
   }
 });
