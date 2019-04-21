@@ -95,4 +95,24 @@ module('Integration | Component | g map', function(hooks) {
 
     map.setZoom(10);
   });
+
+  test('it calls the `onComponentsLoad` hook when all the components are ready', async function(assert) {
+    assert.expect(2);
+
+    this.onComponentsLoad = () => {
+      assert.ok('onComponentsLoad called');
+    };
+
+    await render(hbs`
+      {{#g-map lat=lat lng=lng
+        onComponentsLoad=(action onComponentsLoad) as |g|}}
+        {{g.marker lat=lat lng=lng}}
+      {{/g-map}}
+    `);
+
+    let { components: { markers } } = this.gMapAPI;
+
+    markers[0].isInitialized.promise
+      .then(() => assert.ok('Component is actually loaded'));
+  });
 });
