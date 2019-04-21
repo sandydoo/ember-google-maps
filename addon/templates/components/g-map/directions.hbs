@@ -1,4 +1,10 @@
 {{yield (hash
   directions=directions
   route=(component gMap.route directions=directions)
-  waypoint=(component "g-map/waypoint" _registerWaypoint=(action _registerWaypoint) _unregisterWaypoint=(action _unregisterWaypoint)))}}
+  waypoint=(component "g-map/waypoint"
+    _internalAPI=(hash
+      _registerComponent=(action _registerWaypoint)
+      _unregisterComponent=(action _unregisterWaypoint)
+    )
+  )
+)}}

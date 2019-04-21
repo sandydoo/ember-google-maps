@@ -1,6 +1,15 @@
+// import MapComponent from './map-component';
 import Component from '@ember/component';
-import ProcessOptions from '../../mixins/process-options';
+// import PublicAPI from '../../utils/public-api';
 import { get } from '@ember/object';
+
+function waypointAPI(target) {
+  return {
+    get location() {
+      return get(target, 'location');
+    }
+  };
+}
 
 /**
  * A utility component to add waypoints to the directions component.
@@ -8,24 +17,24 @@ import { get } from '@ember/object';
  * @class Waypoint
  * @namespace GMap
  * @module ember-google-maps/components/g-map/waypoint
- * @extends Ember.Component
- * @uses ProcessOptions
+ * @extends GMap.MapComponent
  */
-export default Component.extend(ProcessOptions, {
+export default Component.extend({
   tagName: '',
 
-  _requiredOptions: ['location'],
-  _ignoredAttrs: ['_registerWaypoint', '_unregisterWaypoint'],
+  _type: 'waypoint',
 
-  didReceiveAttrs() {
+  init() {
     this._super(...arguments);
 
-    this._registerWaypoint(get(this, '_options'));
+    this.publicAPI = waypointAPI(this);
+
+    this._internalAPI._registerComponent(this.publicAPI);
   },
 
   willDestroyElement() {
     this._super(...arguments);
 
-    this._unregisterWaypoint(get(this, '_options'));
+    this._internalAPI._unregisterComponent(this.publicAPI);
   }
 });
