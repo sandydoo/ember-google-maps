@@ -1,11 +1,12 @@
 import Component from '@ember/component';
-import ProcessOptions from '../../mixins/process-options';
-import RegisterEvents from '../../mixins/register-events';
 import PublicAPI from '../../utils/public-api';
-import { get, set } from '@ember/object';
+import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import { get } from '@ember/object';
+import { readOnly } from '@ember/object/computed';
 import { tryInvoke } from '@ember/utils';
-import { defer, resolve } from 'rsvp';
+import { defer, resolve, reject } from 'rsvp';
 import { assert } from '@ember/debug';
+
 
 const MapComponentAPI = {
   map: 'map',
@@ -16,29 +17,64 @@ const MapComponentAPI = {
   }
 };
 
+const NOT_READY = 1,
+      IN_PROGRESS = 2,
+      READY = 3;
+
+const MapComponentLifecycleEnum = {
+  NOT_READY,
+  IN_PROGRESS,
+  READY,
+};
+
+
 /**
  * @class MapComponent
  * @module ember-google-maps/components/g-map/map-component
  * @namespace GMap
  * @extends Component
- * @uses ProcessOptions
- * @uses RegisterEvents
  */
-const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
+const MapComponent = Component.extend({
   tagName: '',
 
-  _type: null,
-  _requiredOptions: ['map'],
+  _type: undefined,
+
+  mapComponentLifecycle: NOT_READY,
+
+
+  /* Options and events */
+
+  _createOptions(options) {
+    return options;
+  },
+
+  _createEvents(events) {
+    return events;
+  },
+
+  _optionsAndEvents: parseOptionsAndEvents(ignoredOptions),
+
+  _options: readOnly('_optionsAndEvents.options'),
+
+  _events: readOnly('_optionsAndEvents.events'),
+
+
+  /* Lifecycle hooks */
 
   init() {
     this._super(...arguments);
 
-    assert('You must set a _type property on the map component.', this._type);
+    assert('You must set a _type property on the map component.', typeof this._type !== 'undefined');
 
     this._registrationType = this._pluralType || `${this._type}s`;
 
     this.isInitialized = defer();
-    this.isInitialized.promise.then(() => set(this, '_isInitialized', true));
+
+    /**
+     * An array of bound event listeners. Call `remove` on each before
+     * destroying the component.
+     */
+    this._eventListeners = new Map();
 
     this.publicAPI = new PublicAPI(this, MapComponentAPI);
   },
@@ -52,13 +88,13 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
   },
 
   didUpdateAttrs() {
-    this._super(...arguments);
-
     this._updateOrAddComponent();
   },
 
   willDestroyElement() {
     this._super(...arguments);
+
+    this._eventListeners.forEach((remove) => remove());
 
     tryInvoke(this.mapComponent, 'setMap', [null]);
 
@@ -67,17 +103,44 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
     this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
   },
 
-  _updateOrAddComponent() {
-    if (!get(this, 'map')) { return; }
 
-    if (this._isInitialized) {
-      this._updateComponent();
-    } else {
-      resolve()
-        .then(() => this._addComponent())
-        .then(() => this._didAddComponent());
+  _updateOrAddComponent() {
+    let options, events;
+
+    switch (this.mapComponentLifecycle) {
+      case READY:
+        options = this._createOptions(get(this, '_options'));
+        events = this._createEvents(get(this, '_events'));
+
+        this._updateComponent(this.mapComponent, options, events);
+        break;
+
+      case IN_PROGRESS:
+        break; // PASS
+
+      case NOT_READY:
+        if (typeof this.map === 'undefined') { break; }
+
+        this.mapComponentLifecycle = IN_PROGRESS;
+
+        options = this._createOptions(get(this, '_options'));
+        events = this._createEvents(get(this, '_events'));
+
+        resolve()
+          .then(() => this._addComponent(options, events))
+          .then(mapComponent => this._didAddComponent(mapComponent, options, events))
+          .then(() => {
+            this.isInitialized.resolve();
+            this.mapComponentLifecycle = READY;
+          })
+          .catch(() => { this.mapComponentLifecycle = NOT_READY; });
+
+        break;
     }
   },
+
+
+  /* Map component hooks */
 
   /**
    * Run when the map component is first initialized. Normally this happens as
@@ -86,8 +149,9 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
    * @method _addComponent
    * @return
    */
-  _addComponent() {
+  _addComponent(/* options, events */) {
     assert('Map components must implement the _addComponent hook.');
+    return reject();
   },
 
   /**
@@ -97,10 +161,16 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
    * @method _didAddComponent
    * @return
    */
-  _didAddComponent() {
-    this._registerOptionObservers();
-    this.registerEvents();
-    this.isInitialized.resolve();
+  _didAddComponent(mapComponent, options, events) {
+    let payload = {
+      map: this.map,
+      publicAPI: this.publicAPI,
+    };
+
+    addEventListeners(mapComponent, events, payload)
+      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+
+    return resolve();
   },
 
   /**
@@ -109,10 +179,9 @@ const MapComponent = Component.extend(ProcessOptions, RegisterEvents, {
    * @method _updateComponent
    * @return
    */
-  _updateComponent() {
-    let options = get(this, '_options');
-    this.mapComponent.setOptions(options);
+  _updateComponent(mapComponent, options /* , events */) {
+    mapComponent.setOptions(options);
   }
 });
 
-export default MapComponent;
+export { MapComponent as default, MapComponentLifecycleEnum };
