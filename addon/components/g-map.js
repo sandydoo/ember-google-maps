@@ -150,11 +150,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
         .reduce((array, componentGroup) => array.concat(componentGroup), [])
         .map((components) => get(components, 'isInitialized.promise'));
 
-    return all(componentsAreInitialized)
-      .then(() => {
-        this._componentsInitialized = true;
-        tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
-      });
+    return all(componentsAreInitialized);
   },
 
   /**
