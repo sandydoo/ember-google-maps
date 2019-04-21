@@ -1,6 +1,8 @@
 import Marker from './marker';
 import { get, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
+import { resolve } from 'rsvp';
+
 
 /**
  * Circle marker component.
@@ -12,12 +14,22 @@ import { reads } from '@ember/object/computed';
  */
 export default Marker.extend({
   _type: 'circle',
-  _requiredOptions: ['center', 'radius'],
 
   radius: 500,
   center: reads('position'),
 
-  _addComponent() {
-    set(this, 'mapComponent', new google.maps.Circle(get(this, '_options')));
+  _createOptions(options) {
+    return {
+      ...options,
+      map: this.map,
+      radius: get(this, 'radius'),
+      center: get(this, 'center'),
+    };
+  },
+
+  _addComponent(options) {
+    return resolve(
+      set(this, 'mapComponent', new google.maps.Circle(options))
+    );
   }
 });
