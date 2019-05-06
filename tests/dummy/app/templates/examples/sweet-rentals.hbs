@@ -31,8 +31,10 @@
           onClick=(action "scrollToListing" l)
           onMouseover=(action (mut l.active) true)
           onMouseleave=(action (mut l.active) false)}}
-          <div class="tooltip {{if l.active "active"}}">
-            £{{l.price}}
+          <div class="anchor-middle-bottom">
+            <div class="tooltip {{if l.active "active"}}">
+              £{{l.price}}
+            </div>
           </div>
         {{/g.overlay}}
       {{/each}}
