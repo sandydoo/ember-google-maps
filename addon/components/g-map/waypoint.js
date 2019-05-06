@@ -1,6 +1,4 @@
-// import MapComponent from './map-component';
 import Component from '@ember/component';
-// import PublicAPI from '../../utils/public-api';
 import { get } from '@ember/object';
 
 function waypointAPI(target) {
