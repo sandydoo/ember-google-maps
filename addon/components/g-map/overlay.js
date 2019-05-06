@@ -5,8 +5,7 @@ import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { bind, once, scheduleOnce } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
-import { htmlSafe } from '@ember/string';
-import { assert } from '@ember/debug';
+import { assert, warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
 
 
@@ -32,11 +31,22 @@ export default MapComponent.extend({
 
   _targetPane: null,
 
-  innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
-
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
+
+  init() {
+    this._super(arguments);
+
+    // Remove for 4.0
+    warn(
+      `
+The \`innerContainerStyle\` option has been removed. See the docs for examples of how to offset overlays relative to their coordinates.
+https://ember-google-maps.sandydoo.me/docs/overlays/`,
+      typeof this.innerContainerStyle === 'undefined',
+      { id: 'inner-container-style-removed' }
+    );
+  },
 
   _addComponent() {
     let isFinishedDrawing = defer();
