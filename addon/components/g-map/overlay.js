@@ -1,6 +1,6 @@
 import { default as MapComponent, MapComponentLifecycleEnum } from './map-component';
 import layout from '../../templates/components/g-map/overlay';
-import { addEventListeners } from '../../utils/options-and-events';
+import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { bind, once, scheduleOnce } from '@ember/runloop';
@@ -28,12 +28,15 @@ export default MapComponent.extend({
   position,
 
   paneName: 'overlayMouseTarget',
+  zIndex: 'auto',
 
   _targetPane: null,
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
+
+  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'paneName', 'zIndex']),
 
   init() {
     this._super(arguments);
@@ -108,15 +111,17 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
   draw() {
     if (this.isDestroyed) { return; }
 
-    let overlayProjection = this.mapComponent.getProjection();
-    let position = get(this, 'position');
-    let point = overlayProjection.fromLatLngToDivPixel(position);
+    let overlayProjection = this.mapComponent.getProjection(),
+        position = get(this, 'position'),
+        point = overlayProjection.fromLatLngToDivPixel(position),
+        zIndex = get(this, 'zIndex');
 
     this.content.style.cssText = `
       position: absolute;
       left: 0;
       top: 0;
       height: 0;
+      z-index: ${zIndex};
       transform: translateX(${point.x}px) translateY(${point.y}px);
     `;
   },
