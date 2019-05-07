@@ -4,26 +4,11 @@ import { setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { run } from '@ember/runloop';
-import GMapOverlay from 'ember-google-maps/components/g-map/overlay';
 
 module('Integration | Component | g map/overlay', function(hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
-
-  /**
-   * This is a hack for ember 2.12, which complains about runloop sideeffects
-   * from the add() method in the overlay component. Wrapping the test in `run`
-   * wasn't working, so here's a little hack.
-   */
-  hooks.beforeEach(function() {
-    this.owner.register('component:g-map/overlay', GMapOverlay.extend({
-      add() {
-        run(() => this._super(...arguments));
-      }
-    }));
-  });
 
   test('it renders a custom overlay', async function(assert) {
     await render(hbs`

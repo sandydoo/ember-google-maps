@@ -59,14 +59,14 @@ export default MapComponent.extend({
 
       set(this, 'content', content);
 
-      (this.mapComponent.draw = () => scheduleOnce('render', this, 'draw'))();
+      (this.mapComponent.draw = bind(this, () => scheduleOnce('render', this, 'draw')))();
 
       isFinishedDrawing.resolve(this.mapComponent);
     }
 
-    Overlay.onAdd = () => once(this, onAdd);
+    Overlay.onAdd = bind(this, () => once(this, onAdd));
 
-    Overlay.draw = () => scheduleOnce('afterRender', this, initialDraw);
+    Overlay.draw = bind(this, () => scheduleOnce('afterRender', this, initialDraw));
 
     Overlay.onRemove = bind(this, 'destroy');
 
