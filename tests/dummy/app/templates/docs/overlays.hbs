@@ -57,8 +57,9 @@
   	  zoom=13
   	  styles=primaryMapStyle
   	  classNames="ember-google-map-responsive" as |g|}}
-  	  {{#each londonLocations as |l|}}
+  	  {{#each londonLocations as |l index|}}
     		{{#g.overlay lat=l.lat lng=l.lng
+          zIndex=(if l.active 1000 index)
     			onMouseover=(action (mut l.active) true)
     			onMouseleave=(action (mut l.active) false)}}
           <div class="anchor-middle-bottom">
