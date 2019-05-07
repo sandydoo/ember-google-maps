@@ -85,7 +85,7 @@ function addEventListener(target, originalEventName, action, payload = {}) {
       ...payload,
     };
 
-    join(action, params);
+    join(target, action, params);
   }
 
   let listener = google.maps.event.addDomListener(target, eventName, callback);
