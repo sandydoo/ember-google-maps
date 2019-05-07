@@ -9,6 +9,7 @@ const chalk = require('chalk');
 const Handlebars = require('handlebars');
 const stripIndent = require('strip-indent');
 const writeFile = require('broccoli-file-creator');
+const camelCase = require('camelcase');
 
 function intersection(a, b) {
   const intersection = new Set();
@@ -30,8 +31,7 @@ function difference(a, b) {
 
 const dependencies = {
   'circle': ['marker'],
-  'info-window': ['detect-render'],
-  'overlay': ['detect-render']
+  'overlay': ['detectRender']
 };
 
 module.exports = {
@@ -43,12 +43,21 @@ module.exports = {
     const app = this._findHost();
 
     const config = app.options['ember-google-maps'] || {};
+
+    if (config.only && config.only.length) {
+      config.only = config.only.map(k => camelCase(k));
+    }
+
+    if (config.except && config.except.length) {
+      config.except = config.except.map(k => camelCase(k));
+    }
+
     this.whitelist = this.generateWhitelist(config);
     this.blacklist = this.generateBlacklist(config);
 
-    // If a whitelist is used, ensure that we include the base map component.
+    // If a whitelist is used, ensure that we include the base map components.
     if (this.whitelist.length) {
-      this.whitelist.push('g-map', 'canvas', 'map-component');
+      this.whitelist.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
       this.whitelist.forEach((w) => {
         const deps = dependencies[w];
         if (deps) {
@@ -129,18 +138,15 @@ module.exports = {
       return false;
     }
 
-    // Always include addon-factory
-    if (/-private-api\/addon-factory/.test(name)) {
-      return false;
-    }
-
     let baseName = path.basename(name);
     baseName = baseName.split('.').shift();
 
     return this.excludeName(baseName, whitelist, blacklist);
   },
 
-  excludeName(name, whitelist, blacklist) {
+  excludeName(rawName, whitelist, blacklist) {
+    let name = camelCase(rawName);
+
     let isWhiteListed = whitelist.indexOf(name) !== -1;
     let isBlackListed = blacklist.indexOf(name) !== -1;
 
