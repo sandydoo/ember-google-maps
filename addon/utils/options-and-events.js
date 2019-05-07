@@ -49,7 +49,7 @@ function isIgnored(key, ignored) {
 }
 
 function extractValue(cell) {
-  if (cell.constructor && Object.keys(cell).includes('value')) {
+  if (cell && cell.constructor && Object.keys(cell).includes('value')) {
     return cell.value;
   }
   return cell;
