@@ -7,7 +7,7 @@ import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 import { schedule, scheduleOnce } from '@ember/runloop';
-import { task, timeout } from 'ember-concurrency';
+import { didCancel, task, timeout } from 'ember-concurrency';
 
 /**
  * A wrapper for the google.maps.directionsService API.
@@ -61,7 +61,17 @@ export default MapComponent.extend({
    * @public
    */
   route() {
-    scheduleOnce('afterRender', get(this, '_route'), 'perform');
+    return new Promise((resolve, reject) => {
+      scheduleOnce('afterRender', () => {
+        get(this, '_route').perform()
+          .then((result) => resolve(result))
+          .catch((e) => {
+            if (!didCancel(e)) {
+              reject(e);
+            }
+          });
+      });
+    });
   },
 
   _route: task(function *() {
@@ -78,6 +88,8 @@ export default MapComponent.extend({
     });
 
     schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
+
+    return directions;
   }).restartable(),
 
   fetchDirections: task(function *(options) {
