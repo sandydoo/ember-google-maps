@@ -2,13 +2,22 @@ import Mixin from '@ember/object/mixin';
 import { computed, get, getProperties } from '@ember/object';
 import { assign } from '@ember/polyfills';
 
-function addObservers(obj, keys, callback) {
-  keys.forEach((key) => obj.addObserver(key, callback));
+
+function addObserver(obj, key, callback) {
+  let listener = obj.addObserver(key, callback);
+
+  return {
+    name: key,
+    listener,
+    remove: () => obj.removeObserver(key, callback)
+  };
 }
 
-function removeObservers(obj, keys, callback) {
-  keys.forEach((key) => obj.removeObserver(key, callback));
+function watch(target, options = {}) {
+  return Object.entries(options)
+    .map(([key, callback]) => addObserver(target, key, callback));
 }
+
 
 /**
  * @class ProcessOptions
@@ -78,26 +87,33 @@ export default Mixin.create({
   init() {
     this._super(...arguments);
 
+    this._watchedListeners = new Map();
+
     if (!this._eventAttrs) {
       this._eventAttrs = [];
     }
   },
 
   willDestroyElement() {
-    let _watchedOptions = get(this, '_watchedOptions');
-    removeObservers(this, _watchedOptions, () => {
-      if (this._isInitialized) { this._updateComponent(); }
-    });
+    this._watchedListeners.forEach((remove) => remove());
 
     this._super(...arguments);
   },
 
   _registerOptionObservers() {
     let _watchedOptions = get(this, '_watchedOptions');
-    if (_watchedOptions.length > 0) {
-      addObservers(this, _watchedOptions, () => {
-        if (this._isInitialized) { this._updateComponent(); }
-      });
+
+    if (_watchedOptions.length === 0) { return; }
+
+    function update() {
+      if (this._isInitialized) { this._updateComponent(); }
     }
+
+    let watched = {};
+    _watchedOptions.forEach((path) => watched[path] = update.bind(this))
+
+    watch(this, watched)
+      .forEach(({ name, remove }) => this._watchedListeners.set(name, remove));
+
   }
 });

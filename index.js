@@ -37,6 +37,12 @@ const dependencies = {
 module.exports = {
   name: require('./package').name,
 
+  options: {
+    babel: {
+      plugins: ['transform-object-rest-spread']
+    }
+  },
+
   included() {
     this._super.included.apply(this, arguments);
 

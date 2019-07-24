@@ -32,6 +32,7 @@
     "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "broccoli-file-creator": "^2.1.1",
     "broccoli-funnel": "^2.0.1",
     "broccoli-merge-trees": "^3.0.0",
