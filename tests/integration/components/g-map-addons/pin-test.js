@@ -5,12 +5,12 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g map/marker', function(hooks) {
+module('Integration | Component | g map addons/pin', function(hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a marker', async function(assert) {
+  test('it renders a marker from an in-repo addon', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
         {{g.pin lat=lat lng=lng}}
