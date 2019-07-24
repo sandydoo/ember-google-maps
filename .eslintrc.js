@@ -1,13 +1,15 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: [],
+  plugins: [
+    'ember'
+  ],
   extends: [
-    'simplabs',
-    'simplabs/plugins/ember'
+    'eslint:recommended',
+    'plugin:ember/recommended'
   ],
   env: {
     browser: true
@@ -16,7 +18,7 @@ module.exports = {
     google: false
   },
   rules: {
-    'ember/avoid-leaking-state-in-components': 'off',
+    'ember/avoid-leaking-state-in-ember-objects': 'off',
     'ember/order-in-components': 'off',
     'ember/no-attrs-in-components': 'off',
   },
