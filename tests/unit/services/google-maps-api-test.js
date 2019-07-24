@@ -7,13 +7,13 @@ module('Unit | Service | google-maps-api', function(hooks) {
   setupTest(hooks);
 
   hooks.beforeEach(function() {
+    window.google = undefined;
+
     this.service = this.owner.lookup('service:google-maps-api');
   });
 
   test('it loads the Google Maps API', async function(assert) {
-    window.google = undefined;
-
-    await this.service._loadMapsAPI();
+    await this.service._getApi();
     assert.ok(google.maps);
   });
 
@@ -32,11 +32,11 @@ module('Unit | Service | google-maps-api', function(hooks) {
       }
     };
 
-    await this.service._loadMapsAPI();
+    await this.service._getApi();
     assert.ok(google.maps);
 
     // Should skip loading the API again.
-    await this.service._loadMapsAPI();
+    await this.service._getApi();
 
     console.error = error;
   });
