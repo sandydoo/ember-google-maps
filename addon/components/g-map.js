@@ -5,7 +5,7 @@ import PublicAPI from '../utils/public-api';
 import layout from '../templates/components/g-map';
 import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
-import { computed, get, set } from '@ember/object';
+import { computed, get, set, setProperties } from '@ember/object';
 import { not, reads } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
@@ -78,8 +78,14 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     return `ember-google-map-${guidFor(this)}`;
   }),
 
-  _hasCustomCanvas: false,
-  _needsCanvas: not('_hasCustomCanvas'),
+  /**
+   * We detect whether there is a custom canvas on initial render.
+   */
+  _isInitialRender: true,
+
+  _customCanvas: null,
+
+  _needsCanvas: not('_customCanvas'),
 
   init() {
     this._super(...arguments);
@@ -121,7 +127,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     let canvas = yield this._canvasIsRendering.promise;
 
     let options = get(this, '_options');
-    let map = new google.maps.Map(canvas.element, options);
+    let map = new google.maps.Map(canvas, options);
 
     google.maps.event.addListenerOnce(map, 'idle', () => {
       if (this.isDestroying || this.isDestroyed) { return; }
@@ -175,14 +181,24 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
     google.maps.event.trigger(get(this, 'map'), ...args);
   },
 
-  _registerCanvas(canvas, isCustomCanvas) {
+  _registerCanvas(canvas) {
     set(this, 'canvas', canvas);
-    set(this, '_hasCustomCanvas', isCustomCanvas);
-    scheduleOnce('afterRender', this, '_notifyCanvasHasRendered');
+
+    this._notifyCanvasHasRendered();
   },
 
   _notifyCanvasHasRendered() {
     this._canvasIsRendering.resolve(this.canvas);
+  },
+
+  _endInitialRender() {
+    scheduleOnce('afterRender', this, () => {
+      if (this.canvas) {
+        set(this, '_customCanvas', this.canvas);
+      }
+
+      set(this, '_isInitialRender', false);
+    });
   },
 
   /**
@@ -211,7 +227,6 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   },
 
   _updateGMap(...props) {
-    let newGMap = Object.assign({}, this.gMap, ...props);
-    scheduleOnce('afterRender', () => set(this, 'gMap', newGMap));
+    setProperties(this.gMap, Object.assign({}, ...props));
   }
 });

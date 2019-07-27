@@ -1,4 +1,6 @@
 import Component from '@ember/component';
+import { computed, get } from '@ember/object';
+import { bool } from '@ember/object/computed';
 
 /**
  * Renders a canvas div into which the map is inserted.
@@ -9,13 +11,22 @@ import Component from '@ember/component';
  * @extends Ember.Component
  */
 export default Component.extend({
-  classNames: ['ember-google-map'],
-  attributeBindings: ['style'],
+  tagName: '',
 
-  _isCustomCanvas: true,
+  _hasCustomCanvas: bool('_customCanvas'),
 
-  init() {
+  _shouldRenderDefaultCanvas: computed('_isInitialRender', '_hasCustomCanvas', function() {
+    return get(this, '_isInitialRender') || !get(this, '_hasCustomCanvas');
+  }),
+
+  didInsertElement() {
     this._super(...arguments);
-    this._internalAPI._registerCanvas(this, this._isCustomCanvas);
+
+    if (this._customCanvas) { return; }
+
+    let id = get(this, 'id');
+    let canvas = document.getElementById(id);
+
+    this._internalAPI._registerCanvas(canvas);
   }
 });

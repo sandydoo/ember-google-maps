@@ -87,7 +87,9 @@ module.exports = {
     return this.filterComponents(tree);
   },
 
-  treeForAddonTemplates() {
+  treeForTemplates() {
+    let tree = this._super.treeForTemplates.apply(this, arguments);
+
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
     let addons = new AddonRegistry(this.project).components;
@@ -115,8 +117,6 @@ module.exports = {
     `));
 
     let addonFactoryTree = writeFile('components/-private-api/addon-factory.hbs', template({ addons }));
-
-    let tree = this._super.treeForAddonTemplates.apply(this, arguments);
 
     tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
 

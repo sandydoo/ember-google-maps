@@ -1,23 +1,34 @@
-{{#-private-api/addon-factory
-  gMap=this.gMap
-  map=this.map
-  _internalAPI=this._internalAPI as |addons|}}
-
-  {{g-map/compute (action this._updateGMap) addons (hash
-    publicAPI=this.publicAPI
-    map=this.map
-    _internalAPI=this._internalAPI
+{{#let
+  (hash
     canvas=(component "g-map/canvas"
       id=this.mapId
       classNames=this.classNames
-      _internalAPI=this._internalAPI)
-    )}}
+      _internalAPI=this._internalAPI
+      _isInitialRender=this._isInitialRender
+      _customCanvas=this._customCanvas)
+    publicAPI=this.publicAPI
+    map=this.map
+    _internalAPI=this._internalAPI
+  ) as |gMap|}}
 
-  {{yield this.gMap}}
+  {{#if this._isInitialRender}}
+    {{yield gMap}}
+    {{!-- Check if there is a custom canvas --}}
+    {{g-map/compute (action this._endInitialRender)}}
+  {{else}}
+    {{!-- Render the default canvas if necessary --}}
+    {{#if this._needsCanvas}}
+      {{gMap.canvas}}
+    {{/if}}
 
-  {{!-- Render the default canvas --}}
-  {{#if this._needsCanvas}}
-    {{gMap.canvas _isCustomCanvas=false}}
+    {{#-private-api/addon-factory
+      gMap=this.gMap
+      map=gMap.map
+      _internalAPI=gMap._internalAPI as |addons|}}
+
+      {{g-map/compute (action this._updateGMap) gMap addons}}
+
+      {{yield this.gMap}}
+    {{/-private-api/addon-factory}}
   {{/if}}
-
-{{/-private-api/addon-factory}}
+{{/let}}

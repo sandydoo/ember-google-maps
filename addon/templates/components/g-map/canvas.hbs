@@ -1,0 +1,7 @@
+{{#if _customCanvas}}
+  {{_customCanvas}}
+{{else}}
+  {{#if this._shouldRenderDefaultCanvas}}
+    <div id={{id}} class="ember-google-map {{classNames}}" style={{style}}>{{yield}}</div>
+  {{/if}}
+{{/if}}
