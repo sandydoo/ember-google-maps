@@ -1,4 +1,4 @@
-{{#let
+{{#with
   (hash
     canvas=(component "g-map/canvas"
       id=this.mapId
@@ -31,4 +31,4 @@
       {{yield this.gMap}}
     {{/-private-api/addon-factory}}
   {{/if}}
-{{/let}}
+{{/with}}
