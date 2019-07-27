@@ -3,11 +3,14 @@ module.exports = {
     embertest: true,
   },
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: 'module'
   },
+  plugins: [
+    'ember'
+  ],
   extends: [
-    'simplabs/configs/ember-qunit',
-    'simplabs/plugins/qunit'
-  ]
+    'eslint:recommended',
+    'plugin:ember/recommended'
+  ],
 };
