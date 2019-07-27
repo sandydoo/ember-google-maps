@@ -39,7 +39,7 @@ module.exports = {
 
   options: {
     babel: {
-      plugins: ['transform-object-rest-spread']
+      plugins: ['@babel/plugin-proposal-object-rest-spread']
     }
   },
 
