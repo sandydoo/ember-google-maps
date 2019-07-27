@@ -4,13 +4,15 @@ import { inject as service } from '@ember/service';
 export default Route.extend({
   document: service('-document'),
 
-  actions: {
-    didTransition() {
-      this.get('document').body.setAttribute('class', 'white');
-    },
+  init() {
+    this._super(...arguments);
 
-    willTransition() {
+    this.on('routeWillChange', function() {
       this.get('document').body.setAttribute('class', '');
-    }
+    });
+
+    this.on('routeDidChange', function() {
+      this.get('document').body.setAttribute('class', 'white');
+    });
   }
 });
