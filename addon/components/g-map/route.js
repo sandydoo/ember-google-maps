@@ -1,7 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/route';
 import { get, set } from '@ember/object';
-import { reject } from 'rsvp';
+import { reject, resolve } from 'rsvp';
 
 /**
  * A wrapper for the google.maps.DirectionsRenderer class.
@@ -16,15 +16,22 @@ export default MapComponent.extend({
   tagName: '',
 
   _type: 'route',
-  _requiredOptions: ['directions'],
 
-  _addComponent() {
-    let options = get(this, '_options');
+  _createOptions(options) {
+    return {
+      ...options,
+      directions: get(this, 'directions'),
+      map: this.map,
+    };
+  },
 
+  _addComponent(options) {
     if (!options.directions) {
       return reject();
     }
 
-    set(this, 'mapComponent', new google.maps.DirectionsRenderer(options));
+    return resolve(
+      set(this, 'mapComponent', new google.maps.DirectionsRenderer(options))
+    );
   }
 });

@@ -1,51 +1,9 @@
 import Mixin from '@ember/object/mixin';
 import { computed, get, getProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
-import { decamelize } from '@ember/string';
-import { assign } from '@ember/polyfills';
-import { join } from '@ember/runloop';
+import { deprecate } from '@ember/application/deprecations';
+import { addEventListeners } from '../utils/options-and-events';
 
-
-/**
- * Add event listeners on a target object using the cross-browser event
- * listener library provided by the Google Maps API.
- *
- * @param {Object} target
- * @param {Events} events
- * @param {[Object]} payload = {} An optional object of additional parameters
- *     to include with the event payload.
- * @return {google.maps.MapsEventListener[]} An array of bound event listeners
- *     that should be used to remove the listeners when no longer needed.
- */
-function _addEventListeners(target, events, payload = {}) {
-  return Object.entries(events).map(([originalEventName, action]) => {
-    return _addEventListener(target, originalEventName, action, payload);
-  });
-}
-
-function _addEventListener(target, originalEventName, action, payload = {}) {
-  let eventName = decamelize(originalEventName).slice(3);
-
-  function callback(googleEvent) {
-    let params = {
-      event: window.event,
-      googleEvent,
-      eventName,
-      target,
-      ...payload,
-    };
-
-    join(target, action, params);
-  }
-
-  let listener = google.maps.event.addDomListener(target, eventName, callback);
-
-  return {
-    name: eventName,
-    listener,
-    remove: () => listener.remove()
-  };
-}
 
 /**
  * Register Google Maps events on any map component.
@@ -103,7 +61,7 @@ export default Mixin.create({
     let events = get(this, 'events');
     let extractedEvents = getProperties(this, get(this, '_eventAttrs'));
 
-    return assign({}, events, extractedEvents);
+    return Object.assign({}, events, extractedEvents);
   }),
 
   /**
@@ -121,6 +79,14 @@ export default Mixin.create({
 
   init() {
     this._super(...arguments);
+
+    deprecate(
+      `
+The \`RegisterEvents\` mixin will be removed in the next major version of ember-google-maps. \
+You can extract events from the component attributes and add event listeners using the functions in \`ember-google-maps/utils/options-and-events\`.`,
+      false,
+      { id: 'register-events-mixin-removed', until: '4.0' }
+    );
 
     this._eventListeners = new Map();
   },
@@ -147,7 +113,7 @@ export default Mixin.create({
       map: get(this, 'map')
     };
 
-    _addEventListeners(eventTarget, events, payload)
+    addEventListeners(eventTarget, events, payload)
       .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
   },
 });
