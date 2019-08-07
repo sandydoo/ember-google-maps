@@ -39,6 +39,8 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    */
   googleMapsApi: service(),
 
+  fastboot: service(),
+
   layout,
 
   tagName: '',
@@ -192,6 +194,8 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   },
 
   _endInitialRender() {
+    if (get(this, 'fastboot.isFastBoot')) { return; }
+
     scheduleOnce('afterRender', this, () => {
       if (this.canvas) {
         set(this, '_customCanvas', this.canvas);
