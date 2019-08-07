@@ -16,9 +16,13 @@
   <section>
     <h5>Treeshaking</h5>
 
-    <p>Ember apps can be notoriously bloaty and part of that bloat comes from the addon ecosystem. Everyone's needs are different and it's unlikely you'll use every single component in this addon. Without proper treeshaking support at build time, your builds end up full of stuff you never needed or, even worse, code you don't even know about!</p>
+    <p>Complex Ember apps can eventually become quite heavy and part of that bloat comes from the addon ecosystem. Everyone's needs are different and it's unlikely you'll use every single component in this addon. Without proper treeshaking support at build time, your builds end up full of stuff you never needed or, even worse, code you don't even know about!</p>
 
     <p>In your <tt>ember-cli-build.js</tt>, you can specify which components to include or exclude from the build using <tt>only</tt> and <tt>except</tt>.</p>
+
+    {{#doc-danger}}
+      This is an advanced feature and may break your app. Manually excluding components from your build can be quite finicky and time-consuming. Use at your own peril.
+    {{/doc-danger}}
 
     {{code-snippet name="ember-cli-build.js"}}
   </section>
