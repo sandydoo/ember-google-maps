@@ -1,9 +1,23 @@
-import MapComponent from './map-component';
+import MapComponent, { MapComponentAPI } from './map-component';
 import layout from '../../templates/components/g-map/info-window';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { get, set } from '@ember/object';
 import { resolve } from 'rsvp';
+
+
+export function InfoWindowAPI(c) {
+  let mapComponentAPI = MapComponentAPI(c);
+
+  return {
+    ...mapComponentAPI,
+    actions: {
+      open: () => c.open(),
+      close: () => c.close()
+    }
+  };
+}
+
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -47,12 +61,7 @@ export default MapComponent.extend({
   init() {
     this._super(...arguments);
 
-    this.publicAPI.reopen({
-      actions: {
-        open: 'open',
-        close: 'close'
-      }
-    });
+    this.publicAPI = InfoWindowAPI(this);
   },
 
   _addComponent(options) {
