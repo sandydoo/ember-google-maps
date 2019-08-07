@@ -5,7 +5,7 @@
 
       <p>The <tt>canvas</tt> component renders the <tt>div</tt> that contains the map. Usage of the <tt>canvas</tt> is <b>optional</b> and the examples will rarely use it because a canvas is created for you by default. If you do call the canvas component, then the default canvas will not be rendered.</p>
 
-      <p>You can use the <tt>canvas</tt> to perhaps add extra classes or control the order of components within the map context. For example, if you are rendering an <tt>autocomplete</tt> input, you might want it to appear above the map canvas. Calling the <tt>canvas</tt> explicitly after that input ensures the correct ordering without any crazy styling.</p>
+      <p>You can use the <tt>canvas</tt> to add extra classes or control the order of components within the map context. For example, if you are rendering an <tt>autocomplete</tt> input, you might want it to appear above the map canvas. Calling the <tt>canvas</tt> explicitly after that input ensures the correct ordering without having to resort to styling hacks.</p>
 
       {{code-snippet name="basic-canvas.hbs"}}
     </section>
@@ -14,10 +14,10 @@
   </div>
   <div class="col-md-5 order-1 order-md-2">
     {{#g-map lat=london.lat lng=london.lng zoom=12
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive" as |g|}}
+      styles=primaryMapStyle as |g|}}
       <input type="text" placeholder="I need to be above the map!" class="form-control input-lg mb-3">
-      {{g.canvas}}
+      {{g.canvas class="ember-google-map-responsive"}}
+      <input type="text" placeholder="I need to be below the map!" class="form-control input-lg mt-3">
     {{/g-map}}
   </div>
 </div>
