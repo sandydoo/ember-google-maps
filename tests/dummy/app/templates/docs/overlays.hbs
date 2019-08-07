@@ -31,15 +31,36 @@
 
       <p><tt>paneName</tt> – Select which map pane to render your overlay in. See {{google-docs "MapPanes" "overlay-view#MapPanes"}} for the options. The default pane is <tt>overlayMouseTarget</tt>.</p>
 
-      <p><tt>innerContainerStyle</tt> – This lets you override the style applied to the container element holding your overlay content. By using the <tt>transform</tt> CSS property, you can move your overlay content relative to its coordinates. For example, the default transform centers the element horizontally and positions it above the coordinates. This is ideal for tooltips, which usually have the "tip" or "anchor" at the middle and bottom of their element.</p>
+      <p><tt>zIndex</tt> – Set the <tt>z-index</tt> CSS property of the overlay. Use this to control the stack order of the order elements.</p>
+    </section>
+    <section>
+      <h5>Positioning the overlay</h5>
 
-      {{code-snippet name="overlay-inner-container-style.css"}}
+      {{#doc-danger}}
+        Your overlay content will not be centered over the coordinates by default. You have to do it yourself!
+      {{/doc-danger}}
 
-      <p>Notice how the transform uses percentages. This lets us define the offset using the dimensions of the overlay content. Here is what the transform should look like if you want your content centered on the coordinates.</p>
+      <p>While the overlay will be positioned exactly at the coordinates specified, your overlay content will expand to the bottom-right and remain <b>anchored</b> to the top-left. In other words, the top-left corner of your content will lie on the coordinates. This is probably not what you want.</p>
 
-      {{code-snippet name="overlay-inner-container-style.hbs"}}
+      <p>By using the <tt>transform</tt> CSS property, you can move your overlay content relative to its coordinates. We'll look at a few common examples now.</p>
 
-      <p>You can of course use other units of measurement, like pixels.</p>
+      <h6>Centering overlay content</h6>
+
+      <p>Let's first center our overlay over the coordinates. To do so we will wrap our overlay content with an element and apply our transform to it.</p>
+
+      {{code-snippet name="overlay-centered.hbs"}}
+
+      <p>Notice how the transform uses percentages. This lets us define the offset using the dimensions of the overlay content. If your content is 100px wide and 100px tall, then the above transform will move it 50px up and 50px to the left.</p>
+
+      <h6>Tooltip positioning</h6>
+
+      <p>Another common need is to center the overlay horizontally and place it above the coordinate. This is ideal for tooltips, which usually have the "tip" or "anchor" at the middle and bottom of their element.</p>
+
+      {{code-snippet name="overlay-tooltip.hbs"}}
+
+      <p>While custom styles get the job done, you should consider adding a class to your stylesheet and use that instead. You can, of course, use other units of measurement, like pixels.</p>
+
+      {{code-snippet name="overlay-style.css"}}
     </section>
     <section>
       <h5>Private API usage</h5>
