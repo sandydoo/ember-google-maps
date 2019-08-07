@@ -5,6 +5,7 @@ import PublicAPI from '../utils/public-api';
 import layout from '../templates/components/g-map';
 import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
+import { getOwner }  from '@ember/application';
 import { computed, get, set, setProperties } from '@ember/object';
 import { not, reads } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
@@ -39,7 +40,11 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
    */
   googleMapsApi: service(),
 
-  fastboot: service(),
+  fastboot: computed(function() {
+    let owner = getOwner(this);
+
+    return owner.lookup('service:fastboot');
+  }),
 
   layout,
 
