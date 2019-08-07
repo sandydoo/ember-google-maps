@@ -26,13 +26,16 @@
       fullscreenControl=true
       onLoad=(action "saveBounds")
       onBoundsChanged=(action "saveBounds") as |g|}}
-      {{#each boundedLondonLocations as |l|}}
+      {{#each boundedLondonLocations as |l index|}}
         {{#g.overlay lat=l.lat lng=l.lng
+          zIndex=(if l.active 1000 index)
           onClick=(action "scrollToListing" l)
           onMouseover=(action (mut l.active) true)
           onMouseleave=(action (mut l.active) false)}}
-          <div class="tooltip {{if l.active "active"}}">
-            £{{l.price}}
+          <div class="anchor-middle-bottom">
+            <div class="tooltip {{if l.active "active"}}">
+              £{{l.price}}
+            </div>
           </div>
         {{/g.overlay}}
       {{/each}}

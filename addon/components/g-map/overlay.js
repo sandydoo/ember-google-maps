@@ -1,12 +1,11 @@
 import { default as MapComponent, MapComponentLifecycleEnum } from './map-component';
 import layout from '../../templates/components/g-map/overlay';
-import { addEventListeners } from '../../utils/options-and-events';
+import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { bind, once, scheduleOnce } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
-import { htmlSafe } from '@ember/string';
-import { assert } from '@ember/debug';
+import { assert, warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
 
 
@@ -29,14 +28,28 @@ export default MapComponent.extend({
   position,
 
   paneName: 'overlayMouseTarget',
+  zIndex: 'auto',
 
   _targetPane: null,
-
-  innerContainerStyle: htmlSafe('transform: translateX(-50%) translateY(-100%);'),
 
   _contentId: computed(function() {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
+
+  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'paneName', 'zIndex']),
+
+  init() {
+    this._super(arguments);
+
+    // Remove for 4.0
+    warn(
+      `
+The \`innerContainerStyle\` option has been removed. See the docs for examples of how to offset overlays relative to their coordinates.
+https://ember-google-maps.sandydoo.me/docs/overlays/`,
+      typeof this.innerContainerStyle === 'undefined',
+      { id: 'inner-container-style-removed' }
+    );
+  },
 
   _addComponent() {
     let isFinishedDrawing = defer();
@@ -98,15 +111,17 @@ export default MapComponent.extend({
   draw() {
     if (this.isDestroyed) { return; }
 
-    let overlayProjection = this.mapComponent.getProjection();
-    let position = get(this, 'position');
-    let point = overlayProjection.fromLatLngToDivPixel(position);
+    let overlayProjection = this.mapComponent.getProjection(),
+        position = get(this, 'position'),
+        point = overlayProjection.fromLatLngToDivPixel(position),
+        zIndex = get(this, 'zIndex');
 
     this.content.style.cssText = `
       position: absolute;
       left: 0;
       top: 0;
       height: 0;
+      z-index: ${zIndex};
       transform: translateX(${point.x}px) translateY(${point.y}px);
     `;
   },

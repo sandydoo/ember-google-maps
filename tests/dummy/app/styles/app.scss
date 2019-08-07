@@ -232,6 +232,10 @@ div.gm-style {
   font-family: $font-family-sans-serif !important;
 }
 
+.anchor-middle-bottom {
+  transform: translateX(-50%) translateY(-100%);
+}
+
 .tooltip {
   position: relative;
   max-width: 200px;
