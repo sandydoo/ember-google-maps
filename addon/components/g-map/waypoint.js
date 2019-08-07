@@ -1,13 +1,15 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
 
-function waypointAPI(target) {
+
+export function WaypointAPI(target) {
   return {
     get location() {
       return get(target, 'location');
     }
   };
 }
+
 
 /**
  * A utility component to add waypoints to the directions component.
@@ -25,7 +27,7 @@ export default Component.extend({
   init() {
     this._super(...arguments);
 
-    this.publicAPI = waypointAPI(this);
+    this.publicAPI = WaypointAPI(this);
 
     this._internalAPI._registerComponent(this.publicAPI);
   },

@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import PublicAPI from '../../utils/public-api';
 import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { get } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
@@ -8,14 +7,22 @@ import { defer, resolve, reject } from 'rsvp';
 import { assert } from '@ember/debug';
 
 
-const MapComponentAPI = {
-  map: 'map',
-  mapComponent: 'mapComponent',
-  isInitialized: 'isInitialized',
-  actions: {
-    update: '_updateComponent'
-  }
-};
+export function MapComponentAPI(c) {
+  return {
+    get map() {
+      return c.map;
+    },
+    get mapComponent() {
+      return c.mapComponent;
+    },
+    get isInitialized() {
+      return c.isInitialized;
+    },
+    actions: {
+      update: () => c._updateComponent
+    }
+  };
+}
 
 const NOT_READY = 1,
       IN_PROGRESS = 2,
@@ -76,7 +83,7 @@ const MapComponent = Component.extend({
      */
     this._eventListeners = new Map();
 
-    this.publicAPI = new PublicAPI(this, MapComponentAPI);
+    this.publicAPI = MapComponentAPI(this);
   },
 
   didInsertElement() {
@@ -97,8 +104,6 @@ const MapComponent = Component.extend({
     this._eventListeners.forEach((remove) => remove());
 
     tryInvoke(this.mapComponent, 'setMap', [null]);
-
-    this.publicAPI.remove(this);
 
     this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
   },

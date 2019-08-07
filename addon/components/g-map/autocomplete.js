@@ -1,10 +1,23 @@
-import MapComponent from './map-component';
+import MapComponent, { MapComponentAPI } from './map-component';
 import layout from '../../templates/components/g-map/autocomplete';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { get, set } from '@ember/object';
 import { tryInvoke } from '@ember/utils';
 import { assert } from '@ember/debug';
 import { resolve } from 'rsvp';
+
+
+export function AutocompleteAPI(c) {
+  let mapComponentAPI = MapComponentAPI(c);
+
+  return {
+    ...mapComponentAPI,
+    get place() {
+      return c.place;
+    }
+  };
+}
+
 
 /**
  * @class Autocomplete
@@ -23,9 +36,7 @@ export default MapComponent.extend({
   init() {
     this._super(...arguments);
 
-    this.publicAPI.reopen({
-      place: 'place'
-    });
+    this.publicAPI = AutocompleteAPI(this);
   },
 
   _addComponent(options) {
