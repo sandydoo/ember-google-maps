@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import PublicAPI from '../utils/public-api';
 import layout from '../templates/components/g-map';
 import { addEventListeners, parseOptionsAndEvents } from '../utils/options-and-events';
 import { position as center } from '../utils/helpers';
@@ -26,15 +25,24 @@ function safeScheduleOnce(queue, context, onSuccess, onError) {
 
 function skipErrorReporting() {}
 
-const GMapAPI = {
-  id: 'mapId',
-  map: 'map',
-  components: 'components',
-  actions: {
-    update: '_updateMap',
-    trigger: '_trigger',
-  }
-};
+function GMapAPI(c) {
+  return {
+    get id() {
+      return get(c, 'mapId');
+    },
+    get map() {
+      return c.map;
+    },
+    get components() {
+      return c.components;
+    },
+    actions: {
+      update: () => c._updateMap(),
+      trigger: () => c._trigger(),
+    }
+  };
+}
+
 
 /**
  * @class GMap
@@ -128,7 +136,7 @@ export default Component.extend({
     this.components = {};
     this.gMap = {};
 
-    this.publicAPI = new PublicAPI(this, GMapAPI);
+    this.publicAPI = GMapAPI(this);
 
     this._internalAPI = {
       _registerCanvas: this._registerCanvas.bind(this),
@@ -224,7 +232,6 @@ export default Component.extend({
       safeScheduleOnce('actions', this, resolve, skipErrorReporting);
     });
   },
-
 
   /**
    * Update the map options.
