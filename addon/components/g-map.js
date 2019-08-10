@@ -191,11 +191,7 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   _registerCanvas(canvas) {
     set(this, 'canvas', canvas);
 
-    this._notifyCanvasHasRendered();
-  },
-
-  _notifyCanvasHasRendered() {
-    this._canvasIsRendering.resolve(this.canvas);
+    this._canvasIsRendering.resolve(canvas);
   },
 
   _endInitialRender() {
