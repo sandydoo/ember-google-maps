@@ -2,6 +2,6 @@
   {{_customCanvas}}
 {{else}}
   {{#if this._shouldRenderDefaultCanvas}}
-    <div id={{id}} class={{computedClasses}} style={{style}}>{{yield}}</div>
+    <div id={{id}} class={{computedClasses}} style={{style}} ...attributes>{{yield}}</div>
   {{/if}}
 {{/if}}
