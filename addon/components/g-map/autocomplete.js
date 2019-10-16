@@ -1,4 +1,4 @@
-import MapComponent, { MapComponentAPI } from './map-component';
+import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/autocomplete';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { get, set } from '@ember/object';
@@ -7,15 +7,17 @@ import { assert } from '@ember/debug';
 import { resolve } from 'rsvp';
 
 
-export function AutocompleteAPI(c) {
-  let mapComponentAPI = MapComponentAPI(c);
+export function AutocompleteAPI(source) {
+  let mapComponentAPI = MapComponentAPI(source);
 
-  return {
-    ...mapComponentAPI,
-    get place() {
-      return c.place;
+  return combine(
+    mapComponentAPI,
+    {
+      get place() {
+        return source.place;
+      }
     }
-  };
+  );
 }
 
 

@@ -1,4 +1,4 @@
-import MapComponent, { MapComponentAPI } from './map-component';
+import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/info-window';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
@@ -6,16 +6,18 @@ import { get, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
 
-export function InfoWindowAPI(c) {
-  let mapComponentAPI = MapComponentAPI(c);
+export function InfoWindowAPI(source) {
+  let mapComponentAPI = MapComponentAPI(source);
 
-  return {
-    ...mapComponentAPI,
-    actions: {
-      open: () => c.open(),
-      close: () => c.close()
+  return combine(
+    mapComponentAPI,
+    {
+      actions: {
+        open: () => source.open(),
+        close: () => source.close()
+      }
     }
-  };
+  );
 }
 
 

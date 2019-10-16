@@ -2,10 +2,10 @@ import Component from '@ember/component';
 import { get } from '@ember/object';
 
 
-export function WaypointAPI(target) {
+export function WaypointAPI(source) {
   return {
     get location() {
-      return get(target, 'location');
+      return get(source, 'location');
     }
   };
 }
