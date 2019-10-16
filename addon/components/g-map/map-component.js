@@ -7,19 +7,29 @@ import { defer, resolve, reject } from 'rsvp';
 import { assert } from '@ember/debug';
 
 
-export function MapComponentAPI(c) {
+export function combine(base, extra) {
+  return Object.defineProperties(
+    base,
+    Object.getOwnPropertyDescriptors(extra)
+  );
+}
+
+export function MapComponentAPI(source) {
   return {
     get map() {
-      return c.map;
+      return source.map;
     },
+
     get mapComponent() {
-      return c.mapComponent;
+      return source.mapComponent;
     },
+
     get isInitialized() {
-      return c.isInitialized;
+      return source.isInitialized;
     },
+
     actions: {
-      update: () => c._updateComponent
+      update: () => source._updateComponent
     }
   };
 }

@@ -25,20 +25,23 @@ function safeScheduleOnce(queue, context, onSuccess, onError) {
 
 function skipErrorReporting() {}
 
-function GMapAPI(c) {
+function GMapAPI(source) {
   return {
     get id() {
-      return get(c, 'mapId');
+      return get(source, 'mapId');
     },
+
     get map() {
-      return c.map;
+      return source.map;
     },
+
     get components() {
-      return c.components;
+      return source.components;
     },
+
     actions: {
-      update: () => c._updateMap(),
-      trigger: () => c._trigger(),
+      update: () => source._updateMap(),
+      trigger: () => source._trigger(),
     }
   };
 }

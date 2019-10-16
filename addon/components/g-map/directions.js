@@ -1,4 +1,4 @@
-import MapComponent, { MapComponentAPI } from './map-component';
+import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/directions';
 import { ignoredOptions, parseOptionsAndEvents, watch } from '../../utils/options-and-events';
 import { inject as service } from '@ember/service';
@@ -11,21 +11,25 @@ import { schedule, scheduleOnce } from '@ember/runloop';
 import { didCancel, task } from 'ember-concurrency';
 
 
-export function DirectionsAPI(c) {
-  let mapComponentAPI = MapComponentAPI(c);
+export function DirectionsAPI(source) {
+  let mapComponentAPI = MapComponentAPI(source);
 
-  return {
-    ...mapComponentAPI,
-    get directions() {
-      return c.directions;
-    },
-    get waypoints() {
-      return c.waypoints;
-    },
-    actions: {
-      route: () => c.route()
+  return combine(
+    mapComponentAPI,
+    {
+      get directions() {
+        return source.directions;
+      },
+
+      get waypoints() {
+        return source.waypoints;
+      },
+
+      actions: {
+        route: () => source.route()
+      }
     }
-  };
+  );
 }
 
 
