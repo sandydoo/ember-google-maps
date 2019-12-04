@@ -1,2 +1,4 @@
-{{yield (hash
-  infoWindow=(component gMap.infoWindow target=mapComponent))}}
+{{#if this.mapComponent}}
+  {{yield (hash
+      infoWindow=(component gMap.infoWindow target=this.mapComponent))}}
+{{/if}}
