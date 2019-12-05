@@ -11,6 +11,7 @@ const ignoredOptions = [
   'gMap',
   'options',
   'events',
+  '_name',
 ];
 
 function parseOptionsAndEvents(ignored = [], callback = (r) => r) {
