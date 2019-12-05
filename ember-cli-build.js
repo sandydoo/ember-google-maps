@@ -22,6 +22,14 @@ module.exports = function(defaults) {
       ]
     },
 
+    minifyCSS: {
+      options: {
+        // Don't break Bootstrap with css mangling.
+        // Remove for clean-css 4.0
+        advanced: false,
+      }
+    },
+
     'ember-composable-helpers': {
       only: ['array', 'join', 'toggle']
     },
