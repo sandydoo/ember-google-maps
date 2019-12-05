@@ -48,6 +48,8 @@ module.exports = {
 
     const app = this._findHost();
 
+    this.isProduction = app.isProduction;
+
     const config = app.options['ember-google-maps'] || {};
 
     if (config.only && config.only.length) {
@@ -61,9 +63,18 @@ module.exports = {
     this.whitelist = this.generateWhitelist(config);
     this.blacklist = this.generateBlacklist(config);
 
+    if (this.isProduction) {
+      this.blacklist.push('warnMissingComponent');
+    }
+
     // If a whitelist is used, ensure that we include the base map components.
     if (this.whitelist.length) {
       this.whitelist.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
+
+      if (!this.isProduction) {
+        this.whitelist.push('warnMissingComponent');
+      }
+
       this.whitelist.forEach((w) => {
         const deps = dependencies[w];
         if (deps) {
@@ -92,9 +103,7 @@ module.exports = {
 
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
-    let addons = new AddonRegistry(this.project).components;
-
-    addons = addons.concat([
+    let addons = new AddonRegistry(this.project).components.concat([
       { key: 'marker', component: 'g-map/marker' },
       { key: 'circle', component: 'g-map/circle' },
       { key: 'polyline', component: 'g-map/polyline' },
@@ -104,13 +113,32 @@ module.exports = {
       { key: 'autocomplete', component: 'g-map/autocomplete' },
       { key: 'directions', component: 'g-map/directions' },
       { key: 'route', component: 'g-map/route' }
-    ]).filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist));
+    ]);
+
+    if (this.isProduction) {
+      // Exclude components that we don't want in the production build.
+      addons = addons.filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist))
+
+    } else {
+      // Replace an excluded component with a debug component in development and
+      // testing. This component should throw an assertion to warn the user of
+      // misconfigured treeshaking.
+      addons = addons.map((component) => {
+        let { key } = component;
+
+        if (this.excludeName(key, this.whitelist, this.blacklist)) {
+          return { key, component: '-private-api/warn-missing-component' };
+        }
+
+        return component;
+      });
+    }
 
     let template = Handlebars.compile(stripIndent(`
       \\{{yield
           (hash
             {{#each addons as |addon|}}
-              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap)
+              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap _name="{{addon.key}}")
             {{/each}}
           )
         }}

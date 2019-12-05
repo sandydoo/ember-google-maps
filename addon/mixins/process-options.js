@@ -35,7 +35,7 @@ export default Mixin.create({
    * @private
    * @type {String[]}
    */
-  _ignoredAttrs: ['map', '_internalAPI', 'gMap', 'lat', 'lng', 'events'],
+  _ignoredAttrs: ['map', '_internalAPI', 'gMap', 'lat', 'lng', 'events', '_name'],
 
   /**
    * Required options that are always included in the options object passed to
