@@ -36,6 +36,6 @@ export default MapComponent.extend({
     watched
       .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
-    return resolve();
+    return this._super(...arguments);
   },
 });
