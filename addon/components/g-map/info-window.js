@@ -51,7 +51,7 @@ export default MapComponent.extend({
     }
 
     if (get(this, 'isOpen')) {
-      newOptions.content = get(this, 'content');
+      newOptions.content = this._getContent();
     }
 
     return {
@@ -67,8 +67,6 @@ export default MapComponent.extend({
   },
 
   _addComponent(options) {
-    this._prepareContent();
-
     return resolve(
       set(this, 'mapComponent', new google.maps.InfoWindow(options))
     );
@@ -99,13 +97,17 @@ export default MapComponent.extend({
     set(this, '_cachedIsOpen', isOpen);
   },
 
-  _prepareContent() {
-    if (!get(this, 'content')) {
-      let content = document.createElement('div');
-
-      set(this, '_targetPane', content);
-      set(this, 'content', content);
+  _getContent() {
+    if (this.content) {
+      return this.content;
     }
+
+    let content = document.createElement('div');
+
+    set(this, '_targetPane', content);
+    set(this, 'content', content);
+
+    return content;
   },
 
   open() {
