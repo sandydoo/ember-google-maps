@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { render } from '@ember/test-helpers';
+import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { A } from '@ember/array';
 
@@ -32,6 +32,8 @@ module('Integration | Component | g map/polyline', function(hooks) {
 
     let newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };
     this.path.pushObject(newCoords);
+
+    await settled();
 
     assert.deepEqual(polyline.getPath().getAt(4).toJSON(), newCoords);
   });
