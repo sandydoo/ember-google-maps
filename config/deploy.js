@@ -25,13 +25,13 @@ module.exports = function(deployTarget) {
     // configure other plugins for production deploy target here
 
     ENV.s3 = {
-      bucket: 'ember-google-maps',
+      bucket: 'ember-google-maps.sandydoo.me',
       region: 'eu-west-1',
       filePattern: '**/*.{js,css,png,gif,ico,jpg,map,xml,txt,svg,swf,eot,ttf,woff,woff2,otf,html}'
     };
 
     ENV['s3-index'] = {
-      bucket: 'ember-google-maps',
+      bucket: 'ember-google-maps.sandydoo.me',
       region: 'eu-west-1'
     };
   }
