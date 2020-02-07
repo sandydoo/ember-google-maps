@@ -15,6 +15,18 @@ import { all, defer } from 'rsvp';
 import { scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 
+function safeScheduleOnce(queue, context, onSuccess, onError) {
+  scheduleOnce(queue, context, () => {
+    if (context.isDestroying || context.isDestroyed) {
+      onError();
+    }
+
+    onSuccess();
+  });
+}
+
+function skipErrorReporting() {}
+
 const GMapAPI = {
   id: 'mapId',
   map: 'map',
@@ -131,6 +143,12 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   _initMap: task(function *() {
     yield get(this, 'google');
 
+    // After google loads, we need to wait for Ember to update any values read
+    // directly from the google object and used in templates. For example, map
+    // controls may be positioned with `ControlPosition.TOP_LEFT`, the value of
+    // which is only available once google loads.
+    yield this._waitForNextRunloop();
+
     let canvas = yield this._canvasIsRendering.promise;
 
     let options = get(this, '_options');
@@ -144,15 +162,13 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
 
       tryInvoke(this, 'onLoad', [this.publicAPI]);
 
-      scheduleOnce('afterRender', this, () => {
-        if (this.isDestroying || this.isDestroyed) { return; }
-
+      safeScheduleOnce('afterRender', this, () => {
         this._waitForComponents()
           .then(() => {
             this._componentsInitialized = true;
             tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
           });
-      });
+      }, skipErrorReporting);
     });
   }),
 
@@ -165,6 +181,13 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
 
     return all(componentsAreInitialized);
   },
+
+  _waitForNextRunloop() {
+    return new Promise((resolve) => {
+      safeScheduleOnce('actions', this, resolve, skipErrorReporting);
+    });
+  },
+
 
   /**
    * Update the map options.
@@ -197,13 +220,13 @@ export default Component.extend(ProcessOptions, RegisterEvents, {
   _endInitialRender() {
     if (get(this, 'fastboot.isFastBoot')) { return; }
 
-    scheduleOnce('afterRender', this, () => {
+    safeScheduleOnce('afterRender', this, () => {
       if (this.canvas) {
         set(this, '_customCanvas', this.canvas);
       }
 
       set(this, '_isInitialRender', false);
-    });
+    }, skipErrorReporting);
   },
 
   /**
