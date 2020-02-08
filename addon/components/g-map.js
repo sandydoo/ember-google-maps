@@ -16,10 +16,10 @@ import { task } from 'ember-concurrency';
 function safeScheduleOnce(queue, context, onSuccess, onError) {
   scheduleOnce(queue, context, () => {
     if (context.isDestroying || context.isDestroyed) {
-      onError();
+      onError.call(context);
     }
 
-    onSuccess();
+    onSuccess.call(context);
   });
 }
 
