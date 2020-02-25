@@ -121,6 +121,17 @@ Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run thes
 * `ember serve`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
+
+#### Debugging the build process
+
+This addon modifies the components included in the final build. You can store incremental build trees to debug the build process with the following command.
+
+* `rm -rf DEBUG; BROCCOLI_DEBUG=ember-google-maps:* ember s`
+
+This will create a `DEBUG` folder at the root of the project containing the source files at various stages of processing.
+The `with-addon-factory` and `post-filter` trees should likely be investigated first.
+
+
 For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
 
 License
