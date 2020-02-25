@@ -9,6 +9,7 @@ const chalk = require('chalk');
 const Handlebars = require('handlebars');
 const stripIndent = require('strip-indent');
 const writeFile = require('broccoli-file-creator');
+const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
 function intersection(a, b) {
@@ -41,6 +42,11 @@ module.exports = {
     babel: {
       plugins: ['@babel/plugin-proposal-object-rest-spread']
     }
+  },
+
+  init() {
+    this._super.init.apply(this, arguments);
+    this.debugTree = BroccoliDebug.buildDebugCallback(`ember-google-maps:${this.name}`);
   },
 
   included() {
@@ -95,11 +101,17 @@ module.exports = {
 
   treeForAddon() {
     let tree = this._super.treeForAddon.apply(this, arguments);
-    return this.filterComponents(tree);
+    tree = this.debugTree(tree, 'addon-tree:input');
+
+    tree = this.filterComponents(tree);
+    tree = this.debugTree(tree, 'addon-tree:post-filter');
+
+    return tree;
   },
 
   treeForAddonTemplates() {
     let tree = this._super.treeForAddonTemplates.apply(this, arguments);
+    tree = this.debugTree(tree, 'addon-templates-tree:input');
 
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
@@ -147,8 +159,12 @@ module.exports = {
     let addonFactoryTree = writeFile('components/-private-api/addon-factory.hbs', template({ addons }));
 
     tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
+    tree = this.debugTree(tree, 'addon-templates-tree:with-addon-factory');
 
-    return this.filterComponents(tree);
+    tree = this.filterComponents(tree);
+    tree = this.debugTree(tree, 'addon-templates-tree:post-filter');
+
+    return tree;
   },
 
   filterComponents(tree) {
