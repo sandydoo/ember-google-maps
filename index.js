@@ -117,6 +117,8 @@ module.exports = {
   },
 
   // This hook is deprecated in Ember-CLI 3.13+.
+  // In older versions, it still runs and seems to overwrite our work in
+  // `treeForAddon`.
   treeForAddonTemplates() {
     let tree = this._super.treeForAddonTemplates.apply(this, arguments);
     tree = this.debugTree(tree, 'addon-templates-tree:input');
