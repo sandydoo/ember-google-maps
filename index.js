@@ -99,20 +99,39 @@ module.exports = {
     return { 'ember-google-maps': mapConfig };
   },
 
-  treeForAddon() {
-    let tree = this._super.treeForAddon.apply(this, arguments);
+  treeForAddon(tree) {
     tree = this.debugTree(tree, 'addon-tree:input');
+
+    let addonFactoryTree = this.createAddonFactoryTree('templates/components');
+    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
+    tree = this.debugTree(tree, 'addon-tree:with-addon-factory');
 
     tree = this.filterComponents(tree);
     tree = this.debugTree(tree, 'addon-tree:post-filter');
 
+    // Run super now, which processes and removes `.hbs`` template files.
+    tree = this._super.treeForAddon.call(this, tree);
+    tree = this.debugTree(tree, 'addon-tree:post-super');
+
     return tree;
   },
 
+  // This hook is deprecated in Ember-CLI 3.13+.
   treeForAddonTemplates() {
     let tree = this._super.treeForAddonTemplates.apply(this, arguments);
     tree = this.debugTree(tree, 'addon-templates-tree:input');
 
+    let addonFactoryTree = this.createAddonFactoryTree('components');
+    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
+    tree = this.debugTree(tree, 'addon-templates-tree:with-addon-factory');
+
+    tree = this.filterComponents(tree);
+    tree = this.debugTree(tree, 'addon-templates-tree:post-filter');
+
+    return tree;
+  },
+
+  createAddonFactoryTree(templatePath) {
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
     let addons = new AddonRegistry(this.project).components.concat([
@@ -156,15 +175,10 @@ module.exports = {
         }}
     `));
 
-    let addonFactoryTree = writeFile('components/-private-api/addon-factory.hbs', template({ addons }));
-
-    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    tree = this.debugTree(tree, 'addon-templates-tree:with-addon-factory');
-
-    tree = this.filterComponents(tree);
-    tree = this.debugTree(tree, 'addon-templates-tree:post-filter');
-
-    return tree;
+    return writeFile(
+      `${templatePath}/-private-api/addon-factory.hbs`,
+      template({ addons })
+    );
   },
 
   filterComponents(tree) {
