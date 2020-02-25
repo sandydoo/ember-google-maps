@@ -1,6 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/control';
 import { get, set } from '@ember/object';
+import { resolve } from 'rsvp';
 
 /**
  * @class Control
@@ -14,7 +15,14 @@ export default MapComponent.extend({
   tagName: 'div',
 
   _type: 'control',
-  _requiredOptions: ['position'],
+
+  _createOptions(options) {
+    return {
+      ...options,
+      position: get(this, 'position'),
+      map: this.map,
+    };
+  },
 
   _addComponent() {
     let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
@@ -27,7 +35,9 @@ export default MapComponent.extend({
     let controlPosition = google.maps.ControlPosition[get(this, 'position')];
     map.controls[controlPosition].push(_elementDestination);
 
-    set(this, 'mapComponent', _elementDestination);
+    return resolve(
+      set(this, 'mapComponent', _elementDestination)
+    );
   },
 
   _updateComponent() {},

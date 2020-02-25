@@ -32,7 +32,6 @@ function difference(a, b) {
 
 const dependencies = {
   'circle': ['marker'],
-  'overlay': ['detectRender']
 };
 
 module.exports = {

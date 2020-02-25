@@ -1,23 +1,8 @@
 import Mixin from '@ember/object/mixin';
-import { computed, get, getProperties } from '@ember/object';
-import { assign } from '@ember/polyfills';
-
-
-function addObserver(obj, key, callback) {
-  let listener = obj.addObserver(key, callback);
-
-  return {
-    name: key,
-    listener,
-    remove: () => obj.removeObserver(key, callback)
-  };
-}
-
-function watch(target, options = {}) {
-  return Object.entries(options)
-    .map(([key, callback]) => addObserver(target, key, callback));
-}
-
+import { computed, get, getProperties, set } from '@ember/object';
+import { defer } from 'rsvp';
+import { deprecate } from '@ember/application/deprecations';
+import { watch } from '../utils/options-and-events';
 
 /**
  * @class ProcessOptions
@@ -81,17 +66,30 @@ export default Mixin.create({
     let _requiredOptions = get(this, '_requiredOptions');
     let required = getProperties(this, _requiredOptions);
 
-    return assign(required, options);
+    return Object.assign({}, required, options);
   }),
 
   init() {
     this._super(...arguments);
+
+    deprecate(
+      `
+The \`ProcessOptions\` mixin will be removed in the next major version of ember-google-maps. \
+If you need to manually parse component attributes, use the functions provided in \`ember-google-maps/utils/options-and-events\`.`,
+      false,
+      { id: 'process-options-mixin-removed', until: '4.0' }
+    );
 
     this._watchedListeners = new Map();
 
     if (!this._eventAttrs) {
       this._eventAttrs = [];
     }
+
+    this._isInitialized = false;
+
+    this.isInitialized = defer();
+    this.isInitialized.promise.then(() => set(this, '_isInitialized', true));
   },
 
   willDestroyElement() {

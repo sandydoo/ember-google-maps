@@ -11,6 +11,8 @@ module('Integration | Component | g-map/info-window', function(hooks) {
   setupLocations(hooks);
 
   hooks.beforeEach(function() {
+    this._domReady = false;
+
     this.onDomReady = () => { this._domReady = true; };
     this.domIsReady = () => this._domReady;
   });

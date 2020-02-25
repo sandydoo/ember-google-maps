@@ -1,13 +1,37 @@
-import MapComponent from './map-component';
+import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/directions';
+import { ignoredOptions, parseOptionsAndEvents, watch } from '../../utils/options-and-events';
 import { inject as service } from '@ember/service';
-import { get, setProperties } from '@ember/object';
+import { get, getProperties, setProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { A } from '@ember/array';
 import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 import { schedule, scheduleOnce } from '@ember/runloop';
-import { didCancel, task, timeout } from 'ember-concurrency';
+import { didCancel, task } from 'ember-concurrency';
+
+
+export function DirectionsAPI(source) {
+  let mapComponentAPI = MapComponentAPI(source);
+
+  return combine(
+    mapComponentAPI,
+    {
+      get directions() {
+        return source.directions;
+      },
+
+      get waypoints() {
+        return source.waypoints;
+      },
+
+      actions: {
+        route: () => source.route()
+      }
+    }
+  );
+}
+
 
 /**
  * A wrapper for the google.maps.directionsService API.
@@ -24,46 +48,64 @@ export default MapComponent.extend({
 
   _type: 'directions',
   _pluralType: 'directions',
-  _ignoredAttrs: ['onDirectionsChanged'],
-  _requiredOptions: ['origin', 'destination', 'travelMode', 'waypoints'],
-  _watchedOptions: ['waypoints.[]'],
 
   directionsService: reads('googleMapsApi.directionsService'),
 
+  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'onDirectionsChanged']),
+
+  _createOptions(options) {
+    return {
+      ...options,
+      ...getProperties(
+        this,
+        [
+          'origin',
+          'destination',
+          'travelMode',
+          'waypoints',
+        ]
+      ),
+    };
+  },
+
   init() {
     this._super(...arguments);
+
     this.waypoints = A();
 
-    this.publicAPI.reopen({
-      directions: 'directions',
-      waypoints: 'waypoints',
-      actions: {
-        route: 'route'
-      }
-    });
+    this.publicAPI = DirectionsAPI(this);
   },
 
-  _addComponent() {
-    return this.route();
+  _addComponent(options) {
+    return this.route(options);
   },
 
-  _updateComponent() {
-    return this.route();
+  _updateComponent(_, options) {
+    return this.route(options);
+  },
+
+  _didAddComponent() {
+    let watched =
+      watch(this, {
+        'waypoints.[]': () => this._updateOrAddComponent(),
+      });
+
+    watched
+      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+
+    return this._super(...arguments);
   },
 
   /**
    * Fetch routing information from DirectionsService.
    *
-   * This should be run after rendering to avoid triggering the request several
-   * times on initial render if there are several waypoints.
-   *
    * @method route
    * @public
    */
-  route() {
+  route(options) {
     return new Promise((resolve, reject) => {
       scheduleOnce('afterRender', () => {
-        get(this, '_route').perform()
+        get(this, '_route').perform(options)
           .then((result) => resolve(result))
           .catch((e) => {
             if (!didCancel(e)) {
@@ -74,12 +116,7 @@ export default MapComponent.extend({
     });
   },
 
-  _route: task(function *() {
-    yield timeout(300);
-
-    let options = get(this, '_options');
-    delete options.map;
-
+  _route: task(function *(options) {
     let directions = yield get(this, 'fetchDirections').perform(options);
 
     setProperties(this, {

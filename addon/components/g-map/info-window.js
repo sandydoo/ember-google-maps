@@ -1,7 +1,25 @@
-import MapComponent from './map-component';
+import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/info-window';
+import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { get, set } from '@ember/object';
+import { resolve } from 'rsvp';
+
+
+export function InfoWindowAPI(source) {
+  let mapComponentAPI = MapComponentAPI(source);
+
+  return combine(
+    mapComponentAPI,
+    {
+      actions: {
+        open: () => source.open(),
+        close: () => source.close()
+      }
+    }
+  );
+}
+
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -16,35 +34,42 @@ export default MapComponent.extend({
 
   _type: 'infoWindow',
 
-  _ignoredAttrs: ['isOpen', 'target'],
-  _requiredOptions: ['content'],
-
   isOpen: false,
   _cachedIsOpen: false,
 
   position,
 
+  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'isOpen', 'target', 'content']),
+
+  _createOptions(options) {
+    let newOptions = {
+      content: undefined,
+    };
+
+    if (!get(this, 'target')) {
+      newOptions.position = get(this, 'position');
+    }
+
+    if (get(this, 'isOpen')) {
+      newOptions.content = this._getContent();
+    }
+
+    return {
+      ...options,
+      ...newOptions,
+    };
+  },
+
   init() {
     this._super(...arguments);
 
-    if (!get(this, 'target')) {
-      this._requiredOptions = this._requiredOptions.concat(['position']);
-    }
-
-    this.publicAPI.reopen({
-      actions: {
-        open: 'open',
-        close: 'close'
-      }
-    });
+    this.publicAPI = InfoWindowAPI(this);
   },
 
-  _addComponent() {
-    this._prepareContent();
-
-    let options = this._getOptions();
-
-    set(this, 'mapComponent', new google.maps.InfoWindow(options));
+  _addComponent(options) {
+    return resolve(
+      set(this, 'mapComponent', new google.maps.InfoWindow(options))
+    );
   },
 
   _didAddComponent() {
@@ -53,23 +78,10 @@ export default MapComponent.extend({
     this._super(...arguments);
   },
 
-  _updateComponent() {
-    let options = this._getOptions();
-
-    this.mapComponent.setOptions(options);
+  _updateComponent(mapComponent, options) {
+    mapComponent.setOptions(options);
 
     this._openOrClose();
-  },
-
-  _getOptions() {
-    let options = get(this, '_options');
-    delete options.map;
-
-    if (!get(this, 'isOpen')) {
-      delete options.content;
-    }
-
-    return options;
   },
 
   _openOrClose() {
@@ -85,13 +97,17 @@ export default MapComponent.extend({
     set(this, '_cachedIsOpen', isOpen);
   },
 
-  _prepareContent() {
-    if (!get(this, 'content')) {
-      let content = document.createElement('div');
-
-      set(this, '_targetPane', content);
-      set(this, 'content', content);
+  _getContent() {
+    if (this.content) {
+      return this.content;
     }
+
+    let content = document.createElement('div');
+
+    set(this, '_targetPane', content);
+    set(this, 'content', content);
+
+    return content;
   },
 
   open() {
