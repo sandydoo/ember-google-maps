@@ -97,8 +97,8 @@ module.exports = {
     return this.filterComponents(tree);
   },
 
-  treeForTemplates() {
-    let tree = this._super.treeForTemplates.apply(this, arguments);
+  treeForAddonTemplates() {
+    let tree = this._super.treeForAddonTemplates.apply(this, arguments);
 
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
