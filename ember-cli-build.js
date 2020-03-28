@@ -7,7 +7,6 @@ module.exports = function(defaults) {
   let project = defaults.project;
   let options = {
     snippetPaths: ['tests/dummy/app/templates/snippets'],
-    includeHighlightStyle: false,
 
     'ember-cli-babel': {
       includePolyfill: true
