@@ -40,6 +40,36 @@ module('Integration | Component | g map/control', function(hooks) {
     `);
 
     let control = await waitFor('.custom-control-holder');
+
     assert.ok(control, 'control rendered');
+  });
+
+  test('it renders several controls in the same position', async function(assert) {
+    await render(hbs`
+      {{#g-map lat=lat lng=lng zoom=12 as |g|}}
+        {{#g.control position="TOP_CENTER" index=1}}
+          <div id="second-control">Second</div>
+        {{/g.control}}
+
+        {{#g.control position="TOP_CENTER" index=0}}
+          <div id="first-control">First</div>
+        {{/g.control}}
+      {{/g-map}}
+    `);
+
+    let control1 = await waitFor('#first-control');
+    let control2 = await waitFor('#second-control');
+
+    assert.ok(control1, 'control rendered');
+    assert.ok(control2, 'control rendered');
+
+    let parent1 = control1.parentElement;
+    let parent2 = parent1.previousSibling;
+
+    assert.equal(parent2, control2.parentElement, 'fetched correct parent element');
+
+    // Test that the control labeled 'first-control' is rendered to the left of the other control.
+    // These are positioned absolutely, so we compare their left offsets.
+    assert.ok(parent1.offsetLeft < parent2.offsetLeft, 'controls rendered in correct order');
   });
 });

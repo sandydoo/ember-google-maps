@@ -1,6 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/control';
-import { get, set } from '@ember/object';
+import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import { get, getProperties, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
 /**
@@ -11,25 +12,21 @@ import { resolve } from 'rsvp';
  */
 export default MapComponent.extend({
   layout,
-  class: undefined,
-  tagName: 'div',
 
   _type: 'control',
 
-  _createOptions(options) {
-    return {
-      ...options,
-      position: get(this, 'position'),
-      map: this.map,
-    };
-  },
+  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'index', 'class']),
 
   _addComponent() {
     let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
-    let map = get(this, 'map');
+    let { map, class: classNames, index } = getProperties(this, ['map', 'class', 'index']);
 
-    if (get(this, 'class')) {
-      _elementDestination.classList.add(get(this, 'class'));
+    if (classNames) {
+      _elementDestination.classList.add(classNames);
+    }
+
+    if (Number.isInteger(index)) {
+     _elementDestination.index = index;
     }
 
     let controlPosition = google.maps.ControlPosition[get(this, 'position')];
