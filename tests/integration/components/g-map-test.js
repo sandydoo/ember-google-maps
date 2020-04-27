@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { render } from '@ember/test-helpers';
+import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | g map', function(hooks) {
@@ -114,5 +114,16 @@ module('Integration | Component | g map', function(hooks) {
 
     markers[0].isInitialized.promise
       .then(() => assert.ok('Component is actually loaded'));
+  });
+
+  /**
+   * Octane support tests
+   */
+  test('it passes attributes to the default canvas', async function(assert) {
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
+    `);
+
+    assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
   });
 });
