@@ -7,6 +7,7 @@ import { bind, once, scheduleOnce } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
 import { assert, warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
+import { isPresent } from '@ember/utils';
 
 
 const { READY } = MapComponentLifecycleEnum;
@@ -116,14 +117,17 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
         point = overlayProjection.fromLatLngToDivPixel(position),
         zIndex = get(this, 'zIndex');
 
-    this.content.style.cssText = `
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 0;
-      z-index: ${zIndex};
-      transform: translateX(${point.x}px) translateY(${point.y}px);
-    `;
+    let { content } = this;
+    if (isPresent(content)) {
+      content.style.cssText = `
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 0;
+        z-index: ${zIndex};
+        transform: translateX(${point.x}px) translateY(${point.y}px);
+      `;
+    }
   },
 
   fetchOverlayContent(id) {
