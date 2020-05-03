@@ -2,18 +2,18 @@ import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import { tryInvoke } from '@ember/utils';
 
-const Router = EmberRouter.extend({
-  location: config.locationType,
-  rootURL: config.rootURL,
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
 
-  init() {
-    this._super(...arguments);
+  constructor() {
+  	super(...arguments);
 
-    this.on('routeDidChange', function() {
+  	this.on('routeDidChange', function() {
       tryInvoke(window, 'scrollTo', [0, 0]);
     });
   }
-});
+}
 
 Router.map(function() {
   this.route('index', { path: '/' });
@@ -39,5 +39,3 @@ Router.map(function() {
     this.route('sweet-rentals');
   });
 });
-
-export default Router;
