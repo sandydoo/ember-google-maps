@@ -17,9 +17,9 @@ function safeScheduleOnce(queue, context, onSuccess, onError) {
   scheduleOnce(queue, context, () => {
     if (context.isDestroying || context.isDestroyed) {
       onError.call(context);
+    } else {
+      onSuccess.call(context);
     }
-
-    onSuccess.call(context);
   });
 }
 
