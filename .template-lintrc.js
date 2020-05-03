@@ -11,5 +11,5 @@ module.exports = {
     'lib/in-repo-pin-addon/**',
     'tests/**',
     'dummy/templates/**'
-  ],
+  ]
 };
