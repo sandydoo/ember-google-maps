@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  extends: 'recommended',
+  extends: 'octane',
 
   // Disable this for now. Investigate what the specific rules
   // are and decide whether to adopt. Seems to demand some
