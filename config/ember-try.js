@@ -14,6 +14,7 @@ module.exports = async function() {
         npm: {
           devDependencies: {
             '@ember/jquery': '^0.5.1',
+            'ember-resolver': '^5.0.1',
             'ember-source': '~2.18.0'
           }
         }

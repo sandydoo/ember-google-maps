@@ -1,12 +1,14 @@
-import Application from '@ember/application';
-import Resolver from 'ember-resolver';
-import loadInitializers from 'ember-load-initializers';
-import config from './config/environment';
+import AppPre from './app-pre-3.15';
+import AppPost from './app-post-3.15';
 
-export default class App extends Application {
-  modulePrefix = config.modulePrefix;
-  podModulePrefix = config.podModulePrefix;
-  Resolver = Resolver;
-}
+import { gte } from 'ember-compatibility-helpers'
 
-loadInitializers(App, config.modulePrefix);
+/**
+ * TODO: 4.0
+ * Besides using an older ember-resolver version, use the old syntax to create
+ * the app. Newer non-octane v3.x apps don't seem to mind the new resolver style.
+ * Remove after dropping v2.18 support.
+ */
+let AppExport = gte('3.15.0') ? AppPost : AppPre;
+
+export default AppExport;
