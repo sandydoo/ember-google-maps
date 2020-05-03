@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins */
 import Mixin from '@ember/object/mixin';
 import { computed, get, getProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';

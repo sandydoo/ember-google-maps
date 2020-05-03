@@ -27,7 +27,8 @@ module.exports = {
     'ember/avoid-leaking-state-in-ember-objects': 'off',
     'ember/order-in-components': 'off',
     'ember/no-attrs-in-components': 'off',
-    'ember/no-jquery': 'error'
+    'ember/no-jquery': 'error',
+    'ember/no-observers': 'off'
   },
   overrides: [
     // node files

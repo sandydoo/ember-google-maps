@@ -36,13 +36,15 @@ export default Component.extend({
 
     if (this._customCanvas) { return; }
 
-    // TODO: Remove in Octane version. Splattributes somehow affect the
-    // rendering loop, so this is necessary for 2.18.
-    scheduleOnce('render', this, function() {
+    function registerCanvas() {
       let id = get(this, 'id');
       let canvas = document.getElementById(id);
 
       this._internalAPI._registerCanvas(canvas);
-    });
+    }
+
+    // TODO: Remove in Octane version. Splattributes somehow affect the
+    // rendering loop, so this is necessary for 2.18.
+    scheduleOnce('render', this, registerCanvas);
   }
 });

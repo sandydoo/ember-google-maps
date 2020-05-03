@@ -7,9 +7,9 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 
   constructor() {
-  	super(...arguments);
+    super(...arguments);
 
-  	this.on('routeDidChange', function() {
+    this.on('routeDidChange', function() {
       tryInvoke(window, 'scrollTo', [0, 0]);
     });
   }

@@ -12,6 +12,7 @@
 
 # misc
 /coverage/
+/DEBUG/
 !.*
 
 # ember-try

@@ -8,6 +8,7 @@ module.exports = {
   // really crap styling for block components...
   ignore: [
     'addon/templates/components/**',
+    'lib/in-repo-pin-addon/**',
     'tests/**',
     'dummy/templates/**'
   ],

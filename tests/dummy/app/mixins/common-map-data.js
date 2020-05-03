@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins */
 import Mixin from '@ember/object/mixin';
 import { inject as service } from '@ember/service';
 import { computed, get } from '@ember/object';
