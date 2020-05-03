@@ -1,8 +1,14 @@
+'use strict';
+
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true
+    }
   },
   plugins: [
     'ember'
@@ -21,6 +27,8 @@ module.exports = {
     'ember/avoid-leaking-state-in-ember-objects': 'off',
     'ember/order-in-components': 'off',
     'ember/no-attrs-in-components': 'off',
+    'ember/no-jquery': 'error',
+    'ember/no-observers': 'off'
   },
   overrides: [
     // node files

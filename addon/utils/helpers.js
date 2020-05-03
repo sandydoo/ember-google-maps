@@ -6,9 +6,7 @@ let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 let position = computed('lat', 'lng', function() {
   const { lat, lng } = getProperties(this, 'lat', 'lng');
-  if (lat && lng) {
-    return new google.maps.LatLng(lat, lng);
-  }
+  return (lat && lng) ? new google.maps.LatLng(lat, lng) : undefined;
 });
 
 function computedPromise(...args) {

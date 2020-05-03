@@ -104,19 +104,21 @@ export default MapComponent.extend({
    */
   route(options) {
     return new Promise((resolve, reject) => {
-      scheduleOnce('afterRender', () => {
-        get(this, '_route').perform(options)
-          .then((result) => resolve(result))
-          .catch((e) => {
-            if (!didCancel(e)) {
-              reject(e);
-            }
-          });
-      });
+      scheduleOnce('afterRender', this, this._performRouteTask, options, resolve, reject);
     });
   },
 
-  _route: task(function *(options) {
+  _performRouteTask(options, resolve, reject) {
+    get(this, 'routeTask').perform(options)
+      .then((result) => resolve(result))
+      .catch((e) => {
+        if (!didCancel(e)) {
+          reject(e);
+        }
+      });
+  },
+
+  routeTask: task(function *(options) {
     let directions = yield get(this, 'fetchDirections').perform(options);
 
     setProperties(this, {

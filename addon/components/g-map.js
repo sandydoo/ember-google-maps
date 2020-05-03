@@ -14,13 +14,15 @@ import { bind, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 
 function safeScheduleOnce(queue, context, onSuccess, onError) {
-  scheduleOnce(queue, context, () => {
+  function func() {
     if (context.isDestroying || context.isDestroyed) {
       onError.call(context);
     } else {
       onSuccess.call(context);
     }
-  });
+  }
+
+  scheduleOnce(queue, context, func);
 }
 
 function skipErrorReporting() {}

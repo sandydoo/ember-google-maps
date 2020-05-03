@@ -1,4 +1,4 @@
-/* eslint no-console: "off", qunit/no-conditional-assertions: "off" */
+/* eslint-disable no-console */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
