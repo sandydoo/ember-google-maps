@@ -28,7 +28,10 @@ module.exports = {
     'ember/order-in-components': 'off',
     'ember/no-attrs-in-components': 'off',
     'ember/no-jquery': 'error',
-    'ember/no-observers': 'off'
+    'ember/no-observers': 'off',
+    // TODO: Remove in 4.0
+    'ember/no-get': 'off'
+
   },
   overrides: [
     // node files
