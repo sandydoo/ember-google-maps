@@ -17,7 +17,7 @@ const GoogleDocs = Component.extend({
 
   as: reads('section'),
 
-  baseUrl: computed('type', function() {
+  baseUrl: computed('type', 'referenceUrl', 'guideUrl', function() {
     return (this.type === 'reference') ? this.referenceUrl : this.guideUrl;
   }),
 
