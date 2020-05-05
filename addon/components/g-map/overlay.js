@@ -3,7 +3,7 @@ import layout from '../../templates/components/g-map/overlay';
 import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
-import { bind, scheduleOnce, run } from '@ember/runloop';
+import { begin, end, bind, schedule, scheduleOnce } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
 import { warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
@@ -52,23 +52,37 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
   },
 
   _addComponent() {
+    // Begin a runloop manually to manage the asynchronous calls from Google
+    // Maps.
+    begin();
+
     let isFinishedDrawing = defer();
 
     let _contentContainer = document.createElement('div');
     _contentContainer.setAttribute('id', get(this, '_contentId'));
+    set(this, '_contentContainer', _contentContainer);
 
     let Overlay = new google.maps.OverlayView();
 
-    // Flush the runloop to get the rendered overlay content.
-    Overlay.onAdd = () => run(this, this.onAdd);
+    Overlay.onAdd = () => this.onAdd();
 
-    Overlay.draw = () => scheduleOnce('render', this, this._initialDraw, isFinishedDrawing.resolve);
+    Overlay.draw = () => {
+      // Schedule to write the style together with appending the container to
+      // the DOM.
+      schedule('render', this, 'draw');
+
+      // Overwrite this initial draw function with the normal one.
+      this.mapComponent.draw = () => scheduleOnce('render', this, 'draw');
+
+      isFinishedDrawing.resolve();
+
+      // Flush the runloop.
+      end();
+    }
 
     Overlay.onRemove = bind(this, 'onRemove');
 
     set(this, 'mapComponent', Overlay);
-
-    set(this, '_contentContainer', _contentContainer);
     this.mapComponent.setMap(this.map);
 
     return isFinishedDrawing.promise;
@@ -92,19 +106,16 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
     }
   },
 
-  _initialDraw(callback) {
-    this.draw();
-    this.mapComponent.draw = () => scheduleOnce('render', this, 'draw');
-    callback();
-  },
-
   onAdd() {
-    if (this.isDestroying || this.isDestroyed) { return; }
-
     let panes = this.mapComponent.getPanes();
     set(this, '_targetPane', panes[this.paneName]);
 
-    this._targetPane.appendChild(this._contentContainer);
+    // Schedule to append the overlay container to the map pane.
+    schedule('render', this, () => {
+      if (this.isDestroying || this.isDestroyed) { return; }
+
+      this._targetPane.appendChild(this._contentContainer)
+    });
   },
 
   draw() {
@@ -133,7 +144,5 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
     }
 
     this._contentContainer = null;
-
-    this.destroy();
   }
 });
