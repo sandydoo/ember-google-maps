@@ -1,7 +1,5 @@
-{{#if _targetPane}}
-  {{#-in-element _targetPane}}
-    <div id={{_contentId}}>
-      {{yield}}
-    </div>
+{{#if (has-block)}}
+  {{#-in-element this._contentContainer}}
+    {{yield}}
   {{/-in-element}}
 {{/if}}
