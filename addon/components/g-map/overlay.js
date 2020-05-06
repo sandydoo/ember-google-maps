@@ -3,7 +3,7 @@ import layout from '../../templates/components/g-map/overlay';
 import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
-import { begin, end, bind, run, join, schedule, scheduleOnce } from '@ember/runloop';
+import { bind, join, schedule, scheduleOnce } from '@ember/runloop';
 import { guidFor } from '@ember/object/internals';
 import { warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
