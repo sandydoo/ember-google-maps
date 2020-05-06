@@ -60,6 +60,10 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
 
     let Overlay = new google.maps.OverlayView();
 
+    // Google Maps runs these setup methods asynchronously. This makes it
+    // impossible to schedule all of the DOM operations within one runloop.
+    // That's why we provide noops and then run the setup process properly,
+    // within a runloop, ourselves.
     Overlay.onAdd = () => {};
     Overlay.onRemove = bind(this, 'onRemove');
     Overlay.draw = () => join(this, setupOverlay);
@@ -74,6 +78,8 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
       this.onAdd();
 
       schedule('render', this, 'draw');
+
+      // Set the normal draw function.
       Overlay.draw = () => join(this, () => scheduleOnce('render', this, 'draw'));
 
       schedule('afterRender', this, () => isFinishedDrawing.resolve(Overlay));
