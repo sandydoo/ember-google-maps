@@ -4,7 +4,7 @@ import { setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { set } from '@ember/object';
+import { get, set } from '@ember/object';
 import { later } from '@ember/runloop';
 
 function randomInt(min, max) {
@@ -25,12 +25,13 @@ function perturbLocations(times) {
 
 function generateLocations(google, center) {
   let { lat, lng } = center,
-      origin = new google.maps.LatLng(lat, lng);
+      maps = get(google, 'maps'),
+      origin = new maps.LatLng(lat, lng);
 
   return Array(42).fill().map((_e, i) => {
     let heading = randomInt(1, 360),
         distance = randomInt(100, 5000),
-        n = google.maps.geometry.spherical.computeOffset(origin, distance, heading);
+        n = maps.geometry.spherical.computeOffset(origin, distance, heading);
     return { id: i, lat: n.lat(), lng: n.lng() };
   });
 }
@@ -65,7 +66,7 @@ module('Integration | Component | g map/overlay', function(hooks) {
 
     let center = { lat: this.lat, lng: this.lng },
         googleMapsApi = this.owner.lookup('service:google-maps-api'),
-        google = await googleMapsApi.google;
+        google = await get(googleMapsApi, 'google');
 
     this.originalLocations = await generateLocations(google, center);
     this.locations = this.originalLocations;
