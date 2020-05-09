@@ -192,6 +192,28 @@ module.exports = {
     return tree;
   },
 
+  setupPreprocessorRegistry(type, registry) {
+    let pluginObject = this._buildPlugin();
+
+    pluginObject.parallelBabel = {
+      requireFile: __filename,
+      buildUsing: '_buildPlugin',
+      params: {},
+    };
+
+    registry.add('htmlbars-ast-plugin', pluginObject);
+  },
+
+  _buildPlugin() {
+    return {
+      name: 'ember-google-maps:canvas-enforcer',
+      plugin: require('./lib/canvas-enforcer'),
+      baseDir() {
+        return __dirname;
+      },
+    };
+  },
+
   createAddonFactoryTree(templatePath) {
     let AddonRegistry = require('./lib/broccoli/addon-registry');
 
