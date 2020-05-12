@@ -2,13 +2,13 @@
   @lat="51.507568"
   @lng="-0.127762"
   @zoom={{12}}
-  @styles={{primaryMapStyle}} as |g|>
+  @styles={{this.myMapStyle}} as |g|>
 
   {{!-- A manually positioned info window with basic text --}}
   <g.infoWindow
-    @lat={{london.lat}}
-    @lng={{london.lng}}
-    @isOpen={{mapTooltipOpen}}
+    @lat={{this.london.lat}}
+    @lng={{this.london.lng}}
+    @isOpen={{this.mapTooltipOpen}}
     @content="Simple text tooltip" />
 
   {{!--
@@ -16,12 +16,12 @@
     Notice how it is yielded by the marker itself.
     This info window displays the template defined in the block --}}
   <g.marker
-    @lat={{london.lat}}
-    @lng={{london.lng}}
+    @lat={{this.london.lat}}
+    @lng={{this.london.lng}}
     @onClick={{action (toggle "markerTooltipOpen" this)}} as |m|>
 
     <m.infoWindow
-      @isOpen={{markerTooltipOpen}} as |i|>
+      @isOpen={{this.markerTooltipOpen}} as |i|>
 
       <div class="text-center">
         <img src="/images/doge.jpg" alt="Such doge!" width=200>

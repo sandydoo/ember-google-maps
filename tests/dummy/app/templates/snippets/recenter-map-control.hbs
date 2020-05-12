@@ -1,6 +1,6 @@
 <GMap
-  @lat={{london.lat}}
-  @lng={{london.lng}}
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
   @zoom={{12}}
   @disableDefaultUI={{true}}
   @mapTypeControl={{false}}
@@ -8,7 +8,7 @@
   @zoomControlOptions={{hash
     position=google.maps.ControlPosition.TOP_LEFT}} as |g|>
 
-  <g.marker @lat={{london.lat}} @lng={{london.lng}} />
+  <g.marker @lat={{this.london.lat}} @lng={{this.london.lng}} />
 
   <g.control @position="TOP_CENTER">
     <div class="map-control">

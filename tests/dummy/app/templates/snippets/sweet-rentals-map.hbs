@@ -1,9 +1,8 @@
 <GMap
-  @lat={{london.lat}}
-  @lng={{london.lng}}
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
   @zoom={{12}}
-  @styles={{primaryMapStyle}}
-  @classNames="ember-google-map-cover"
+  @styles={{this.myMapStyle}}
   @scrollwheel={{false}}
   @gestureHandling="greedy"
   @disableDefaultUI={{true}}
@@ -12,18 +11,19 @@
     position=google.maps.ControlPosition.TOP_LEFT}}
   @fullscreenControl={{true}}
   @onLoad={{action "saveBounds"}}
-  @onBoundsChanged={{action "saveBounds"}} as |g|>
+  @onBoundsChanged={{action "saveBounds"}}
+  class="ember-google-map-cover" as |g|>
 
-  {{#each boundedLondonLocations as |l|}}
+  {{#each this.boundedLondonLocations as |location|}}
     <g.overlay
-      @lat={{l.lat}}
-      @lng={{l.lng}}
+      @lat={{location.lat}}
+      @lng={{location.lng}}
       @onClick={{action "scrollToListing" l}}
-      @onMouseover={{action (mut l.active) true}}
-      @onMouseleave={{action (mut l.active) false}}>
+      @onMouseover={{action (mut location.active) true}}
+      @onMouseleave={{action (mut location.active) false}}>
 
-      <div class="tooltip {{if l.active "active"}}">
-        £{{l.price}}
+      <div class="tooltip {{if location.active "active"}}">
+        £{{location.price}}
       </div>
 
     </g.overlay>

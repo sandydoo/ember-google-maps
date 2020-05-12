@@ -2,17 +2,17 @@
   @lat="51.507568"
   @lng="-0.127762"
   @zoom={{9}}
-  @styles={{primaryMapStyle}} as |g|>
+  @styles={{this.myMapStyle}} as |g|>
 
-  {{#each londonLocations as |l|}}
+  {{#each this.londonLocations as |location|}}
     <g.overlay
-      @lat={{l.lat}}
-      @lng={{l.lng}}
-      @onMouseover={{action (mut l.active) true}}
-      @onMouseleave={{action (mut l.active) false}}>
+      @lat={{location.lat}}
+      @lng={{location.lng}}
+      @onMouseover={{action (mut location.active) true}}
+      @onMouseleave={{action (mut location.active) false}}>
 
-      <div class="tooltip {{if l.active "active"}}">
-        £{{l.price}}
+      <div class="tooltip {{if location.active "active"}}">
+        £{{location.price}}
       </div>
 
     </g.overlay>
