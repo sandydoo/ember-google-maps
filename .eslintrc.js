@@ -51,7 +51,8 @@ module.exports = {
         'blueprints/*/index.js',
         'config/**/*.js',
         'lib/broccoli/**/*.js',
-        'tests/dummy/config/**/*.js'
+        'tests/dummy/config/**/*.js',
+        'build-tests/build-test.js'
       ],
       excludedFiles: [
         'addon/**',
