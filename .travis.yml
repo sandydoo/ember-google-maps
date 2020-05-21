@@ -30,6 +30,7 @@ jobs:
       script:
         - yarn lint
         - yarn test:ember
+        - yarn test:build
 
     - stage: "Additional Tests"
       name: "Floating Dependencies"
