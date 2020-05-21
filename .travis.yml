@@ -30,6 +30,10 @@ jobs:
       script:
         - yarn lint
         - yarn test:ember
+
+    - stage: "Tests"
+      name: "Build Tests"
+      script:
         - yarn test:build
 
     - stage: "Additional Tests"
