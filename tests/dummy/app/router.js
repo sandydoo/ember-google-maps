@@ -34,6 +34,7 @@ Router.map(function() {
     this.route('directions');
     this.route('overlays');
     this.route('complex-ui');
+    this.route('advanced');
   });
 
   this.route('examples', function() {

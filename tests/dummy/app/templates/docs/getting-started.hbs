@@ -7,29 +7,13 @@
   <section>
     <h5>Loading Google Maps</h5>
 
-    <p>You can configure the options used for loading the Google Maps SDK in your app's <tt>config/environment.js</tt>. Only the <tt>key</tt> option is <b>required</b>, however, from first-hand experience, I would suggest explicitly setting the language and version to avoid any nasty surprises.</p>
+    <p>You can configure the options used for loading the Google Maps API in your app's <tt>config/environment.js</tt>. The <tt>key</tt> option is <b>required</b>. Everything else is optional, however, I strongly suggest explicitly setting the language and version options to avoid any nasty surprises.</p>
 
-    <p>During the build process, these options will be used to generate the url to load the SDK, which will then be lazily loaded <b>on-demand</b>. No render-blocking script tags on every page. No jQuery. 👌</p>
+    <p>As your app is built, these options will be used to generate the URL for the API. The API is automatically loaded — on-demand — only when it is needed.</p>
 
     {{code-snippet name="config.js"}}
-  </section>
-  <section>
-    <h5>Treeshaking</h5>
 
-    <p>Complex Ember apps can eventually become quite heavy and part of that bloat comes from the addon ecosystem. Everyone's needs are different and it's unlikely you'll use every single component in this addon. Without proper treeshaking support at build time, your builds end up full of stuff you never needed or, even worse, code you don't even know about!</p>
-
-    <p>In your <tt>ember-cli-build.js</tt>, you can specify which components to include or exclude from the build using <tt>only</tt> and <tt>except</tt>.</p>
-
-    {{#doc-danger}}
-      This is an advanced feature and may break your app. Manually excluding components from your build can be quite finicky and time-consuming. Use at your own peril.
-    {{/doc-danger}}
-
-    {{code-snippet name="ember-cli-build.js"}}
-  </section>
-  <section>
-    <h5>Performance issues</h5>
-
-    <p>This addon relies heavily on Ember components. Components are what makes this addon simple and enjoyable to use. However, they come at a cost. Each component brings a bit of overhead that can eventually pile up into a heafty setup cost. Normally, this should not be an issue, apart from some extreme use-cases. If you intend to display thousands of markers, you should aim to create them in Javascript, or consider displaying fewer markers in the first place.</p>
+    <p>If your requirements are more complex and statically building the URL is too restrictive, you can always override the URL at runtime. {{link-to "Learn more about the advanced options of this addon." "docs.advanced"}}</p>
   </section>
 
   <p>{{nextPage.text}}</p>

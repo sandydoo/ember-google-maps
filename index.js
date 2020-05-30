@@ -263,7 +263,9 @@ module.exports = {
     config = config || {};
 
     if (!config.key && !config.client) {
-      this.warn('You must provide either a Google Maps API key or a Google Maps Premium Plan Client ID to use ember-google-maps. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+      // Since we allow configuring the URL at runtime, we don't throw an error
+      // here.
+      return '';
     }
 
     if (config.key && config.client) {

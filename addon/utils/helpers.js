@@ -1,13 +1,16 @@
 import { computed, getProperties } from '@ember/object';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import { Promise, resolve } from 'rsvp';
 
-let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 let position = computed('lat', 'lng', function() {
   const { lat, lng } = getProperties(this, 'lat', 'lng');
   return (lat && lng) ? new google.maps.LatLng(lat, lng) : undefined;
 });
+
+
+let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
 function computedPromise(...args) {
   let func = args.pop();
@@ -18,4 +21,9 @@ function computedPromise(...args) {
   });
 }
 
-export { computedPromise, position };
+
+function promisify(maybePromise) {
+  return (maybePromise instanceof Promise) ? maybePromise : resolve(maybePromise);
+}
+
+export { computedPromise, position, promisify };

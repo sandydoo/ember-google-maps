@@ -1,10 +1,12 @@
 import Service from '@ember/service';
-import { computedPromise } from '../utils/helpers';
+import { computedPromise, promisify } from '../utils/helpers';
 import { get } from '@ember/object';
 import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
+import { assert } from '@ember/debug';
 import { bind } from '@ember/runloop';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
+
 
 /**
  * @class GoogleMapsApi
@@ -35,17 +37,18 @@ export default Service.extend({
    * By default, this returns the Google Maps URL created at build time. You can
    * use this hook to build the URL at runtime instead.
    *
-   * This function returns a promise that resolves with the URL. This allows you
-   * to use external data when building the URL. For example, you could fetch
-   * the database record for the current user for localisation purposes.
+   * Optionally, you can return a promise that resolves with the URL. This
+   * allows you to use external data when building the URL. For example, you
+   * could fetch the database record for the current user for localisation
+   * purposes.
    *
    * @method buildGoogleMapsUrl
    * @public
    * @param  {Object} config The ember-google-maps configuration.
-   * @return {Promise<string>} The URL to the Google Maps API.
+   * @return {(string|Promise<string>)} The URL to the Google Maps API.
    */
   buildGoogleMapsUrl(config) {
-    return resolve(config['src']);
+    return config['src'];
   },
 
   /**
@@ -75,11 +78,18 @@ export default Service.extend({
 
     let config = this._getConfig();
 
-    return this.buildGoogleMapsUrl(config)
+    return promisify(this.buildGoogleMapsUrl(config))
       .then(this._loadAndInitApi);
   },
 
   _loadAndInitApi(src) {
+    assert(`
+ember-google-maps: You tried to load the Google Maps API, but the source URL was empty. \
+Perhaps you forgot to specify the API key? \
+Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
+      src
+    );
+
     return new Promise((resolve, reject) => {
       window.initGoogleMap = bind(() => {
         runloopifyGoogleMaps();

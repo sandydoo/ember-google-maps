@@ -34,7 +34,8 @@ export default ApplicationController.extend(CommonMapData, {
       { title: 'Controls', path: 'docs.controls', text: "Next, let's look at how we can modify the default map UI." },
       { title: 'Directions', path: 'docs.directions', text: "Let's look at how to query and display routing information." },
       { title: 'Custom overlays', path: 'docs.overlays', text: "It's finally time to learn how to create custom HTML markers!" },
-      { title: 'Complex UI', path: 'docs.complex-ui', text: "Let's see what we can build with these components." }
+      { title: 'Complex UI', path: 'docs.complex-ui', text: "Let's see what we can build with these components." },
+      { title: 'Advanced', path: 'docs.advanced', text: "Learn about some of the more advanced options of this addon." },
     ];
   }).readOnly()
 });
