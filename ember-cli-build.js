@@ -6,7 +6,7 @@ const { maybeEmbroider } = require('@embroider/test-setup');
 
 module.exports = function(defaults) {
   let options = {
-    snippetPaths: ['tests/dummy/app/templates/snippets'],
+    snippetPaths: ['tests/dummy/code-snippets'],
 
     babel: {
       plugins: [
