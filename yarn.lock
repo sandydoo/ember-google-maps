@@ -4480,7 +4480,7 @@ ember-cli-babel@^7.1.0, ember-cli-babel@^7.1.2, ember-cli-babel@^7.11.0, ember-c
     rimraf "^3.0.1"
     semver "^5.5.0"
 
-ember-cli-babel@^7.20.4:
+ember-cli-babel@^7.19.0:
   version "7.20.4"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.20.4.tgz#6f7bd275ac7532cf6dc1826f350aea32a3c81b06"
   integrity sha512-LcE2PMKkozLxJDibyidH5uUuRORVo+b6Mub95MdF6anWNTR72FtNtXANSJaMqtP8ELhLglapUgLC3ylfdyGa8A==
