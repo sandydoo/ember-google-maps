@@ -4,10 +4,10 @@ import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise, resolve } from 'rsvp';
 
 
-let position = computed('lat', 'lng', function() {
+function position() {
   const { lat, lng } = getProperties(this, 'lat', 'lng');
   return (lat && lng) ? new google.maps.LatLng(lat, lng) : undefined;
-});
+}
 
 
 let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);

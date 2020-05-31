@@ -1,7 +1,7 @@
 import MapComponent from './map-component';
 import layout from '../../templates/components/g-map/marker';
 import { position } from '../../utils/helpers';
-import { get, set } from '@ember/object';
+import { computed, get, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
 
@@ -19,7 +19,7 @@ export default MapComponent.extend({
 
   _type: 'marker',
 
-  position,
+  position: computed('lat', 'lng', position),
 
   _createOptions(options) {
     return {

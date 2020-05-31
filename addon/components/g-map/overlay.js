@@ -25,7 +25,7 @@ export default MapComponent.extend({
 
   _type: 'overlay',
 
-  position,
+  position: computed('lat', 'lng', position),
 
   paneName: 'overlayMouseTarget',
   zIndex: 'auto',

@@ -2,7 +2,7 @@ import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/info-window';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
-import { get, set } from '@ember/object';
+import { computed, get, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
 
@@ -37,7 +37,7 @@ export default MapComponent.extend({
   isOpen: false,
   _cachedIsOpen: false,
 
-  position,
+  position: computed('lat', 'lng', position),
 
   _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'isOpen', 'target', 'content']),
 

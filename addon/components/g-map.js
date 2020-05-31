@@ -89,7 +89,7 @@ export default Component.extend({
    * @type {google.maps.LatLng}
    * @public
    */
-  center,
+  center: computed('lat', 'lng', center),
 
   google: reads('googleMapsApi.google'),
 
