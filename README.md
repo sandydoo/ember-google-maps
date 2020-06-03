@@ -21,7 +21,7 @@ A friendly Ember addon for working with Google Maps.
 📎 Documentation
 --------------------------------------------------------------------------------
 
-##### [View guide and documentation ↗️](docs-url)
+**[View guide and documentation ↗️][docs-url]**
 
 
 🔗 Compatibility
@@ -83,13 +83,13 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 {{/g-map}}
 ```
 
-#### [Learn more ↗️](docs-url)
+**[Learn more ↗️][docs-url]**
 
 
-👷‍ Maintainers
+👷 Maintainers
 --------------------------------------------------------------------------------
 
-This addon is maintained by **[Sander Melnikov](maintainer-url)**.
+This addon is maintained by **[Sander Melnikov][maintainer-url]**.
 
 
 Contributing
@@ -103,7 +103,7 @@ For more information on using ember-cli, visit [https://ember-cli.com/](https://
 License
 --------------------------------------------------------------------------------
 
-[MIT](license-url) © [Sander Melnikov](maintainer-url).
+[MIT][license-url] © [Sander Melnikov][maintainer-url].
 
 
 Disclaimer
