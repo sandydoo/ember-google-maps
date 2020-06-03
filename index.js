@@ -41,6 +41,49 @@ let dependencies = {
   'circle': ['marker'],
 };
 
+function excludeComponent(included, excluded) {
+  let shouldExclude = excludeName(included, excluded);
+
+  return function(name) {
+    if (!IS_COMPONENT.test(name)) {
+      return false;
+    }
+
+    let baseName = path.basename(name).split('.').shift();
+
+    return shouldExclude(baseName);
+  }
+}
+
+function excludeName(included, excluded) {
+  return function(rawName) {
+    let name = camelCase(rawName),
+        isIncluded = included.indexOf(name) !== -1,
+        isExcluded = excluded.indexOf(name) !== -1;
+
+    if (included.length === 0 && excluded.length === 0) {
+      return false;
+    }
+
+    // Include if both included and excluded
+    if (isIncluded && isExcluded) {
+      return false;
+    }
+
+    // Only included
+    if (included.length && excluded.length === 0) {
+      return !isIncluded;
+    }
+
+    // Only excluded
+    if (excluded.length && included.length === 0) {
+      return isExcluded;
+    }
+
+    return !isIncluded || isExcluded;
+  }
+}
+
 
 module.exports = {
   name: require('./package').name,
@@ -70,8 +113,8 @@ module.exports = {
       except = [],
     } = config;
 
-    only = only.map(k => camelCase(k));
-    except = except.map(k => camelCase(k));
+    only = only.map(camelCase);
+    except = except.map(camelCase);
 
     let included = this.createIncludedList(only, except),
         excluded = this.createExcludedList(only, except);
@@ -97,7 +140,12 @@ module.exports = {
       });
     }
 
-    this.treeshakingConfig = { included, excluded };
+    this.excludeName = excludeName(included, excluded);
+    this.excludeComponent = excludeComponent(included, excluded);
+
+    this.skipTreeshaking =
+      (!included || included.length === 0) &&
+      (!excluded || excluded.length === 0);
   },
 
   config(env, config) {
@@ -156,11 +204,9 @@ module.exports = {
       { key: 'route', component: 'g-map/route' }
     ]);
 
-    let { included, excluded } = this.treeshakingConfig;
-
     if (this.isProduction) {
       // Exclude components that we don't want in the production build.
-      addons = addons.filter(({ key }) => !this.excludeName(key, included, excluded));
+      addons = addons.filter(({ key }) => !this.excludeName(key));
 
     } else {
       // Replace an excluded component with a debug component in development and
@@ -169,7 +215,7 @@ module.exports = {
       addons = addons.map(component => {
         let { key } = component;
 
-        if (this.excludeName(key, included, excluded)) {
+        if (this.excludeName(key)) {
           return {
             key,
             component: '-private-api/warn-missing-component',
@@ -197,56 +243,13 @@ module.exports = {
   },
 
   filterComponents(tree) {
-    let { included, excluded } = this.treeshakingConfig;
-
-    let skipTreeshaking =
-      (!included || included.length === 0) &&
-      (!excluded || excluded.length === 0);
-
-    if (skipTreeshaking) {
+    if (this.skipTreeshaking) {
       return tree;
     }
 
     return new Funnel(tree, {
-      exclude: [(name) => this.excludeComponent(name, included, excluded)]
+      exclude: [this.excludeComponent]
     });
-  },
-
-  excludeComponent(name, included, excluded) {
-    if (!IS_COMPONENT.test(name)) {
-      return false;
-    }
-
-    let baseName = path.basename(name).split('.').shift();
-
-    return this.excludeName(baseName, included, excluded);
-  },
-
-  excludeName(rawName, included, excluded) {
-    let name = camelCase(rawName),
-        isIncluded = included.indexOf(name) !== -1,
-        isExcluded = excluded.indexOf(name) !== -1;
-
-    if (included.length === 0 && excluded.length === 0) {
-      return false;
-    }
-
-    // Include if both included and excluded
-    if (isIncluded && isExcluded) {
-      return false;
-    }
-
-    // Only included
-    if (included.length && excluded.length === 0) {
-      return !isIncluded;
-    }
-
-    // Only excluded
-    if (excluded.length && included.length === 0) {
-      return isExcluded;
-    }
-
-    return !isIncluded || isExcluded;
   },
 
   createIncludedList(onlyList = [], exceptList = []) {
