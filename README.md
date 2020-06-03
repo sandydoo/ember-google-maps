@@ -1,9 +1,11 @@
-[![Build Status](https://travis-ci.org/sandydoo/ember-google-maps.svg?branch=master)](https://travis-ci.org/sandydoo/ember-google-maps)
+# Ember Google Maps
 
-📍 Ember Google Maps
-------------------------------------------------------------------------------
+A friendly Ember addon for working with Google Maps.
 
-> A *lightweight*, *declarative*, *composable* API for building ambitious map UIs in your Ember apps.
+[![Version][npm-version-badge]][npm-url]
+[![npm][npm-downloads-badge]][npm-url]
+[![Ember Observer Score][ember-observer-badge]][ember-observer-url]
+[![Build Status][ci-badge]][ci-url]
 
 ##### What this addon *is*:
 
@@ -13,27 +15,25 @@
 ##### What this addon *is not*:
 
 * ❌  A bulky, verbose wrapper that reimplements the entire Google Maps API.
-* ❌  A whitelist or option validator that is tightly coupled to Google's API.
+* ❌  An option validator that is tightly coupled to Google's API.
+
 
 📎 Documentation
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
-#### [View guides and documentation ›](https://ember-google-maps.sandydoo.me/)
+##### [View guide and documentation ↗️](docs-url)
+
 
 🔗 Compatibility
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 * Ember.js v2.18 or above
 * Ember CLI v3.11 or above
 * Node.js v10 or above
 
-👷‍ Maintainers
-------------------------------------------------------------------------------
-
-This addon is maintained by **[Sander Melnikov](https://github.com/sandydoo)**.
 
 ⭐ Features
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 
 | Feature                   |                   |
@@ -46,10 +46,11 @@ This addon is maintained by **[Sander Melnikov](https://github.com/sandydoo)**.
 | Minimal observer usage    | ✅                |
 | Native Ember HTML markers | ✅                |
 
-If you don't need the Google API specifically, check out [ember-leaflet](https://github.com/miguelcobain/ember-leaflet).
+If you don't need the Google API specifically, check out [ember-leaflet ↗️](https://github.com/miguelcobain/ember-leaflet).
+
 
 Examples of what to expect
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 Display a map centered around a set of coordinates 🗺.
 
@@ -82,16 +83,47 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 {{/g-map}}
 ```
 
-#### [Learn more ›](https://ember-google-maps.sandydoo.me/)
+#### [Learn more ↗️](docs-url)
+
+
+👷‍ Maintainers
+--------------------------------------------------------------------------------
+
+This addon is maintained by **[Sander Melnikov](maintainer-url)**.
+
 
 Contributing
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
 
 For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
 
-License
-------------------------------------------------------------------------------
 
-[MIT](https://github.com/sandydoo/ember-google-maps/blob/master/LICENSE.md) © [Sander Melnikov](https://github.com/sandydoo).
+License
+--------------------------------------------------------------------------------
+
+[MIT](license-url) © [Sander Melnikov](maintainer-url).
+
+
+Disclaimer
+--------------------------------------------------------------------------------
+
+This software and its maintainer are in no way affiliated, endorsed, maintained, or supported by Google LLC.
+
+©2020 Google LLC All rights reserved. Google Maps™ is a trademark of Google LLC.
+
+
+[npm-version-badge]: https://img.shields.io/npm/v/ember-google-maps.svg
+[npm-downloads-badge]: https://img.shields.io/npm/dm/ember-google-maps
+[npm-url]: https://www.npmjs.org/package/ember-google-maps
+
+[ci-badge]: https://travis-ci.org/sandydoo/ember-google-maps.svg?branch=master
+[ci-url]: https://travis-ci.org/sandydoo/ember-google-maps
+
+[ember-observer-badge]: https://emberobserver.com/badges/ember-google-maps.svg
+[ember-observer-url]: https://emberobserver.com/addons/ember-google-maps
+
+[docs-url]: https://ember-google-maps.sandydoo.me/
+[maintainer-url]: https://github.com/sandydoo
+[license-url]: https://github.com/sandydoo/ember-google-maps/blob/master/LICENSE.md
