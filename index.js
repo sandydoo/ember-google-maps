@@ -12,27 +12,35 @@ const writeFile = require('broccoli-file-creator');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
+
+const IS_COMPONENT = /components\//;
+
 function intersection(a, b) {
-  const intersection = new Set();
+  let intersection = new Set();
+
   for (let e of b) {
     if (a.has(e)) {
       intersection.add(e);
     }
   }
+
   return intersection;
 }
 
 function difference(a, b) {
-  const difference = new Set(a);
+  let difference = new Set(a);
+
   for (let e of b) {
     difference.delete(e);
   }
+
   return difference;
 }
 
 const dependencies = {
   'circle': ['marker'],
 };
+
 
 module.exports = {
   name: require('./package').name,
@@ -54,41 +62,45 @@ module.exports = {
     const app = this._findHost();
 
     this.isProduction = app.isProduction;
+    this.isDevelopment = !this.isProduction;
 
     const config = app.options['ember-google-maps'] || {};
 
-    if (config.only && config.only.length) {
-      config.only = config.only.map(k => camelCase(k));
+    let { only, except } = config;
+
+    if (only && only.length) {
+      only = only.map(k => camelCase(k));
     }
 
-    if (config.except && config.except.length) {
-      config.except = config.except.map(k => camelCase(k));
+    if (except && except.length) {
+      except = except.map(k => camelCase(k));
     }
 
-    this.whitelist = this.generateWhitelist(config);
-    this.blacklist = this.generateBlacklist(config);
+    let included = this.createIncludedList(only, except),
+        excluded = this.createExcludedList(only, except);
 
     if (this.isProduction) {
-      this.blacklist.push('warnMissingComponent');
+      excluded.push('warnMissingComponent');
     }
 
-    // If a whitelist is used, ensure that we include the base map components.
-    if (this.whitelist.length) {
-      this.whitelist.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
+    // Ensure that we include the base map components.
+    if (included.length) {
+      included.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
 
-      if (!this.isProduction) {
-        this.whitelist.push('warnMissingComponent');
+      if (this.isDevelopment) {
+        included.push('warnMissingComponent');
       }
 
-      this.whitelist.forEach((w) => {
-        const deps = dependencies[w];
+      included.forEach(name => {
+        let deps = dependencies[name];
+
         if (deps) {
-          this.whitelist = this.whitelist.concat(deps);
+          included = included.concat(deps);
         }
       });
     }
 
-    this.noFiltersDefined = (!this.whitelist || this.whitelist.length === 0) && (!this.blacklist || this.blacklist.length === 0);
+    this.treeshakingConfig = { included, excluded };
   },
 
   config(env, config) {
@@ -147,19 +159,24 @@ module.exports = {
       { key: 'route', component: 'g-map/route' }
     ]);
 
+    let { included, excluded } = this.treeshakingConfig;
+
     if (this.isProduction) {
       // Exclude components that we don't want in the production build.
-      addons = addons.filter(({ key }) => !this.excludeName(key, this.whitelist, this.blacklist))
+      addons = addons.filter(({ key }) => !this.excludeName(key, included, excluded));
 
     } else {
       // Replace an excluded component with a debug component in development and
       // testing. This component should throw an assertion to warn the user of
       // misconfigured treeshaking.
-      addons = addons.map((component) => {
+      addons = addons.map(component => {
         let { key } = component;
 
-        if (this.excludeName(key, this.whitelist, this.blacklist)) {
-          return { key, component: '-private-api/warn-missing-component' };
+        if (this.excludeName(key, included, excluded)) {
+          return {
+            key,
+            component: '-private-api/warn-missing-component',
+          };
         }
 
         return component;
@@ -183,63 +200,61 @@ module.exports = {
   },
 
   filterComponents(tree) {
-    const whitelist = this.whitelist;
-    const blacklist = this.blacklist;
+    let { included, excluded } = this.treeshakingConfig;
 
-    if (this.noFiltersDefined) {
+    let skipTreeshaking =
+      (!included || included.length === 0) &&
+      (!excluded || excluded.length === 0);
+
+    if (skipTreeshaking) {
       return tree;
     }
 
     return new Funnel(tree, {
-      exclude: [(name) => this.excludeComponent(name, whitelist, blacklist)]
+      exclude: [(name) => this.excludeComponent(name, included, excluded)]
     });
   },
 
-  excludeComponent(name, whitelist, blacklist) {
-    const regex = /components\//;
-
-    const isComponent = regex.test(name);
-    if (!isComponent) {
+  excludeComponent(name, included, excluded) {
+    if (!IS_COMPONENT.test(name)) {
       return false;
     }
 
-    let baseName = path.basename(name);
-    baseName = baseName.split('.').shift();
+    let baseName = path.basename(name).split('.').shift();
 
-    return this.excludeName(baseName, whitelist, blacklist);
+    return this.excludeName(baseName, included, excluded);
   },
 
-  excludeName(rawName, whitelist, blacklist) {
-    let name = camelCase(rawName);
+  excludeName(rawName, included, excluded) {
+    let name = camelCase(rawName),
+        isIncluded = included.indexOf(name) !== -1,
+        isExcluded = excluded.indexOf(name) !== -1;
 
-    let isWhiteListed = whitelist.indexOf(name) !== -1;
-    let isBlackListed = blacklist.indexOf(name) !== -1;
-
-    if (whitelist.length === 0 && blacklist.length === 0) {
+    if (included.length === 0 && excluded.length === 0) {
       return false;
     }
 
-    // Include if both white- and blacklisted
-    if (isWhiteListed && isBlackListed) {
+    // Include if both included and excluded
+    if (isIncluded && isExcluded) {
       return false;
     }
 
-    // Only whitelisted
-    if (whitelist.length && blacklist.length === 0) {
-      return !isWhiteListed;
+    // Only included
+    if (included.length && excluded.length === 0) {
+      return !isIncluded;
     }
 
-    // Only blacklisted
-    if (blacklist.length && whitelist.length === 0) {
-      return isBlackListed;
+    // Only excluded
+    if (excluded.length && included.length === 0) {
+      return isExcluded;
     }
 
-    return !isWhiteListed || isBlackListed;
+    return !isIncluded || isExcluded;
   },
 
-  generateWhitelist(config) {
-    const only = new Set(config.only || []);
-    const except = new Set(config.except || []);
+  createIncludedList(onlyList = [], exceptList = []) {
+    let only = new Set(onlyList),
+        except = new Set(exceptList);
 
     if (except && except.length) {
       return difference(only, except);
@@ -248,9 +263,9 @@ module.exports = {
     return Array.from(only);
   },
 
-  generateBlacklist(config) {
-    const only = new Set(config.only || []);
-    const except = new Set(config.except || []);
+  createExcludedList(onlyList = [], exceptList = []) {
+    let only = new Set(onlyList),
+        except = new Set(exceptList);
 
     if (only && only.length) {
       return intersection(except, only);
