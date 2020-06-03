@@ -1,7 +1,7 @@
 {
   "name": "ember-google-maps",
   "version": "3.0.3",
-  "description": "A lightweight, declarative, composable API for building ambitious map UIs in your Ember apps.",
+  "description": "A friendly Ember addon for working with Google Maps.",
   "keywords": [
     "ember-addon",
     "emberjs",
