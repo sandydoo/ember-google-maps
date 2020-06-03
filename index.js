@@ -37,7 +37,7 @@ function difference(a, b) {
   return difference;
 }
 
-const dependencies = {
+let dependencies = {
   'circle': ['marker'],
 };
 
@@ -59,22 +59,19 @@ module.exports = {
   included() {
     this._super.included.apply(this, arguments);
 
-    const app = this._findHost();
+    let app = this._findHost(),
+        config = app.options['ember-google-maps'] || {};
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
-    const config = app.options['ember-google-maps'] || {};
+    let {
+      only = [],
+      except = [],
+    } = config;
 
-    let { only, except } = config;
-
-    if (only && only.length) {
-      only = only.map(k => camelCase(k));
-    }
-
-    if (except && except.length) {
-      except = except.map(k => camelCase(k));
-    }
+    only = only.map(k => camelCase(k));
+    except = except.map(k => camelCase(k));
 
     let included = this.createIncludedList(only, except),
         excluded = this.createExcludedList(only, except);
@@ -274,62 +271,64 @@ module.exports = {
     return Array.from(except);
   },
 
-  buildGoogleMapsUrl(config) {
-    config = config || {};
+  buildGoogleMapsUrl(config = {}) {
+    let {
+      baseUrl = '//maps.googleapis.com/maps/api/js',
+      channel,
+      client,
+      key,
+      language,
+      libraries,
+      protocol,
+      region,
+      version,
+    } = config;
 
-    if (!config.key && !config.client) {
+    if (!key && !client) {
       // Since we allow configuring the URL at runtime, we don't throw an error
       // here.
       return '';
     }
 
-    if (config.key && config.client) {
+    if (key && client) {
       this.warn('You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
     }
 
-    if (config.channel && !config.client) {
+    if (channel && !client) {
       this.warn('The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
     }
 
-    let src = config.baseUrl || '//maps.googleapis.com/maps/api/js';
-    const params = [];
+    let src = baseUrl,
+        params = [];
 
-    const version = config.version;
     if (version) {
       params.push('v=' + encodeURIComponent(version));
     }
 
-    const client = config.client;
     if (client) {
       params.push('client=' + encodeURIComponent(client));
     }
 
-    const channel = config.channel;
     if (channel) {
       params.push('channel=' + encodeURIComponent(channel));
     }
 
-    const libraries = config.libraries;
     if (libraries && libraries.length) {
       params.push('libraries=' + encodeURIComponent(libraries.join(',')));
     }
 
-    const region = config.region;
     if (region) {
       params.push('region=' + encodeURIComponent(region));
     }
 
-    const language = config.language;
     if (language) {
       params.push('language=' + encodeURIComponent(language));
     }
 
-    const key = config.key;
     if (key) {
       params.push('key=' + encodeURIComponent(key));
     }
 
-    const protocol = config.protocol;
     if (protocol) {
       src = protocol + ':' + src;
     }
