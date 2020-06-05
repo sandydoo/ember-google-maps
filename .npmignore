@@ -27,7 +27,6 @@
 /tests/
 /yarn.lock
 .gitkeep
-/lib/in-repo-pin-addon/
 
 # ember-try
 /.node_modules.ember-try/
