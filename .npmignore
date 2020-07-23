@@ -22,7 +22,6 @@
 /CONTRIBUTING.md
 /ember-cli-build.js
 /testem.js
-/addon-test-support/
 /build-tests/
 /tests/
 /yarn.lock
