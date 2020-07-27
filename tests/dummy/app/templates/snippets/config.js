@@ -7,5 +7,6 @@ ENV['ember-google-maps'] = {
   libraries: ['geometry', 'places'], // Optional libraries
   // client: undefined,
   // channel: undefined,
-  // baseUrl: '//maps.googleapis.com/maps/api/js'
+  // baseUrl: '//maps.googleapis.com/maps/api/js',
+  // mapIds: ['1234', '2345'],
 }
