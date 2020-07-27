@@ -285,6 +285,7 @@ module.exports = {
       protocol,
       region,
       version,
+      mapId,
     } = config;
 
     if (!key && !client) {
@@ -330,6 +331,10 @@ module.exports = {
 
     if (key) {
       params.push('key=' + encodeURIComponent(key));
+    }
+
+    if (mapId) {
+      params.push('map_ids=' + encodeURIComponent(mapId));
     }
 
     if (protocol) {
