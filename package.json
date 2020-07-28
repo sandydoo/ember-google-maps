@@ -114,5 +114,9 @@
     "paths": [
       "lib/in-repo-pin-addon"
     ]
+  },
+  "volta": {
+    "node": "10.22.0",
+    "yarn": "1.22.4"
   }
 }
