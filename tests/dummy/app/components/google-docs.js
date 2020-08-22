@@ -25,7 +25,7 @@ const GoogleDocs = Component.extend({
     return capitalize(this.type);
   }),
 
-  href: computed(function() {
+  href: computed('baseUrl', 'section', function() {
     return get(this, 'baseUrl') + get(this, 'section');
   })
 });

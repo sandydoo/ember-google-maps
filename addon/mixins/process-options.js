@@ -51,7 +51,7 @@ export default Mixin.create({
    * @public
    * @return {Object}
    */
-  options: computed('attrs', 'events', function() {
+  options: computed('attrs', 'events', '_ignoredAttrs', '_eventAttrs', function() {
     let { _ignoredAttrs, _eventAttrs } = getProperties(this, '_ignoredAttrs', '_eventAttrs');
     let ignoredAttrs = [..._ignoredAttrs, ..._eventAttrs];
 
@@ -62,7 +62,7 @@ export default Mixin.create({
     return getProperties(this, attrs);
   }),
 
-  _options: computed('map', 'options', function() {
+  _options: computed('map', 'options', '_requiredOptions', function() {
     let options = get(this, 'options');
     let _requiredOptions = get(this, '_requiredOptions');
     let required = getProperties(this, _requiredOptions);

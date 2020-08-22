@@ -4,7 +4,7 @@ import { computed, get, getProperties, set } from '@ember/object';
 import { throttle } from '@ember/runloop';
 
 export default DocsController.extend(CommonMapData, {
-  boundedLondonLocations: computed('mapBounds', function() {
+  boundedLondonLocations: computed('londonLocations', 'mapBounds', function() {
     let londonLocations = get(this, 'londonLocations');
     return londonLocations.filter((location) => {
       let mapBounds = get(this, 'mapBounds');

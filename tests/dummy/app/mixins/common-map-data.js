@@ -25,7 +25,7 @@ export default Mixin.create({
 
   googleLoaded: reads('googleMapsApi.google.isFulfilled'),
 
-  londonLocations: computed('googleLoaded', function() {
+  londonLocations: computed('googleLoaded', 'london', function() {
     if (!get(this, 'googleLoaded')) { return []; }
     const { lat, lng } = get(this, 'london');
     const origin = new google.maps.LatLng(lat, lng);

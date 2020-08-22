@@ -9,7 +9,7 @@ export default ApplicationController.extend(CommonMapData, {
 
   routeName: reads('router.currentRouteName'),
 
-  currentPage: computed('routeName', function() {
+  currentPage: computed('links', 'routeName', function() {
     return get(this, 'links').find((l) => l.path === get(this, 'routeName'));
   }),
 
@@ -19,8 +19,8 @@ export default ApplicationController.extend(CommonMapData, {
     return links[++index];
   }),
 
-  links: computed(function() {
-    return [
+  links:
+    [
       { title: 'About', path: 'docs.about', text: '' },
       { title: 'Getting started', path: 'docs.getting-started' },
       { title: 'Map', path: 'docs.map', text: "That's it. You're now ready to create a map." },
@@ -36,6 +36,5 @@ export default ApplicationController.extend(CommonMapData, {
       { title: 'Custom overlays', path: 'docs.overlays', text: "It's finally time to learn how to create custom HTML markers!" },
       { title: 'Complex UI', path: 'docs.complex-ui', text: "Let's see what we can build with these components." },
       { title: 'Advanced', path: 'docs.advanced', text: "Learn about some of the more advanced options of this addon." },
-    ];
-  }).readOnly()
+    ]
 });
