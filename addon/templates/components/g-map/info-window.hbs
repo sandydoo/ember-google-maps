@@ -1,9 +1,9 @@
-{{#if _targetPane}}
-  {{#-in-element _targetPane}}
+{{#if this._targetPane}}
+  {{#in-element this._targetPane}}
     {{#if hasBlock}}
       {{yield publicAPI}}
     {{else}}
       {{content}}
     {{/if}}
-  {{/-in-element}}
+  {{/in-element}}
 {{/if}}

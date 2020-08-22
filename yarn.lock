@@ -5047,6 +5047,16 @@ ember-google-maps@sandydoo/ember-google-maps:
     handlebars "^4.0.11"
     strip-indent "^3.0.0"
 
+ember-in-element-polyfill@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ember-in-element-polyfill/-/ember-in-element-polyfill-1.0.0.tgz#10365af6fe31bc59e71ec463ed209d4ba4caecda"
+  integrity sha512-0eSfWWgkOMvj7lcjo20VX8uX4HYxSOxm6MY3bAzqW5RpnHcpcrRf6o4y80xLGh5pp9z8FobiUfFwubphACP8mQ==
+  dependencies:
+    debug "^4.1.1"
+    ember-cli-babel "^7.19.0"
+    ember-cli-htmlbars "^4.3.1"
+    ember-cli-version-checker "^5.0.2"
+
 ember-load-initializers@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ember-load-initializers/-/ember-load-initializers-2.1.1.tgz#d1a8bead00bc44222b0ab181840869992beb30f5"
