@@ -150,10 +150,14 @@ export default MapComponent.extend({
   }),
 
   _registerWaypoint(waypoint) {
-    get(this, 'waypoints').pushObject(waypoint);
+    schedule('actions', () => {
+      get(this, 'waypoints').pushObject(waypoint);
+    });
   },
 
   _unregisterWaypoint(waypoint) {
-    get(this, 'waypoints').removeObject(waypoint);
+    schedule('actions', () => {
+      get(this, 'waypoints').removeObject(waypoint);
+    });
   }
 });
