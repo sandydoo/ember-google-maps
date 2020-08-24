@@ -4800,16 +4800,6 @@ ember-cli-htmlbars-inline-precompile@^2.1.0:
     heimdalljs-logger "^0.1.9"
     silent-error "^1.1.0"
 
-ember-cli-htmlbars@^2.0.1:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-2.0.5.tgz#b5a105429a6bce4f7c9c97b667e3b8926e31397f"
-  integrity sha512-3f3PAxdnQ/fhQa8XP/3z4RLRgLHxV8j4Ln75aHbRdemOCjBa048KxL9l+acRLhCulbGQCMnLiIUIC89PAzLrcA==
-  dependencies:
-    broccoli-persistent-filter "^1.4.3"
-    hash-for-dep "^1.2.3"
-    json-stable-stringify "^1.0.0"
-    strip-bom "^3.0.0"
-
 ember-cli-htmlbars@^3.0.0, ember-cli-htmlbars@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-3.1.0.tgz#87806c2a0bca2ab52d4fb8af8e2215c1ca718a99"
@@ -5153,17 +5143,18 @@ ember-export-application-global@^2.0.1:
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-2.0.1.tgz#b120a70e322ab208defc9e2daebe8d0dfc2dcd46"
   integrity sha512-B7wiurPgsxsSGzJuPFkpBWnaeuCu2PGpG2BjyrfA1VcL7//o+5RSnZqiCEY326y7qmxb2GoCgo0ft03KBU0rRw==
 
-ember-google-maps-sample-addon@sandydoo/ember-google-maps-sample-addon#912b087510cecd02324c804d100da86486b12b80:
-  version "0.0.0"
-  resolved "https://codeload.github.com/sandydoo/ember-google-maps-sample-addon/tar.gz/912b087510cecd02324c804d100da86486b12b80"
+ember-google-maps-sample-addon@sandydoo/ember-google-maps-sample-addon#^1.0.0:
+  version "1.1.0"
+  resolved "https://codeload.github.com/sandydoo/ember-google-maps-sample-addon/tar.gz/dc72a1bf89e2f841fb6846b73903a0af85d3bfc2"
   dependencies:
-    ember-cli-babel "^6.6.0"
-    ember-cli-htmlbars "^2.0.1"
-    ember-google-maps sandydoo/ember-google-maps
+    ember-cli-babel "^7.21.0"
+    ember-cli-htmlbars "^5.2.0"
+    ember-google-maps "^3.1.0"
 
-ember-google-maps@sandydoo/ember-google-maps:
-  version "3.1.0"
-  resolved "https://codeload.github.com/sandydoo/ember-google-maps/tar.gz/6c62471e671c041ff2aa937a9939762ecd0fa919"
+ember-google-maps@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ember-google-maps/-/ember-google-maps-3.2.0.tgz#598a1b0e4536eb1c1274b432ae3a07c794bc21e4"
+  integrity sha512-pqZOenVMKhJvG8smEhWtzdvMUfr2rEF9NvNKdresiFe14zkE/Gegp8ik5vm9pep9UG/zwmzVGh9/5y769EJyCQ==
   dependencies:
     "@babel/plugin-proposal-object-rest-spread" "^7.9.6"
     broccoli-debug "^0.6.5"
@@ -5173,9 +5164,10 @@ ember-google-maps@sandydoo/ember-google-maps:
     camelcase "^5.0.0"
     chalk "^2.3.1"
     ember-angle-bracket-invocation-polyfill "^2.0.2"
-    ember-cli-babel "^7.19.0"
-    ember-cli-htmlbars "^4.3.1"
+    ember-cli-babel "^7.21.0"
+    ember-cli-htmlbars "^5.2.0"
     ember-concurrency "^1.1.0"
+    ember-in-element-polyfill "^1.0.0"
     handlebars "^4.0.11"
     strip-indent "^3.0.0"
 
