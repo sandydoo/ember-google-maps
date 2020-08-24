@@ -1,6 +1,6 @@
 # Ember Google Maps
 
-A friendly Ember addon for working with Google Maps.
+A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-url].
 
 [![Version][npm-version-badge]][npm-url]
 [![npm][npm-downloads-badge]][npm-url]
@@ -123,6 +123,9 @@ This software and its maintainer are in no way affiliated, endorsed, maintained,
 
 [ember-observer-badge]: https://emberobserver.com/badges/ember-google-maps.svg
 [ember-observer-url]: https://emberobserver.com/addons/ember-google-maps
+
+[ember-url]: https://emberjs.com
+[google-maps-url]: https://developers.google.com/maps/documentation/javascript/overview
 
 [docs-url]: https://ember-google-maps.sandydoo.me/
 [maintainer-url]: https://github.com/sandydoo
