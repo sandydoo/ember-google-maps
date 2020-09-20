@@ -21,23 +21,25 @@ module('Unit | Service | google-maps-api', function(hooks) {
     let multipleAPIsRegex = /Google Maps JavaScript API multiple times on this page/;
     let error = console.error;
 
-    console.error = function(...args) {
-      let msg = args[0];
-      if (multipleAPIsRegex.test(msg)) {
-        assert.ok(false, 'The API loader should not load the API multiple times.');
-      }
+    try {
+      console.error = function(msg) {
+        if (multipleAPIsRegex.test(msg)) {
+          assert.ok(false, 'The API loader should not load the API multiple times.');
+        }
 
-      if (error) {
-        error.apply(console, args);
-      }
-    };
+        if (error) {
+          error.apply(console, arguments);
+        }
+      };
 
-    await this.service._getApi();
-    assert.ok(google.maps);
+      await this.service._getApi();
+      assert.ok(google.maps);
 
-    // Should skip loading the API again.
-    await this.service._getApi();
-
-    console.error = error;
+      // Should skip loading the API again.
+      await this.service._getApi();
+    }
+    finally {
+      console.error = error;
+    }
   });
 });
