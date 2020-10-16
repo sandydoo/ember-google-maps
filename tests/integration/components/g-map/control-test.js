@@ -64,9 +64,7 @@ module('Integration | Component | g map/control', function(hooks) {
     assert.ok(control2, 'control rendered');
 
     let parent1 = control1.parentElement;
-    let parent2 = parent1.previousSibling;
-
-    assert.equal(parent2, control2.parentElement, 'fetched correct parent element');
+    let parent2 = control2.parentElement;
 
     // Test that the control labeled 'first-control' is rendered to the left of the other control.
     // These are positioned absolutely, so we compare their left offsets.
