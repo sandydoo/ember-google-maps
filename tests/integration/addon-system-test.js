@@ -10,16 +10,17 @@ module('Integration | Addon System', function(hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it registers the `sampleAddon` component from `ember-google-maps-sample-addon`', async function(assert) {
+  test('it registers a pin (marker) component from an addon with the keyword “ember-google-maps-addon”', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
-        {{g.sampleAddon}}
+        {{g.pin lat=lat lng=lng}}
       {{/g-map}}
     `);
 
-    let { components } = this.gMapAPI;
+    let { map, components: { markers } } = this.gMapAPI;
+    let marker = markers[0].mapComponent;
 
-    assert.equal(components.sampleAddons.length, 1);
-    assert.equal(components.markers.length, 1);
+    assert.equal(markers.length, 1);
+    assert.equal(marker.map, map);
   });
 });
