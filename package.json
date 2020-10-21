@@ -16,7 +16,7 @@
     "url": "git://github.com/sandydoo/ember-google-maps"
   },
   "license": "MIT",
-  "author": "Sander Melnikov <sander@sandydoo.me>",
+  "author": "Sander Melnikov <hey@sandydoo.me>",
   "directories": {
     "doc": "doc",
     "test": "tests"
