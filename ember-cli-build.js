@@ -7,6 +7,12 @@ module.exports = function(defaults) {
   let options = {
     snippetPaths: ['tests/dummy/app/templates/snippets'],
 
+    babel: {
+      plugins: [
+        '@babel/plugin-proposal-optional-chaining'
+      ]
+    },
+
     'ember-cli-babel': {
       includePolyfill: true
     },
