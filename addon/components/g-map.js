@@ -8,7 +8,6 @@ import { computed, get, set, setProperties } from '@ember/object';
 import { not, reads, readOnly } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
-import { tryInvoke } from '@ember/utils';
 import { all, defer } from 'rsvp';
 import { bind, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
@@ -197,7 +196,7 @@ export default Component.extend({
       this._waitForComponents()
         .then(() => {
           this._componentsInitialized = true;
-          tryInvoke(this, 'onComponentsLoad', [this.publicAPI]);
+          this.onComponentsLoad?.(this.publicAPI);
         });
     }
 
@@ -214,7 +213,7 @@ export default Component.extend({
       addEventListeners(map, this._createEvents(get(this, '_events')), payload)
         .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
-      tryInvoke(this, 'onLoad', [this.publicAPI]);
+      this.onLoad?.(this.publicAPI);
 
       safeScheduleOnce('afterRender', this, waitForComponents, skipErrorReporting);
     }

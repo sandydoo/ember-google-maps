@@ -1,6 +1,5 @@
 import EmberRouter from '@ember/routing/router';
 import config from 'dummy/config/environment';
-import { tryInvoke } from '@ember/utils';
 
 
 export default class Router extends EmberRouter {
@@ -11,7 +10,7 @@ export default class Router extends EmberRouter {
     super(...arguments);
 
     this.on('routeDidChange', function() {
-      tryInvoke(window, 'scrollTo', [0, 0]);
+      window.scrollTo?.(0, 0);
     });
   }
 }

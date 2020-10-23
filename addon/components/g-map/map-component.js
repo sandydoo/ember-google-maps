@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { get } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
-import { tryInvoke } from '@ember/utils';
 import { defer, resolve, reject } from 'rsvp';
 import { assert } from '@ember/debug';
 
@@ -113,7 +112,7 @@ const MapComponent = Component.extend({
 
     this._eventListeners.forEach((remove) => remove());
 
-    tryInvoke(this.mapComponent, 'setMap', [null]);
+    this.mapComponent?.setMap?.(null);
 
     this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
   },

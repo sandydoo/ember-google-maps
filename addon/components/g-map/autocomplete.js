@@ -2,7 +2,6 @@ import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/autocomplete';
 import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
 import { get, set } from '@ember/object';
-import { tryInvoke } from '@ember/utils';
 import { assert } from '@ember/debug';
 import { resolve } from 'rsvp';
 
@@ -67,7 +66,7 @@ export default MapComponent.extend({
     this.place = this.mapComponent.getPlace();
 
     if (this.place.geometry) {
-      tryInvoke(this, 'onSearch', [this.publicAPI]);
+      this.onSearch?.(this.publicAPI);
     }
   }
 });

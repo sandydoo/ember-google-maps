@@ -5,7 +5,6 @@ import { inject as service } from '@ember/service';
 import { get, getProperties, setProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { A } from '@ember/array';
-import { tryInvoke } from '@ember/utils';
 import { Promise } from 'rsvp';
 import { schedule, scheduleOnce } from '@ember/runloop';
 import { didCancel, task } from 'ember-concurrency';
@@ -126,7 +125,9 @@ export default MapComponent.extend({
       mapComponent: directions
     });
 
-    schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
+    if (this.onDirectionsChanged) {
+      schedule('afterRender', () => this.onDirectionsChanged?.(this.publicAPI));
+    }
 
     return directions;
   }).restartable(),
