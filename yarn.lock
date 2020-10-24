@@ -4852,7 +4852,7 @@ ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.1, e
     ember-cli-version-checker "^2.1.2"
     semver "^5.5.0"
 
-ember-cli-babel@^7.0.0, ember-cli-babel@^7.11.1, ember-cli-babel@^7.7.3:
+ember-cli-babel@^7.0.0, ember-cli-babel@^7.11.1, ember-cli-babel@^7.23.0, ember-cli-babel@^7.7.3:
   version "7.23.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.23.0.tgz#ec580aa2c115d0810e454dd5c2fffce238284b92"
   integrity sha512-ix58DlRDAbGITtdJoRUPcAoQwKLYr/x/kIXjU9u1ATyhmuUjqb+0FDXghOWbkNihGiNOqBBR49+LBgK9AeBcNw==
@@ -4937,10 +4937,10 @@ ember-cli-deploy-build@^2.0.0:
     glob "^7.1.1"
     rsvp "^3.5.0"
 
-ember-cli-deploy-display-revisions@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-cli-deploy-display-revisions/-/ember-cli-deploy-display-revisions-2.1.0.tgz#506b53d33291149820da81278a4d567acb5956f7"
-  integrity sha512-BrmTNYHjvdbpqe5nmJA3ZbONRiRmh3i27KBQuC35riUJ7NxGiIeIFMr53x3cOjlLfLJ4EOfzGmSCP98X3q5tOw==
+ember-cli-deploy-display-revisions@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/ember-cli-deploy-display-revisions/-/ember-cli-deploy-display-revisions-2.1.1.tgz#32ea7aac7ab775e158b847da9be762160dc58044"
+  integrity sha512-tIzI9ovg+qo9xkb23Mu1TqkfCjdvLhb9a3/99ITOJEMl8ETz1yMwVcIiKl2/UpBRA5wDJkeefxxkZ8Tz7yr44g==
   dependencies:
     cli-table3 "^0.6.0"
     core-object "^3.1.5"
@@ -5069,7 +5069,7 @@ ember-cli-fastboot@^2.0.0:
     md5-hex "^2.0.0"
     silent-error "^1.1.0"
 
-ember-cli-flash@^1.9.0:
+ember-cli-flash@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ember-cli-flash/-/ember-cli-flash-1.9.1.tgz#fda9f7b92fdb4bb85688e4df554beb514c1749e7"
   integrity sha512-9AN0BD27owvnNpFBELy5zSNIbJBUP8xW6mFV98L0qHnfJk2gG7bXbXOzt6VtRqWC+Pm5rCRqUoCz+NiwsPvObw==
@@ -5898,10 +5898,10 @@ eslint-plugin-node@^11.1.0:
     resolve "^1.10.1"
     semver "^6.1.0"
 
-eslint-plugin-qunit@^4.0.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-qunit/-/eslint-plugin-qunit-4.3.0.tgz#a7465cd3947bfb9abdf7d7da93e77d2c7c68bee8"
-  integrity sha512-xyQtwoDHWDuIqH5cp8SV0N++gFGwxfMKwRyumsBnJ3INM6Mz/qWUhrCTastOvvAc98aoieu2X5Ht4LgaZ3a75Q==
+eslint-plugin-qunit@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-qunit/-/eslint-plugin-qunit-5.0.0.tgz#2f33707b97f7b0a338c16378794e325550a1431b"
+  integrity sha512-F1AuwxsJ4YgSQztd3OZCNtM3DXpiDF9bpXbVCBcBU+8l5WOAAxfJHNYqP3tOhEEbIJPRkcTgk0SAJPYtdVjBmQ==
 
 eslint-scope@^4.0.0:
   version "4.0.3"
