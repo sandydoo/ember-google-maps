@@ -84,7 +84,7 @@ If you need to manually parse component attributes, use the functions provided i
     this._watchedListeners = new Map();
 
     if (!this._eventAttrs) {
-      this._eventAttrs = [];
+      set(this, '_eventAttrs', []);
     }
 
     this._isInitialized = false;
