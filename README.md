@@ -118,8 +118,8 @@ This software and its maintainer are in no way affiliated, endorsed, maintained,
 [npm-downloads-badge]: https://img.shields.io/npm/dm/ember-google-maps
 [npm-url]: https://www.npmjs.org/package/ember-google-maps
 
-[ci-badge]: https://travis-ci.org/sandydoo/ember-google-maps.svg?branch=main
-[ci-url]: https://travis-ci.org/sandydoo/ember-google-maps
+[ci-badge]: https://github.com/sandydoo/ember-google-maps/workflows/CI/badge.svg
+[ci-url]: https://github.com/sandydoo/ember-google-maps/actions?query=workflow%3ACI
 
 [ember-observer-badge]: https://emberobserver.com/badges/ember-google-maps.svg
 [ember-observer-url]: https://emberobserver.com/addons/ember-google-maps
