@@ -10,6 +10,10 @@ on:
   schedule:
     - cron: '0 3 * * 1' # Mondays at 3am
 
+env:
+  CI: true
+  GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+
 jobs:
   test:
     name: Tests
