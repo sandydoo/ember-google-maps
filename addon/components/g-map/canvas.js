@@ -15,12 +15,6 @@ import { scheduleOnce } from '@ember/runloop';
 export default Component.extend({
   tagName: '',
 
-  _hasCustomCanvas: bool('_customCanvas'),
-
-  _shouldRenderDefaultCanvas: computed('_isInitialRender', '_hasCustomCanvas', function() {
-    return get(this, '_isInitialRender') || !get(this, '_hasCustomCanvas');
-  }),
-
   // TODO: Remove in Octane version. Use `...attributes` instead.
   computedClasses: computed('class', 'classNames', function() {
     let classes = [
@@ -33,8 +27,6 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-
-    if (this._customCanvas) { return; }
 
     function registerCanvas() {
       let id = get(this, 'id');

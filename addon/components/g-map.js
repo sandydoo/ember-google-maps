@@ -105,17 +105,6 @@ export default Component.extend({
     return `ember-google-map-${guidFor(this)}`;
   }),
 
-
-  /**
-   * We detect whether there is a custom canvas on initial render.
-   */
-  _isInitialRender: true,
-
-  _customCanvas: null,
-
-  _needsCanvas: not('_customCanvas'),
-
-
   _optionsAndEvents: parseOptionsAndEvents(),
 
   _options: readOnly('_optionsAndEvents.options'),
@@ -262,18 +251,6 @@ export default Component.extend({
     set(this, 'canvas', canvas);
 
     this._canvasIsRendering.resolve(canvas);
-  },
-
-  _endInitialRender() {
-    if (get(this, 'fastboot.isFastBoot')) { return; }
-
-    safeScheduleOnce('afterRender', this, () => {
-      if (this.canvas) {
-        set(this, '_customCanvas', this.canvas);
-      }
-
-      set(this, '_isInitialRender', false);
-    }, skipErrorReporting);
   },
 
   /**
