@@ -36,7 +36,7 @@ module('Integration | Component | g map/canvas', function(hooks) {
     assert.ok(find('.custom-class'), 'custom canvas rendered');
   });
 
-  test('it renders a custom canvas div with splatted classes', async function(assert) {
+  test('octane: it renders a custom canvas div with splatted classes', async function(assert) {
     await render(hbs`
       {{#g-map lat=lat lng=lng as |g|}}
         <g.canvas class="custom-class" />
