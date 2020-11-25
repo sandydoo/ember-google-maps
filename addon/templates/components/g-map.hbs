@@ -17,7 +17,7 @@
     {{g-map/compute (action this._updateGMap) gMap addons}}
 
     {{#unless hasBlockParams}}
-      {{gMap.canvas}}
+      <gMap.canvas ...attributes />
     {{/unless}}
 
     {{yield this.gMap}}
