@@ -5,7 +5,7 @@ import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
 import { getOwner }  from '@ember/application';
 import { computed, get, set, setProperties } from '@ember/object';
-import { not, reads, readOnly } from '@ember/object/computed';
+import { reads, readOnly } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
 import { all, defer } from 'rsvp';

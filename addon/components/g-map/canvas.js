@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { computed, get } from '@ember/object';
-import { bool } from '@ember/object/computed';
 import { scheduleOnce } from '@ember/runloop';
 
 
