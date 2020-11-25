@@ -119,11 +119,20 @@ module('Integration | Component | g map', function(hooks) {
   /**
    * Octane support tests
    */
-  test('it passes attributes to the default canvas', async function(assert) {
+  test('octane: it passes attributes to the default canvas', async function(assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
     `);
 
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
+  });
+
+  test('octane: it renders a default canvas in block form', async function(assert) {
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" as |g|>
+      </GMap>
+    `);
+
+    assert.ok(find('.ember-google-map'), 'default canvas rendered');
   });
 });
