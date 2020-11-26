@@ -125,6 +125,7 @@ module('Integration | Component | g map', function(hooks) {
     `);
 
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
+    assert.ok(find('.ember-google-map'), 'default class appended to attributes');
   });
 
   test('octane: it renders a default canvas in block form', async function(assert) {
