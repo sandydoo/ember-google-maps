@@ -192,25 +192,22 @@ module.exports = {
     return tree;
   },
 
-  setupPreprocessorRegistry(type, registry) {
-    let pluginObject = this._buildPlugin();
+  setupPreprocessorRegistry(_type, registry) {
+    let plugin = this._canvasBuildPlugin();
 
-    pluginObject.parallelBabel = {
-      requireFile: __filename,
-      buildUsing: '_buildPlugin',
-      params: {},
-    };
-
-    registry.add('htmlbars-ast-plugin', pluginObject);
+    registry.add('htmlbars-ast-plugin', plugin);
   },
 
-  _buildPlugin() {
+  _canvasBuildPlugin() {
     return {
       name: 'ember-google-maps:canvas-enforcer',
       plugin: require('./lib/canvas-enforcer'),
-      baseDir() {
-        return __dirname;
-      },
+      baseDir() { return __dirname; },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_canvasBuildPlugin',
+        params: {},
+      }
     };
   },
 
