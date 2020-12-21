@@ -201,7 +201,7 @@ module.exports = {
   _canvasBuildPlugin() {
     return {
       name: 'ember-google-maps:canvas-enforcer',
-      plugin: require('./lib/canvas-enforcer'),
+      plugin: require('./lib/broccoli/canvas-enforcer'),
       baseDir() { return __dirname; },
       parallelBabel: {
         requireFile: __filename,
