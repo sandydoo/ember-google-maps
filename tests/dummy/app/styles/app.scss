@@ -126,13 +126,14 @@ tt {
 }
 
 footer {
-  font-size: $font-size-sm;
+  font-size: 0.8rem;
   line-height: 1.2;
-  padding: 5em 0 1.5em 0;
+  padding: 12em 0 1.5em 0;
 }
 
 .shields {
   margin-top: 0.6em;
+  filter: grayscale(0.4);
 }
 
 .shield-inline {
