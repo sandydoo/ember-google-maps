@@ -1,9 +1,9 @@
 <GMap
   @lat={{this.london.lat}}
   @lng={{this.london.lng}}
-  @zoom={{12}} as |g|>
+  @zoom={{12}} as |map|>
 
-  <g.directions
+  <map.directions
     @origin="Covent Garden"
     @destination="Clerkenwell"
     @travelMode="WALKING" as |d|>
@@ -11,5 +11,5 @@
     {{!-- Check out the DirectionsResult object --}}
     {{log d.directions}}
 
-  </g.directions>
+  </map.directions>
 </GMap>

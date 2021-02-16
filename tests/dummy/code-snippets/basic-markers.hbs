@@ -1,10 +1,10 @@
 <GMap
   @lat="51.507568"
   @lng="-0.127762"
-  @zoom={{9}} as |g|>
+  @zoom={{9}} as |map|>
 
   {{#each this.londonLocations as |location|}}
-    <g.marker
+    <map.marker
       @lat={{location.lat}}
       @lng={{location.lng}}
       @draggable={{true}}

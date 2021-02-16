@@ -1,40 +1,40 @@
 <GMap
   @lat={{this.london.lat}}
   @lng={{this.london.lng}}
-  @zoom={{12}} as |g|>
+  @zoom={{12}} as |map|>
 
   {{!-- Fetch the directions --}}
-  <g.directions
+  <map.directions
     @origin="Covent Garden"
     @destination="Clerkenwell"
-    @travelMode="WALKING" as |d|>
+    @travelMode="WALKING" as |directions|>
 
     {{!-- Display the route returned by the directions query --}}
-    <d.route
+    <directions.route
       @draggable={{true}}
       @polylineOptions={{hash
         strokeColor="green"
         strokeWeight=8
-        strokeOpacity=0.7}} as |r|>
+        strokeOpacity=0.7}} as |route|>
 
       {{!-- Add a waypoint to make sure we grab our coffee --}}
       <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
 
       {{!-- Use a custom helper to process the directions --}}
-      {{#each (get-route-steps r.directions) as |s|}}
+      {{#each (get-route-steps route.directions) as |step|}}
         {{!-- Display a marker for each step of the route --}}
-        <g.marker
-          @position={{s.start_location}}
-          @onClick={{action (toggle "showInstructions" s)}} as |m|>
+        <map.marker
+          @position={{step.start_location}}
+          @onClick={{action (toggle "showInstructions" step)}} as |marker|>
 
           {{!-- Add an infoWindow with directions for good measure --}}
-          <m.infoWindow
-            @content={{s.instructions}}
-            @isOpen={{s.showInstructions}} />
+          <marker.infoWindow
+            @content={{step.instructions}}
+            @isOpen={{step.showInstructions}} />
 
-        </g.marker>
+        </map.marker>
       {{/each}}
 
-    </d.route>
-  </g.directions>
+    </directions.route>
+  </map.directions>
 </GMap>

@@ -2,9 +2,9 @@
   @lat="51.507568"
   @lng="-0.127762"
   @zoom={{10}}
-  @styles={{this.myMapStyle}} as |g|>
+  @styles={{this.myMapStyle}} as |map|>
 
-  <g.polyline
+  <map.polyline
     @path={{this.arrayOfCoordinates}}
     @geodesic={{true}}
     @strokeColor="orange"

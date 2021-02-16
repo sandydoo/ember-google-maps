@@ -8,17 +8,17 @@
   @disableDefaultUI={{true}}
   @zoomControl={{true}}
   @zoomControlOptions={{hash
-    position=google.maps.ControlPosition.TOP_LEFT}}
+    position=this.google.maps.ControlPosition.TOP_LEFT}}
   @fullscreenControl={{true}}
   @onLoad={{action "saveBounds"}}
   @onBoundsChanged={{action "saveBounds"}}
-  class="ember-google-map-cover" as |g|>
+  class="ember-google-map-cover" as |map|>
 
   {{#each this.boundedLondonLocations as |location|}}
-    <g.overlay
+    <map.overlay
       @lat={{location.lat}}
       @lng={{location.lng}}
-      @onClick={{action "scrollToListing" l}}
+      @onClick={{action "scrollToListing" location}}
       @onMouseover={{action (mut location.active) true}}
       @onMouseleave={{action (mut location.active) false}}>
 
@@ -26,7 +26,7 @@
         £{{location.price}}
       </div>
 
-    </g.overlay>
+    </map.overlay>
   {{/each}}
 
 </GMap>

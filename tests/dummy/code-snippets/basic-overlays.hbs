@@ -2,10 +2,10 @@
   @lat="51.507568"
   @lng="-0.127762"
   @zoom={{9}}
-  @styles={{this.myMapStyle}} as |g|>
+  @styles={{this.myMapStyle}} as |map|>
 
   {{#each this.londonLocations as |location|}}
-    <g.overlay
+    <map.overlay
       @lat={{location.lat}}
       @lng={{location.lng}}
       @onMouseover={{action (mut location.active) true}}
@@ -15,7 +15,7 @@
         £{{location.price}}
       </div>
 
-    </g.overlay>
+    </map.overlay>
   {{/each}}
 
 </GMap>
