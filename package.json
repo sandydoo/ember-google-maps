@@ -103,7 +103,7 @@
     "prismjs": "^1.19.0",
     "qunit-dom": "^1.5.0",
     "sass": "^1.23.7",
-    "tracked-built-ins": "^1.0.2"
+    "tracked-maps-and-sets": "^2.2.1"
   },
   "engines": {
     "node": "10.* || >= 12"
