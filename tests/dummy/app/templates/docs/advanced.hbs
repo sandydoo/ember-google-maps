@@ -6,11 +6,11 @@
 
     <p>To change the URL, overwrite the <tt>buildGoogleMapsURL</tt> function in the google-maps-api service. It receives all of the ember-google-maps configuration options.</p>
 
-    {{code-snippet name="build-google-maps-url.js"}}
+    <CodeSnippet @name="build-google-maps-url.js" />
 
     <p>The URL can also depend on external, asynchronously loaded data. Using the localisation example, you could fetch the language preferences of the current user from an external database. While we wait for the database to respond, we can return the request promise and make sure it resolves with the correct URL for the API.</p>
 
-    {{code-snippet name="build-google-maps-url-async.js"}}
+    <CodeSnippet @name="build-google-maps-url-async.js" />
   </section>
   <section>
     <h5>Treeshaking</h5>
@@ -19,11 +19,11 @@
 
     <p>In your <tt>ember-cli-build.js</tt>, you can specify which components to include or exclude from the build using <tt>only</tt> and <tt>except</tt>.</p>
 
-    {{#doc-danger}}
+    <DocDanger>
       This is an advanced feature and may break your app. Manually excluding components from your build can be quite finicky and time-consuming. Use at your own peril.
-    {{/doc-danger}}
+    </DocDanger>
 
-    {{code-snippet name="ember-cli-build.js"}}
+    <CodeSnippet @name="ember-cli-build.js" />
   </section>
   <section>
     <h5>Performance issues</h5>

@@ -8,7 +8,7 @@ export default Controller.extend({
 
   actions: {
     recenterMap(map) {
-      const { lat, lng } = this.london;
+      let { lat, lng } = this.london;
       map.setZoom(12);
       map.panTo({ lat, lng });
     }

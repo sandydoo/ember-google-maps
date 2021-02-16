@@ -7,11 +7,11 @@
 
       <p>As an example, to register an action for the <tt>bounds_changed</tt> event, you would pass an action to the <tt>onBoundsChanged</tt> attribute. For <tt>dragend</tt>, you would use <tt>onDragend</tt>.</p>
 
-      {{code-snippet name="map-events.hbs"}}
+      <CodeSnippet @name="map-events.hbs" />
 
-      {{#doc-danger}}
+      <DocDanger>
         Some Google event names break the expected naming style. Notice how <tt>dragend</tt> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <tt>e</tt> in <tt>onDragend</tt>.
-      {{/doc-danger}}
+      </DocDanger>
 
       <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
 
@@ -46,9 +46,9 @@
         </tbody>
       </table>
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         The sample map has some event listeners set up – see if you can find them all!
-      {{/doc-tip}}
+      </DocTip>
     </section>
     <section>
       <h5>Event propagation</h5>
@@ -61,7 +61,7 @@
 
       <p>You can disable bubbling by calling <tt>stopPropagation</tt> on the event object you receive as an argument.</p>
 
-      {{code-snippet name="event-stop-propagation.js"}}
+      <CodeSnippet @name="event-stop-propagation.js" />
 
       <p>If you eventually get tired of writing this, you can create a template helper similar to the one suggested in the <a href="https://www.emberjs.com/api/ember/release/classes/Ember.Templates.helpers/methods/action?anchor=action"><span class="ember">ember</span> docs for the action helper</a>.</p>
     </section>
@@ -69,13 +69,15 @@
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{g-map lat=london.lat lng=london.lng zoom=12
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive"
-      onBoundsChanged=(action "flashMessageThrottle" "The bounds have changed!")
-      onClick=(action "flashMessage" "You clicked the map!")
-      onDblclick=(action "flashMessage" "Ooh, a double click!!")
-      onZoomChanged=(action "flashMessageThrottle" "Zoooooom!")
-    }}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive"
+      @onBoundsChanged={{action "flashMessageThrottle" "The bounds have changed!"}}
+      @onClick={{action "flashMessage" "You clicked the map!"}}
+      @onDblclick={{action "flashMessage" "Ooh, a double click!!"}}
+      @onZoomChanged={{action "flashMessageThrottle" "Zoooooom!"}} />
   </div>
 </div>

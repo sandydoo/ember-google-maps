@@ -1,9 +1,14 @@
-{{#g-map lat="51.507568" lng="-0.127762" zoom=9 as |g|}}
+<GMap
+  @lat="51.507568"
+  @lng="-0.127762"
+  @zoom={{9}} as |g|>
+
   {{#each londonLocations as |l|}}
-    {{g.marker
-      lat=l.lat
-      lng=l.lng
-      draggable=true
-      onClick=(action "onClick")}}
+    <g.marker
+      @lat={{l.lat}}
+      @lng={{l.lng}}
+      @draggable={{true}}
+      @onClick={{action "onClick"}} />
   {{/each}}
-{{/g-map}}
+
+</GMap>

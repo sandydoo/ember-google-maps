@@ -1,20 +1,20 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container">
-    {{#link-to "index" class="no-link-decor"}}
+    <LinkTo @route="index" class="no-link-decor">
       <div class="navbar-brand ember">ember google maps</div>
-    {{/link-to}}
+    </LinkTo>
 
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          {{#link-to "index" class="nav-link"}}
+          <LinkTo @route="index" class="nav-link">
             Home
-          {{/link-to}}
+          </LinkTo>
         </li>
         <li class="nav-item">
-          {{#link-to "docs.about" class="nav-link"}}
+          <LinkTo @route="docs.about" class="nav-link">
             Docs
-          {{/link-to}}
+          </LinkTo>
         </li>
       </ul>
     </div>

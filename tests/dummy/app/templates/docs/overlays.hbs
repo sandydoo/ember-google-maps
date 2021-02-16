@@ -18,11 +18,11 @@
 
       <p>Your imagination is the limit here. Let's render some fake rental prices and add some fun hover effects as a start.</p>
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         Hover over the overlay markers to trigger a CSS transform.
-      {{/doc-tip}}
+      </DocTip>
 
-    	{{code-snippet name="basic-overlays.hbs"}}
+    	<CodeSnippet @name="basic-overlays.hbs" />
     </section>
     <section>
       <h5>Custom options</h5>
@@ -36,9 +36,9 @@
     <section>
       <h5>Positioning the overlay</h5>
 
-      {{#doc-danger}}
+      <DocDanger>
         Your overlay content will not be centered over the coordinates by default. You have to do it yourself!
-      {{/doc-danger}}
+      </DocDanger>
 
       <p>While the overlay will be positioned exactly at the coordinates specified, your overlay content will expand to the bottom-right and remain <b>anchored</b> to the top-left. In other words, the top-left corner of your content will lie on the coordinates. This is probably not what you want.</p>
 
@@ -48,7 +48,7 @@
 
       <p>Let's first center our overlay over the coordinates. To do so we will wrap our overlay content with an element and apply our transform to it.</p>
 
-      {{code-snippet name="overlay-centered.hbs"}}
+      <CodeSnippet @name="overlay-centered.hbs" />
 
       <p>Notice how the transform uses percentages. This lets us define the offset using the dimensions of the overlay content. If your content is 100px wide and 100px tall, then the above transform will move it 50px up and 50px to the left.</p>
 
@@ -56,34 +56,45 @@
 
       <p>Another common need is to center the overlay horizontally and place it above the coordinate. This is ideal for tooltips, which usually have the "tip" or "anchor" at the middle and bottom of their element.</p>
 
-      {{code-snippet name="overlay-tooltip.hbs"}}
+      <CodeSnippet @name="overlay-tooltip.hbs" />
 
       <p>While custom styles get the job done, you should consider adding a class to your stylesheet and use that instead. You can, of course, use other units of measurement, like pixels.</p>
 
-      {{code-snippet name="overlay-style.css"}}
+      <CodeSnippet @name="overlay-style.css" />
     </section>
 
+<<<<<<< HEAD
+=======
+      <DocDanger>
+        The overlay component uses the experimental <tt>-in-element</tt> Glimmer feature to teleport the component into the map's overlay pane. It works like a charm and will soon be part of the public API, but is still currently an experimental, private feature. You've been warned. 😉
+      </DocDanger>
+    </section>
+>>>>>>> 8e6a583 (Convert addon to angle bracket syntax)
   	<p>{{nextPage.text}}</p>
 
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-  	{{#g-map lat=london.lat lng=london.lng
-  	  zoom=13
-  	  styles=primaryMapStyle
-  	  classNames="ember-google-map-responsive" as |g|}}
+  	<GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{13}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive" as |g|>
   	  {{#each londonLocations as |l index|}}
-    		{{#g.overlay lat=l.lat lng=l.lng
-          zIndex=(if l.active 1000 index)
-    			onMouseover=(action (mut l.active) true)
-    			onMouseleave=(action (mut l.active) false)}}
+    		<g.overlay
+          @lat={{l.lat}}
+          @lng={{l.lng}}
+          @zIndex={{if l.active 1000 index}}
+          @onMouseover={{action (mut l.active) true}}
+          @onMouseleave={{action (mut l.active) false}}>
           <div class="anchor-middle-bottom">
             <div class="tooltip {{if l.active "active"}}">
       			  £{{l.price}}
             </div>
           </div>
-    		{{/g.overlay}}
+    		</g.overlay>
   	  {{/each}}
-  	{{/g-map}}
+  	</GMap>
   </div>
 </div>

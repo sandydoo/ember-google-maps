@@ -1,7 +1,7 @@
 <div class="navbar fixed-top navbar-light">
   <div class="navbar-brand ember">sweet rentals</div>
   <ul class="navbar-nav">
-    <li class="nav-item">{{link-to "Back to docs ›" "docs.complex-ui" classNames="btn btn-primary"}}</li>
+    <li class="nav-item"><LinkTo @route="docs.complex-ui" @classNames="btn btn-primary">Back to docs ›</LinkTo></li>
   </ul>
 </div>
 
@@ -9,36 +9,45 @@
   <div class="content-column">
     {{#each boundedLondonLocations as |l|}}
       <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-rental-card">
-        {{rental-card rental=l}}
+        <RentalCard @rental={{l}} />
       </div>
     {{/each}}
   </div>
   <div class="map-column">
-    {{#g-map lat=london.lat lng=london.lng zoom=12
-      styles=primaryMapStyle
-      classNames="ember-google-map-cover"
-      scrollwheel=false
-      gestureHandling="greedy"
-      disableDefaultUI=true
-      zoomControl=true
-      zoomControlOptions=(hash
-        position=google.maps.ControlPosition.TOP_LEFT)
-      fullscreenControl=true
-      onLoad=(action "saveBounds")
-      onBoundsChanged=(action "saveBounds") as |g|}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-cover"
+      @scrollwheel={{false}}
+      @gestureHandling="greedy"
+      @disableDefaultUI={{true}}
+      @zoomControl={{true}}
+      @zoomControlOptions={{hash
+        position=google.maps.ControlPosition.TOP_LEFT}}
+      @fullscreenControl={{true}}
+      @onLoad={{action "saveBounds"}}
+      @onBoundsChanged={{action "saveBounds"}} as |g|>
+
       {{#each boundedLondonLocations as |l index|}}
-        {{#g.overlay lat=l.lat lng=l.lng
-          zIndex=(if l.active 1000 index)
-          onClick=(action "scrollToListing" l)
-          onMouseover=(action (mut l.active) true)
-          onMouseleave=(action (mut l.active) false)}}
+        <g.overlay
+          @lat={{l.lat}}
+          @lng={{l.lng}}
+          @zIndex={{if l.active 1000 index}}
+          @onClick={{action "scrollToListing" l}}
+          @onMouseover={{action (mut l.active) true}}
+          @onMouseleave={{action (mut l.active) false}}>
+
           <div class="anchor-middle-bottom">
             <div class="tooltip {{if l.active "active"}}">
               £{{l.price}}
             </div>
           </div>
-        {{/g.overlay}}
+
+        </g.overlay>
       {{/each}}
-    {{/g-map}}
+
+    </GMap>
   </div>
 </div>

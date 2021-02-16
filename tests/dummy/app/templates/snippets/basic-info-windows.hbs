@@ -1,23 +1,33 @@
-{{#g-map lat="51.507568" lng="-0.127762"
-  zoom=12
-  styles=primaryMapStyle as |g|}}
+<GMap
+  @lat="51.507568"
+  @lng="-0.127762"
+  @zoom={{12}}
+  @styles={{primaryMapStyle}} as |g|>
 
   {{!-- A manually positioned info window with basic text --}}
-  {{g.infoWindow lat=london.lat lng=london.lng
-    isOpen=mapTooltipOpen
-    content="Simple text tooltip"}}
+  <g.infoWindow
+    @lat={{london.lat}}
+    @lng={{london.lng}}
+    @isOpen={{mapTooltipOpen}}
+    @content="Simple text tooltip" />
 
   {{!--
     An info window attached to a marker component.
     Notice how it is yielded by the marker itself.
     This info window displays the template defined in the block --}}
-  {{#g.marker lat=london.lat lng=london.lng
-    onClick=(action (toggle "markerTooltipOpen" this)) as |m|}}
-    {{#m.infoWindow isOpen=markerTooltipOpen as |i|}}
+  <g.marker
+    @lat={{london.lat}}
+    @lng={{london.lng}}
+    @onClick={{action (toggle "markerTooltipOpen" this)}} as |m|>
+
+    <m.infoWindow
+      @isOpen={{markerTooltipOpen}} as |i|>
+
       <div class="text-center">
         <img src="/images/doge.jpg" alt="Such doge!" width=200>
         <div>Custom <i>HTML</i> content in infoWindow!</div>
       </div>
-    {{/m.infoWindow}}
-  {{/g.marker}}
-{{/g-map}}
+
+    </m.infoWindow>
+  </g.marker>
+</GMap>

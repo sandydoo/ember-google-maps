@@ -7,51 +7,54 @@
 
       <p>Let's disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
 
-      {{code-snippet name="show-hide-controls.hbs"}}
+      <CodeSnippet @name="show-hide-controls.hbs" />
 
-      {{#doc-tip}}
+      <DocTip>
         Unfortunately, you have to reference the position using the constants defined under <tt>google.maps.ControlPosition</tt>. These actually map to integers that then define the position of the control. Now you wouldn't normally have access to the <tt>google</tt> global in the template. A safe way of accessing it is via the <tt>googleMapsApi</tt> service. That way, when <tt>google</tt> is done initializing, the template will be updated with the position value.
-      {{/doc-tip}}
+      </DocTip>
 
-      {{code-snippet name="safely-accessing-google.js"}}
+      <CodeSnippet @name="safely-accessing-google.js" />
     </section>
     <section>
       <h5>Adding custom map controls</h5>
 
       <p>For more complex map UIs, you might want to add your own map controls to let the user initiate custom actions right from the map. Let's try adding a button to the <tt>top center</tt> of the map that pans back to the center of London and sets the zoom level back to <tt>12</tt>.</p>
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         Try out the custom control to recenter the map.
-      {{/doc-tip}}
+      </DocTip>
 
       <p>The <tt>control</tt> component accepts a <tt>position</tt> attribute and a block template. The <tt>position</tt> is a string that specifies the placement of the control on the map. It should be one of the control position constants defined in {{google-docs "ControlPosition" "control#ControlPosition"}}. The component will map these to the correct <tt>google.maps.controlPosition</tt> behind the scenes. In our case, to place the control in the top center, we use <tt>TOP_CENTER</tt>. From there, we just bind an action to the button and pass the yielded map object.</p>
 
-      {{code-snippet name="recenter-map-control.hbs"}}
+      <CodeSnippet @name="recenter-map-control.hbs" />
 
       <p>In the controller (or component), we handle the action and recenter the map to wherever we want.</p>
 
-      {{code-snippet name="recenter-map-controller.js"}}
+      <CodeSnippet @name="recenter-map-controller.js" />
     </section>
 
     <p>{{nextPage.text}}</p>
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{#g-map lat=london.lat lng=london.lng zoom=12
-      styles=primaryMapStyle
-      disableDefaultUI=true
-      mapTypeControl=false
-      zoomControl=true
-      zoomControlOptions=(hash position=google.maps.ControlPosition.TOP_LEFT)
-      classNames="ember-google-map-responsive" as |g|}}
-      {{g.marker lat=london.lat lng=london.lng}}
-      {{#g.control position="TOP_CENTER"}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @disableDefaultUI={{true}}
+      @mapTypeControl={{false}}
+      @zoomControl={{true}}
+      @zoomControlOptions={{hash position=google.maps.ControlPosition.TOP_LEFT}}
+      @classNames="ember-google-map-responsive" as |g|>
+      <g.marker @lat={{london.lat}} @lng={{london.lng}} />
+      <g.control @position="TOP_CENTER">
         <div class="map-control">
           <button {{action "recenterMap" g.map}} role="button" class="btn btn-light m-2">
             Recenter map
           </button>
         </div>
-      {{/g.control}}
-    {{/g-map}}
+      </g.control>
+    </GMap>
   </div>
 </div>

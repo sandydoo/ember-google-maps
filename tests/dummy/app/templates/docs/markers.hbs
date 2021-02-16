@@ -7,28 +7,34 @@
 
       <p>Every attribute passed to the marker will be passed on as an option to the marker, much like with the <tt>g-map</tt> component. Events work in the same way.</p>
 
-      {{#doc-tip}}
-        Don't forget that these are Google Maps events, not Ember events! {{link-to "Learn about event handling ›" "docs.map"}}
-      {{/doc-tip}}
+      <DocTip>
+        Don't forget that these are Google Maps events, not Ember events! <LinkTo @route="docs.map">Learn about event handling ›</LinkTo>
+      </DocTip>
 
-      {{code-snippet name="basic-markers.hbs"}}
+      <CodeSnippet @name="basic-markers.hbs" />
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         Click on a marker to find out its coordinates.
-      {{/doc-tip}}
+      </DocTip>
     </section>
 
     <p>{{nextPage.text}}</p>
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{#g-map lat=london.lat lng=london.lng
-      zoom=12
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive" as |g|}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive" as |g|>
       {{#each londonLocations as |l|}}
-        {{g.marker lat=l.lat lng=l.lng draggable=true onClick=(action "flashMessage" (concat "Clicked: " l.lat ", " l.lng))}}
+        <g.marker
+          @lat={{l.lat}}
+          @lng={{l.lng}}
+          @draggable={{true}}
+          @onClick={{action "flashMessage" (concat "Clicked: " l.lat ", " l.lng)}} />
       {{/each}}
-    {{/g-map}}
+    </GMap>
   </div>
 </div>

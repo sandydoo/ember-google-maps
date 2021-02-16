@@ -4,27 +4,32 @@
       <div class="col-12 col-md-6">
         <h1 style="font-size: 2rem; font-weight: 700">Create maps – the Ember way.</h1>
         <p>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</p>
-        {{link-to "Get started ›" "docs.about" class="btn btn-primary mt-2"}}
+        <LinkTo @route="docs.about" class="btn btn-primary mt-2">Get started ›</LinkTo>
       </div>
     </div>
   </div>
 
   <main>
-    {{#g-map lat=london.lat lng=london.lng zoom=12
-      classNames="ember-google-map-full-width"
-      styles=lightStyle
-      disableDefaultUI=true
-      zoomControl=true
-      scrollwheel=false as |g|}}
-      {{#g.overlay lat=london.lat lng=london.lng}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @classNames="ember-google-map-full-width"
+      @styles={{lightStyle}}
+      @disableDefaultUI={{true}}
+      @zoomControl={{true}}
+      @scrollwheel={{false}} as |g|>
+      <g.overlay
+        @lat={{london.lat}}
+        @lng={{london.lng}}>
         <div class="tooltip bs-tooltip-top anchor-middle-bottom" style="width: 120px; height: 4em;">
           <div class="tooltip-inner text-center">
             <h6 class="m-0">Made for <span class="ember">ember</span></h6>
           </div>
         </div>
-      {{/g.overlay}}
-    {{/g-map}}
+      </g.overlay>
+    </GMap>
   </main>
 
-  {{footer-main classNames="text-center"}}
+  <FooterMain @classNames="text-center" />
 </div>

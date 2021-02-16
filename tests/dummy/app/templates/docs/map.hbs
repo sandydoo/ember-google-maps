@@ -6,18 +6,18 @@
       <p>Creating a map is straightforward. The only required arguments are the coordinates for
       the center.</p>
 
-      {{code-snippet name="basic-map.hbs"}}
+      <CodeSnippet @name="basic-map.hbs" />
 
       <p>To get the map to render, the map canvas needs to be styled with dimensions. For example, in your <tt>app.css</tt>:</p>
 
-      {{code-snippet name="map-canvas-style.css"}}
+      <CodeSnippet @name="map-canvas-style.css" />
 
       <p>Most of the components in this addon accept <tt>lat</tt> and <tt>lng</tt> parameters for
       convenience and consistency. This lets you avoid the hassle of remembering whether to use <tt>position</tt> or <tt>center</tt> and lets you provide the coordinates separately, as that's how you are likely storing them if you're using Ember Data. We don't assert the usage of <tt>lat</tt> and <tt>lng</tt>, so you can still use the native Google options if you wish.</p>
 
       <p>The <tt>g-map</tt> component accepts all of the {{google-docs "MapOptions" "map#MapOptions"}} options you would pass to a Google Map instance. These are automatically watched for changes.</p>
 
-      {{code-snippet name="map-passing-options.hbs"}}
+      <CodeSnippet @name="map-passing-options.hbs" />
 
       <p>You can also pass an <tt>options</tt> object, but note that <b>it will not be watched for changes</b>. You can use the <tt>hash</tt> helper instead if you need the options to be watched.</p>
     </section>
@@ -30,11 +30,14 @@
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{g-map lat=london.lat lng=london.lng zoom=12
-      styles=primaryMapStyle
-      minZoom=10
-      panControl=false
-      streetViewControl=false
-      classNames="ember-google-map-responsive"}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @minZoom={{10}}
+      @panControl={{false}}
+      @streetViewControl={{false}}
+      @classNames="ember-google-map-responsive" />
   </div>
 </div>

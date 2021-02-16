@@ -2,7 +2,7 @@
   <ul class="nav flex-column justify-content-center">
     {{#each links as |l|}}
       <li class="nav-item">
-        {{link-to l.title l.path class="nav-link"}}
+        <LinkTo @route={{l.path}} class="nav-link">{{l.title}}</LinkTo>
       </li>
     {{/each}}
   </ul>

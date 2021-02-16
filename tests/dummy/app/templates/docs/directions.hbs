@@ -7,7 +7,7 @@
 
       <p>You must provide at least 3 of the {{google-docs "DirectionsRequest" "directions#DirectionsRequest"}} options: <tt>origin</tt>, <tt>destination</tt>, and <tt>travelMode</tt>.</p>
 
-      {{code-snippet name="basic-directions.hbs"}}
+      <CodeSnippet @name="basic-directions.hbs" />
 
       <p>For convenience, you can provide an <tt>onDirectionsChanged</tt> action, which will be called when the directions are updated. This is a custom event provided by the addon, similar to the native event on the {{google-docs "DirectionsRenderer" "directions#DirectionsRenderer"}}.</p>
     </section>
@@ -16,7 +16,7 @@
 
       <p>The <tt>directions</tt> component yields a simple <tt>waypoint</tt> component that accepts a <tt>location</tt> and an optional <tt>stopover</tt> attribute. You also provide the <tt>waypoints</tt> as an option to <tt>directions</tt>.</p>
 
-      {{code-snippet name="basic-waypoint.hbs"}}
+      <CodeSnippet @name="basic-waypoint.hbs" />
     </section>
     <section>
       <h5>Displaying routes</h5>
@@ -25,51 +25,53 @@
 
       <p>To actually display routes, the <tt>directions</tt> component yields a <tt>route</tt> component, which uses the {{google-docs "DirectionsRenderer" "directions#DirectionsRenderer"}} under the hood to display directions results.</p>
 
-      {{code-snippet name="basic-routes.hbs"}}
+      <CodeSnippet @name="basic-routes.hbs" />
     </section>
     <section>
       <h5>Complex routing</h5>
 
-      <p>Let's recreate one of the more complex examples from {{google-docs "Complex directions example" "directions-complex" type="examples"}}. We want to walk from Covent Garden to Clerkenwell. We're going to fetch the route and display markers along the route for each step of the route. Each marker has an <tt>{{link-to "infoWindow" "docs.info-windows"}}</tt> attached to it that displays the instructions for the specific step. You know what? Let's also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
+      <p>Let's recreate one of the more complex examples from {{google-docs "Complex directions example" "directions-complex" type="examples"}}. We want to walk from Covent Garden to Clerkenwell. We're going to fetch the route and display markers along the route for each step of the route. Each marker has an <tt><LinkTo @route="docs.info-windows">infoWindow</LinkTo></tt> attached to it that displays the instructions for the specific step. You know what? Let's also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
 
-      {{code-snippet name="complex-routes.hbs"}}
+      <CodeSnippet @name="complex-routes.hbs" />
 
       <p>If you're doing complex routing like in the example above, you might find that manipulating the directions object in Handlebars can be a bit of a pain. In this case, I would suggest creating your own helpers. Here we've defined a <tt>get-route-steps</tt> helper that extracts the route steps.</p>
 
-      {{code-snippet name="get-route-steps.js"}}
+      <CodeSnippet @name="get-route-steps.js" />
     </section>
 
     <p>{{nextPage.text}}</p>
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{#g-map lat=london.lat lng=london.lng
-      zoom=12
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive" as |g|}}
-      {{#g.directions
-        origin="Covent Garden"
-        destination="Clerkenwell"
-        travelMode="WALKING" as |d|}}
-        {{#d.route
-          polylineOptions=(hash
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{12}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive" as |g|>
+      <g.directions
+        @origin="Covent Garden"
+        @destination="Clerkenwell"
+        @travelMode="WALKING" as |d|>
+        <d.route
+          @polylineOptions={{hash
             strokeColor="green"
             strokeWeight=8
-            strokeOpacity=0.7) as |r|}}
+            strokeOpacity=0.7}} as |r|>
 
-          {{d.waypoint location="Leather Lane Department of Coffee and Social Affairs"}}
+          <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
 
           {{#each (get-route-steps r.directions) as |s|}}
-            {{#g.marker
-              position=s.start_location
-              onClick=(action (toggle "showInstructions" s)) as |m|}}
-              {{m.infoWindow
-                content=s.instructions
-                isOpen=s.showInstructions}}
-            {{/g.marker}}
+            <g.marker
+              @position={{s.start_location}}
+              @onClick={{action (toggle "showInstructions" s)}} as |m|>
+              <m.infoWindow
+                @content={{s.instructions}}
+                @isOpen={{s.showInstructions}} />
+            </g.marker>
           {{/each}}
-        {{/d.route}}
-      {{/g.directions}}
-    {{/g-map}}
+        </d.route>
+      </g.directions>
+    </GMap>
   </div>
 </div>

@@ -1,11 +1,21 @@
-{{#g-map lat="51.507568" lng="-0.127762" zoom=9 styles=primaryMapStyle as |g|}}
+<GMap
+  @lat="51.507568"
+  @lng="-0.127762"
+  @zoom={{9}}
+  @styles={{primaryMapStyle}} as |g|>
+
   {{#each londonLocations as |l|}}
-    {{#g.overlay lat=l.lat lng=l.lng
-      onMouseover=(action (mut l.active) true)
-      onMouseleave=(action (mut l.active) false)}}
+    <g.overlay
+      @lat={{l.lat}}
+      @lng={{l.lng}}
+      @onMouseover={{action (mut l.active) true}}
+      @onMouseleave={{action (mut l.active) false}}>
+
       <div class="tooltip {{if l.active "active"}}">
         £{{l.price}}
       </div>
-    {{/g.overlay}}
+
+    </g.overlay>
   {{/each}}
-{{/g-map}}
+
+</GMap>

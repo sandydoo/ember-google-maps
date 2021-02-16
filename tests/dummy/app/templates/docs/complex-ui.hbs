@@ -5,11 +5,11 @@
 
     <p>Keep in mind this is just a visual example. Let's simulate fetching a geo-bound AJAX query from a BE server by filtering an array of random locations as you pan the map. Let's also attach some mouseover effects!</p>
 
-    {{#doc-tip}}
+    <DocTip>
       You might want to view this demo on a device with a larger screen.
-    {{/doc-tip}}
+    </DocTip>
 
-    {{link-to "View rentals example ›" "examples.sweet-rentals" classNames="btn btn-primary"}}
+    <LinkTo @route="examples.sweet-rentals" @classNames="btn btn-primary">View rentals example ›</LinkTo>
   </section>
   <section>
     <h5 class="mt-4">Breakdown of the demo</h5>
@@ -24,7 +24,7 @@
       </ol>
     </p>
 
-    {{code-snippet name="sweet-rentals-map.hbs"}}
+    <CodeSnippet @name="sweet-rentals-map.hbs" />
   </section>
   <section>
     <h5>Leave your feedback on GitHub</h5>

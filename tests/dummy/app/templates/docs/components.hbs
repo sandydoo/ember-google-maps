@@ -3,21 +3,21 @@
     <section>
       <h5 id="components">Contextual components</h5>
 
-      <p>In block form, the {{#link-to "docs.map"}}<tt>g-map</tt>{{/link-to}} component yields all sorts of map components. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready!</p>
+      <p>In block form, the <LinkTo @route="docs.map"><tt>g-map</tt></LinkTo> component yields all sorts of map components. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready!</p>
 
       <p>The addon currently provides the following components:
         <ul>
-          <li>{{link-to "canvas" "docs.canvas"}}</li>
-          <li>{{link-to "marker" "docs.markers"}}</li>
-          <li>{{link-to "circle" "docs.circles"}}</li>
-          <li>{{link-to "polyline" "docs.polylines"}}</li>
-          <li>{{link-to "infoWindow" "docs.info-windows"}}</li>
-          <li>{{link-to "control" "docs.controls"}}</li>
-          <li>{{link-to "overlay" "docs.overlays"}}</li>
+          <li><LinkTo @route="docs.canvas">canvas</LinkTo></li>
+          <li><LinkTo @route="docs.markers">marker</LinkTo></li>
+          <li><LinkTo @route="docs.circles">circle</LinkTo></li>
+          <li><LinkTo @route="docs.polylines">polyline</LinkTo></li>
+          <li><LinkTo @route="docs.info-windows">infoWindow</LinkTo></li>
+          <li><LinkTo @route="docs.controls">control</LinkTo></li>
+          <li><LinkTo @route="docs.overlays">overlay</LinkTo></li>
           <li>autocomplete</li>
-          <li>{{link-to "directions" "docs.directions"}}</li>
-          <li>{{link-to "route" "docs.directions"}}</li>
-          <li>{{link-to "waypoint" "docs.directions"}}</li>
+          <li><LinkTo @route="docs.directions">directions</LinkTo></li>
+          <li><LinkTo @route="docs.directions">route</LinkTo></li>
+          <li><LinkTo @route="docs.directions">waypoint</LinkTo></li>
         </ul>
       </p>
     </section>
@@ -29,13 +29,13 @@
     <section>
       <h5>Accessing component instances</h5>
 
-      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – {{#link-to "docs.map"}}<tt>g-map</tt>{{/link-to}}. The parent map then provides a <tt>publicAPI</tt>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <tt>onLoad</tt> action, you can get access to this object once the map loads.</p>
+      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – <LinkTo @route="docs.map"><tt>g-map</tt></LinkTo>. The parent map then provides a <tt>publicAPI</tt>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <tt>onLoad</tt> action, you can get access to this object once the map loads.</p>
 
-      {{code-snippet name="map-public-api.js"}}
+      <CodeSnippet @name="map-public-api.js" />
 
-      {{code-snippet name="map-on-load.hbs"}}
+      <CodeSnippet @name="map-on-load.hbs" />
 
-      {{code-snippet name="handle-on-load.js"}}
+      <CodeSnippet @name="handle-on-load.js" />
 
       <p>Some components may take some time to initialise and render on the map. You can provide an <tt>onComponentsLoad</tt> action to the map that will be called once all the components have been registered with the map.</p>
     </section>

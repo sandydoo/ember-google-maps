@@ -4,11 +4,11 @@
       <h5>Creating polylines</h5>
       <p>Use the <tt>polyline</tt> component to create a new polyline.</p>
 
-      {{code-snippet name="basic-polylines.hbs"}}
+      <CodeSnippet @name="basic-polylines.hbs" />
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         Click on the map to append new points to the polyline!
-      {{/doc-tip}}
+      </DocTip>
     </section>
     <section>
       <h5>Observing changes to the path</h5>
@@ -22,16 +22,19 @@
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{#g-map lat=london.lat lng=london.lng
-      zoom=10
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive"
-      onClick=(action "appendPolyline") as |g|}}
-      {{g.polyline path=flightCoordinates
-        geodesic=true
-        strokeColor=fillColor
-        strokeOpacity=1.0
-        strokeWeight=3}}
-    {{/g-map}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{10}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive"
+      @onClick={{action "appendPolyline"}} as |g|>
+      <g.polyline
+        @path={{flightCoordinates}}
+        @geodesic={{true}}
+        @strokeColor={{fillColor}}
+        @strokeOpacity={{1}}
+        @strokeWeight={{3}} />
+    </GMap>
   </div>
 </div>

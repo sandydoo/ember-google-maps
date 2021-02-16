@@ -1,6 +1,8 @@
-{{g-map lat="51.508530" lng="-0.076132"
-  zoom=10
-  onClick=(action "onClick")
-  onDragend=(action "onDragend")
-  onZoomChanged=(action "onZoomChanged")
-  onBoundsChanged=(action "onBoundsChanged")}}
+<GMap
+  @lat="51.508530"
+  @lng="-0.076132"
+  @zoom={{10}}
+  @onClick={{action "onClick"}}
+  @onDragend={{action "onDragend"}}
+  @onZoomChanged={{action "onZoomChanged"}}
+  @onBoundsChanged={{action "onBoundsChanged"}} />

@@ -5,18 +5,18 @@
 
       <p>Circles are pretty much markers with a radius. Use the <tt>circle</tt> component to create a circle.</p>
 
-      {{code-snippet name="basic-circles.hbs"}}
+      <CodeSnippet @name="basic-circles.hbs" />
 
-      {{#doc-tip badgeText="Test"}}
+      <DocTip @badgeText="Test">
         Modify the radius and fill color of the circle.
-      {{/doc-tip}}
+      </DocTip>
 
       <div class="form-group">
           <label class="col-form-label" for="radius-input">Radius</label>
-          {{input id="radius-input" name="radius" class="form-control" type="number" value=radius step="100" min="100" max="1500"}}
+          <Input @id="radius-input" @name="radius" class="form-control" @type="number" @value={{radius}} @step="100" @min="100" @max="1500" />
 
           <label class="col-form-label" for="fill-color-input">Fill color (hex)</label>
-          {{input id="fill-color-input" name="fillColor" type="color" class="form-control" value=fillColor}}
+          <Input @id="fill-color-input" @name="fillColor" @type="color" class="form-control" @value={{fillColor}} />
       </div>
     </section>
 
@@ -24,17 +24,21 @@
     {{link-to-next nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
-    {{#g-map lat=london.lat lng=london.lng
-      zoom=14
-      styles=primaryMapStyle
-      classNames="ember-google-map-responsive" as |g|}}
-      {{g.circle lat="51.507568" lng="-0.127762"
-        radius=radius
-        fillColor=fillColor
-        fillOpacity=0.3
-        strokeColor="darkgreen"
-        strokeOpacity=0.5
-        strokeWeight=1}}
-    {{/g-map}}
+    <GMap
+      @lat={{london.lat}}
+      @lng={{london.lng}}
+      @zoom={{14}}
+      @styles={{primaryMapStyle}}
+      @classNames="ember-google-map-responsive" as |g|>
+      <g.circle
+        @lat="51.507568"
+        @lng="-0.127762"
+        @radius={{radius}}
+        @fillColor={{fillColor}}
+        @fillOpacity={{0.3}}
+        @strokeColor="darkgreen"
+        @strokeOpacity={{0.5}}
+        @strokeWeight={{1}} />
+    </GMap>
   </div>
 </div>
