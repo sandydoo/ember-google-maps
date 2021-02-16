@@ -73,8 +73,9 @@
       @lng={{london.lng}}
       @zoom={{13}}
       @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive" as |g|>
-  	  {{#each londonLocations as |l index|}}
+      class="ember-google-map-responsive" as |g|>
+
+  	  {{#each this.mapData.londonLocations as |l index|}}
     		<g.overlay
           @lat={{l.lat}}
           @lng={{l.lng}}
@@ -88,6 +89,7 @@
           </div>
     		</g.overlay>
   	  {{/each}}
+
   	</GMap>
   </div>
 </div>

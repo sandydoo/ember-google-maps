@@ -10,31 +10,26 @@
         Click on the map to append new points to the polyline!
       </DocTip>
     </section>
-    <section>
-      <h5>Observing changes to the path</h5>
 
-      <p>Polylines are slightly special because the path attribute is an array, which can't be watched for changes by <tt>didReceiveAttrs</tt> – the hook this addon uses to avoid creating hundreds of observers.</p>
-
-      <p>To combat this issue, the addon defines the <tt>_watchedOptions</tt> concatenated array. The <tt>polygon</tt> component populates it with the <tt>path.[]</tt> key, which is used to dynamically create an observer.</p>
-    </section>
-
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{10}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive"
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive"
       @onClick={{action "appendPolyline"}} as |g|>
+
       <g.polyline
-        @path={{flightCoordinates}}
+        @path={{this.flightCoordinates}}
         @geodesic={{true}}
-        @strokeColor={{fillColor}}
+        @strokeColor={{this.fillColor}}
         @strokeOpacity={{1}}
         @strokeWeight={{3}} />
+
     </GMap>
   </div>
 </div>

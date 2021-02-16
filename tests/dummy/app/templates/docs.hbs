@@ -1,12 +1,12 @@
 <div class="container-fluid mt-4">
   <div class="alerts-container">
-    {{#each flashMessages.queue as |flash|}}
+    {{#each this.flashMessages.queue as |flash|}}
       <FlashMessage @flash={{flash}} />
     {{/each}}
   </div>
   <div class="d-sm-flex">
     <div class="col-sidebar">
-      <NavMain @links={{links}} />
+      <NavMain @links={{this.links}} />
     </div>
     <div class="col flex-1">
       <main>

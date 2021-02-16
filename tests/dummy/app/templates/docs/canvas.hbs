@@ -10,17 +10,23 @@
       <CodeSnippet @name="basic-canvas.hbs" />
     </section>
 
-    {{link-to-next nextPage}}
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}} as |g|>
+      @styles={{this.primaryMapStyle}} as |g|>
+
       <input type="text" placeholder="I need to be above the map!" class="form-control input-lg mb-3">
-      <g.canvas @class="ember-google-map-responsive" />
+
+      <g.canvas class="ember-google-map-responsive" />
+
+      <g.marker @lat={{this.london.lat}} @lng={{this.london.lng}} />
+
       <input type="text" placeholder="I need to be below the map!" class="form-control input-lg mt-3">
+
     </GMap>
   </div>
 </div>

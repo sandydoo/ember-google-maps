@@ -33,21 +33,22 @@
       <CodeSnippet @name="recenter-map-controller.js" />
     </section>
 
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
+      @styles={{this.primaryMapStyle}}
       @disableDefaultUI={{true}}
-      @mapTypeControl={{false}}
       @zoomControl={{true}}
       @zoomControlOptions={{hash position=google.maps.ControlPosition.TOP_LEFT}}
-      @classNames="ember-google-map-responsive" as |g|>
-      <g.marker @lat={{london.lat}} @lng={{london.lng}} />
+      class="ember-google-map-responsive" as |g|>
+
+      <g.marker @lat={{this.london.lat}} @lng={{this.london.lng}} />
+
       <g.control @position="TOP_CENTER">
         <div class="map-control">
           <button {{action "recenterMap" g.map}} role="button" class="btn btn-light m-2">
@@ -55,6 +56,7 @@
           </button>
         </div>
       </g.control>
+
     </GMap>
   </div>
 </div>

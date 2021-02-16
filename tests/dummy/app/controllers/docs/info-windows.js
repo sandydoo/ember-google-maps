@@ -1,7 +1,11 @@
 import DocsController from '../docs';
-import CommonMapData from '../../mixins/common-map-data';
+import { tracked } from '@glimmer/tracking';
 
-export default DocsController.extend(CommonMapData, {
-  mapTooltipOpen: false,
-  markerTooltipOpen: false
-});
+
+export default class InfoWindowsController extends DocsController {
+  @tracked
+  mapTooltipOpen = false;
+
+  @tracked
+  markerTooltipOpen =false;
+}

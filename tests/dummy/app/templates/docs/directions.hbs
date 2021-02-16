@@ -39,27 +39,29 @@
       <CodeSnippet @name="get-route-steps.js" />
     </section>
 
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive" as |g|>
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
       <g.directions
         @origin="Covent Garden"
         @destination="Clerkenwell"
         @travelMode="WALKING" as |d|>
+
+        <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
+
         <d.route
           @polylineOptions={{hash
             strokeColor="green"
             strokeWeight=8
             strokeOpacity=0.7}} as |r|>
-
-          <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
 
           {{#each (get-route-steps r.directions) as |s|}}
             <g.marker

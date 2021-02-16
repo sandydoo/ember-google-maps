@@ -11,25 +11,27 @@
 
   <main>
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @classNames="ember-google-map-full-width"
-      @styles={{lightStyle}}
+      class="ember-google-map-full-width"
+      @styles={{this.lightStyle}}
       @disableDefaultUI={{true}}
       @zoomControl={{true}}
       @scrollwheel={{false}} as |g|>
+
       <g.overlay
-        @lat={{london.lat}}
-        @lng={{london.lng}}>
+        @lat={{this.london.lat}}
+        @lng={{this.london.lng}}>
         <div class="tooltip bs-tooltip-top anchor-middle-bottom" style="width: 120px; height: 4em;">
           <div class="tooltip-inner text-center">
             <h6 class="m-0">Made for <span class="ember">ember</span></h6>
           </div>
         </div>
       </g.overlay>
+
     </GMap>
   </main>
 
-  <FooterMain @classNames="text-center" />
+  <FooterMain class="text-center" />
 </div>

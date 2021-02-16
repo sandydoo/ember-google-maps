@@ -1,19 +1,26 @@
 import Controller from '@ember/controller';
-import CommonMapData from '../mixins/common-map-data';
 import { inject as service } from '@ember/service';
-import { get } from '@ember/object';
+import { action } from '@ember/object';
 import { throttle } from '@ember/runloop';
 
-export default Controller.extend(CommonMapData, {
-  flashMessages: service(),
 
-  actions: {
-    flashMessage(message) {
-      this.flashMessages.info(message);
-    },
+export default class ApplicationController extends Controller {
+  @service
+  mapData;
 
-    flashMessageThrottle(message) {
-      throttle(this, 'send', 'flashMessage', message, 300, true);
-    }
+  @service
+  flashMessages;
+
+  london = this.mapData.london;
+  lightStyle = this.mapData.lightStyle;
+
+  @action
+  flashMessage(message) {
+    this.flashMessages.info(message);
   }
-});
+
+  @action
+  flashMessageThrottle(message) {
+    throttle(this, 'send', 'flashMessage', message, 300, true);
+  }
+}

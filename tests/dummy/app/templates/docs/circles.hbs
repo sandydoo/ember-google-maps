@@ -13,28 +13,29 @@
 
       <div class="form-group">
           <label class="col-form-label" for="radius-input">Radius</label>
-          <Input @id="radius-input" @name="radius" class="form-control" @type="number" @value={{radius}} @step="100" @min="100" @max="1500" />
+          <input id="radius-input" name="radius" class="form-control" type="number" value={{this.radius}} step="100" min="100" max="1500" {{on "input" this.updateRadius}} />
 
           <label class="col-form-label" for="fill-color-input">Fill color (hex)</label>
-          <Input @id="fill-color-input" @name="fillColor" @type="color" class="form-control" @value={{fillColor}} />
+          <input id="fill-color-input" name="fillColor" type="color" class="form-control" {{on "input" this.updateFillColor}} value={{this.fillColor}} />
       </div>
     </section>
 
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{14}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive" as |g|>
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
       <g.circle
         @lat="51.507568"
         @lng="-0.127762"
-        @radius={{radius}}
-        @fillColor={{fillColor}}
+        @radius={{this.radius}}
+        @fillColor={{this.fillColor}}
         @fillOpacity={{0.3}}
         @strokeColor="darkgreen"
         @strokeOpacity={{0.5}}

@@ -66,15 +66,15 @@
       <p>If you eventually get tired of writing this, you can create a template helper similar to the one suggested in the <a href="https://www.emberjs.com/api/ember/release/classes/Ember.Templates.helpers/methods/action?anchor=action"><span class="ember">ember</span> docs for the action helper</a>.</p>
     </section>
 
-    {{link-to-next nextPage}}
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive"
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive"
       @onBoundsChanged={{action "flashMessageThrottle" "The bounds have changed!"}}
       @onClick={{action "flashMessage" "You clicked the map!"}}
       @onDblclick={{action "flashMessage" "Ooh, a double click!!"}}

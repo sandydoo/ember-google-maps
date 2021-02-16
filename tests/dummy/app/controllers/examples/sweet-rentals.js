@@ -1,44 +1,108 @@
 import Controller from '@ember/controller';
-import CommonMapData from '../../mixins/common-map-data';
 import { inject as service } from '@ember/service';
-import { computed, get, getProperties, set } from '@ember/object';
+import { action } from '@ember/object';
 import { reads } from '@ember/object/computed';
+import { tracked } from '@glimmer/tracking';
 import { throttle } from '@ember/runloop';
 
-export default Controller.extend(CommonMapData, {
-  googleMapsApi: service(),
 
-  google: reads('googleMapsApi.google'),
+class Rental {
+  @tracked id;
+  @tracked lat;
+  @tracked lng;
+  @tracked type;
+  @tracked price;
+  @tracked active;
 
-  boundedLondonLocations: computed('londonLocations', 'mapBounds', function() {
-    let londonLocations = get(this, 'londonLocations');
-    let mapBounds = get(this, 'mapBounds');
+  constructor(args) {
+    return Object.assign(this, args);
+  }
+}
 
-    return londonLocations.filter((location) => {
+
+export default class SweetRentalsController extends Controller {
+  @service
+  googleMapsApi;
+
+  @service
+  mapData;
+
+  @reads('googleMapsApi.google')
+  google;
+
+  @tracked mapBounds;
+  @tracked mapZoom;
+
+  @tracked
+  rentals = [];
+
+  london = this.mapData.london;
+  primaryMapStyle = this.mapData.primaryMapStyle;
+
+  constructor() {
+    super(...arguments);
+
+    this.getRentals().then(rentals => {
+      this.rentals = rentals;
+    });
+  }
+
+  get filteredRentals() {
+    return this.rentals.filter(rental => {
+      let { mapBounds } = this;
+
       if (mapBounds) {
-        let { lat, lng } = getProperties(location, 'lat', 'lng');
-        return mapBounds.contains(new google.maps.LatLng(lat, lng));
+        let { lat, lng } = rental;
+
+        // TODO: Look into this again...
+        let northEast = mapBounds.getNorthEast(),
+            southWest = mapBounds.getSouthWest(),
+            distance = 10000 / this.mapZoom,
+            newNorthEast = google.maps.geometry.spherical.computeOffset(northEast, distance, 45),
+            newSouthWest = google.maps.geometry.spherical.computeOffset(southWest, distance, -135),
+            extendedBounds = mapBounds.extend(newNorthEast).extend(newSouthWest);
+
+        return extendedBounds.contains(new google.maps.LatLng(lat, lng));
       } else {
         return true;
       }
     });
-  }),
+  }
 
-  actions: {
-    saveBounds({ map }) {
-      throttle(this, this._saveBounds, map, 30);
-    },
+  getRentals() {
+    return this.google.then(() => {
+      return this.mapData.londonLocations
+        .map(location => new Rental({ ...location, active: false }));
+    });
+  }
 
-    scrollToListing(listing) {
-      let id = `rental-${listing.id}`;
-      let el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+  @action
+  saveBounds({ map }) {
+    throttle(this, this._saveBounds, map, 30);
+  }
+
+  @action
+  scrollToListing(listing) {
+    let id = `rental-${listing.id}`,
+        el = document.getElementById(id);
+
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
-  },
+  }
+
+  @action
+  handleMouseEnter(rental) {
+    rental.active = true;
+  }
+
+  @action
+  handleMouseLeave(rental) {
+    rental.active = false;
+  }
 
   _saveBounds(map) {
-    set(this, 'mapBounds', map.getBounds());
+    this.mapBounds = map.getBounds();
+    this.mapZoom = map.getZoom();
   }
-});
+}

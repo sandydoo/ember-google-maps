@@ -22,66 +22,45 @@
       </DocTip>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{markerTooltipOpen}} @change={{action (toggle "markerTooltipOpen" this)}} class="custom-control-input" @id="toggle-marker-tooltip" />
+        <Input @type="checkbox" @checked={{this.markerTooltipOpen}} @change={{action (toggle "markerTooltipOpen" this)}} class="custom-control-input" @id="toggle-marker-tooltip" />
         <label class="custom-control-label" for="toggle-marker-tooltip">Toggle marker tooltip</label>
       </div>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{mapTooltipOpen}} @change={{action (toggle "mapTooltipOpen" this)}} class="custom-control-input" @id="toggle-map-tooltip" />
+        <Input @type="checkbox" @checked={{this.mapTooltipOpen}} @change={{action (toggle "mapTooltipOpen" this)}} class="custom-control-input" @id="toggle-map-tooltip" />
         <label class="custom-control-label" for="toggle-map-tooltip">Toggle map tooltip</label>
       </div>
     </section>
 
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive" as |g|>
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
 
       <g.infoWindow
-        @lat={{london.lat}}
-        @lng={{london.lng}}
-        @isOpen={{mapTooltipOpen}}
+        @lat={{this.london.lat}}
+        @lng={{this.london.lng}}
+        @isOpen={{this.mapTooltipOpen}}
         @content="<i>Simple text tooltip</i>" />
 
-      {{#each londonLocations as |l|}}
-        <!-- {{g.marker lat=l.lat lng=l.lng onClick=(action 'setMarker')}} -->
-
-        <!-- {{#g.marker lat=l.lat lng=l.lng onClick=(action (toggle "open" l)) as |m|}}
-          {{#m.infoWindow isOpen=l.open}}
-            Info window: {{l.lat}}, {{l.lng}}, {{activeId}}
-          {{/m.infoWindow}}
-        {{/g.marker}} -->
-
-
-        <!-- {{#g.marker lat=l.lat lng=l.lng onClick=(action 'setMarker' l.id) as |m|}}
-          {{#m.infoWindow isOpen=(eq l.id activeId)}}
-            Info window: {{l.lat}}, {{l.lng}}, {{activeId}}, {{eq l.id activeId}}
-            <div class="text-center">
-              <img src="/images/doge.jpg" alt="Such doge!" width=200>
-              <div>Custom <i>HTML</i> content in infoWindow!</div>
-            </div>
-          {{/m.infoWindow}}
-        {{/g.marker}} -->
-      {{/each}}
-
-      <!-- {{g.infoWindow target=currMarker isOpen=mapTooltipOpen content="<i>Attached text tooltip</i>"}} -->
-
       <g.marker
-        @lat={{london.lat}}
-        @lng={{london.lng}}
+        @lat={{this.london.lat}}
+        @lng={{this.london.lng}}
         @onClick={{action (toggle "markerTooltipOpen" this)}} as |m|>
-        <m.infoWindow @isOpen={{markerTooltipOpen}}>
+
+        <m.infoWindow @isOpen={{this.markerTooltipOpen}}>
           <div class="text-center">
             <img src="/images/doge.jpg" alt="Such doge!" width=200>
             <div>Custom <i>HTML</i> content in infoWindow!</div>
           </div>
         </m.infoWindow>
+
       </g.marker>
     </GMap>
   </div>

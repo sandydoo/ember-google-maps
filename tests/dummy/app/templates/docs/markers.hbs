@@ -18,23 +18,25 @@
       </DocTip>
     </section>
 
-    <p>{{nextPage.text}}</p>
-    {{link-to-next nextPage}}
+    <p>{{this.nextPage.text}}</p>
+    {{link-to-next this.nextPage}}
   </div>
   <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-responsive" as |g|>
-      {{#each londonLocations as |l|}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
+      {{#each-in this.locations key="id" as |id location|}}
         <g.marker
-          @lat={{l.lat}}
-          @lng={{l.lng}}
-          @draggable={{true}}
-          @onClick={{action "flashMessage" (concat "Clicked: " l.lat ", " l.lng)}} />
-      {{/each}}
+          @lat={{location.lat}}
+          @lng={{location.lng}}
+          @visible={{true}}
+          @draggable={{false}}
+          @onClick={{action "flashMessage" (concat "Clicked: " location.lat ", " location.lng)}} />
+      {{/each-in}}
     </GMap>
   </div>
 </div>

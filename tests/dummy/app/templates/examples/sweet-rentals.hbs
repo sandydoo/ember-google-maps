@@ -7,19 +7,22 @@
 
 <div class="container-cover">
   <div class="content-column">
-    {{#each boundedLondonLocations as |l|}}
+    {{#each this.filteredRentals key="id" as |rental|}}
       <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-rental-card">
-        <RentalCard @rental={{l}} />
+        <RentalCard
+          @rental={{rental}}
+          @onMouseEnter={{this.handleMouseEnter}}
+          @onMouseLeave={{this.handleMouseLeave}} />
       </div>
     {{/each}}
   </div>
   <div class="map-column">
     <GMap
-      @lat={{london.lat}}
-      @lng={{london.lng}}
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{primaryMapStyle}}
-      @classNames="ember-google-map-cover"
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-cover"
       @scrollwheel={{false}}
       @gestureHandling="greedy"
       @disableDefaultUI={{true}}
@@ -30,18 +33,18 @@
       @onLoad={{action "saveBounds"}}
       @onBoundsChanged={{action "saveBounds"}} as |g|>
 
-      {{#each boundedLondonLocations as |l index|}}
+      {{#each this.filteredRentals key="id" as |rental index|}}
         <g.overlay
-          @lat={{l.lat}}
-          @lng={{l.lng}}
-          @zIndex={{if l.active 1000 index}}
-          @onClick={{action "scrollToListing" l}}
-          @onMouseover={{action (mut l.active) true}}
-          @onMouseleave={{action (mut l.active) false}}>
+          @lat={{rental.lat}}
+          @lng={{rental.lng}}
+          @zIndex={{if rental.active 1000 index}}
+          @onClick={{action "scrollToListing" rental}}
+          @onMouseover={{action this.handleMouseEnter rental}}
+          @onMouseleave={{action this.handleMouseLeave rental}}>
 
           <div class="anchor-middle-bottom">
-            <div class="tooltip {{if l.active "active"}}">
-              £{{l.price}}
+            <div class="tooltip {{if rental.active "active"}}">
+              £{{rental.price}}
             </div>
           </div>
 
