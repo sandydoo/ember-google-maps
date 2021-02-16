@@ -2,7 +2,7 @@ import ApplicationController from './application';
 import { inject as service } from '@ember/service';
 import { reads } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
-import { TrackedMap } from 'tracked-built-ins';
+import { TrackedMap } from 'tracked-maps-and-sets';
 import darkStyle from '../map-styles/dark';
 import lightStyle from '../map-styles/light';
 
