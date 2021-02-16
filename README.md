@@ -27,8 +27,8 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 🔗 Compatibility
 --------------------------------------------------------------------------------
 
-* Ember.js v2.18 or above
-* Ember CLI v3.11 or above
+* Ember.js v3.16 or above
+* Ember CLI v3.16 or above
 * Node.js v10 or above
 
 
