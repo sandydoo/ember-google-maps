@@ -1,25 +1,23 @@
 {{#with
-  (hash
-    canvas=(component "g-map/canvas"
-      id=this.mapId
-      classNames=this.classNames
-      _internalAPI=this._internalAPI)
-    publicAPI=this.publicAPI
-    map=this.map
-    _internalAPI=this._internalAPI
-  ) as |gMap|}}
+  (component "g-map/canvas"
+    id=this.mapId
+    classNames=this.classNames
+    _internalAPI=this._internalAPI) as |canvas|}}
 
   {{#-private-api/addon-factory
-    gMap=this.gMap
-    map=gMap.map
-    _internalAPI=gMap._internalAPI as |addons|}}
-
-    {{g-map/compute (action this._updateGMap) gMap addons}}
+    map=this.map
+    _internalAPI=this._internalAPI as |addons|}}
 
     {{#unless hasBlockParams}}
-      <gMap.canvas ...attributes />
+      <canvas ...attributes />
     {{/unless}}
 
-    {{yield this.gMap}}
+    {{yield
+      (g-map/merge addons
+        (hash
+          canvas=canvas
+          map=this.map
+          publicAPI=this.publicAPI
+          _internalAPI=this._internalAPI))}}
   {{/-private-api/addon-factory}}
 {{/with}}

@@ -127,7 +127,6 @@ export default Component.extend({
     this._super(...arguments);
 
     this.components = {};
-    this.gMap = {};
 
     this.publicAPI = GMapAPI(this);
 
@@ -276,9 +275,5 @@ export default Component.extend({
    */
   _unregisterComponent(type, componentAPI) {
     this.components[type].removeObject(componentAPI);
-  },
-
-  _updateGMap(...props) {
-    setProperties(this.gMap, Object.assign({}, ...props));
   }
 });

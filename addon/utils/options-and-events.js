@@ -7,7 +7,6 @@ const ignoredOptions = [
   'lat',
   'lng',
   '_internalAPI',
-  'gMap',
   'options',
   'events',
   '_name',

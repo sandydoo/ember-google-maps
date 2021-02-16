@@ -235,7 +235,7 @@ module.exports = {
       \\{{yield
           (hash
             {{#each addons as |addon|}}
-              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap _name="{{addon.key}}")
+              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI _name="{{addon.key}}")
             {{/each}}
           )
         }}
