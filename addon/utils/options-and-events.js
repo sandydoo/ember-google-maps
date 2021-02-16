@@ -1,7 +1,6 @@
 import { computed } from '@ember/object';
 import { decamelize } from '@ember/string';
-import { join } from '@ember/runloop';
-
+import { next } from '@ember/runloop';
 
 const ignoredOptions = [
   'map',
@@ -86,7 +85,7 @@ function addEventListener(target, originalEventName, action, payload = {}) {
       ...payload,
     };
 
-    join(target, action, params);
+    next(target, action, params);
   }
 
   let listener = google.maps.event.addDomListener(target, eventName, callback);
