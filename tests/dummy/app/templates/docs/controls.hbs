@@ -5,12 +5,12 @@
 
       <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <tt>true</tt> or <tt>false</tt>. You can also pass in a <tt>hash</tt> to set further options. Learn more by following the guides at {{google-docs "Controls Guide" "controls" type="guides"}}.</p>
 
-      <p>Let's disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
+      <p>Let’s disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
 
       <CodeSnippet @name="show-hide-controls.hbs" />
 
       <DocTip>
-        Unfortunately, you have to reference the position using the constants defined under <tt>google.maps.ControlPosition</tt>. These actually map to integers that then define the position of the control. Now you wouldn't normally have access to the <tt>google</tt> global in the template. A safe way of accessing it is via the <tt>googleMapsApi</tt> service. That way, when <tt>google</tt> is done initializing, the template will be updated with the position value.
+        Unfortunately, you have to reference the position using the constants defined under <tt>google.maps.ControlPosition</tt>. These actually map to integers that then define the position of the control. Now you wouldn’t normally have access to the <tt>google</tt> global in the template. A safe way of accessing it is via the <tt>googleMapsApi</tt> service. That way, when <tt>google</tt> is done initializing, the template will be updated with the position value.
       </DocTip>
 
       <CodeSnippet @name="safely-accessing-google.js" />
@@ -18,7 +18,7 @@
     <section>
       <h5>Adding custom map controls</h5>
 
-      <p>For more complex map UIs, you might want to add your own map controls to let the user initiate custom actions right from the map. Let's try adding a button to the <tt>top center</tt> of the map that pans back to the center of London and sets the zoom level back to <tt>12</tt>.</p>
+      <p>For more complex map UIs, you might want to add your own map controls to let the user initiate custom actions right from the map. Let’s try adding a button to the <tt>top center</tt> of the map that pans back to the center of London and sets the zoom level back to <tt>12</tt>.</p>
 
       <DocTip @badgeText="Test">
         Try out the custom control to recenter the map.

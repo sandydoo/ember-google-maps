@@ -15,7 +15,7 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 ##### What this addon *is not*:
 
 * ❌  A bulky, verbose wrapper that reimplements the entire Google Maps API.
-* ❌  An option validator that is tightly coupled to Google's API.
+* ❌  An option validator that is tightly coupled to Google’s API.
 
 
 📎 Documentation
@@ -46,7 +46,7 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 | Minimal observer usage    | ✅                |
 | Native Ember HTML markers | ✅                |
 
-If you don't need the Google API specifically, check out [ember-leaflet ↗️](https://github.com/miguelcobain/ember-leaflet).
+If you don’t need the Google API specifically, check out [ember-leaflet ↗️](https://github.com/miguelcobain/ember-leaflet).
 
 
 Examples of what to expect

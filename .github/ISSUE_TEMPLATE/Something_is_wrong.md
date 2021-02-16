@@ -1,6 +1,6 @@
 ---
 name: Something is wrong
-about: Having problems? Not sure if it's a bug? Open an issue.
+about: Having problems? Not sure if it’s a bug? Open an issue.
 ---
 
 <!---
@@ -8,17 +8,17 @@ Please read the documentation before opening an issue.
 
 Most problems can be solved by consulting the [Google Maps API reference](https://developers.google.com/maps/documentation/javascript/reference/3.exp/).
 
-* I've read the relevant documentation for this addon on [ember-google-maps.sandydoo.me](https://ember-google-maps.sandydoo.me/docs/getting-started).
+* I’ve read the relevant documentation for this addon on [ember-google-maps.sandydoo.me](https://ember-google-maps.sandydoo.me/docs/getting-started).
 
 * I understand how to set options on the components in this addon. Arguments passed to a component are used to set the options on the map component.
 
-* I've searched the relevant section of the [Google Maps API reference](https://developers.google.com/maps/documentation/javascript/reference/3.exp/).
+* I’ve searched the relevant section of the [Google Maps API reference](https://developers.google.com/maps/documentation/javascript/reference/3.exp/).
 
-* I've [searched the closed issues](https://github.com/sandydoo/ember-google-maps/issues?q=is%3Aissue+is%3Aclosed) for similar problems.
+* I’ve [searched the closed issues](https://github.com/sandydoo/ember-google-maps/issues?q=is%3Aissue+is%3Aclosed) for similar problems.
 
 If nothing seems to be working, open an issue.
 Please, include as much detail as possible.
-Post relevant bits of code, describe what you're working on and what you're trying to accomplish.
+Post relevant bits of code, describe what you’re working on and what you’re trying to accomplish.
 -->
 
 ### Describe the problem
