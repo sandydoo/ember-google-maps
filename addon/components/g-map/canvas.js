@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { computed, get } from '@ember/object';
-import { scheduleOnce } from '@ember/runloop';
 
 
 /**
@@ -27,15 +26,9 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    function registerCanvas() {
-      let id = get(this, 'id');
-      let canvas = document.getElementById(id);
+    let id = get(this, 'id');
+    let canvas = document.getElementById(id);
 
-      this._internalAPI._registerCanvas(canvas);
-    }
-
-    // TODO: Remove in Octane version. Splattributes somehow affect the
-    // rendering loop, so this is necessary for 2.18.
-    scheduleOnce('render', this, registerCanvas);
+    this._internalAPI._registerCanvas(canvas);
   }
 });
