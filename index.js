@@ -175,23 +175,6 @@ module.exports = {
     return tree;
   },
 
-  // This hook is deprecated in Ember-CLI 3.13+.
-  // In older versions, it still runs and seems to overwrite our work in
-  // `treeForAddon`.
-  treeForAddonTemplates() {
-    let tree = this._super.treeForAddonTemplates.apply(this, arguments);
-    tree = this.debugTree(tree, 'addon-templates-tree:input');
-
-    let addonFactoryTree = this.createAddonFactoryTree('components');
-    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    tree = this.debugTree(tree, 'addon-templates-tree:with-addon-factory');
-
-    tree = this.filterComponents(tree);
-    tree = this.debugTree(tree, 'addon-templates-tree:post-filter');
-
-    return tree;
-  },
-
   setupPreprocessorRegistry(_type, registry) {
     let plugin = this._canvasBuildPlugin();
 
