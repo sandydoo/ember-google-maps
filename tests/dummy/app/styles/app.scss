@@ -27,12 +27,12 @@ $grid-gutter-width: 32px;
 $spacer: 2rem;
 
 $line-height-base: 1.6;
+$paragraph-margin-bottom: 2rem;
 
 $font-family-cursive: 'Pacifico', cursive;
 
 $headings-font-family: 'Montserrat';
 $headings-font-weight: 700;
-$headings-margin-bottom: $spacer;
 
 $input-bg: lighten($floral-white, 3);
 
@@ -232,7 +232,7 @@ footer {
   width: 100%;
 }
 
-.ember-google-map-2-3 {
+.ember-google-map-3-2 {
   height: auto;
   aspect-ratio: 3 / 2;
   padding-top: 66.666667%;

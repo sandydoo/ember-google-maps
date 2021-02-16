@@ -2,19 +2,19 @@
   <div class="mb-2" style="padding: 2em 0;">
     <div class="row">
       <div class="col-12">
-        <h1 style="font-size: 2em; font-weight: 700; letter-spacing: -0.02em;">Ember + Google Maps.<br>
+        <h1 style="font-size: 2em; font-weight: 700; letter-spacing: -0.03em;">Ember + Google Maps.<br>
         <span class="text-muted">A friendly Ember addon for working with Google Maps.</span></h1>
-        <LinkTo @route="docs.about" class="btn btn-primary">Get started ›</LinkTo>
+        <LinkTo @route="docs.getting-started" class="btn btn-primary mt-2">Get started ›</LinkTo>
       </div>
     </div>
   </div>
 
-  <main>
+  <main class="mt-5">
     <GMap
       @lat={{this.london.lat}}
       @lng={{this.london.lng}}
       @zoom={{12}}
-      class="ember-google-map-full-width ember-google-map-2-3"
+      class="ember-google-map-full-width ember-google-map-3-2"
       @styles={{this.lightStyle}}
       @disableDefaultUI={{true}}
       @zoomControl={{true}}
