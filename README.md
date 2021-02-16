@@ -55,32 +55,37 @@ Examples of what to expect
 Display a map centered around a set of coordinates 🗺.
 
 ```handlebars
-{{g-map lat='51.508530' lng='-0.076132' zoom=10}}
+<GMap @lat="51.508530" @lng="-0.076132" @zoom={{10}} />
 ```
 
 Display an array of locations using markers 📍.
 
 ```handlebars
-{{#g-map lat='51.508530' lng='-0.076132' zoom=10 as |g|}}
-  {{#each locations as |l|}}
-    {{g.marker lat=l.lat lng=l.lng onClick=(action 'showDetails' l)}}
+<GMap @lat="51.508530" @lng="-0.076132" @zoom={{10}} as |map|>
+  {{#each this.locations as |location|}}
+    <map.marker
+      @lat={{location.lat}}
+      @lng={{location.lng}}
+      @onClick={{action "showDetails" location}} />
   {{/each}}
-{{/g-map}}
+</GMap>
 ```
 
 Display a custom overlay, like a custom HTML marker using template blocks 😱.
 This lets you do all sorts of fancy things, like adding CSS animations and binding data.
 
 ```handlebars
-{{#g-map lat='51.508530' lng='-0.076132' zoom=10 as |g|}}
-  {{#each rentals as |r|}}
-    {{#g.overlay lat=r.lat lng=r.lng classNames='custom-marker'}}
-      <div class="marker-content">
-        <p class="price">{{r.price}}</p>
+<GMap @lat="51.508530" @lng="-0.076132" @zoom={{10}} as |map|>
+  {{#each this.rentals as |rental|}}
+    <map.overlay @lat={{rental.lat}} @lng={{rental.lng}}>
+      <div style="transform: translateX(-50%) translateY(-50%);">
+        <p class="price">
+          {{rental.price}}
+        </p>
       </div>
-    {{/g.overlay}}
+    </map.overlay>
   {{/each}}
-{{/g-map}}
+</GMap>
 ```
 
 **[Learn more ↗️][docs-url]**
