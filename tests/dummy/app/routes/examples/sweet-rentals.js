@@ -8,11 +8,11 @@ export default Route.extend({
     this._super(...arguments);
 
     this.on('routeWillChange', function() {
-      this.get('document').body.setAttribute('class', '');
+      this.document.body.setAttribute('class', '');
     });
 
     this.on('routeDidChange', function() {
-      this.get('document').body.setAttribute('class', 'white');
+      this.document.body.setAttribute('class', 'white');
     });
   }
 });

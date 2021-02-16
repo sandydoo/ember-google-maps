@@ -9,7 +9,7 @@ export default Controller.extend(CommonMapData, {
 
   actions: {
     flashMessage(message) {
-      get(this, 'flashMessages').info(message);
+      this.flashMessages.info(message);
     },
 
     flashMessageThrottle(message) {

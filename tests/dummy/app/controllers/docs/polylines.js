@@ -1,6 +1,5 @@
 import DocsController from '../docs';
 import CommonMapData from '../../mixins/common-map-data';
-import { get } from '@ember/object';
 import { A } from '@ember/array';
 
 export default DocsController.extend(CommonMapData, {
@@ -18,7 +17,7 @@ export default DocsController.extend(CommonMapData, {
     appendPolyline({ googleEvent }) {
       let latLng = googleEvent.latLng;
 
-      get(this, 'flightCoordinates').pushObject({
+      this.flightCoordinates.pushObject({
         lat: latLng.lat(),
         lng: latLng.lng()
       });

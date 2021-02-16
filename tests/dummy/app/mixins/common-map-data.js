@@ -1,7 +1,7 @@
 /* eslint-disable ember/no-new-mixins */
 import Mixin from '@ember/object/mixin';
 import { inject as service } from '@ember/service';
-import { computed, get } from '@ember/object';
+import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import darkStyle from '../map-styles/dark';
 import lightStyle from '../map-styles/light';
@@ -26,8 +26,8 @@ export default Mixin.create({
   googleLoaded: reads('googleMapsApi.google.isFulfilled'),
 
   londonLocations: computed('googleLoaded', 'london', function() {
-    if (!get(this, 'googleLoaded')) { return []; }
-    const { lat, lng } = get(this, 'london');
+    if (this.googleLoaded) { return []; }
+    const { lat, lng } = this.london;
     const origin = new google.maps.LatLng(lat, lng);
 
     return Array(42).fill().map((_e, i) => {

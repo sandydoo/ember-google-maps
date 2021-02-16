@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import layout from '../templates/components/google-docs';
-import { computed, get } from '@ember/object';
+import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { capitalize } from '@ember/string';
 
@@ -26,7 +26,7 @@ const GoogleDocs = Component.extend({
   }),
 
   href: computed('baseUrl', 'section', function() {
-    return get(this, 'baseUrl') + get(this, 'section');
+    return this.baseUrl + this.section;
   })
 });
 

@@ -1,14 +1,14 @@
 import DocsController from '../docs';
 import CommonMapData from '../../mixins/common-map-data';
-import { computed, get, getProperties, set } from '@ember/object';
+import { computed, getProperties, set } from '@ember/object';
 import { throttle } from '@ember/runloop';
 
 export default DocsController.extend(CommonMapData, {
   boundedLondonLocations: computed('londonLocations', 'mapBounds', function() {
-    let londonLocations = get(this, 'londonLocations');
+    let londonLocations = this.londonLocations;
     return londonLocations.filter((location) => {
-      let mapBounds = get(this, 'mapBounds');
-      return mapBounds && get(this, 'mapBounds').contains(new google.maps.LatLng(getProperties(location, 'lat', 'lng')));
+      let mapBounds = this.mapBounds;
+      return mapBounds && mapBounds.contains(new google.maps.LatLng(getProperties(location, 'lat', 'lng')));
     });
   }),
 
@@ -18,7 +18,7 @@ export default DocsController.extend(CommonMapData, {
     },
 
     scrollToListing(listing) {
-      const id = `rental-${listing.id}`;
+      let id = `rental-${listing.id}`;
       let el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
