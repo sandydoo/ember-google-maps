@@ -17,9 +17,13 @@ module('Integration | Component | g-map/directions', function(hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.directions origin=origin destination=destination travelMode="WALKING" onDirectionsChanged=(action trackAction 'directionsReady')}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING"
+          @onDirectionsChanged={{action trackAction "directionsReady"}} />
+      </GMap>
     `);
 
     await this.seenAction('directionsReady', { timeout: 10000 });
@@ -41,9 +45,13 @@ module('Integration | Component | g-map/directions', function(hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.directions origin=origin destination=destination travelMode="WALKING" onDirectionsChanged=(action trackAction 'directionsReady')}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING"
+          @onDirectionsChanged={{action trackAction "directionsReady"}} />
+      </GMap>
     `);
 
     await this.seenAction('directionsReady', { timeout: 10000 });

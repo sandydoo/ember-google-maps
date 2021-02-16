@@ -22,7 +22,13 @@ module('Integration | Component | g map/map-component', function(hooks) {
       _unregisterComponent: () => {}
     };
 
-    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test" _addComponent=_addComponent}}`);
+    await render(hbs`
+      <GMap::MapComponent
+        @map={{map}}
+        @_internalAPI={{_internalAPI}}
+        @_type="test"
+        @_addComponent={{_addComponent}} />
+    `);
   });
 
   test('it unregisters with the parent map when destroyed', async function(assert) {
@@ -33,6 +39,12 @@ module('Integration | Component | g map/map-component', function(hooks) {
       _unregisterComponent: (type) => assert.equal(type, 'tests', 'it unregisters'),
     };
 
-    await render(hbs`{{g-map/map-component map=map _internalAPI=_internalAPI _type="test" _addComponent=_addComponent}}`);
+    await render(hbs`
+      <GMap::MapComponent
+        @map={{map}}
+        @_internalAPI={{_internalAPI}}
+        @_type="test"
+        @_addComponent={{_addComponent}} />`
+    );
   });
 });

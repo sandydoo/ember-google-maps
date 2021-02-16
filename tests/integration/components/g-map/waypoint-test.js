@@ -22,15 +22,17 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
     this.waypointLocation = 'Leather Lane';
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions
-          origin=origin
-          destination=destination
-          travelMode="WALKING"
-          onDirectionsChanged=(action trackAction 'directionsReady')as |d|}}
-          {{d.waypoint location=waypointLocation}}
-        {{/g.directions}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING"
+          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
+
+          <d.waypoint @location={{waypointLocation}} />
+
+        </g.directions>
+      </GMap>
     `);
 
     await this.seenAction('directionsReady', { timeout: 10000 });
@@ -51,17 +53,19 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
     this.addWaypoint = true;
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions
-          origin=origin
-          destination=destination
-          travelMode="WALKING"
-          onDirectionsChanged=(action trackAction 'directionsReady') as |d|}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING"
+          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
+
           {{#if addWaypoint}}
-            {{d.waypoint location=waypointLocation}}
+            <d.waypoint @location={{waypointLocation}} />
           {{/if}}
-        {{/g.directions}}
-      {{/g-map}}
+
+        </g.directions>
+      </GMap>
     `);
 
     await this.seenAction('directionsReady', { timeout: 10000 });

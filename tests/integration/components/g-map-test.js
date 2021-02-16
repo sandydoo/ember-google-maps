@@ -12,7 +12,7 @@ module('Integration | Component | g map', function(hooks) {
 
   test('it renders a map', async function(assert) {
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12}}
+      <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -22,7 +22,11 @@ module('Integration | Component | g map', function(hooks) {
 
   test('it passes attributes as options to the map', async function(assert) {
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12 zoomControl=false}}
+      <GMap
+        @lat={{lat}}
+        @lng={{lng}}
+        @zoom={{12}}
+        @zoomControl={{false}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -32,7 +36,10 @@ module('Integration | Component | g map', function(hooks) {
 
   test('it accepts an options hash', async function(assert) {
     await render(hbs`
-      {{g-map lat=lat lng=lng options=(hash zoom=12 zoomControl=false)}}
+      <GMap
+        @lat={{lat}}
+        @lng={{lng}}
+        @options={{hash zoom=12 zoomControl=false}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -44,7 +51,7 @@ module('Integration | Component | g map', function(hooks) {
     this.zoom = 12;
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=zoom}}
+      <GMap @lat={{lat}} @lng={{lng}} @zoom={{zoom}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -64,7 +71,11 @@ module('Integration | Component | g map', function(hooks) {
     };
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12 onZoomChanged=(action onZoomChanged)}}
+      <GMap
+        @lat={{lat}}
+        @lng={{lng}}
+        @zoom={{12}}
+        @onZoomChanged={{action onZoomChanged}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -84,9 +95,12 @@ module('Integration | Component | g map', function(hooks) {
     };
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12
-        onClick=(action onClick)
-        events=(hash onZoomChanged=(action onZoomChanged))}}
+      <GMap
+        @lat={{lat}}
+        @lng={{lng}}
+        @zoom={{12}}
+        @onClick={{action onClick}}
+        @events={{hash onZoomChanged=(action onZoomChanged)}} />
     `);
 
     let { map } = this.gMapAPI;
@@ -104,10 +118,14 @@ module('Integration | Component | g map', function(hooks) {
     };
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng
-        onComponentsLoad=(action onComponentsLoad) as |g|}}
-        {{g.marker lat=lat lng=lng}}
-      {{/g-map}}
+      <GMap
+        @lat={{lat}}
+        @lng={{lng}}
+        @onComponentsLoad={{action onComponentsLoad}} as |g|>
+
+        <g.marker @lat={{lat}} @lng={{lng}} />
+
+      </GMap>
     `);
 
     let { components: { markers } } = this.gMapAPI;

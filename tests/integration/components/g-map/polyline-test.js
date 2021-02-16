@@ -20,9 +20,9 @@ module('Integration | Component | g map/polyline', function(hooks) {
     ]);
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.polyline path=path}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.polyline @path={{path}} />
+      </GMap>
     `);
 
     let { components: { polylines } } = this.gMapAPI;

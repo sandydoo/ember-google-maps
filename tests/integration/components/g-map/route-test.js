@@ -17,11 +17,14 @@ module('Integration | Component | g-map/route', function(hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions origin=origin destination=destination travelMode="WALKING" as |d|}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING" as |d|>
           {{d.route}}
-        {{/g.directions}}
-      {{/g-map}}
+        </g.directions>
+      </GMap>
     `);
 
     let { components: { routes } } = this.gMapAPI;
@@ -36,15 +39,15 @@ module('Integration | Component | g-map/route', function(hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.directions
-          origin=origin
-          destination=destination
-          travelMode="WALKING"
-          onDirectionsChanged=(action trackAction 'directionsReady') as |d|}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.directions
+          @origin={{origin}}
+          @destination={{destination}}
+          @travelMode="WALKING"
+          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
           {{d.route}}
-        {{/g.directions}}
-      {{/g-map}}
+        </g.directions>
+      </GMap>
     `);
 
     await this.seenAction('directionsReady', { timeout: 10000 });

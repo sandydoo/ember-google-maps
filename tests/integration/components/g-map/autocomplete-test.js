@@ -12,11 +12,11 @@ module('Integration | Component | g map/autocomplete', function(hooks) {
 
   test('it renders a pac-input', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.autocomplete}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.autocomplete>
           <input id="pac-input">
-        {{/g.autocomplete}}
-      {{/g-map}}
+        </g.autocomplete>
+      </GMap>
     `);
 
     let { autocompletes } = this.gMapAPI.components;
@@ -35,11 +35,11 @@ module('Integration | Component | g map/autocomplete', function(hooks) {
     this.onSearch = () => assert.ok(true, 'place');
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.autocomplete onSearch=(action onSearch)}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.autocomplete @onSearch={{action onSearch}}>
           <input>
-        {{/g.autocomplete}}
-      {{/g-map}}
+        </g.autocomplete>
+      </GMap>
     `);
 
     let { autocompletes } = this.gMapAPI.components;

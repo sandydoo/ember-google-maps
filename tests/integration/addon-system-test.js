@@ -12,9 +12,9 @@ module('Integration | Addon System', function(hooks) {
 
   test('it registers a pin (marker) component from an addon with the keyword “ember-google-maps-addon”', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.pin lat=lat lng=lng}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.pin @lat={{lat}} @lng={{lng}} />
+      </GMap>
     `);
 
     let { map, components: { markers } } = this.gMapAPI;

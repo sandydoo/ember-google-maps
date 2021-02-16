@@ -28,9 +28,13 @@ module('Integration | Component | g-map/info-window', function(hooks) {
 
   test('it registers an info window', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.infoWindow lat=lat lng=lng isOpen=false content="test"}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.infoWindow
+          @lat={{lat}}
+          @lng={{lng}}
+          @isOpen={{false}}
+          @content="test" />
+      </GMap>
     `);
 
     let { components: { infoWindows } } = this.gMapAPI;
@@ -45,9 +49,14 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     this.isOpen = false;
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.infoWindow lat=lat lng=lng isOpen=isOpen content="Opening an info window!" onDomready=(action onDomReady)}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.infoWindow
+          @lat={{lat}}
+          @lng={{lng}}
+          @isOpen={{isOpen}}
+          @content="Opening an info window!"
+          @onDomready={{action onDomReady}} />
+      </GMap>
     `);
 
     let infoWindow = getInfoWindow(this.gMapAPI);
@@ -62,11 +71,14 @@ module('Integration | Component | g-map/info-window', function(hooks) {
 
   test('it renders an info window with custom html passed using the content attribute', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{g.infoWindow lat=lat lng=lng isOpen=true
-          onDomready=(action onDomReady)
-          content="<div id='info-window-test'>Content rendering test!</div>"}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.infoWindow
+          @lat={{lat}}
+          @lng={{lng}}
+          @isOpen={{true}}
+          @onDomready={{action onDomReady}}
+          @content="<div id='info-window-test'>Content rendering test!</div>" />
+      </GMap>
     `);
 
     await waitUntil(this.domIsReady);
@@ -79,11 +91,15 @@ module('Integration | Component | g-map/info-window', function(hooks) {
 
   test('it renders an info window with custom html passed as a block', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.infoWindow lat=lat lng=lng isOpen=true onDomready=(action onDomReady)}}
+      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+        <g.infoWindow
+          @lat={{lat}}
+          @lng={{lng}}
+          @isOpen={{true}}
+          @onDomready={{action onDomReady}}>
           <div id="info-window-test">Custom HTML block test!</div>
-        {{/g.infoWindow}}
-      {{/g-map}}
+        </g.infoWindow>
+      </GMap>
     `);
 
     await waitUntil(this.domIsReady);
@@ -96,11 +112,14 @@ module('Integration | Component | g-map/info-window', function(hooks) {
 
   test('it attaches an info window to a marker', async function(assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng zoom=6 as |g|}}
-        {{#g.marker lat=55 lng=2 as |m|}}
-          {{m.infoWindow isOpen=true content="Testing info windows attached to markers" onDomready=(action onDomReady)}}
-        {{/g.marker}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+        <g.marker @lat={{55}} @lng={{2}} as |m|>
+          <m.infoWindow
+            @isOpen={{true}}
+            @content="Testing info windows attached to markers"
+            @onDomready={{action onDomReady}} />
+        </g.marker>
+      </GMap>
     `);
 
     await waitUntil(this.domIsReady);
@@ -117,15 +136,17 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     this.isOpen = true;
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng zoom=6 as |g|}}
-        {{#g.marker lat=55 lng=2 as |m|}}
-          {{#m.infoWindow isOpen=isOpen onDomready=(action onDomReady)}}
+      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+        <g.marker @lat={{55}} @lng={{2}} as |m|>
+          <m.infoWindow
+            @isOpen={{isOpen}}
+            @onDomready={{action onDomReady}}>
             <div id="info-window-test">
               An info window attached to a marker!
             </div>
-          {{/m.infoWindow}}
-        {{/g.marker}}
-      {{/g-map}}
+          </m.infoWindow>
+        </g.marker>
+      </GMap>
     `);
 
     await waitUntil(this.domIsReady);
@@ -145,11 +166,14 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     this.isOpen = true;
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng zoom=6 as |g|}}
-        {{#g.marker lat=55 lng=2 as |m|}}
-          {{m.infoWindow isOpen=isOpen content="<div id='info-window-test'>Testing the close button!</div>" onDomready=(action onDomReady)}}
-        {{/g.marker}}
-      {{/g-map}}
+      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+        <g.marker @lat={{55}} @lng={{2}} as |m|>
+          <m.infoWindow
+            @isOpen={{isOpen}}
+            @content="<div id='info-window-test'>Testing the close button!</div>"
+            @onDomready={{action onDomReady}} />
+        </g.marker>
+      </GMap>
     `);
 
     await waitUntil(this.domIsReady);
