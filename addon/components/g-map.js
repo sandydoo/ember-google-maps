@@ -4,7 +4,7 @@ import { addEventListeners, parseOptionsAndEvents } from '../utils/options-and-e
 import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
 import { getOwner }  from '@ember/application';
-import { computed, get, set, setProperties } from '@ember/object';
+import { computed, get, set } from '@ember/object';
 import { reads, readOnly } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
