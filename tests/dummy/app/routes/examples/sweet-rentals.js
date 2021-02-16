@@ -1,11 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default Route.extend({
-  document: service('-document'),
+export default class extends Route {
+  @service('-document')
+  document;
 
-  init() {
-    this._super(...arguments);
+  constructor() {
+    super(...arguments);
 
     this.on('routeWillChange', function() {
       this.document.body.setAttribute('class', '');
@@ -15,4 +16,4 @@ export default Route.extend({
       this.document.body.setAttribute('class', 'white');
     });
   }
-});
+}
