@@ -1,10 +1,10 @@
-<div class="container">
-  <div class="mb-2" style="padding: 2rem 0;">
+<div class="container container-body mt-5">
+  <div class="mb-2" style="padding: 2em 0;">
     <div class="row">
-      <div class="col-12 col-md-6">
-        <h1 style="font-size: 2rem; font-weight: 700">Create maps – the Ember way.</h1>
-        <p>A <i>lightweight</i>, <i>declarative</i>, <i>composable</i> API for building ambitious map UIs in your <span class="ember">ember</span> apps.</p>
-        <LinkTo @route="docs.about" class="btn btn-primary mt-2">Get started ›</LinkTo>
+      <div class="col-12">
+        <h1 style="font-size: 2em; font-weight: 700; letter-spacing: -0.02em;">Ember + Google Maps.<br>
+        <span class="text-muted">A friendly Ember addon for working with Google Maps.</span></h1>
+        <LinkTo @route="docs.about" class="btn btn-primary">Get started ›</LinkTo>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
       @lat={{this.london.lat}}
       @lng={{this.london.lng}}
       @zoom={{12}}
-      class="ember-google-map-full-width"
+      class="ember-google-map-full-width ember-google-map-2-3"
       @styles={{this.lightStyle}}
       @disableDefaultUI={{true}}
       @zoomControl={{true}}
@@ -33,5 +33,5 @@
     </GMap>
   </main>
 
-  <FooterMain class="text-center" />
+  <FooterMain />
 </div>
