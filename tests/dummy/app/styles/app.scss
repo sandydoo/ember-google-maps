@@ -232,15 +232,15 @@ footer {
   width: 100%;
 }
 
-.ember-google-map-3-2 {
+.ember-google-map-16-9 {
   height: auto;
-  aspect-ratio: 3 / 2;
-  padding-top: 66.666667%;
+  aspect-ratio: 16 / 9;
+  padding-top: 56.25%;
 }
 
 .ember-google-map,
 .ember-google-map > div {
-  background: rgba(34, 80, 102, 1) !important;
+  background: $body-bg !important;
 }
 
 .ember-google-map-responsive {

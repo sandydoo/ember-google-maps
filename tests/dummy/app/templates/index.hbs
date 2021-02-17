@@ -1,37 +1,33 @@
-<div class="container container-body mt-5">
-  <div class="mb-2" style="padding: 2em 0;">
-    <div class="row">
-      <div class="col-12">
-        <h1 style="font-size: 2em; font-weight: 700; letter-spacing: -0.03em;">Ember + Google Maps.<br>
-        <span class="text-muted">A friendly Ember addon for working with Google Maps.</span></h1>
-        <LinkTo @route="docs.getting-started" class="btn btn-primary mt-2">Get started ›</LinkTo>
-      </div>
-    </div>
-  </div>
+<div class="container container-body">
 
-  <main class="mt-5">
-    <GMap
+  <GMap
+    @lat={{this.london.lat}}
+    @lng={{this.london.lng}}
+    @zoom={{12}}
+    class="ember-google-map-full-width ember-google-map-16-9 mt-4"
+    @styles={{this.lightStyle}}
+    @disableDefaultUI={{true}}
+    @zoomControl={{true}}
+    @scrollwheel={{false}} as |g|>
+
+    <g.overlay
       @lat={{this.london.lat}}
-      @lng={{this.london.lng}}
-      @zoom={{12}}
-      class="ember-google-map-full-width ember-google-map-3-2"
-      @styles={{this.lightStyle}}
-      @disableDefaultUI={{true}}
-      @zoomControl={{true}}
-      @scrollwheel={{false}} as |g|>
-
-      <g.overlay
-        @lat={{this.london.lat}}
-        @lng={{this.london.lng}}>
-        <div class="tooltip bs-tooltip-top anchor-middle-bottom" style="width: 120px; height: 4em;">
-          <div class="tooltip-inner text-center">
-            <h6 class="m-0">Made for <span class="ember">ember</span></h6>
-          </div>
+      @lng={{this.london.lng}}>
+      <div class="tooltip bs-tooltip-top anchor-middle-bottom" style="width: 8em; height: 4em;">
+        <div class="tooltip-inner text-center">
+          <h6 class="m-0">Made for <span class="ember">ember</span></h6>
         </div>
-      </g.overlay>
-
-    </GMap>
-  </main>
+      </div>
+    </g.overlay>
+  </GMap>
+  <div class="pl-1 pr-2">
+    <h1 class="mt-3 mb-3 font-weight-bold" style="font-size: 2.2em; letter-spacing: -0.03em;">
+      Ember + Google Maps.
+      <br>
+      <span class="text-muted">A friendly Ember addon for working with Google Maps.</span>
+    </h1>
+    <LinkTo @route="docs.getting-started" class="btn btn-link pl-0 font-weight-bold">Get started →</LinkTo>
+  </div>
 
   <FooterMain />
 </div>
