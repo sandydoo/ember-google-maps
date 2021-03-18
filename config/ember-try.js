@@ -13,6 +13,9 @@ module.exports = async function() {
           EMBER_OPTIONAL_FEATURES: JSON.stringify({ 'jquery-integration': true })
         },
         npm: {
+          dependencies: {
+            'ember-concurrency': '^1.3.0'
+          },
           devDependencies: {
             '@ember/jquery': '^0.5.1',
             'ember-resolver': '^5.0.1',
