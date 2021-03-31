@@ -1,37 +1,25 @@
 import Service from '@ember/service';
-import { computedPromise, promisify } from '../utils/helpers';
-import { get } from '@ember/object';
+import { computed } from '@ember/object';
 import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
 import { assert } from '@ember/debug';
 import { bind } from '@ember/runloop';
+import { toPromiseProxy, promisify } from '../utils/helpers';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
 
 
-/**
- * @class GoogleMapsApi
- * @extends Ember.Service
- * @module ember-google-maps/services/google-maps-api
- * @public
- */
-export default Service.extend({
-  /**
-   * @method google
-   * @readOnly
-   * @return {Ember.ObjectProxy}
-   */
-  google: computedPromise(function() {
-    return this._getApi();
-  }).readOnly(),
+export default class GoogleMapsApiService extends Service {
+  @computed
+  get google() {
+    return toPromiseProxy(() => this._getApi());
+  }
 
-  /**
-   * @method directionsService
-   * @readOnly
-   * @return {Ember.ObjectProxy}
-   */
-  directionsService: computedPromise(function() {
-    return get(this, 'google').then(() => new google.maps.DirectionsService());
-  }).readOnly(),
+  @computed
+  get directionsService() {
+    return toPromiseProxy(
+      () => this.google.then(google => new google.maps.DirectionsService())
+    );
+  }
 
   /**
    * By default, this returns the Google Maps URL created at build time. You can
@@ -41,34 +29,21 @@ export default Service.extend({
    * allows you to use external data when building the URL. For example, you
    * could fetch the database record for the current user for localisation
    * purposes.
-   *
-   * @method buildGoogleMapsUrl
-   * @public
-   * @param  {Object} config The ember-google-maps configuration.
-   * @return {(string|Promise<string>)} The URL to the Google Maps API.
    */
   buildGoogleMapsUrl(config) {
     return config['src'];
-  },
+  }
 
   /**
    * Get the configuration for ember-google-maps set in environment.js. This
    * should contain your API key and any other options you set.
-   *
-   * @method _getConfig
-   * @private
-   * @return {Object}
    */
   _getConfig() {
     return getOwner(this).resolveRegistration('config:environment')['ember-google-maps'];
-  },
+  }
 
   /**
    * Return or load the Google Maps API.
-   *
-   * @method _getApi
-   * @private
-   * @return {Promise<object>}
    */
   _getApi() {
     if (typeof document === 'undefined') { return reject(); }
@@ -80,7 +55,7 @@ export default Service.extend({
 
     return promisify(this.buildGoogleMapsUrl(config))
       .then(this._loadAndInitApi);
-  },
+  }
 
   _loadAndInitApi(src) {
     assert(`
@@ -107,4 +82,4 @@ Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
       s.src = `${src}&callback=initGoogleMap`;
     });
   }
-});
+}
