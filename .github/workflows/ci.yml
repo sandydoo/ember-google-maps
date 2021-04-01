@@ -94,6 +94,7 @@ jobs:
           - ember-beta
           - ember-default-with-jquery
           - ember-classic
+        allow-failure: [false]
         include:
           - scenario: ember-canary
             allow-failure: true
