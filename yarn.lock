@@ -5540,6 +5540,16 @@ ember-auto-import@^1.10.1:
     walk-sync "^0.3.3"
     webpack "^4.43.0"
 
+ember-cache-primitive-polyfill@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ember-cache-primitive-polyfill/-/ember-cache-primitive-polyfill-1.0.1.tgz#a27075443bd87e5af286c1cd8a7df24e3b9f6715"
+  integrity sha512-hSPcvIKarA8wad2/b6jDd/eU+OtKmi6uP+iYQbzi5TQpjsqV6b4QdRqrLk7ClSRRKBAtdTuutx+m+X+WlEd2lw==
+  dependencies:
+    ember-cli-babel "^7.22.1"
+    ember-cli-version-checker "^5.1.1"
+    ember-compatibility-helpers "^1.2.1"
+    silent-error "^1.1.1"
+
 ember-cli-addon-tests@^0.11.1:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/ember-cli-addon-tests/-/ember-cli-addon-tests-0.11.1.tgz#70c9164cb4126b2d17bbf9588ff34d97d4bfbad1"
@@ -5648,7 +5658,7 @@ ember-cli-babel@^7.1.0, ember-cli-babel@^7.1.2, ember-cli-babel@^7.22.1:
     rimraf "^3.0.1"
     semver "^5.5.0"
 
-ember-cli-babel@^7.11.1, ember-cli-babel@^7.13.0, ember-cli-babel@^7.13.2, ember-cli-babel@^7.23.1, ember-cli-babel@^7.26.2:
+ember-cli-babel@^7.11.1, ember-cli-babel@^7.13.0, ember-cli-babel@^7.13.2, ember-cli-babel@^7.21.0, ember-cli-babel@^7.23.1, ember-cli-babel@^7.26.2:
   version "7.26.3"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.26.3.tgz#e93ce7ec458208894d10844cf76e41cc06fdbeb6"
   integrity sha512-ZCs0g99d3kYaHs1+HT33oMY7/K+nLCAAv7dCLxsMzg7cQf55O6Pq4ZKnWEr3IHVs33xbJFnEb9prt1up36QVnw==
@@ -12608,13 +12618,23 @@ tr46@^2.0.2:
   dependencies:
     punycode "^2.1.1"
 
-tracked-maps-and-sets@^2.2.1:
+tracked-maps-and-sets@^2.0.0, tracked-maps-and-sets@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/tracked-maps-and-sets/-/tracked-maps-and-sets-2.2.1.tgz#323dd40540c561e8b0ffdec8bf129c68ec5025f9"
   integrity sha512-XYrXh6L/GpGmVmG3KcN/qoDyi4FxHh8eZY/BA/RuoxynskV+GZSfwrX3R+5DR2CIkzkCx4zi4kkDRg1AMDfDhg==
   dependencies:
     "@glimmer/tracking" "^1.0.0"
     ember-cli-babel "^7.17.2"
+
+tracked-toolbox@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/tracked-toolbox/-/tracked-toolbox-1.2.2.tgz#1669225a13371b66da8e98521258b51ce0c18909"
+  integrity sha512-lI7O4nyISRAznMloK/MalPXCANIGabfqFcnUxNuRctPfRT/G//RPQcjoSKQMkbiBjdrStfIssik23hyd/EtAWQ==
+  dependencies:
+    ember-cache-primitive-polyfill "^1.0.0"
+    ember-cli-babel "^7.21.0"
+    ember-cli-htmlbars "^5.3.1"
+    tracked-maps-and-sets "^2.0.0"
 
 tree-sync@^1.2.2:
   version "1.4.0"

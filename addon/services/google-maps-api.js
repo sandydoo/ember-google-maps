@@ -1,19 +1,19 @@
 import Service from '@ember/service';
-import { computed } from '@ember/object';
 import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
 import { assert } from '@ember/debug';
 import { bind } from '@ember/runloop';
 import { toPromiseProxy, promisify } from '../utils/helpers';
+import { cached } from 'tracked-toolbox';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
 
 export default class GoogleMapsApiService extends Service {
-  @computed
+  @cached
   get google() {
     return toPromiseProxy(() => this._getApi());
   }
 
-  @computed('google')
+  @cached
   get directionsService() {
     return toPromiseProxy(() =>
       this.google.then((google) => new google.maps.DirectionsService())
