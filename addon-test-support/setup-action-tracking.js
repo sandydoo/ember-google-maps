@@ -1,10 +1,9 @@
-import EmberObject from '@ember/object';
-import { Promise } from 'rsvp';
+import { Promise, resolve } from 'rsvp';
 
 export class ActionTracker {
   constructor() {
-    let Tracked = EmberObject.extend();
-    this.tracked = Tracked.create();
+    this.tracked = new Map();
+    this.watcher = new Map();
   }
 
   seen(name, options = {}) {
@@ -12,20 +11,20 @@ export class ActionTracker {
       return;
     }
 
+    let target = this.tracked.get(name);
+
+    if (target?.count > target?.lastSeen) {
+      this.tracked.set(name, {
+        ...target,
+        lastSeen: target.count,
+      });
+      return resolve();
+    }
+
     let { timeout = 10000 } = options;
 
     return new Promise((resolve, reject) => {
-      let target = this.tracked[name];
-      let observed = () => {
-        this.tracked[name].observed = true;
-        resolve(this.tracked[name]);
-      };
-
-      if (target && target.observed === false) {
-        observed();
-      }
-
-      this.tracked.addObserver(name, this, observed);
+      this.watcher.set(name, resolve);
 
       setTimeout(() => {
         reject(new Error(`Timed out waiting for ${name}.`));
@@ -33,15 +32,23 @@ export class ActionTracker {
     });
   }
 
-  track(name, value) {
-    let { current: previous, count = 0 } = this.tracked[name] || {};
+  notify(name) {
+    let resolve = this.watcher.get(name);
+    this.watcher.delete(name);
+    return resolve?.();
+  }
+
+  track(name) {
+    let { count = 0, lastSeen = 0 } = this.tracked.get(name) ?? {};
 
     this.tracked.set(name, {
-      current: value,
-      previous,
       count: ++count,
-      observed: false,
+      lastSeen,
     });
+
+    if (this.watcher.has(name)) {
+      this.notify(name);
+    }
   }
 }
 
