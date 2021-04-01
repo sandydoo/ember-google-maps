@@ -1,37 +1,24 @@
-import Component from '@ember/component';
-import layout from '../templates/components/google-docs';
-import { computed } from '@ember/object';
-import { reads } from '@ember/object/computed';
+import Component from '@glimmer/component';
 import { capitalize } from '@ember/string';
 
-const GoogleDocs = Component.extend({
-  layout,
-  tagName: 'a',
-  attributeBindings: ['href', 'rel', 'target'],
+let referenceUrl =
+    'https://developers.google.com/maps/documentation/javascript/reference/',
+  guideUrl = 'https://developers.google.com/maps/documentation/javascript/';
 
-  type: 'reference',
-  referenceUrl: 'https://developers.google.com/maps/documentation/javascript/reference/',
-  guideUrl: 'https://developers.google.com/maps/documentation/javascript/',
-  rel: 'noopener',
-  target: '_blank',
+export default class GoogleDocs extends Component {
+  get type() {
+    return this.args.type ?? 'reference';
+  }
 
-  as: reads('section'),
+  get baseUrl() {
+    return this.type === 'reference' ? referenceUrl : guideUrl;
+  }
 
-  baseUrl: computed('type', 'referenceUrl', 'guideUrl', function() {
-    return (this.type === 'reference') ? this.referenceUrl : this.guideUrl;
-  }),
-
-  displayType: computed('type', function() {
+  get displayType() {
     return capitalize(this.type);
-  }),
+  }
 
-  href: computed('baseUrl', 'section', function() {
-    return this.baseUrl + this.section;
-  })
-});
-
-GoogleDocs.reopenClass({
-  positionalParams: ['as', 'section']
-});
-
-export default GoogleDocs;
+  get href() {
+    return this.baseUrl + this.args.section;
+  }
+}
