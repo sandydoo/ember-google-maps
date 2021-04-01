@@ -67,6 +67,8 @@ export default Component.extend({
     return owner.lookup('service:fastboot');
   }),
 
+  isFastBoot: reads('fastboot.isFastBoot'),
+
   layout,
 
   tagName: '',
@@ -139,7 +141,9 @@ export default Component.extend({
     this._canvasIsRendering = defer();
     this._eventListeners = new Map();
 
-    get(this, '_initMap').perform();
+    if (!get(this, 'isFastBoot')) {
+      get(this, '_initMap').perform();
+    }
   },
 
   didUpdateAttrs() {
