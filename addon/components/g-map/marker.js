@@ -4,7 +4,6 @@ import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
-
 /**
  * A wrapper for the google.maps.Marker class.
  *
@@ -30,8 +29,6 @@ export default MapComponent.extend({
   },
 
   _addComponent(options) {
-    return resolve(
-      set(this, 'mapComponent', new google.maps.Marker(options))
-    );
-  }
+    return resolve(set(this, 'mapComponent', new google.maps.Marker(options)));
+  },
 });

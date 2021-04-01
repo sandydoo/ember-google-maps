@@ -10,6 +10,6 @@ module.exports = {
     'addon/templates/components/**',
     'lib/in-repo-pin-addon/**',
     'tests/**',
-    'dummy/templates/**'
-  ]
+    'dummy/templates/**',
+  ],
 };

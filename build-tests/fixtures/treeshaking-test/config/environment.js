@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'treeshaking-test',
     environment,
@@ -9,15 +9,15 @@ module.exports = function(environment) {
     EmberENV: {
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     'ember-google-maps': {
-      key: process.env.GOOGLE_MAPS_API_KEY
+      key: process.env.GOOGLE_MAPS_API_KEY,
     },
 
-    APP: {}
+    APP: {},
   };
 
   if (environment === 'test') {

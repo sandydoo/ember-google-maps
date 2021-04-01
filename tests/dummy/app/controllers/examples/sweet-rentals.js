@@ -1,10 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { reads } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { throttle } from '@ember/runloop';
-
 
 class Rental {
   @tracked id;
@@ -19,7 +17,6 @@ class Rental {
   }
 }
 
-
 export default class SweetRentalsController extends Controller {
   @service
   googleMapsApi;
@@ -27,8 +24,9 @@ export default class SweetRentalsController extends Controller {
   @service
   mapData;
 
-  @reads('googleMapsApi.google')
-  google;
+  get google() {
+    return this.googleMapsApi.google;
+  }
 
   @tracked mapBounds;
   @tracked mapZoom;
@@ -42,13 +40,13 @@ export default class SweetRentalsController extends Controller {
   constructor() {
     super(...arguments);
 
-    this.getRentals().then(rentals => {
+    this.getRentals().then((rentals) => {
       this.rentals = rentals;
     });
   }
 
   get filteredRentals() {
-    return this.rentals.filter(rental => {
+    return this.rentals.filter((rental) => {
       let { mapBounds } = this;
 
       if (mapBounds) {
@@ -56,11 +54,19 @@ export default class SweetRentalsController extends Controller {
 
         // TODO: Look into this again...
         let northEast = mapBounds.getNorthEast(),
-            southWest = mapBounds.getSouthWest(),
-            distance = 10000 / this.mapZoom,
-            newNorthEast = google.maps.geometry.spherical.computeOffset(northEast, distance, 45),
-            newSouthWest = google.maps.geometry.spherical.computeOffset(southWest, distance, -135),
-            extendedBounds = mapBounds.extend(newNorthEast).extend(newSouthWest);
+          southWest = mapBounds.getSouthWest(),
+          distance = 10000 / this.mapZoom,
+          newNorthEast = google.maps.geometry.spherical.computeOffset(
+            northEast,
+            distance,
+            45
+          ),
+          newSouthWest = google.maps.geometry.spherical.computeOffset(
+            southWest,
+            distance,
+            -135
+          ),
+          extendedBounds = mapBounds.extend(newNorthEast).extend(newSouthWest);
 
         return extendedBounds.contains(new google.maps.LatLng(lat, lng));
       } else {
@@ -71,8 +77,9 @@ export default class SweetRentalsController extends Controller {
 
   getRentals() {
     return this.google.then(() => {
-      return this.mapData.londonLocations
-        .map(location => new Rental({ ...location, active: false }));
+      return this.mapData.londonLocations.map(
+        (location) => new Rental({ ...location, active: false })
+      );
     });
   }
 
@@ -84,7 +91,7 @@ export default class SweetRentalsController extends Controller {
   @action
   scrollToListing(listing) {
     let id = `rental-${listing.id}`,
-        el = document.getElementById(id);
+      el = document.getElementById(id);
 
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });

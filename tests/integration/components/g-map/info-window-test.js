@@ -5,20 +5,24 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g-map/info-window', function(hooks) {
+module('Integration | Component | g-map/info-window', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this._domReady = false;
 
-    this.onDomReady = () => { this._domReady = true; };
+    this.onDomReady = () => {
+      this._domReady = true;
+    };
     this.domIsReady = () => this._domReady;
   });
 
   function getInfoWindow(gMapAPI) {
-    let { components: { infoWindows } } = gMapAPI;
+    let {
+      components: { infoWindows },
+    } = gMapAPI;
     return infoWindows[0].mapComponent;
   }
 
@@ -26,7 +30,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     return infoWindow.getMap() && infoWindow.getPosition();
   }
 
-  test('it registers an info window', async function(assert) {
+  test('it registers an info window', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} as |g|>
         <g.infoWindow
@@ -37,7 +41,9 @@ module('Integration | Component | g-map/info-window', function(hooks) {
       </GMap>
     `);
 
-    let { components: { infoWindows } } = this.gMapAPI;
+    let {
+      components: { infoWindows },
+    } = this.gMapAPI;
 
     assert.equal(infoWindows.length, 1);
 
@@ -45,7 +51,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.ok(infoWindow);
   });
 
-  test('it opens an info window when isOpen is set to true', async function(assert) {
+  test('it opens an info window when isOpen is set to true', async function (assert) {
     this.isOpen = false;
 
     await render(hbs`
@@ -69,7 +75,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.ok(isVisible(infoWindow));
   });
 
-  test('it renders an info window with custom html passed using the content attribute', async function(assert) {
+  test('it renders an info window with custom html passed using the content attribute', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} as |g|>
         <g.infoWindow
@@ -89,7 +95,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.ok(isVisible(infoWindow));
   });
 
-  test('it renders an info window with custom html passed as a block', async function(assert) {
+  test('it renders an info window with custom html passed as a block', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} as |g|>
         <g.infoWindow
@@ -110,7 +116,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.ok(isVisible(infoWindow));
   });
 
-  test('it attaches an info window to a marker', async function(assert) {
+  test('it attaches an info window to a marker', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
         <g.marker @lat={{55}} @lng={{2}} as |m|>
@@ -132,7 +138,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.deepEqual(infoWindow.getPosition().toJSON(), { lat: 55, lng: 2 });
   });
 
-  test('it closes the info window when isOpen is set to false', async function(assert) {
+  test('it closes the info window when isOpen is set to false', async function (assert) {
     this.isOpen = true;
 
     await render(hbs`
@@ -162,7 +168,7 @@ module('Integration | Component | g-map/info-window', function(hooks) {
     assert.notOk(isVisible(infoWindow));
   });
 
-  test('it closes the info window when the close button is clicked', async function(assert) {
+  test('it closes the info window when the close button is clicked', async function (assert) {
     this.isOpen = true;
 
     await render(hbs`

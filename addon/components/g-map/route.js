@@ -33,5 +33,5 @@ export default MapComponent.extend({
     return resolve(
       set(this, 'mapComponent', new google.maps.DirectionsRenderer(options))
     );
-  }
+  },
 });

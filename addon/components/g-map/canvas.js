@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { computed, get } from '@ember/object';
 
-
 /**
  * Renders a canvas div into which the map is inserted.
  *
@@ -14,13 +13,13 @@ export default Component.extend({
   tagName: '',
 
   // TODO: Remove in Octane version. Use `...attributes` instead.
-  computedClasses: computed('class', 'classNames', function() {
+  computedClasses: computed('class', 'classNames', function () {
     let classes = [
       'ember-google-map',
       get(this, 'class'),
-      get(this, 'classNames')
+      get(this, 'classNames'),
     ];
-    return classes.filter(x => x).join(' ');
+    return classes.filter((x) => x).join(' ');
   }),
 
   didInsertElement() {
@@ -30,5 +29,5 @@ export default Component.extend({
     let canvas = document.getElementById(id);
 
     this._internalAPI._registerCanvas(canvas);
-  }
+  },
 });

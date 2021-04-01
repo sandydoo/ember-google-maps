@@ -1,13 +1,13 @@
 /* eslint-env node */
 'use strict';
 
-module.exports = function(deployTarget) {
+module.exports = function (deployTarget) {
   let ENV = {
     build: {},
     // include other plugin configuration that applies to all deploy targets here
     pipeline: {
-      activateOnDeploy: true
-    }
+      activateOnDeploy: true,
+    },
   };
 
   if (deployTarget === 'development') {
@@ -27,12 +27,13 @@ module.exports = function(deployTarget) {
     ENV.s3 = {
       bucket: 'ember-google-maps.sandydoo.me',
       region: 'eu-west-1',
-      filePattern: '**/*.{js,css,png,gif,ico,jpg,map,xml,txt,svg,swf,eot,ttf,woff,woff2,otf,html}'
+      filePattern:
+        '**/*.{js,css,png,gif,ico,jpg,map,xml,txt,svg,swf,eot,ttf,woff,woff2,otf,html}',
     };
 
     ENV['s3-index'] = {
       bucket: 'ember-google-maps.sandydoo.me',
-      region: 'eu-west-1'
+      region: 'eu-west-1',
     };
   }
 

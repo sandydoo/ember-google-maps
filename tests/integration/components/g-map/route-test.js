@@ -1,18 +1,22 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { getDirectionsQuery, setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
+import {
+  getDirectionsQuery,
+  setupActionTracking,
+  setupMapTest,
+} from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import wait from 'dummy/tests/helpers/wait';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g-map/route', function(hooks) {
+module('Integration | Component | g-map/route', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
   setupActionTracking(hooks);
 
-  test('it renders a route', async function(assert) {
+  test('it renders a route', async function (assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
 
@@ -27,14 +31,16 @@ module('Integration | Component | g-map/route', function(hooks) {
       </GMap>
     `);
 
-    let { components: { routes } } = this.gMapAPI;
+    let {
+      components: { routes },
+    } = this.gMapAPI;
 
     assert.equal(routes.length, 1);
 
     await wait(1000);
   });
 
-  test('it updates a route when the directions change', async function(assert) {
+  test('it updates a route when the directions change', async function (assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
 
@@ -52,7 +58,9 @@ module('Integration | Component | g-map/route', function(hooks) {
 
     await this.seenAction('directionsReady', { timeout: 10000 });
 
-    let { components: { routes } } = this.gMapAPI;
+    let {
+      components: { routes },
+    } = this.gMapAPI;
 
     let directions = routes[0].mapComponent.directions;
     let { origin } = getDirectionsQuery(directions);

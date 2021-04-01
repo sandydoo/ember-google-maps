@@ -1,6 +1,9 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { setupActionTracking, setupMapTest } from 'ember-google-maps/test-support';
+import {
+  setupActionTracking,
+  setupMapTest,
+} from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import wait from 'dummy/tests/helpers/wait';
 import { render } from '@ember/test-helpers';
@@ -10,13 +13,13 @@ function getWaypoints(directions) {
   return directions[0].directions.request.waypoints;
 }
 
-module('Integration | Component | g-map/waypoint', function(hooks) {
+module('Integration | Component | g-map/waypoint', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
   setupActionTracking(hooks);
 
-  test('it adds a waypoint to the directions', async function(assert) {
+  test('it adds a waypoint to the directions', async function (assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
     this.waypointLocation = 'Leather Lane';
@@ -37,7 +40,9 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
 
     await this.seenAction('directionsReady', { timeout: 10000 });
 
-    let { components: { directions } } = this.gMapAPI;
+    let {
+      components: { directions },
+    } = this.gMapAPI;
     let request = directions[0].directions.request;
 
     assert.equal(request.waypoints.length, 1);
@@ -46,7 +51,7 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
     await wait(1000);
   });
 
-  test('it updates the current directions when added', async function(assert) {
+  test('it updates the current directions when added', async function (assert) {
     this.origin = 'Covent Garden';
     this.destination = 'Clerkenwell';
     this.waypointLocation = 'Leather Lane';
@@ -70,7 +75,9 @@ module('Integration | Component | g-map/waypoint', function(hooks) {
 
     await this.seenAction('directionsReady', { timeout: 10000 });
 
-    let { components: { directions } } = this.gMapAPI;
+    let {
+      components: { directions },
+    } = this.gMapAPI;
     let waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 1);

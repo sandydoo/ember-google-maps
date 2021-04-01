@@ -5,21 +5,21 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g map/map-component', function(hooks) {
+module('Integration | Component | g map/map-component', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  hooks.before(function() {
+  hooks.before(function () {
     this._addComponent = () => {};
   });
 
-  test('it registers with the parent map when created', async function(assert) {
+  test('it registers with the parent map when created', async function (assert) {
     assert.expect(1);
 
     this._internalAPI = {
       _registerComponent: (type) => assert.equal(type, 'tests', 'it registers'),
-      _unregisterComponent: () => {}
+      _unregisterComponent: () => {},
     };
 
     await render(hbs`
@@ -31,12 +31,13 @@ module('Integration | Component | g map/map-component', function(hooks) {
     `);
   });
 
-  test('it unregisters with the parent map when destroyed', async function(assert) {
+  test('it unregisters with the parent map when destroyed', async function (assert) {
     assert.expect(1);
 
     this._internalAPI = {
       _registerComponent: () => {},
-      _unregisterComponent: (type) => assert.equal(type, 'tests', 'it unregisters'),
+      _unregisterComponent: (type) =>
+        assert.equal(type, 'tests', 'it unregisters'),
     };
 
     await render(hbs`
@@ -44,7 +45,6 @@ module('Integration | Component | g map/map-component', function(hooks) {
         @map={{map}}
         @_internalAPI={{_internalAPI}}
         @_type="test"
-        @_addComponent={{_addComponent}} />`
-    );
+        @_addComponent={{_addComponent}} />`);
   });
 });

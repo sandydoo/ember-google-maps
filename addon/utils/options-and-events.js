@@ -15,7 +15,7 @@ const ignoredOptions = [
 function parseOptionsAndEvents(ignored = [], callback = (r) => r) {
   let ignoredSet = new Set(ignored);
 
-  return computed('attrs', function() {
+  return computed('attrs', function () {
     return callback(parseAttrs(ignoredSet, this.attrs));
   });
 }
@@ -55,8 +55,9 @@ function extractValue(cell) {
 }
 
 function watch(target, options = {}) {
-  return Object.entries(options)
-    .map(([key, callback]) => addObserver(target, key, callback));
+  return Object.entries(options).map(([key, callback]) =>
+    addObserver(target, key, callback)
+  );
 }
 
 function addObserver(obj, key, callback) {
@@ -65,10 +66,9 @@ function addObserver(obj, key, callback) {
   return {
     name: key,
     listener,
-    remove: () => obj.removeObserver(key, callback)
+    remove: () => obj.removeObserver(key, callback),
   };
 }
-
 
 /* Events */
 
@@ -92,7 +92,7 @@ function addEventListener(target, originalEventName, action, payload = {}) {
   return {
     name: eventName,
     listener,
-    remove: () => listener.remove()
+    remove: () => listener.remove(),
   };
 }
 
@@ -120,5 +120,5 @@ export {
   isEvent,
   isIgnored,
   parseOptionsAndEvents,
-  watch
+  watch,
 };

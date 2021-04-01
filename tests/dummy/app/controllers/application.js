@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { throttle } from '@ember/runloop';
 
-
 export default class ApplicationController extends Controller {
   @service
   mapData;

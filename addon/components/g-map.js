@@ -1,9 +1,12 @@
 import Component from '@ember/component';
 import layout from '../templates/components/g-map';
-import { addEventListeners, parseOptionsAndEvents } from '../utils/options-and-events';
+import {
+  addEventListeners,
+  parseOptionsAndEvents,
+} from '../utils/options-and-events';
 import { position as center } from '../utils/helpers';
 import { inject as service } from '@ember/service';
-import { getOwner }  from '@ember/application';
+import { getOwner } from '@ember/application';
 import { computed, get, set } from '@ember/object';
 import { reads, readOnly } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
@@ -43,10 +46,9 @@ function GMapAPI(source) {
     actions: {
       update: () => source._updateMap(),
       trigger: () => source._trigger(),
-    }
+    },
   };
 }
-
 
 /**
  * @class GMap
@@ -61,7 +63,7 @@ export default Component.extend({
    */
   googleMapsApi: service(),
 
-  fastboot: computed(function() {
+  fastboot: computed(function () {
     let owner = getOwner(this);
 
     return owner.lookup('service:fastboot');
@@ -103,7 +105,7 @@ export default Component.extend({
    * @type {String}
    * @public
    */
-  mapId: computed(function() {
+  mapId: computed(function () {
     return `ember-google-map-${guidFor(this)}`;
   }),
 
@@ -135,7 +137,7 @@ export default Component.extend({
     this._internalAPI = {
       _registerCanvas: this._registerCanvas.bind(this),
       _registerComponent: this._registerComponent.bind(this),
-      _unregisterComponent: this._unregisterComponent.bind(this)
+      _unregisterComponent: this._unregisterComponent.bind(this),
     };
 
     this._canvasIsRendering = defer();
@@ -168,7 +170,7 @@ export default Component.extend({
    * @private
    * @return
    */
-  _initMap: task(function *() {
+  _initMap: task(function* () {
     yield get(this, 'google');
 
     // After google loads, we need to wait for Ember to update any values read
@@ -183,17 +185,20 @@ export default Component.extend({
     let map = new google.maps.Map(canvas, options);
 
     function waitForComponents() {
-      if (this.isDestroying || this.isDestroyed) { return; }
+      if (this.isDestroying || this.isDestroyed) {
+        return;
+      }
 
-      this._waitForComponents()
-        .then(() => {
-          this._componentsInitialized = true;
-          this.onComponentsLoad?.(this.publicAPI);
-        });
+      this._waitForComponents().then(() => {
+        this._componentsInitialized = true;
+        this.onComponentsLoad?.(this.publicAPI);
+      });
     }
 
     function setupMap() {
-      if (this.isDestroying || this.isDestroyed) { return; }
+      if (this.isDestroying || this.isDestroyed) {
+        return;
+      }
 
       set(this, 'map', map);
 
@@ -202,23 +207,30 @@ export default Component.extend({
         publicAPI: this.publicAPI,
       };
 
-      addEventListeners(map, this._createEvents(get(this, '_events')), payload)
-        .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+      addEventListeners(
+        map,
+        this._createEvents(get(this, '_events')),
+        payload
+      ).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
       this.onLoad?.(this.publicAPI);
 
-      safeScheduleOnce('afterRender', this, waitForComponents, skipErrorReporting);
+      safeScheduleOnce(
+        'afterRender',
+        this,
+        waitForComponents,
+        skipErrorReporting
+      );
     }
 
     google.maps.event.addListenerOnce(map, 'idle', bind(this, setupMap));
   }),
 
   _waitForComponents() {
-    let componentsAreInitialized =
-      Object.keys(this.components)
-        .map((name) => this.components[name])
-        .reduce((array, componentGroup) => array.concat(componentGroup), [])
-        .map((components) => get(components, 'isInitialized.promise'));
+    let componentsAreInitialized = Object.keys(this.components)
+      .map((name) => this.components[name])
+      .reduce((array, componentGroup) => array.concat(componentGroup), [])
+      .map((components) => get(components, 'isInitialized.promise'));
 
     return all(componentsAreInitialized);
   },
@@ -279,5 +291,5 @@ export default Component.extend({
    */
   _unregisterComponent(type, componentAPI) {
     this.components[type].removeObject(componentAPI);
-  }
+  },
 });

@@ -3,7 +3,6 @@ import { get, set } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import { resolve } from 'rsvp';
 
-
 /**
  * Circle marker component.
  *
@@ -28,8 +27,6 @@ export default Marker.extend({
   },
 
   _addComponent(options) {
-    return resolve(
-      set(this, 'mapComponent', new google.maps.Circle(options))
-    );
-  }
+    return resolve(set(this, 'mapComponent', new google.maps.Circle(options)));
+  },
 });

@@ -5,12 +5,12 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g map', function(hooks) {
+module('Integration | Component | g map', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a map', async function(assert) {
+  test('it renders a map', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} />
     `);
@@ -20,7 +20,7 @@ module('Integration | Component | g map', function(hooks) {
     assert.ok(map, 'map initialized');
   });
 
-  test('it passes attributes as options to the map', async function(assert) {
+  test('it passes attributes as options to the map', async function (assert) {
     await render(hbs`
       <GMap
         @lat={{lat}}
@@ -34,7 +34,7 @@ module('Integration | Component | g map', function(hooks) {
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
-  test('it accepts an options hash', async function(assert) {
+  test('it accepts an options hash', async function (assert) {
     await render(hbs`
       <GMap
         @lat={{lat}}
@@ -47,7 +47,7 @@ module('Integration | Component | g map', function(hooks) {
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
-  test('it updates the map when attributes are changed', async function(assert) {
+  test('it updates the map when attributes are changed', async function (assert) {
     this.zoom = 12;
 
     await render(hbs`
@@ -63,7 +63,7 @@ module('Integration | Component | g map', function(hooks) {
     assert.equal(map.zoom, this.zoom);
   });
 
-  test('it extracts events from attributes and binds them to the map', async function(assert) {
+  test('it extracts events from attributes and binds them to the map', async function (assert) {
     assert.expect(1);
 
     this.onZoomChanged = ({ eventName }) => {
@@ -83,7 +83,7 @@ module('Integration | Component | g map', function(hooks) {
     map.setZoom(10);
   });
 
-  test('it accepts both an events hash and individual attribute events', async function(assert) {
+  test('it accepts both an events hash and individual attribute events', async function (assert) {
     assert.expect(2);
 
     this.onClick = ({ eventName }) => {
@@ -91,7 +91,11 @@ module('Integration | Component | g map', function(hooks) {
     };
 
     this.onZoomChanged = ({ eventName }) => {
-      assert.equal(eventName, 'zoom_changed', 'zoom changed event from events hash');
+      assert.equal(
+        eventName,
+        'zoom_changed',
+        'zoom changed event from events hash'
+      );
     };
 
     await render(hbs`
@@ -110,7 +114,7 @@ module('Integration | Component | g map', function(hooks) {
     map.setZoom(10);
   });
 
-  test('it calls the `onComponentsLoad` hook when all the components are ready', async function(assert) {
+  test('it calls the `onComponentsLoad` hook when all the components are ready', async function (assert) {
     assert.expect(2);
 
     this.onComponentsLoad = () => {
@@ -128,25 +132,31 @@ module('Integration | Component | g map', function(hooks) {
       </GMap>
     `);
 
-    let { components: { markers } } = this.gMapAPI;
+    let {
+      components: { markers },
+    } = this.gMapAPI;
 
-    markers[0].isInitialized.promise
-      .then(() => assert.ok('Component is actually loaded'));
+    markers[0].isInitialized.promise.then(() =>
+      assert.ok('Component is actually loaded')
+    );
   });
 
   /**
    * Octane support tests
    */
-  test('octane: it passes attributes to the default canvas', async function(assert) {
+  test('octane: it passes attributes to the default canvas', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
     `);
 
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
-    assert.ok(find('.ember-google-map'), 'default class appended to attributes');
+    assert.ok(
+      find('.ember-google-map'),
+      'default class appended to attributes'
+    );
   });
 
-  test('octane: it renders a default canvas in block form', async function(assert) {
+  test('octane: it renders a default canvas in block form', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" as |g|>
       </GMap>

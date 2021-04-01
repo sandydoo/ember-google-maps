@@ -9,22 +9,17 @@ module.exports = function (defaults) {
     snippetPaths: ['tests/dummy/code-snippets'],
 
     babel: {
-      plugins: [
-        '@babel/plugin-proposal-optional-chaining'
-      ]
+      plugins: ['@babel/plugin-proposal-optional-chaining'],
     },
 
     'ember-cli-babel': {
-      includePolyfill: true
+      includePolyfill: true,
     },
 
     sassOptions: {
       precision: 10,
       onlyIncluded: true,
-      includePaths: [
-        'tests/dummy/app/styles',
-        'node_modules/bootstrap/scss'
-      ]
+      includePaths: ['tests/dummy/app/styles', 'node_modules/bootstrap/scss'],
     },
 
     minifyCSS: {
@@ -32,11 +27,11 @@ module.exports = function (defaults) {
         // Don't break Bootstrap with css mangling.
         // Remove for clean-css 4.0
         advanced: false,
-      }
+      },
     },
 
     'ember-composable-helpers': {
-      only: ['array', 'join', 'toggle']
+      only: ['array', 'join', 'toggle'],
     },
 
     prember: {
@@ -58,9 +53,9 @@ module.exports = function (defaults) {
         '/docs/directions',
         '/docs/overlays',
         '/docs/complex-ui',
-        '/examples/sweet-rentals'
-      ]
-    }
+        '/examples/sweet-rentals',
+      ],
+    },
   };
 
   let app = new EmberAddon(defaults, options);

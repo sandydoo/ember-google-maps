@@ -7,17 +7,16 @@ import { bind } from '@ember/runloop';
 import { toPromiseProxy, promisify } from '../utils/helpers';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
 
-
 export default class GoogleMapsApiService extends Service {
   @computed
   get google() {
     return toPromiseProxy(() => this._getApi());
   }
 
-  @computed
+  @computed('google')
   get directionsService() {
-    return toPromiseProxy(
-      () => this.google.then(google => new google.maps.DirectionsService())
+    return toPromiseProxy(() =>
+      this.google.then((google) => new google.maps.DirectionsService())
     );
   }
 
@@ -39,26 +38,34 @@ export default class GoogleMapsApiService extends Service {
    * should contain your API key and any other options you set.
    */
   _getConfig() {
-    return getOwner(this).resolveRegistration('config:environment')['ember-google-maps'];
+    return getOwner(this).resolveRegistration('config:environment')[
+      'ember-google-maps'
+    ];
   }
 
   /**
    * Return or load the Google Maps API.
    */
   _getApi() {
-    if (typeof document === 'undefined') { return reject(); }
+    if (typeof document === 'undefined') {
+      return reject();
+    }
 
     let google = window.google;
-    if (google && google.maps) { return resolve(google); }
+    if (google && google.maps) {
+      return resolve(google);
+    }
 
     let config = this._getConfig();
 
-    return promisify(this.buildGoogleMapsUrl(config))
-      .then(this._loadAndInitApi);
+    return promisify(this.buildGoogleMapsUrl(config)).then(
+      this._loadAndInitApi
+    );
   }
 
   _loadAndInitApi(src) {
-    assert(`
+    assert(
+      `
 ember-google-maps: You tried to load the Google Maps API, but the source URL was empty. \
 Perhaps you forgot to specify the API key? \
 Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,

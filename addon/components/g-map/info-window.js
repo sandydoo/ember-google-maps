@@ -1,25 +1,23 @@
 import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/info-window';
-import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import {
+  ignoredOptions,
+  parseOptionsAndEvents,
+} from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { resolve } from 'rsvp';
 
-
 export function InfoWindowAPI(source) {
   let mapComponentAPI = MapComponentAPI(source);
 
-  return combine(
-    mapComponentAPI,
-    {
-      actions: {
-        open: () => source.open(),
-        close: () => source.close()
-      }
-    }
-  );
+  return combine(mapComponentAPI, {
+    actions: {
+      open: () => source.open(),
+      close: () => source.close(),
+    },
+  });
 }
-
 
 /**
  * A wrapper for the google.maps.InfoWindow class.
@@ -39,7 +37,12 @@ export default MapComponent.extend({
 
   position: computed('lat', 'lng', position),
 
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'isOpen', 'target', 'content']),
+  _optionsAndEvents: parseOptionsAndEvents([
+    ...ignoredOptions,
+    'isOpen',
+    'target',
+    'content',
+  ]),
 
   _createOptions(options) {
     let newOptions = {
@@ -124,5 +127,5 @@ export default MapComponent.extend({
     if (this.mapComponent) {
       this.mapComponent.close();
     }
-  }
+  },
 });

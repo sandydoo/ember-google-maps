@@ -1,24 +1,22 @@
 import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/autocomplete';
-import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import {
+  ignoredOptions,
+  parseOptionsAndEvents,
+} from '../../utils/options-and-events';
 import { get, set } from '@ember/object';
 import { assert } from '@ember/debug';
 import { resolve } from 'rsvp';
 
-
 export function AutocompleteAPI(source) {
   let mapComponentAPI = MapComponentAPI(source);
 
-  return combine(
-    mapComponentAPI,
-    {
-      get place() {
-        return source.place;
-      }
-    }
-  );
+  return combine(mapComponentAPI, {
+    get place() {
+      return source.place;
+    },
+  });
 }
-
 
 /**
  * @class Autocomplete
@@ -45,15 +43,21 @@ export default MapComponent.extend({
 
     let inputElement = this.element.querySelector('input');
 
-    assert('You must define your own input within the ember-google-maps autocomplete block.', inputElement);
+    assert(
+      'You must define your own input within the ember-google-maps autocomplete block.',
+      inputElement
+    );
 
-    let autocomplete = new google.maps.places.Autocomplete(inputElement, options);
+    let autocomplete = new google.maps.places.Autocomplete(
+      inputElement,
+      options
+    );
     set(this, 'mapComponent', autocomplete);
 
     // Bias the search results to the current map bounds.
     autocomplete.setBounds(map.getBounds());
 
-    map.addListener('bounds_changed', function() {
+    map.addListener('bounds_changed', function () {
       autocomplete.setBounds(map.getBounds());
     });
 
@@ -68,5 +72,5 @@ export default MapComponent.extend({
     if (this.place.geometry) {
       this.onSearch?.(this.publicAPI);
     }
-  }
+  },
 });

@@ -21,5 +21,5 @@ include "${name}".
 Learn more at: https://ember-google-maps.sandydoo.me/docs/getting-started`;
 
     assert(message);
-  }
+  },
 });

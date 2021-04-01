@@ -7,15 +7,12 @@ const linkToNext = LinkComponent.extend({
   init() {
     this._super(...arguments);
 
-    set(this, 'params', [
-      `${this.nextPage.title} ›`,
-      this.nextPage.path
-    ]);
-  }
+    set(this, 'params', [`${this.nextPage.title} ›`, this.nextPage.path]);
+  },
 });
 
 linkToNext.reopenClass({
-  positionalParams: ['nextPage']
+  positionalParams: ['nextPage'],
 });
 
 export default linkToNext;

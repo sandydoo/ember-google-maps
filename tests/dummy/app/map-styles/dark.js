@@ -1,106 +1,106 @@
 export const dark = [
   {
-    'featureType': 'water',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#193341'
-      }
-    ]
+        color: '#193341',
+      },
+    ],
   },
   {
-    'featureType': 'landscape',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'landscape',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#2c5a71'
-      }
-    ]
+        color: '#2c5a71',
+      },
+    ],
   },
   {
-    'featureType': 'road',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#29768a'
+        color: '#29768a',
       },
       {
-        'lightness': -37
-      }
-    ]
+        lightness: -37,
+      },
+    ],
   },
   {
-    'featureType': 'poi',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'poi',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#406d80'
-      }
-    ]
+        color: '#406d80',
+      },
+    ],
   },
   {
-    'featureType': 'transit',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'transit',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#406d80'
-      }
-    ]
+        color: '#406d80',
+      },
+    ],
   },
   {
-    'elementType': 'labels.text.stroke',
-    'stylers': [
+    elementType: 'labels.text.stroke',
+    stylers: [
       {
-        'visibility': 'on'
+        visibility: 'on',
       },
       {
-        'color': '#3e606f'
+        color: '#3e606f',
       },
       {
-        'weight': 2
+        weight: 2,
       },
       {
-        'gamma': 0.84
-      }
-    ]
+        gamma: 0.84,
+      },
+    ],
   },
   {
-    'elementType': 'labels.text.fill',
-    'stylers': [
+    elementType: 'labels.text.fill',
+    stylers: [
       {
-        'color': '#ffffff'
-      }
-    ]
+        color: '#ffffff',
+      },
+    ],
   },
   {
-    'featureType': 'administrative',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'administrative',
+    elementType: 'geometry',
+    stylers: [
       {
-        'weight': 0.6
+        weight: 0.6,
       },
       {
-        'color': '#1a3541'
-      }
-    ]
+        color: '#1a3541',
+      },
+    ],
   },
   {
-    'elementType': 'labels.icon',
-    'stylers': [
+    elementType: 'labels.icon',
+    stylers: [
       {
-        'visibility': 'off'
-      }
-    ]
+        visibility: 'off',
+      },
+    ],
   },
   {
-    'featureType': 'poi.park',
-    'elementType': 'geometry',
-    'stylers': [
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [
       {
-        'color': '#2c5a71'
-      }
-    ]
-  }
+        color: '#2c5a71',
+      },
+    ],
+  },
 ];
 
 export default dark;

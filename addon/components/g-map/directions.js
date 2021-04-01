@@ -1,6 +1,10 @@
 import MapComponent, { MapComponentAPI, combine } from './map-component';
 import layout from '../../templates/components/g-map/directions';
-import { ignoredOptions, parseOptionsAndEvents, watch } from '../../utils/options-and-events';
+import {
+  ignoredOptions,
+  parseOptionsAndEvents,
+  watch,
+} from '../../utils/options-and-events';
 import { inject as service } from '@ember/service';
 import { get, getProperties, setProperties } from '@ember/object';
 import { reads } from '@ember/object/computed';
@@ -9,28 +13,23 @@ import { Promise } from 'rsvp';
 import { schedule, scheduleOnce } from '@ember/runloop';
 import { didCancel, task } from 'ember-concurrency';
 
-
 export function DirectionsAPI(source) {
   let mapComponentAPI = MapComponentAPI(source);
 
-  return combine(
-    mapComponentAPI,
-    {
-      get directions() {
-        return source.directions;
-      },
+  return combine(mapComponentAPI, {
+    get directions() {
+      return source.directions;
+    },
 
-      get waypoints() {
-        return source.waypoints;
-      },
+    get waypoints() {
+      return source.waypoints;
+    },
 
-      actions: {
-        route: () => source.route()
-      }
-    }
-  );
+    actions: {
+      route: () => source.route(),
+    },
+  });
 }
-
 
 /**
  * A wrapper for the google.maps.directionsService API.
@@ -50,20 +49,20 @@ export default MapComponent.extend({
 
   directionsService: reads('googleMapsApi.directionsService'),
 
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'onDirectionsChanged']),
+  _optionsAndEvents: parseOptionsAndEvents([
+    ...ignoredOptions,
+    'onDirectionsChanged',
+  ]),
 
   _createOptions(options) {
     return {
       ...options,
-      ...getProperties(
-        this,
-        [
-          'origin',
-          'destination',
-          'travelMode',
-          'waypoints',
-        ]
-      ),
+      ...getProperties(this, [
+        'origin',
+        'destination',
+        'travelMode',
+        'waypoints',
+      ]),
     };
   },
 
@@ -84,13 +83,13 @@ export default MapComponent.extend({
   },
 
   _didAddComponent() {
-    let watched =
-      watch(this, {
-        'waypoints.[]': () => this._updateOrAddComponent(),
-      });
+    let watched = watch(this, {
+      'waypoints.[]': () => this._updateOrAddComponent(),
+    });
 
-    watched
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+    watched.forEach(({ name, remove }) =>
+      this._eventListeners.set(name, remove)
+    );
 
     return this._super(...arguments);
   },
@@ -103,12 +102,20 @@ export default MapComponent.extend({
    */
   route(options) {
     return new Promise((resolve, reject) => {
-      scheduleOnce('afterRender', this, this._performRouteTask, options, resolve, reject);
+      scheduleOnce(
+        'afterRender',
+        this,
+        this._performRouteTask,
+        options,
+        resolve,
+        reject
+      );
     });
   },
 
   _performRouteTask(options, resolve, reject) {
-    get(this, 'routeTask').perform(options)
+    get(this, 'routeTask')
+      .perform(options)
       .then((result) => resolve(result))
       .catch((e) => {
         if (!didCancel(e)) {
@@ -117,12 +124,12 @@ export default MapComponent.extend({
       });
   },
 
-  routeTask: task(function *(options) {
+  routeTask: task(function* (options) {
     let directions = yield get(this, 'fetchDirections').perform(options);
 
     setProperties(this, {
       directions,
-      mapComponent: directions
+      mapComponent: directions,
     });
 
     if (this.onDirectionsChanged) {
@@ -132,7 +139,7 @@ export default MapComponent.extend({
     return directions;
   }).restartable(),
 
-  fetchDirections: task(function *(options) {
+  fetchDirections: task(function* (options) {
     let directionsService = yield get(this, 'directionsService');
 
     let request = new Promise((resolve, reject) => {
@@ -160,5 +167,5 @@ export default MapComponent.extend({
     schedule('actions', () => {
       get(this, 'waypoints').removeObject(waypoint);
     });
-  }
+  },
 });

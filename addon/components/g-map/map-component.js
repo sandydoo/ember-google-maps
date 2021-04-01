@@ -1,16 +1,16 @@
 import Component from '@ember/component';
-import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import {
+  addEventListeners,
+  ignoredOptions,
+  parseOptionsAndEvents,
+} from '../../utils/options-and-events';
 import { get } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
 import { defer, resolve, reject } from 'rsvp';
 import { assert } from '@ember/debug';
 
-
 export function combine(base, extra) {
-  return Object.defineProperties(
-    base,
-    Object.getOwnPropertyDescriptors(extra)
-  );
+  return Object.defineProperties(base, Object.getOwnPropertyDescriptors(extra));
 }
 
 export function MapComponentAPI(source) {
@@ -28,21 +28,20 @@ export function MapComponentAPI(source) {
     },
 
     actions: {
-      update: () => source._updateComponent
-    }
+      update: () => source._updateComponent,
+    },
   };
 }
 
 const NOT_READY = 1,
-      IN_PROGRESS = 2,
-      READY = 3;
+  IN_PROGRESS = 2,
+  READY = 3;
 
 const MapComponentLifecycleEnum = {
   NOT_READY,
   IN_PROGRESS,
   READY,
 };
-
 
 /**
  * @class MapComponent
@@ -56,7 +55,6 @@ const MapComponent = Component.extend({
   _type: undefined,
 
   mapComponentLifecycle: NOT_READY,
-
 
   /* Options and events */
 
@@ -74,13 +72,15 @@ const MapComponent = Component.extend({
 
   _events: readOnly('_optionsAndEvents.events'),
 
-
   /* Lifecycle hooks */
 
   init() {
     this._super(...arguments);
 
-    assert('You must set a _type property on the map component.', typeof this._type !== 'undefined');
+    assert(
+      'You must set a _type property on the map component.',
+      typeof this._type !== 'undefined'
+    );
 
     this._registrationType = this._pluralType || `${this._type}s`;
 
@@ -98,12 +98,16 @@ const MapComponent = Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    this._internalAPI._registerComponent(this._registrationType, this.publicAPI);
+    this._internalAPI._registerComponent(
+      this._registrationType,
+      this.publicAPI
+    );
 
     this._updateOrAddComponent();
   },
 
   didUpdateAttrs() {
+    this._super();
     this._updateOrAddComponent();
   },
 
@@ -114,9 +118,11 @@ const MapComponent = Component.extend({
 
     this.mapComponent?.setMap?.(null);
 
-    this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
+    this._internalAPI._unregisterComponent(
+      this._registrationType,
+      this.publicAPI
+    );
   },
-
 
   _updateOrAddComponent() {
     let options, events;
@@ -133,7 +139,9 @@ const MapComponent = Component.extend({
         break; // PASS
 
       case NOT_READY:
-        if (typeof this.map === 'undefined') { break; }
+        if (typeof this.map === 'undefined') {
+          break;
+        }
 
         this.mapComponentLifecycle = IN_PROGRESS;
 
@@ -142,17 +150,20 @@ const MapComponent = Component.extend({
 
         resolve()
           .then(() => this._addComponent(options, events))
-          .then(mapComponent => this._didAddComponent(mapComponent, options, events))
+          .then((mapComponent) =>
+            this._didAddComponent(mapComponent, options, events)
+          )
           .then(() => {
             this.isInitialized.resolve();
             this.mapComponentLifecycle = READY;
           })
-          .catch(() => { this.mapComponentLifecycle = NOT_READY; });
+          .catch(() => {
+            this.mapComponentLifecycle = NOT_READY;
+          });
 
         break;
     }
   },
-
 
   /* Map component hooks */
 
@@ -181,8 +192,11 @@ const MapComponent = Component.extend({
       publicAPI: this.publicAPI,
     };
 
-    addEventListeners(mapComponent, events, payload)
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+    addEventListeners(
+      mapComponent,
+      events,
+      payload
+    ).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
     return resolve();
   },
@@ -195,7 +209,7 @@ const MapComponent = Component.extend({
    */
   _updateComponent(mapComponent, options /* , events */) {
     mapComponent.setOptions(options);
-  }
+  },
 });
 
 export { MapComponent as default, MapComponentLifecycleEnum };

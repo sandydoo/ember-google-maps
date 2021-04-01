@@ -8,11 +8,11 @@ export default class extends Route {
   constructor() {
     super(...arguments);
 
-    this.on('routeWillChange', function() {
+    this.on('routeWillChange', function () {
       this.document.body.setAttribute('class', '');
     });
 
-    this.on('routeDidChange', function() {
+    this.on('routeDidChange', function () {
       this.document.body.setAttribute('class', 'white');
     });
   }

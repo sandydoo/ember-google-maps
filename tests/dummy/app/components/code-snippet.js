@@ -30,5 +30,5 @@ export default Component.extend({
     let highlightedCode = Prism.highlight(source, grammar, language);
 
     this.code = htmlSafe(highlightedCode);
-  }
+  },
 });

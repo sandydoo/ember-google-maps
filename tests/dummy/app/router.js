@@ -1,7 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from 'dummy/config/environment';
 
-
 export default class Router extends EmberRouter {
   location = config.locationType;
   rootURL = config.rootURL;
@@ -9,7 +8,7 @@ export default class Router extends EmberRouter {
   constructor() {
     super(...arguments);
 
-    this.on('routeDidChange', function() {
+    this.on('routeDidChange', function () {
       window.scrollTo?.(0, 0);
     });
   }
@@ -18,7 +17,7 @@ export default class Router extends EmberRouter {
 Router.map(function () {
   this.route('index', { path: '/' });
 
-  this.route('docs', function() {
+  this.route('docs', function () {
     this.route('about');
     this.route('getting-started');
     this.route('map');
@@ -36,7 +35,7 @@ Router.map(function () {
     this.route('advanced');
   });
 
-  this.route('examples', function() {
+  this.route('examples', function () {
     this.route('sweet-rentals');
   });
 });

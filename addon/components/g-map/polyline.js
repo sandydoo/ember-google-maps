@@ -29,12 +29,13 @@ export default MapComponent.extend({
   },
 
   _didAddComponent() {
-    let watched = watch(this,
-      { 'path.[]': () => this._updateOrAddComponent() }
-    );
+    let watched = watch(this, {
+      'path.[]': () => this._updateOrAddComponent(),
+    });
 
-    watched
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+    watched.forEach(({ name, remove }) =>
+      this._eventListeners.set(name, remove)
+    );
 
     return this._super(...arguments);
   },

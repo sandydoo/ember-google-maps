@@ -25,23 +25,25 @@ function perturbLocations(times) {
 
 function generateLocations(google, center) {
   let { lat, lng } = center,
-      maps = get(google, 'maps'),
-      origin = new maps.LatLng(lat, lng);
+    maps = get(google, 'maps'),
+    origin = new maps.LatLng(lat, lng);
 
-  return Array(42).fill().map((_e, i) => {
-    let heading = randomInt(1, 360),
+  return Array(42)
+    .fill()
+    .map((_e, i) => {
+      let heading = randomInt(1, 360),
         distance = randomInt(100, 5000),
         n = maps.geometry.spherical.computeOffset(origin, distance, heading);
-    return { id: i, lat: n.lat(), lng: n.lng() };
-  });
+      return { id: i, lat: n.lat(), lng: n.lng() };
+    });
 }
 
-module('Integration | Component | g map/overlay', function(hooks) {
+module('Integration | Component | g map/overlay', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a custom overlay', async function(assert) {
+  test('it renders a custom overlay', async function (assert) {
     await render(hbs`
       <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} as |g|>
         <g.overlay @lat={{lat}} @lng={{lng}}>
@@ -50,7 +52,10 @@ module('Integration | Component | g map/overlay', function(hooks) {
       </GMap>
     `);
 
-    let { id, components: { overlays } } = this.gMapAPI;
+    let {
+      id,
+      components: { overlays },
+    } = this.gMapAPI;
     let overlay = await waitFor('#custom-overlay');
     let mapDiv = find(`#${id}`);
 
@@ -61,12 +66,12 @@ module('Integration | Component | g map/overlay', function(hooks) {
     assert.ok(mapDiv.contains(overlay), 'overlay is child of map node');
   });
 
-  test('it survives a performance test without errors', async function(assert) {
+  test('it survives a performance test without errors', async function (assert) {
     assert.expect(0);
 
     let center = { lat: this.lat, lng: this.lng },
-        googleMapsApi = this.owner.lookup('service:google-maps-api'),
-        google = await get(googleMapsApi, 'google');
+      googleMapsApi = this.owner.lookup('service:google-maps-api'),
+      google = await get(googleMapsApi, 'google');
 
     this.originalLocations = await generateLocations(google, center);
     this.locations = this.originalLocations;

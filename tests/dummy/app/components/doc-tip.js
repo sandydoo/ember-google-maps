@@ -8,5 +8,5 @@ export default Component.extend({
   cardClassNames: 'doc-tip',
 
   badgeClassNames: 'badge-primary',
-  badgeText: 'Tip'
+  badgeText: 'Tip',
 });

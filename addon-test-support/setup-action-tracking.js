@@ -8,7 +8,9 @@ export class ActionTracker {
   }
 
   seen(name, options = {}) {
-    if (!name) { return; }
+    if (!name) {
+      return;
+    }
 
     let { timeout = 10000 } = options;
 
@@ -44,7 +46,7 @@ export class ActionTracker {
 }
 
 export default function setupActionTracking(hooks) {
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.actionTracker = new ActionTracker();
     this.trackAction = (...args) => this.actionTracker.track(...args);
     this.seenAction = (...args) => this.actionTracker.seen(...args);

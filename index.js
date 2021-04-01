@@ -12,7 +12,6 @@ const writeFile = require('broccoli-file-creator');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
-
 const IS_COMPONENT = /components\//;
 
 function intersection(a, b) {
@@ -38,13 +37,13 @@ function difference(a, b) {
 }
 
 let dependencies = {
-  'circle': ['marker'],
+  circle: ['marker'],
 };
 
 function excludeComponent(included, excluded) {
   let shouldExclude = excludeName(included, excluded);
 
-  return function(name) {
+  return function (name) {
     if (!IS_COMPONENT.test(name)) {
       return false;
     }
@@ -52,14 +51,14 @@ function excludeComponent(included, excluded) {
     let baseName = path.basename(name).split('.').shift();
 
     return shouldExclude(baseName);
-  }
+  };
 }
 
 function excludeName(included, excluded) {
-  return function(rawName) {
+  return function (rawName) {
     let name = camelCase(rawName),
-        isIncluded = included.indexOf(name) !== -1,
-        isExcluded = excluded.indexOf(name) !== -1;
+      isIncluded = included.indexOf(name) !== -1,
+      isExcluded = excluded.indexOf(name) !== -1;
 
     if (included.length === 0 && excluded.length === 0) {
       return false;
@@ -81,9 +80,8 @@ function excludeName(included, excluded) {
     }
 
     return !isIncluded || isExcluded;
-  }
+  };
 }
-
 
 module.exports = {
   name: require('./package').name,
@@ -93,34 +91,33 @@ module.exports = {
       plugins: [
         '@babel/plugin-proposal-object-rest-spread',
         '@babel/plugin-proposal-optional-chaining',
-      ]
-    }
+      ],
+    },
   },
 
   init() {
     this._super.init.apply(this, arguments);
-    this.debugTree = BroccoliDebug.buildDebugCallback(`ember-google-maps:${this.name}`);
+    this.debugTree = BroccoliDebug.buildDebugCallback(
+      `ember-google-maps:${this.name}`
+    );
   },
 
   included() {
     this._super.included.apply(this, arguments);
 
     let app = this._findHost(),
-        config = app.options['ember-google-maps'] || {};
+      config = app.options['ember-google-maps'] || {};
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
-    let {
-      only = [],
-      except = [],
-    } = config;
+    let { only = [], except = [] } = config;
 
     only = only.map(camelCase);
     except = except.map(camelCase);
 
     let included = this.createIncludedList(only, except),
-        excluded = this.createExcludedList(only, except);
+      excluded = this.createExcludedList(only, except);
 
     if (this.isProduction) {
       excluded.push('warnMissingComponent');
@@ -134,7 +131,7 @@ module.exports = {
         included.push('warnMissingComponent');
       }
 
-      included.forEach(name => {
+      included.forEach((name) => {
         let deps = dependencies[name];
 
         if (deps) {
@@ -185,12 +182,14 @@ module.exports = {
     return {
       name: 'ember-google-maps:canvas-enforcer',
       plugin: require('./lib/broccoli/canvas-enforcer'),
-      baseDir() { return __dirname; },
+      baseDir() {
+        return __dirname;
+      },
       parallelBabel: {
         requireFile: __filename,
         buildUsing: '_canvasBuildPlugin',
         params: {},
-      }
+      },
     };
   },
 
@@ -206,18 +205,17 @@ module.exports = {
       { key: 'control', component: 'g-map/control' },
       { key: 'autocomplete', component: 'g-map/autocomplete' },
       { key: 'directions', component: 'g-map/directions' },
-      { key: 'route', component: 'g-map/route' }
+      { key: 'route', component: 'g-map/route' },
     ]);
 
     if (this.isProduction) {
       // Exclude components that we don't want in the production build.
       addons = addons.filter(({ key }) => !this.excludeName(key));
-
     } else {
       // Replace an excluded component with a debug component in development and
       // testing. This component should throw an assertion to warn the user of
       // misconfigured treeshaking.
-      addons = addons.map(component => {
+      addons = addons.map((component) => {
         let { key } = component;
 
         if (this.excludeName(key)) {
@@ -231,7 +229,8 @@ module.exports = {
       });
     }
 
-    let template = Handlebars.compile(stripIndent(`
+    let template = Handlebars.compile(
+      stripIndent(`
       \\{{yield
           (hash
             {{#each addons as |addon|}}
@@ -239,7 +238,8 @@ module.exports = {
             {{/each}}
           )
         }}
-    `));
+    `)
+    );
 
     return writeFile(
       `${templatePath}/-private-api/addon-factory.hbs`,
@@ -253,13 +253,13 @@ module.exports = {
     }
 
     return new Funnel(tree, {
-      exclude: [this.excludeComponent]
+      exclude: [this.excludeComponent],
     });
   },
 
   createIncludedList(onlyList = [], exceptList = []) {
     let only = new Set(onlyList),
-        except = new Set(exceptList);
+      except = new Set(exceptList);
 
     if (except && except.length) {
       return difference(only, except);
@@ -270,7 +270,7 @@ module.exports = {
 
   createExcludedList(onlyList = [], exceptList = []) {
     let only = new Set(onlyList),
-        except = new Set(exceptList);
+      except = new Set(exceptList);
 
     if (only && only.length) {
       return intersection(except, only);
@@ -300,15 +300,19 @@ module.exports = {
     }
 
     if (key && client) {
-      this.warn('You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+      this.warn(
+        'You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started'
+      );
     }
 
     if (channel && !client) {
-      this.warn('The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+      this.warn(
+        'The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started'
+      );
     }
 
     let src = baseUrl,
-        params = [];
+      params = [];
 
     if (version) {
       params.push('v=' + encodeURIComponent(version));
@@ -353,5 +357,5 @@ module.exports = {
 
   warn(message) {
     this.ui.writeLine(chalk.yellow(message));
-  }
+  },
 };

@@ -20,7 +20,7 @@ module.exports = {
     browser: true,
   },
   globals: {
-    google: false
+    google: false,
   },
   rules: {
     'ember/avoid-leaking-state-in-ember-objects': 'off',
@@ -35,7 +35,7 @@ module.exports = {
 
     // TODO: Fix later
     'ember/no-legacy-test-waiters': 'off',
-    'ember/no-test-import-export': 'off'
+    'ember/no-test-import-export': 'off',
   },
   overrides: [
     // node files

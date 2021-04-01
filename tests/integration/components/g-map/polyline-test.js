@@ -6,17 +6,17 @@ import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { A } from '@ember/array';
 
-module('Integration | Component | g map/polyline', function(hooks) {
+module('Integration | Component | g map/polyline', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it updates a polylines when the path attribute changes', async function(assert) {
+  test('it updates a polylines when the path attribute changes', async function (assert) {
     this.path = A([
       { lat: 51.56742722687343, lng: -0.25783538818359375 },
       { lat: 51.51917163898047, lng: -0.23586273193359375 },
       { lat: 51.46680134633284, lng: -0.09922027587890625 },
-      { lat: 51.476892649684764, lng: -0.0006866455078125 }
+      { lat: 51.476892649684764, lng: -0.0006866455078125 },
     ]);
 
     await render(hbs`
@@ -25,7 +25,9 @@ module('Integration | Component | g map/polyline', function(hooks) {
       </GMap>
     `);
 
-    let { components: { polylines } } = this.gMapAPI;
+    let {
+      components: { polylines },
+    } = this.gMapAPI;
     let polyline = polylines[0].mapComponent;
 
     assert.ok(polyline, 'polyline exists');

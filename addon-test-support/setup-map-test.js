@@ -8,24 +8,27 @@ import GMapComponent from 'ember-google-maps/components/g-map';
  * available in the testing context as `gMapAPI`.
  */
 export default function setupMapTest(hooks) {
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     let testContext = this;
     let waiterFulfilled = false;
 
-    this.owner.register('component:g-map', GMapComponent.extend({
-      didInsertElement() {
-        this._super(...arguments);
+    this.owner.register(
+      'component:g-map',
+      GMapComponent.extend({
+        didInsertElement() {
+          this._super(...arguments);
 
-        registerWaiter(() => {
-          if (this._componentsInitialized === true) {
-            if (!waiterFulfilled) {
-              testContext.gMapAPI = this.publicAPI;
-              waiterFulfilled = true;
+          registerWaiter(() => {
+            if (this._componentsInitialized === true) {
+              if (!waiterFulfilled) {
+                testContext.gMapAPI = this.publicAPI;
+                waiterFulfilled = true;
+              }
+              return true;
             }
-            return true;
-          }
-        });
-      }
-    }));
+          });
+        },
+      })
+    );
   });
 }

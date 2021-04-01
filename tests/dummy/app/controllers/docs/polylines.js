@@ -2,7 +2,6 @@ import DocsController from '../docs';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
 
-
 export default class PolylinesController extends DocsController {
   fillColor = 'orange';
 
@@ -11,7 +10,7 @@ export default class PolylinesController extends DocsController {
     { lat: 51.51917163898047, lng: -0.23586273193359375 },
     { lat: 51.46680134633284, lng: -0.09922027587890625 },
     { lat: 51.476892649684764, lng: -0.0006866455078125 },
-    { lat: 51.500154286474746, lng: 0.05218505859375 }
+    { lat: 51.500154286474746, lng: 0.05218505859375 },
   ]);
 
   @action
@@ -20,7 +19,7 @@ export default class PolylinesController extends DocsController {
 
     this.flightCoordinates.pushObject({
       lat: latLng.lat(),
-      lng: latLng.lng()
+      lng: latLng.lng(),
     });
   }
 }

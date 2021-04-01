@@ -1,6 +1,13 @@
-import { default as MapComponent, MapComponentLifecycleEnum } from './map-component';
+import {
+  default as MapComponent,
+  MapComponentLifecycleEnum,
+} from './map-component';
 import layout from '../../templates/components/g-map/overlay';
-import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
+import {
+  addEventListeners,
+  ignoredOptions,
+  parseOptionsAndEvents,
+} from '../../utils/options-and-events';
 import { position } from '../../utils/helpers';
 import { computed, get, set } from '@ember/object';
 import { bind, join, schedule, scheduleOnce } from '@ember/runloop';
@@ -8,9 +15,7 @@ import { guidFor } from '@ember/object/internals';
 import { warn } from '@ember/debug';
 import { defer, resolve } from 'rsvp';
 
-
 const { READY } = MapComponentLifecycleEnum;
-
 
 /**
  * A wrapper for the google.maps.Overlay class.
@@ -32,11 +37,15 @@ export default MapComponent.extend({
 
   _targetPane: null,
 
-  _contentId: computed(function() {
+  _contentId: computed(function () {
     return `ember-google-maps-overlay-${guidFor(this)}`;
   }),
 
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'paneName', 'zIndex']),
+  _optionsAndEvents: parseOptionsAndEvents([
+    ...ignoredOptions,
+    'paneName',
+    'zIndex',
+  ]),
 
   init() {
     this._super(arguments);
@@ -73,14 +82,17 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
     Overlay.setMap(this.map);
 
     function setupOverlay() {
-      if (this.isDestroying || this.isDestroyed) { return; }
+      if (this.isDestroying || this.isDestroyed) {
+        return;
+      }
 
       this.onAdd();
 
       schedule('render', this, 'draw');
 
       // Set the normal draw function.
-      Overlay.draw = () => join(this, () => scheduleOnce('render', this, 'draw'));
+      Overlay.draw = () =>
+        join(this, () => scheduleOnce('render', this, 'draw'));
 
       schedule('afterRender', this, () => isFinishedDrawing.resolve(Overlay));
     }
@@ -94,8 +106,11 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
       publicAPI: this.publicAPI,
     };
 
-    addEventListeners(this._contentContainer, events, payload)
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+    addEventListeners(
+      this._contentContainer,
+      events,
+      payload
+    ).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
     return resolve();
   },
@@ -112,19 +127,23 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
 
     // Schedule to append the overlay container to the map pane.
     schedule('render', this, () => {
-      if (this.isDestroying || this.isDestroyed) { return; }
+      if (this.isDestroying || this.isDestroyed) {
+        return;
+      }
 
       this._targetPane.appendChild(this._contentContainer);
     });
   },
 
   draw() {
-    if (this.isDestroying || this.isDestroyed) { return; }
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
 
     let overlayProjection = this.mapComponent.getProjection(),
-        position = get(this, 'position'),
-        point = overlayProjection.fromLatLngToDivPixel(position),
-        zIndex = get(this, 'zIndex');
+      position = get(this, 'position'),
+      point = overlayProjection.fromLatLngToDivPixel(position),
+      zIndex = get(this, 'zIndex');
 
     this._contentContainer.style.cssText = `
       position: absolute;
@@ -137,7 +156,9 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
   },
 
   onRemove() {
-    if (this.isDestroying || this.isDestroyed) { return; }
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
 
     let parentNode = this._contentContainer.parentNode;
 
@@ -146,5 +167,5 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
     }
 
     this._contentContainer = null;
-  }
+  },
 });
