@@ -13,6 +13,7 @@ on:
     - cron: '0 3 * * 1' # Mondays at 3am
 
 env:
+  node-version: '14.x'
   CI: true
   GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
 
@@ -23,9 +24,9 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 10.x
+          node-version: ${{ env.node-version }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -43,9 +44,9 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 10.x
+          node-version: ${{ env.node-version }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -61,9 +62,9 @@ jobs:
     needs: [test, test-build]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 10.x
+          node-version: ${{ env.node-version }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -95,9 +96,9 @@ jobs:
           - scenario: embroider-optimized
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 10.x
+          node-version: ${{ env.node-version }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
