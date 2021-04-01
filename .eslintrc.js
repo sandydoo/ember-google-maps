@@ -33,10 +33,6 @@ module.exports = {
     'ember/no-component-lifecycle-hooks': 'off',
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/require-tagless-components': 'off',
-
-    // TODO: Fix later
-    'ember/no-legacy-test-waiters': 'off',
-    'ember/no-test-import-export': 'off',
   },
   overrides: [
     // node files

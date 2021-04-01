@@ -12,22 +12,8 @@ import { reads, readOnly } from '@ember/object/computed';
 import { guidFor } from '@ember/object/internals';
 import { A } from '@ember/array';
 import { all, defer } from 'rsvp';
-import { bind, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
-
-function safeScheduleOnce(queue, context, onSuccess, onError) {
-  function func() {
-    if (context.isDestroying || context.isDestroyed) {
-      onError.call(context);
-    } else {
-      onSuccess.call(context);
-    }
-  }
-
-  scheduleOnce(queue, context, func);
-}
-
-function skipErrorReporting() {}
+import { waitFor } from '@ember/test-waiters';
 
 function GMapAPI(source) {
   return {
@@ -170,61 +156,31 @@ export default Component.extend({
    * @private
    * @return
    */
-  _initMap: task(function* () {
-    yield get(this, 'google');
+  _initMap: task(
+    waitFor(function* () {
+      yield get(this, 'google');
 
-    // After google loads, we need to wait for Ember to update any values read
-    // directly from the google object and used in templates. For example, map
-    // controls may be positioned with `ControlPosition.TOP_LEFT`, the value of
-    // which is only available once google loads.
-    yield this._waitForNextRunloop();
+      let canvas = yield this._canvasIsRendering.promise;
 
-    let canvas = yield this._canvasIsRendering.promise;
-
-    let options = this._createOptions(get(this, '_options'));
-    let map = new google.maps.Map(canvas, options);
-
-    function waitForComponents() {
-      if (this.isDestroying || this.isDestroyed) {
-        return;
-      }
-
-      this._waitForComponents().then(() => {
-        this._componentsInitialized = true;
-        this.onComponentsLoad?.(this.publicAPI);
-      });
-    }
-
-    function setupMap() {
-      if (this.isDestroying || this.isDestroyed) {
-        return;
-      }
+      let options = this._createOptions(get(this, '_options'));
+      let map = new google.maps.Map(canvas, options);
 
       set(this, 'map', map);
 
-      let payload = {
+      addEventListeners(map, this._createEvents(get(this, '_events')), {
         map: this.map,
         publicAPI: this.publicAPI,
-      };
-
-      addEventListeners(
-        map,
-        this._createEvents(get(this, '_events')),
-        payload
-      ).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
+      }).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
 
       this.onLoad?.(this.publicAPI);
 
-      safeScheduleOnce(
-        'afterRender',
-        this,
-        waitForComponents,
-        skipErrorReporting
-      );
-    }
+      yield this._waitForComponents().then(() => {
+        this.onComponentsLoad?.(this.publicAPI);
+      });
 
-    google.maps.event.addListenerOnce(map, 'idle', bind(this, setupMap));
-  }),
+      return this.publicAPI;
+    })
+  ),
 
   _waitForComponents() {
     let componentsAreInitialized = Object.keys(this.components)
@@ -233,12 +189,6 @@ export default Component.extend({
       .map((components) => get(components, 'isInitialized.promise'));
 
     return all(componentsAreInitialized);
-  },
-
-  _waitForNextRunloop() {
-    return new Promise((resolve) => {
-      safeScheduleOnce('actions', this, resolve, skipErrorReporting);
-    });
   },
 
   /**
