@@ -7,18 +7,17 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
     ecmaFeatures: {
-      legacyDecorators: true
-    }
+      legacyDecorators: true,
+    },
   },
-  plugins: [
-    'ember'
-  ],
+  plugins: ['ember'],
   extends: [
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   globals: {
     google: false
@@ -44,13 +43,13 @@ module.exports = {
       files: [
         '.eslintrc.js',
         'tests/.eslintrc.js',
+        '.prettierrc.js',
         '.template-lintrc.js',
         'ember-cli-build.js',
         'index.js',
         'testem.js',
         'blueprints/*/index.js',
         'config/**/*.js',
-        '**/config/*.js',
         'tests/dummy/config/**/*.js',
         'build-tests/build-test.js',
         'lib/broccoli/**/*.js',
@@ -60,17 +59,17 @@ module.exports = {
         'addon-test-support/**',
         'app/**',
         'lib/in-repo-pin-addon/**',
-        'tests/dummy/app/**'
+        'tests/dummy/app/**',
       ],
       parserOptions: {
-        sourceType: 'script'
+        sourceType: 'script',
       },
       env: {
         browser: false,
-        node: true
+        node: true,
       },
       plugins: ['node'],
-      extends: ['plugin:node/recommended']
-    }
-  ]
+      extends: ['plugin:node/recommended'],
+    },
+  ],
 };

@@ -4,7 +4,7 @@
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 const { maybeEmbroider } = require('@embroider/test-setup');
 
-module.exports = function(defaults) {
+module.exports = function (defaults) {
   let options = {
     snippetPaths: ['tests/dummy/code-snippets'],
 

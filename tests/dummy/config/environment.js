@@ -1,7 +1,7 @@
 /* eslint-env node */
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'dummy',
     environment,
@@ -14,8 +14,8 @@ module.exports = function(environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
@@ -24,14 +24,14 @@ module.exports = function(environment) {
     },
 
     flashMessageDefaults: {
-      extendedTimeout: 500
+      extendedTimeout: 500,
     },
 
     'ember-google-maps': {
       language: 'en',
       libraries: ['geometry', 'places'],
-      key: process.env.GOOGLE_MAPS_API_KEY
-    }
+      key: process.env.GOOGLE_MAPS_API_KEY,
+    },
   };
 
   if (environment === 'development') {
