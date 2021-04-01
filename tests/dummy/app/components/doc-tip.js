@@ -1,12 +1,19 @@
-import Component from '@ember/component';
-import layout from '../templates/components/doc-tip';
+import Component from '@glimmer/component';
 
-export default Component.extend({
-  layout,
-  tagName: '',
+export default class DocTip extends Component {
+  defaultBadgeText = 'Tip';
+  defaultCardClassNames = 'doc-tip';
+  defaultBadgeClassNames = 'badge-primary';
 
-  cardClassNames: 'doc-tip',
+  get cardClassNames() {
+    return this.args.cardClassNames ?? this.defaultCardClassNames;
+  }
 
-  badgeClassNames: 'badge-primary',
-  badgeText: 'Tip',
-});
+  get badgeClassNames() {
+    return this.args.badgeClassNames ?? this.defaultBadgeClassNames;
+  }
+
+  get badgeText() {
+    return this.args.badgeText ?? this.defaultBadgeText;
+  }
+}

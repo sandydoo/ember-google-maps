@@ -1,5 +1,4 @@
-import Component from '@ember/component';
-import layout from '../templates/components/code-snippet';
+import Component from '@glimmer/component';
 import { getCodeSnippet } from 'ember-code-snippet';
 import { htmlSafe } from '@ember/template';
 import Prism from 'prismjs';
@@ -14,21 +13,18 @@ import markupTemplate from 'prismjs/components/prism-markup-templating';
 import nw from 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace';
 /* eslint-enable */
 
-export default Component.extend({
-  layout,
-  tagName: '',
+export default class CodeSnippet extends Component {
+  constructor() {
+    super(...arguments);
 
-  init() {
-    this._super(...arguments);
+    let { language, source } = getCodeSnippet(this.args.name);
 
-    let { language, source } = getCodeSnippet(this.name);
-
-    language = this.language || language;
+    language = this.args.language ?? language;
     this.languageClass = `language-${language}`;
 
     let grammar = Prism.languages[language];
     let highlightedCode = Prism.highlight(source, grammar, language);
 
     this.code = htmlSafe(highlightedCode);
-  },
-});
+  }
+}

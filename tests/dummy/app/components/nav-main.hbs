@@ -1,6 +1,6 @@
 <nav class="sticky-top sticky-top-offset">
   <ul class="nav flex-column justify-content-center">
-    {{#each links as |l|}}
+    {{#each @links as |l|}}
       <li class="nav-item">
         <LinkTo @route={{l.path}} class="nav-link">{{l.title}}</LinkTo>
       </li>

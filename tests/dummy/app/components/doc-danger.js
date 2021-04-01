@@ -1,7 +1,7 @@
-import DocTipComponent from './doc-tip';
+import DocTip from './doc-tip';
 
-export default DocTipComponent.extend({
-  cardClassNames: 'doc-danger',
-  badgeClassNames: 'badge-danger',
-  badgeText: 'Warning',
-});
+export default class DocDanger extends DocTip {
+  defaultCardClassNames = 'doc-danger';
+  defaultBadgeClassNames = 'badge-danger';
+  defaultBadgeText = 'Warning';
+}
