@@ -77,8 +77,8 @@ jobs:
       - name: Test
         run: yarn test:ember
 
-  test-try:
-    name: Scenario Tests
+  test-compatibility:
+    name: "Scenario Tests: ${{ matrix.scenario }} | optional: ${{ matrix.allow-failure }}"
     runs-on: ubuntu-latest
     needs: [test, test-build, test-no-lock]
     continue-on-error: ${{ matrix.allow-failure }}
