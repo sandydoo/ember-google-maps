@@ -23,15 +23,16 @@ module.exports = {
     google: false,
   },
   rules: {
-    'ember/avoid-leaking-state-in-ember-objects': 'off',
     'ember/order-in-components': 'off',
-    'ember/no-attrs-in-components': 'off',
-    'ember/no-jquery': 'error',
-    'ember/no-observers': 'off',
 
     // TODO: Remove in 4.0
     'ember/no-get': 'off',
-    'ember/no-mixins': 'off',
+    'ember/no-observers': 'off',
+    'ember/no-classic-components': 'off',
+    'ember/no-classic-classes': 'off',
+    'ember/no-component-lifecycle-hooks': 'off',
+    'ember/no-computed-properties-in-native-classes': 'off',
+    'ember/require-tagless-components': 'off',
 
     // TODO: Fix later
     'ember/no-legacy-test-waiters': 'off',
@@ -52,6 +53,7 @@ module.exports = {
         'config/**/*.js',
         'tests/dummy/config/**/*.js',
         'build-tests/build-test.js',
+        'build-tests/**/config/**/*.js',
         'lib/broccoli/**/*.js',
       ],
       excludedFiles: [

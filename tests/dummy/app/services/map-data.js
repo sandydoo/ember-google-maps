@@ -1,6 +1,5 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { reads } from '@ember/object/computed';
 import darkStyle from '../map-styles/dark';
 import lightStyle from '../map-styles/light';
 import { tracked } from '@glimmer/tracking';
@@ -13,8 +12,9 @@ export default class MapDataService extends Service {
   @service
   googleMapsApi;
 
-  @reads('googleMapsApi.google')
-  google;
+  get google() {
+    return this.googleMapsApi.google;
+  }
 
   primaryMapStyle = darkStyle;
   lightStyle = lightStyle;

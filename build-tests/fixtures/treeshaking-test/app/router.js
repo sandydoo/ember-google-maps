@@ -7,6 +7,6 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('basic-treeshaking-test');
-  this.route('missing-component-test');
+  this.route('basic-treeshaking');
+  this.route('missing-component');
 });
