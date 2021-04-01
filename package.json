@@ -46,7 +46,6 @@
     "broccoli-merge-trees": "^4.2.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
-    "ember-angle-bracket-invocation-polyfill": "^3.0.0",
     "ember-cli-babel": "^7.23.1",
     "ember-cli-htmlbars": "^5.3.2",
     "ember-concurrency": "^2.0.0",
