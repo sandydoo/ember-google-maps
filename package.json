@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
-    "@ember/test-helpers": "^1.7.0",
+    "@ember/test-helpers": "^1.7.2",
     "@ember/test-waiters": "^2.4.3",
     "@embroider/test-setup": "^0.39.0",
     "@glimmer/component": "^1.0.3",
@@ -109,10 +109,12 @@
     "prember-sitemap-generator": "0.1.1",
     "prettier": "^2.2.1",
     "prismjs": "^1.19.0",
-    "qunit": "^2.14.0",
     "qunit-dom": "^1.6.0",
     "sass": "^1.23.7",
     "tracked-maps-and-sets": "^2.2.1"
+  },
+  "resolutions": {
+    "qunit": "~2.11.0"
   },
   "engines": {
     "node": "10.* || >= 12"
