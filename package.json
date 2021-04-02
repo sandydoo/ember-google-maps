@@ -40,6 +40,7 @@
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-proposal-optional-chaining": "^7.12.1",
+    "@ember/render-modifiers": "^1.0.2",
     "broccoli-debug": "^0.6.5",
     "broccoli-file-creator": "^2.1.1",
     "broccoli-funnel": "^3.0.3",
