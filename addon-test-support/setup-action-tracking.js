@@ -48,12 +48,21 @@ export class ActionTracker {
       this.notify(name);
     }
   }
+
+  reset() {
+    this.#tracked.clear();
+    this.#watcher.clear();
+  }
 }
 
 export default function setupActionTracking(hooks) {
-  hooks.beforeEach(function () {
+  hooks.before(function () {
     this.actionTracker = new ActionTracker();
     this.trackAction = (...args) => this.actionTracker.track(...args);
     this.seenAction = (...args) => this.actionTracker.seen(...args);
+  });
+
+  hooks.afterEach(function () {
+    this.actionTracker.reset();
   });
 }
