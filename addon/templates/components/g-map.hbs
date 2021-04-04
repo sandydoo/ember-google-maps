@@ -1,8 +1,7 @@
 {{#let
   (component "g-map/canvas"
     id=this.mapId
-    classNames=this.classNames
-    _internalAPI=this._internalAPI) as |canvas|}}
+    onCanvasReady=this._internalAPI._registerCanvas) as |canvas|}}
 
   {{#-private-api/addon-factory
     map=this.map
