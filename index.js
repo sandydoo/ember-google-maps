@@ -158,9 +158,9 @@ module.exports = {
   treeForAddon(tree) {
     tree = this.debugTree(tree, 'addon-tree:input');
 
-    let addonFactoryTree = this.createAddonFactoryTree('templates/components');
-    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    tree = this.debugTree(tree, 'addon-tree:with-addon-factory');
+    // let addonFactoryTree = this.createAddonFactoryTree('templates/components');
+    // tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
+    // tree = this.debugTree(tree, 'addon-tree:with-addon-factory');
 
     tree = this.filterComponents(tree);
     tree = this.debugTree(tree, 'addon-tree:post-filter');
