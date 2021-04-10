@@ -12,10 +12,10 @@ module('Integration | Component | g map', function (hooks) {
 
   test('it renders a map', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.ok(map, 'map initialized');
   });
@@ -23,13 +23,13 @@ module('Integration | Component | g map', function (hooks) {
   test('it passes attributes as options to the map', async function (assert) {
     await render(hbs`
       <GMap
-        @lat={{lat}}
-        @lng={{lng}}
+        @lat={{this.lat}}
+        @lng={{this.lng}}
         @zoom={{12}}
         @zoomControl={{false}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
@@ -37,12 +37,12 @@ module('Integration | Component | g map', function (hooks) {
   test('it accepts an options hash', async function (assert) {
     await render(hbs`
       <GMap
-        @lat={{lat}}
-        @lng={{lng}}
+        @lat={{this.lat}}
+        @lng={{this.lng}}
         @options={{hash zoom=12 zoomControl=false}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
@@ -51,14 +51,16 @@ module('Integration | Component | g map', function (hooks) {
     this.zoom = 12;
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{zoom}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{this.zoom}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.equal(map.zoom, this.zoom);
 
     this.set('zoom', 15);
+
+    await this.waitForMap();
 
     assert.equal(map.zoom, this.zoom);
   });
@@ -72,13 +74,13 @@ module('Integration | Component | g map', function (hooks) {
 
     await render(hbs`
       <GMap
-        @lat={{lat}}
-        @lng={{lng}}
+        @lat={{this.lat}}
+        @lng={{this.lng}}
         @zoom={{12}}
-        @onZoomChanged={{action onZoomChanged}} />
+        @onZoomChanged={{action this.onZoomChanged}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     map.setZoom(10);
   });
@@ -100,14 +102,14 @@ module('Integration | Component | g map', function (hooks) {
 
     await render(hbs`
       <GMap
-        @lat={{lat}}
-        @lng={{lng}}
+        @lat={{this.lat}}
+        @lng={{this.lng}}
         @zoom={{12}}
-        @onClick={{action onClick}}
-        @events={{hash onZoomChanged=(action onZoomChanged)}} />
+        @onClick={{action this.onClick}}
+        @events={{hash onZoomChanged=(action this.onZoomChanged)}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     trigger(map, 'click');
 
@@ -123,18 +125,18 @@ module('Integration | Component | g map', function (hooks) {
 
     await render(hbs`
       <GMap
-        @lat={{lat}}
-        @lng={{lng}}
-        @onComponentsLoad={{action onComponentsLoad}} as |g|>
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @onComponentsLoad={{action this.onComponentsLoad}} as |g|>
 
-        <g.marker @lat={{lat}} @lng={{lng}} />
+        <g.marker @lat={{this.lat}} @lng={{this.lng}} />
 
       </GMap>
     `);
 
     let {
       components: { markers },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
 
     markers[0].isInitialized.promise.then(() =>
       assert.ok('Component is actually loaded')
@@ -148,6 +150,8 @@ module('Integration | Component | g map', function (hooks) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
     `);
+
+    await this.waitForMap();
 
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
     assert.ok(
