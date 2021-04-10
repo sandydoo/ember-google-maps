@@ -1,54 +1,28 @@
 import MapComponent from './map-component';
-import layout from '../../templates/components/g-map/control';
-import {
-  ignoredOptions,
-  parseOptionsAndEvents,
-} from '../../utils/options-and-events';
-import { get, getProperties, set } from '@ember/object';
-import { resolve } from 'rsvp';
+import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 
-/**
- * @class Control
- * @namespace GMap
- * @module ember-google-maps/components/g-map/control
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
+export default class Control extends MapComponent {
+  id = 'ember-google-maps-control-' + guidFor(this);
 
-  _type: 'control',
+  container = window?.document?.createDocumentFragment();
 
-  _optionsAndEvents: parseOptionsAndEvents([
-    ...ignoredOptions,
-    'index',
-    'class',
-  ]),
+  new(options) {
+    // TODO: Support an existing control position
+    let position = google.maps.ControlPosition[options.position];
 
-  _addComponent() {
-    let _elementDestination = set(
-      this,
-      '_elementDestination',
-      document.createElement('div')
-    );
-    let { map, class: classNames, index } = getProperties(this, [
-      'map',
-      'class',
-      'index',
-    ]);
+    this.context.map.controls[position].push(this.container.firstElementChild);
 
-    if (classNames) {
-      _elementDestination.classList.add(classNames);
-    }
+    return this.container;
+  }
 
-    if (Number.isInteger(index)) {
-      _elementDestination.index = index;
-    }
+  teardown() {
+    this.container = null;
+    this.controlElement = null;
+  }
 
-    let controlPosition = google.maps.ControlPosition[get(this, 'position')];
-    map.controls[controlPosition].push(_elementDestination);
-
-    return resolve(set(this, 'mapComponent', _elementDestination));
-  },
-
-  _updateComponent() {},
-});
+  @action
+  getControl(element) {
+    this.controlElement = element;
+  }
+}

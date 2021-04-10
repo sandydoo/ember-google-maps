@@ -12,7 +12,7 @@ module('Integration | Component | g map/control', function (hooks) {
 
   test('it renders a custom control', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
         <g.control @position="TOP_CENTER">
           <div id="custom-control"></div>
         </g.control>
@@ -22,7 +22,7 @@ module('Integration | Component | g map/control', function (hooks) {
     let {
       map,
       components: { controls },
-    } = this.gMapAPI;
+   } = await this.waitForMap();
 
     assert.equal(controls.length, 1);
 
@@ -39,7 +39,7 @@ module('Integration | Component | g map/control', function (hooks) {
 
   test('it renders a control with a class value', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
         <g.control @position="TOP_CENTER" @class="custom-control-holder">
           <div id="custom-control"></div>
         </g.control>
@@ -53,15 +53,15 @@ module('Integration | Component | g map/control', function (hooks) {
 
   test('it renders several controls in the same position', async function (assert) {
     await render(hbs`
-      {{#g-map lat=lat lng=lng zoom=12 as |g|}}
-        {{#g.control position="TOP_CENTER" index=1}}
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
+        <g.control @position="TOP_CENTER" @index={{1}}>
           <div id="second-control">Second</div>
-        {{/g.control}}
+        </g.control>
 
-        {{#g.control position="TOP_CENTER" index=0}}
+        <g.control @position="TOP_CENTER" @index={{0}}>
           <div id="first-control">First</div>
-        {{/g.control}}
-      {{/g-map}}
+        </g.control>
+      </GMap>
     `);
 
     let control1 = await waitFor('#first-control');
