@@ -1,4 +1,4 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
 
 /**
@@ -6,11 +6,11 @@ import { assert } from '@ember/debug';
  * included in the build. In development, we replace the excluded component with
  * this one instead.
  */
-export default Component.extend({
-  init() {
-    this._super(...arguments);
+export default class WarnMissingComponent extends Component {
+  constructor() {
+    super(...arguments);
 
-    let name = this._name;
+    let name = this.args.name;
 
     let message = `
 Ember Google Maps couldn't find a map component called "${name}"!
@@ -21,5 +21,5 @@ include "${name}".
 Learn more at: https://ember-google-maps.sandydoo.me/docs/getting-started`;
 
     assert(message);
-  },
-});
+  }
+}
