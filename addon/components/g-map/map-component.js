@@ -7,8 +7,6 @@ import { MapComponentManager } from '../../component-managers/map-component-mana
 import { addEventListeners } from 'ember-google-maps/utils/options-and-events';
 
 export default class MapComponent {
-  @tracked mapComponent;
-
   boundEvents = [];
 
   publicAPI = this;

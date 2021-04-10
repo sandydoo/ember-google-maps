@@ -1,131 +1,74 @@
-import MapComponent, { MapComponentAPI, combine } from './map-component';
-import layout from '../../templates/components/g-map/info-window';
-import {
-  ignoredOptions,
-  parseOptionsAndEvents,
-} from '../../utils/options-and-events';
-import { position } from '../../utils/helpers';
-import { computed, get, set } from '@ember/object';
-import { resolve } from 'rsvp';
+import MapComponent from './map-component';
+import { toLatLng } from '../../utils/helpers';
 
-export function InfoWindowAPI(source) {
-  let mapComponentAPI = MapComponentAPI(source);
+export default class InfoWindow extends MapComponent {
+  get name() {
+    return 'infoWindows';
+  }
 
-  return combine(mapComponentAPI, {
-    actions: {
-      open: () => source.open(),
-      close: () => source.close(),
-    },
-  });
-}
+  get isOpen() {
+    return Boolean(this.mapComponent.getMap());
+  }
 
-/**
- * A wrapper for the google.maps.InfoWindow class.
- *
- * @class InfoWindow
- * @namespace GMap
- * @module ember-google-maps/components/g-map/info-window
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
+  // TODO: Sanitize this.args.content?
+  get content() {
+    return this.args.content ?? this.container;
+  }
 
-  _type: 'infoWindow',
+  container = window?.document?.createDocumentFragment();
 
-  isOpen: false,
-  _cachedIsOpen: false,
+  get newOptions() {
+    let options = this.options;
 
-  position: computed('lat', 'lng', position),
-
-  _optionsAndEvents: parseOptionsAndEvents([
-    ...ignoredOptions,
-    'isOpen',
-    'target',
-    'content',
-  ]),
-
-  _createOptions(options) {
-    let newOptions = {
-      content: undefined,
-    };
-
-    if (!get(this, 'target')) {
-      newOptions.position = get(this, 'position');
+    if (!options.target) {
+      options.position ??= toLatLng(this.args.lat, this.args.lng);
     }
 
-    if (get(this, 'isOpen')) {
-      newOptions.content = this._getContent();
+    if (options.isOpen) {
+      options.content = this.content;
     }
 
-    return {
-      ...options,
-      ...newOptions,
-    };
-  },
+    return options;
+  }
 
-  init() {
-    this._super(...arguments);
+  new() {
+    let infoWindow = new google.maps.InfoWindow(this.newOptions);
 
-    this.publicAPI = InfoWindowAPI(this);
-  },
+    // This is kind of annoying. Maybe we can refactor stuff to not use `this`.
+    this.mapComponent = infoWindow;
 
-  _addComponent(options) {
-    return resolve(
-      set(this, 'mapComponent', new google.maps.InfoWindow(options))
-    );
-  },
+    this.addEventsToMapComponent(infoWindow, this.events, this.publicAPI);
 
-  _didAddComponent() {
-    this._openOrClose();
+    this.toggleOpen();
 
-    this._super(...arguments);
-  },
+    return infoWindow;
+  }
 
-  _updateComponent(mapComponent, options) {
-    mapComponent.setOptions(options);
+  update(infoWindow) {
+    infoWindow.setOptions(this.newOptions);
 
-    this._openOrClose();
-  },
+    this.toggleOpen();
+  }
 
-  _openOrClose() {
-    let isOpen = get(this, 'isOpen');
-    let isOpenChanged = this._cachedIsOpen !== isOpen;
+  toggleOpen() {
+    let shouldBeOpen = this.args.isOpen ?? false;
 
-    if (isOpenChanged && isOpen) {
+    if (shouldBeOpen === this.isOpen) {
+      return;
+    }
+
+    if (shouldBeOpen) {
       this.open();
-    } else if (isOpenChanged && !isOpen) {
+    } else {
       this.close();
     }
-
-    set(this, '_cachedIsOpen', isOpen);
-  },
-
-  _getContent() {
-    if (this.content) {
-      return this.content;
-    }
-
-    let content = document.createElement('div');
-
-    set(this, '_targetPane', content);
-    set(this, 'content', content);
-
-    return content;
-  },
+  }
 
   open() {
-    if (this.mapComponent) {
-      google.maps.event.addListenerOnce(this.mapComponent, 'closeclick', () => {
-        set(this, 'isOpen', false);
-      });
-
-      this.mapComponent.open(get(this, 'map'), get(this, 'target'));
-    }
-  },
+    this.mapComponent.open(this.map, this.options.target);
+  }
 
   close() {
-    if (this.mapComponent) {
-      this.mapComponent.close();
-    }
-  },
-});
+    this.mapComponent.close();
+  }
+}

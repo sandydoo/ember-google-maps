@@ -2,8 +2,12 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { find, render, waitUntil } from '@ember/test-helpers';
+import { find, render, waitFor, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+
+function isVisible(infoWindow) {
+  return infoWindow.getMap() && infoWindow.getPosition();
+}
 
 module('Integration | Component | g-map/info-window', function (hooks) {
   setupRenderingTest(hooks);
@@ -11,31 +15,21 @@ module('Integration | Component | g-map/info-window', function (hooks) {
   setupLocations(hooks);
 
   hooks.beforeEach(function () {
-    this._domReady = false;
+    this.getFirstInfoWindow = async () => {
+      let {
+        components: { infoWindows },
+      } = await this.waitForMap();
 
-    this.onDomReady = () => {
-      this._domReady = true;
+      return infoWindows[0].mapComponent;
     };
-    this.domIsReady = () => this._domReady;
   });
-
-  function getInfoWindow(gMapAPI) {
-    let {
-      components: { infoWindows },
-    } = gMapAPI;
-    return infoWindows[0].mapComponent;
-  }
-
-  function isVisible(infoWindow) {
-    return infoWindow.getMap() && infoWindow.getPosition();
-  }
 
   test('it registers an info window', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.infoWindow
-          @lat={{lat}}
-          @lng={{lng}}
+          @lat={{this.lat}}
+          @lng={{this.lng}}
           @isOpen={{false}}
           @content="test" />
       </GMap>
@@ -43,7 +37,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     let {
       components: { infoWindows },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
 
     assert.equal(infoWindows.length, 1);
 
@@ -52,85 +46,79 @@ module('Integration | Component | g-map/info-window', function (hooks) {
   });
 
   test('it opens an info window when isOpen is set to true', async function (assert) {
-    this.isOpen = false;
+    this.set('isOpen', false);
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.infoWindow
-          @lat={{lat}}
-          @lng={{lng}}
-          @isOpen={{isOpen}}
-          @content="Opening an info window!"
-          @onDomready={{action onDomReady}} />
+          @lat={{this.lat}}
+          @lng={{this.lng}}
+          @isOpen={{this.isOpen}}
+          @content="Opening an info window!" />
       </GMap>
     `);
 
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindow = await this.getFirstInfoWindow();
 
     assert.notOk(isVisible(infoWindow));
 
     this.set('isOpen', true);
-    await waitUntil(this.domIsReady);
+
+    await this.waitForMap();
 
     assert.ok(isVisible(infoWindow));
   });
 
+  // TODO: This should throw an error in development. Very unsafe.
   test('it renders an info window with custom html passed using the content attribute', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.infoWindow
-          @lat={{lat}}
-          @lng={{lng}}
+          @lat={{this.lat}}
+          @lng={{this.lng}}
           @isOpen={{true}}
-          @onDomready={{action onDomReady}}
           @content="<div id='info-window-test'>Content rendering test!</div>" />
       </GMap>
     `);
 
-    await waitUntil(this.domIsReady);
-
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindow = await this.getFirstInfoWindow();
 
     assert.ok(find('#info-window-test'));
-    assert.ok(isVisible(infoWindow));
+    assert.ok(isVisible(infoWindow), 'info window is visible');
   });
 
   test('it renders an info window with custom html passed as a block', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.infoWindow
-          @lat={{lat}}
-          @lng={{lng}}
-          @isOpen={{true}}
-          @onDomready={{action onDomReady}}>
+          @lat={{this.lat}}
+          @lng={{this.lng}}
+          @isOpen={{true}}>
           <div id="info-window-test">Custom HTML block test!</div>
         </g.infoWindow>
       </GMap>
     `);
 
-    await waitUntil(this.domIsReady);
+    let infoWindow = await this.getFirstInfoWindow();
 
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindowElement = await waitFor('#info-window-test');
 
-    assert.ok(find('#info-window-test'));
-    assert.ok(isVisible(infoWindow));
+    assert.ok(infoWindowElement, 'rendered info window content');
+    assert.ok(isVisible(infoWindow), 'info window is visible');
   });
 
   test('it attaches an info window to a marker', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
         <g.marker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
             @isOpen={{true}}
-            @content="Testing info windows attached to markers"
-            @onDomready={{action onDomReady}} />
+            @content="Testing info windows attached to markers" />
         </g.marker>
       </GMap>
     `);
 
-    await waitUntil(this.domIsReady);
-
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindow = await this.getFirstInfoWindow();
 
     // Wait until Google Maps updates the position value.
     await waitUntil(() => isVisible(infoWindow));
@@ -139,14 +127,13 @@ module('Integration | Component | g-map/info-window', function (hooks) {
   });
 
   test('it closes the info window when isOpen is set to false', async function (assert) {
-    this.isOpen = true;
+    this.set('isOpen', true);
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
         <g.marker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
-            @isOpen={{isOpen}}
-            @onDomready={{action onDomReady}}>
+            @isOpen={{this.isOpen}}>
             <div id="info-window-test">
               An info window attached to a marker!
             </div>
@@ -155,44 +142,49 @@ module('Integration | Component | g-map/info-window', function (hooks) {
       </GMap>
     `);
 
-    await waitUntil(this.domIsReady);
-
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindow = await this.getFirstInfoWindow();
 
     assert.ok(find('#info-window-test'));
     assert.ok(isVisible(infoWindow));
 
     this.set('isOpen', false);
 
+    await this.waitForMap();
+
     assert.notOk(find('#info-window-test'));
     assert.notOk(isVisible(infoWindow));
   });
 
+  // TODO: We should check that the user binds an event to click close, otherwise isOpen will go out of sync.
   test('it closes the info window when the close button is clicked', async function (assert) {
-    this.isOpen = true;
+    this.set('isOpen', true);
+
+    this.closeInfoWindow = () => {
+      this.set('isOpen', false);
+    };
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{6}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
         <g.marker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
-            @isOpen={{isOpen}}
-            @content="<div id='info-window-test'>Testing the close button!</div>"
-            @onDomready={{action onDomReady}} />
+            @isOpen={{this.isOpen}}
+            @onCloseclick={{this.closeInfoWindow}}
+            @content="<div id='info-window-test'>Testing the close button!</div>"/>
         </g.marker>
       </GMap>
     `);
 
-    await waitUntil(this.domIsReady);
-
-    let infoWindow = getInfoWindow(this.gMapAPI);
+    let infoWindow = await this.getFirstInfoWindow();
 
     assert.ok(find('#info-window-test'));
-    assert.ok(isVisible(infoWindow));
+    assert.ok(isVisible(infoWindow), 'info window is visible');
 
     trigger(infoWindow, 'closeclick');
 
-    assert.notOk(find('#info-window-test'), 'info window closed');
-    assert.notOk(isVisible(infoWindow));
-    assert.ok(this.isOpen === false);
+    await this.waitForMap();
+
+    assert.notOk(find('#info-window-test'), 'info window is not in DOM');
+    assert.notOk(isVisible(infoWindow), 'info window is not visible');
+    assert.equal(this.get('isOpen'), false, 'isOpen is set to false');
   });
 });
