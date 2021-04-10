@@ -6,6 +6,7 @@ import { bind } from '@ember/runloop';
 import { toPromiseProxy, promisify } from '../utils/helpers';
 import { cached } from 'tracked-toolbox';
 import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
+import { waitFor } from '@ember/test-waiters';
 
 export default class GoogleMapsApiService extends Service {
   @cached
@@ -46,6 +47,7 @@ export default class GoogleMapsApiService extends Service {
   /**
    * Return or load the Google Maps API.
    */
+  @waitFor
   _getApi() {
     if (typeof document === 'undefined') {
       return reject();
