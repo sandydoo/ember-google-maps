@@ -20,14 +20,15 @@ module('Integration | Component | g map/polyline', function (hooks) {
     ]);
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.polyline @path={{path}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.polyline @path={{this.path}} />
       </GMap>
     `);
 
     let {
       components: { polylines },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let polyline = polylines[0].mapComponent;
 
     assert.ok(polyline, 'polyline exists');
@@ -35,7 +36,7 @@ module('Integration | Component | g map/polyline', function (hooks) {
     let newCoords = { lat: 51.500154286474746, lng: 0.05218505859375 };
     this.path.pushObject(newCoords);
 
-    await settled();
+    await this.waitForMap();
 
     assert.deepEqual(polyline.getPath().getAt(4).toJSON(), newCoords);
   });
