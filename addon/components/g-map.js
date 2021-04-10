@@ -1,245 +1,73 @@
-import Component from '@ember/component';
-import layout from '../templates/components/g-map';
-import {
-  addEventListeners,
-  parseOptionsAndEvents,
-} from '../utils/options-and-events';
-import { position as center } from '../utils/helpers';
-import { inject as service } from '@ember/service';
-import { getOwner } from '@ember/application';
-import { computed, get, set } from '@ember/object';
-import { reads, readOnly } from '@ember/object/computed';
-import { guidFor } from '@ember/object/internals';
+import MapComponent from './g-map/map-component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { A } from '@ember/array';
-import { all, defer } from 'rsvp';
-import { task } from 'ember-concurrency';
+
+import { toLatLng } from '../utils/helpers';
+
 import { waitFor } from '@ember/test-waiters';
+import { DEBUG } from '@glimmer/env';
 
-function GMapAPI(source) {
-  return {
-    get id() {
-      return get(source, 'mapId');
-    },
+export default class GMap extends MapComponent {
+  @tracked canvas;
 
-    get map() {
-      return source.map;
-    },
+  @tracked mapComponent;
 
-    get components() {
-      return source.components;
-    },
+  // TODO: Fix components for publicAPI
+  components = A([]);
 
-    actions: {
-      update: () => source._updateMap(),
-      trigger: () => source._trigger(),
-    },
-  };
-}
+  get map() {
+    return this.mapComponent;
+  }
 
-/**
- * @class GMap
- * @module ember-google-maps/components/g-map
- * @extends Ember.Component
- */
-export default Component.extend({
-  /**
-   * @property googleMapsApi
-   * @type GoogleMapsApi
-   * @readOnly
-   */
-  googleMapsApi: service(),
+  newOptions(options) {
+    let { lat, lng } = this.args;
 
-  fastboot: computed(function () {
-    let owner = getOwner(this);
-
-    return owner.lookup('service:fastboot');
-  }),
-
-  isFastBoot: reads('fastboot.isFastBoot'),
-
-  layout,
-
-  tagName: '',
-
-  /**
-   * Zoom level for the map
-   *
-   * @property zoom
-   * @type {Number}
-   * @default 8
-   * @public
-   */
-  zoom: 8,
-
-  /**
-   * The latitude and longitude of the center of the map.
-   *
-   * @property center
-   * @type {google.maps.LatLng}
-   * @public
-   */
-  center: computed('lat', 'lng', center),
-
-  google: reads('googleMapsApi.google'),
-
-  mapComponent: reads('map'),
-
-  /**
-   * A unique id for the current map instance.
-   *
-   * @property mapId
-   * @type {String}
-   * @public
-   */
-  mapId: computed(function () {
-    return `ember-google-map-${guidFor(this)}`;
-  }),
-
-  _optionsAndEvents: parseOptionsAndEvents(),
-
-  _options: readOnly('_optionsAndEvents.options'),
-
-  _events: readOnly('_optionsAndEvents.events'),
-
-  _createOptions(options) {
     return {
+      zoom: 15,
+      center: toLatLng(lat, lng),
       ...options,
-      center: get(this, 'center'),
-      zoom: get(this, 'zoom'),
     };
-  },
+  }
 
-  _createEvents(events) {
-    return events;
-  },
+  // TODO: What if canvas is conditional? Render helpers? Promise? Force a
+  // visible canvas?
+  // TODO: Fix publicAPI
+  new(options, events) {
+    let map = new google.maps.Map(this.canvas, options);
 
-  init() {
-    this._super(...arguments);
+    this.addEventsToMapComponent(map, events, { map });
 
-    this.components = {};
+    return map;
+  }
 
-    this.publicAPI = GMapAPI(this);
+  update(map, options) {
+    map.setOptions(options);
 
-    this._internalAPI = {
-      _registerCanvas: this._registerCanvas.bind(this),
-      _registerComponent: this._registerComponent.bind(this),
-      _unregisterComponent: this._unregisterComponent.bind(this),
-    };
-
-    this._canvasIsRendering = defer();
-    this._eventListeners = new Map();
-
-    if (!get(this, 'isFastBoot')) {
-      get(this, '_initMap').perform();
+    // Pause tests until map is in an idle state.
+    if (DEBUG) {
+      this.pauseTestForIdle(map);
     }
-  },
 
-  didUpdateAttrs() {
-    this._super(...arguments);
+    return map;
+  }
 
-    if (get(this, 'map')) {
-      let options = this._createOptions(get(this, '_options'));
-      this._updateMap(options);
-    }
-  },
+  @waitFor
+  async pauseTestForIdle(map) {
+    await new Promise((resolve) => {
+      google.maps.event.addListenerOnce(map, 'idle', () => resolve(map));
+    });
+  }
 
-  willDestroyElement() {
-    this._super(...arguments);
+  @action
+  getCanvas(canvas) {
+    this.canvas = canvas;
+  }
 
-    this._eventListeners.forEach((remove) => remove());
-  },
-
-  /**
-   * Initialize the map, register events and prep internal components.
-   *
-   * @method _initMap
-   * @private
-   * @return
-   */
-  _initMap: task(
-    waitFor(function* () {
-      yield get(this, 'google');
-
-      let canvas = yield this._canvasIsRendering.promise;
-
-      let options = this._createOptions(get(this, '_options'));
-      let map = new google.maps.Map(canvas, options);
-
-      set(this, 'map', map);
-
-      addEventListeners(map, this._createEvents(get(this, '_events')), {
-        map: this.map,
-        publicAPI: this.publicAPI,
-      }).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
-
-      this.onLoad?.(this.publicAPI);
-
-      yield this._waitForComponents().then(() => {
-        this.onComponentsLoad?.(this.publicAPI);
-      });
-
-      return this.publicAPI;
-    })
-  ),
-
-  _waitForComponents() {
-    let componentsAreInitialized = Object.keys(this.components)
-      .map((name) => this.components[name])
-      .reduce((array, componentGroup) => array.concat(componentGroup), [])
-      .map((components) => get(components, 'isInitialized.promise'));
-
-    return all(componentsAreInitialized);
-  },
-
-  /**
-   * Update the map options.
-   *
-   * @method _updateMap
-   * @return
-   */
-  _updateMap(options) {
-    get(this, 'map').setOptions(options);
-  },
-
-  /**
-   * Helper method to trigger Google Maps events.
-   *
-   * @method _trigger
-   * @param {String} event Event name
-   * @return
-   */
-  _trigger(...args) {
-    google.maps.event.trigger(get(this, 'map'), ...args);
-  },
-
-  _registerCanvas(canvas) {
-    set(this, 'canvas', canvas);
-
-    this._canvasIsRendering.resolve(canvas);
-  },
-
-  /**
-   * Register a contextual component with the map component.
-   *
-   * @method _registerComponent
-   * @param {String} type Plural name of the component
-   * @param {Object} componentAPI
-   * @return
-   */
-  _registerComponent(type, componentAPI) {
-    this.components[type] = this.components[type] || A();
-    this.components[type].pushObject(componentAPI);
-  },
-
-  /**
-   * Unregister a contextual component with the map component.
-   *
-   * @method _unregisterComponent
-   * @param {String} type Name of the component
-   * @param {Object} componentAPI
-   * @return
-   */
-  _unregisterComponent(type, componentAPI) {
-    this.components[type].removeObject(componentAPI);
-  },
-});
+  // TODO: Return the publicAPI here
+  @action
+  getComponent(component) {
+    this.components.pushObject(component);
+    return this;
+  }
+}

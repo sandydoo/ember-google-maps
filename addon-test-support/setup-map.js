@@ -1,26 +1,49 @@
-import GMapComponent from 'ember-google-maps/components/g-map';
+import GMap from 'ember-google-maps/components/g-map';
+import { settled } from '@ember/test-helpers';
+
+let lastKey;
+const MAP_STORE = new Map();
+
+function addToStore(id, map) {
+  MAP_STORE.set(id, map);
+  lastKey = id;
+}
+
+function getFromStore(id) {
+  if (id) {
+    return MAP_STORE.get(id);
+  }
+
+  return MAP_STORE.get(lastKey);
+}
+
+function resetStore() {
+  MAP_STORE.clear();
+}
+
+export async function waitForMap(id) {
+  await settled();
+
+  return getFromStore(id);
+}
 
 export default function setupMapTest(hooks) {
   hooks.beforeEach(function () {
-    let initTask;
-
-    // Make sure to wrap the init task with a `waitFor`, so that this value
-    // is populated before we access it.
-    Object.defineProperty(this, 'gMapAPI', {
-      get: function () {
-        return initTask.lastSuccessful.value;
-      },
-    });
+    this.waitForMap = waitForMap.bind(this);
 
     this.owner.register(
       'component:g-map',
-      GMapComponent.extend({
-        init() {
-          this._super(...arguments);
+      class InstrumentedGMap extends GMap {
+        constructor() {
+          super(...arguments);
 
-          initTask = this._initMap;
-        },
-      })
+          addToStore(this.id, this);
+        }
+      }
     );
+  });
+
+  hooks.afterEach(function () {
+    resetStore();
   });
 }

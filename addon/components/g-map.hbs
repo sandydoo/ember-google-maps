@@ -1,0 +1,17 @@
+{{#let (component 'g-map/canvas' onCanvasReady=(fn this.getCanvas)) as |canvas|}}
+  {{#unless (has-block-params)}}
+    <canvas ...attributes />
+  {{/unless}}
+
+  {{yield (hash
+    map=this.mapComponent
+    canvas=canvas
+    marker=(component 'g-map/marker' getContext=(fn this.getComponent))
+    circle=(component 'g-map/circle' getContext=(fn this.getComponent))
+    polyline=(component 'g-map/polyline' getContext=(fn this.getComponent))
+    directions=(component 'g-map/directions' getContext=(fn this.getComponent))
+    control=(component 'g-map/control' getContext=(fn this.getComponent))
+    overlay=(component 'g-map/overlay' getContext=(fn this.getComponent))
+    infoWindow=(component 'g-map/info-window' getContext=(fn this.getComponent))
+    )}}
+{{/let}}

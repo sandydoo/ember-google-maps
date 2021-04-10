@@ -1,78 +1,137 @@
-import { computed } from '@ember/object';
 import { decamelize } from '@ember/string';
 import { next } from '@ember/runloop';
 
-const ignoredOptions = [
-  'map',
-  'lat',
-  'lng',
-  '_internalAPI',
-  'options',
-  'events',
-  '_name',
-];
+import { DEBUG } from '@glimmer/env';
 
-function parseOptionsAndEvents(ignored = [], callback = (r) => r) {
-  let ignoredSet = new Set(ignored);
+// TODO: handle options and events hashes.
+export const ignoredOptions = ['lat', 'lng', 'getContext', 'options', 'events'];
 
-  return computed('attrs', function () {
-    return callback(parseAttrs(ignoredSet, this.attrs));
-  });
-}
+const IGNORED = Symbol('Ignored'),
+  EVENT = Symbol('Event'),
+  OPTION = Symbol('Option');
 
-function parseAttrs(ignored = new Set(), args = {}) {
-  let events = { ...args.events };
-  let options = { ...args.options };
+// TODO: Provide alternative to Proxy for IE11? Or drop IE11 support?
+export class OptionsAndEvents {
+  constructor(rawArgs) {
+    this.rawArgs = rawArgs;
 
-  let entries = Object.entries(args);
+    this.ignoredSet = new Set(ignoredOptions);
 
-  entries.forEach(([k, v]) => {
-    if (isIgnored(k, ignored)) {
-      // Pass
-    } else if (isEvent(k)) {
-      events[k] = v;
-    } else {
-      options[k] = extractValue(v);
-    }
-  });
+    this.optionsCache = new Set();
+    this.eventsCache = new Set();
 
-  return { events, options };
-}
+    // Sort and cache the arguments by type.
+    this.parse();
 
-function isEvent(key) {
-  return key.slice(0, 2) === 'on';
-}
+    let target = Object.create(null);
 
-function isIgnored(key, ignored) {
-  return ignored.has(key);
-}
+    let optionsHandler = new ArgsProxyHandler(rawArgs, this.optionsCache);
+    let eventsHandler = new ArgsProxyHandler(rawArgs, this.eventsCache);
 
-function extractValue(cell) {
-  if (cell && cell.constructor && Object.keys(cell).includes('value')) {
-    return cell.value;
+    this.options = new Proxy(target, optionsHandler);
+    this.events = new Proxy(target, eventsHandler);
   }
-  return cell;
+
+  parse() {
+    for (let prop in this.rawArgs) {
+      let identity = this.identify(prop);
+
+      switch (identity) {
+        case OPTION:
+          this.optionsCache.add(prop);
+          break;
+
+        case EVENT:
+          this.eventsCache.add(prop);
+          break;
+
+        case IGNORED:
+          break;
+      }
+    }
+  }
+
+  identify(prop) {
+    if (this.isIgnored(prop)) {
+      return IGNORED;
+    } else if (this.isEvent(prop)) {
+      return EVENT;
+    } else {
+      return OPTION;
+    }
+  }
+
+  isEvent(prop) {
+    return prop.slice(0, 2) === 'on';
+  }
+
+  isIgnored(prop) {
+    return this.ignoredSet.has(prop);
+  }
 }
 
-function watch(target, options = {}) {
-  return Object.entries(options).map(([key, callback]) =>
-    addObserver(target, key, callback)
-  );
-}
+class ArgsProxyHandler {
+  constructor(args, cache) {
+    this.args = args;
+    this.cache = cache;
+    this.setCache = new Map();
+  }
 
-function addObserver(obj, key, callback) {
-  let listener = obj.addObserver(key, callback);
+  get(_target, prop) {
+    if (this.cache.has(prop)) {
+      return this.setCache.get(prop) ?? this.args[prop];
+    }
+  }
 
-  return {
-    name: key,
-    listener,
-    remove: () => obj.removeObserver(key, callback),
-  };
+  // TODO: Google Maps like to set default stuff. Check how this is going to
+  // work.
+  set(_target, prop, value) {
+    if (value !== undefined) {
+      this.cache.add(prop);
+      this.setCache.set(prop, value);
+      return value;
+    } else {
+      this.cache.delete(prop);
+      this.setCache.delete(prop);
+    }
+  }
+
+  has(_target, prop) {
+    return this.cache.has(prop);
+  }
+
+  ownKeys() {
+    return Array.from(this.cache.values());
+  }
+
+  isExtensible() {
+    return false;
+  }
+
+  getOwnPropertyDescriptor(_target, prop) {
+    if (DEBUG && !this.cache.has(prop)) {
+      throw new Error(
+        `args proxies do not have real property descriptors, so you should never need to call getOwnPropertyDescriptor yourself. This code exists for enumerability, such as in for-in loops and Object.keys(). Attempted to get the descriptor for \`${String(
+          prop
+        )}\``
+      );
+    }
+
+    return {
+      enumerable: true,
+      configurable: true,
+    };
+  }
 }
 
 /* Events */
 
-function addEventListener(target, originalEventName, action, payload = {}) {
+export function addEventListener(
+  target,
+  originalEventName,
+  action,
+  payload = {}
+) {
   let eventName = decamelize(originalEventName).slice(3);
 
   function callback(googleEvent) {
@@ -87,7 +146,12 @@ function addEventListener(target, originalEventName, action, payload = {}) {
     next(target, action, params);
   }
 
-  let listener = google.maps.event.addDomListener(target, eventName, callback);
+  let addGoogleListener =
+    target instanceof Element
+      ? google.maps.event.addDomListener
+      : google.maps.event.addListener;
+
+  let listener = addGoogleListener(target, eventName, callback);
 
   return {
     name: eventName,
@@ -107,18 +171,8 @@ function addEventListener(target, originalEventName, action, payload = {}) {
  * @return {google.maps.MapsEventListener[]} An array of bound event listeners
  *     that should be used to remove the listeners when no longer needed.
  */
-function addEventListeners(target, events, payload = {}) {
+export function addEventListeners(target, events, payload = {}) {
   return Object.entries(events).map(([originalEventName, action]) => {
     return addEventListener(target, originalEventName, action, payload);
   });
 }
-
-export {
-  addEventListener,
-  addEventListeners,
-  ignoredOptions,
-  isEvent,
-  isIgnored,
-  parseOptionsAndEvents,
-  watch,
-};

@@ -2,9 +2,8 @@ import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise, resolve } from 'rsvp';
 
-export function position() {
-  let { lat, lng } = this;
-  return lat && lng ? new google.maps.LatLng(lat, lng) : undefined;
+export function toLatLng(lat, lng) {
+  return lat && lng && google.maps ? new google.maps.LatLng(lat, lng) : undefined;
 }
 
 let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
