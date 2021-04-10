@@ -1,11 +1,10 @@
 import Service from '@ember/service';
 import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
-import { assert } from '@ember/debug';
 import { bind } from '@ember/runloop';
 import { toPromiseProxy, promisify } from '../utils/helpers';
 import { cached } from 'tracked-toolbox';
-import runloopifyGoogleMaps from '../utils/runloopify-google-maps';
+import { assert } from '@ember/debug';
 import { waitFor } from '@ember/test-waiters';
 
 export default class GoogleMapsApiService extends Service {
@@ -76,7 +75,6 @@ Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
 
     return new Promise((resolve, reject) => {
       window.initGoogleMap = bind(() => {
-        runloopifyGoogleMaps();
         resolve(window.google);
       });
 
