@@ -1,32 +1,24 @@
 import Marker from './marker';
-import { get, set } from '@ember/object';
-import { reads } from '@ember/object/computed';
-import { resolve } from 'rsvp';
+import { toLatLng } from '../../utils/helpers';
 
-/**
- * Circle marker component.
- *
- * @class Circle
- * @namespace GMap
- * @module ember-google-maps/components/g-map/circle
- * @extends GMap.Marker
- */
-export default Marker.extend({
-  _type: 'circle',
+export default class Circle extends Marker {
+  newOptions(options) {
+    let { lat, lng } = this.args;
 
-  radius: 500,
-  center: reads('position'),
-
-  _createOptions(options) {
     return {
+      radius: 500,
+      center: toLatLng(lat, lng),
       ...options,
-      map: this.map,
-      radius: get(this, 'radius'),
-      center: get(this, 'center'),
     };
-  },
+  }
 
-  _addComponent(options) {
-    return resolve(set(this, 'mapComponent', new google.maps.Circle(options)));
-  },
-});
+  new(options, events) {
+    let circle = new google.maps.Circle(options);
+
+    this.addEventsToMapComponent(circle, events, this.publicAPI);
+
+    circle.setMap(this.context.map);
+
+    return circle;
+  }
+}

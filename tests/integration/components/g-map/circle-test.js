@@ -12,17 +12,17 @@ module('Integration | Component | g map/circle', function (hooks) {
 
   test('it renders a circle', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.circle @lat={{lat}} @lng={{lng}} />
+      <GMap @lat={{thislat}} @lng={{this.lng}} as |g|>
+        <g.circle @lat={{thislat}} @lng={{this.lng}} />
       </GMap>
     `);
 
     let {
       map,
       components: { circles },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
 
     assert.equal(circles.length, 1);
-    assert.equal(circles[0].mapComponent.map, map);
+    assert.ok(circles[0].mapComponent.getMap());
   });
 });
