@@ -1,151 +1,64 @@
-import {
-  default as MapComponent,
-  MapComponentLifecycleEnum,
-} from './map-component';
-import layout from '../../templates/components/g-map/overlay';
-import {
-  addEventListeners,
-  ignoredOptions,
-  parseOptionsAndEvents,
-} from '../../utils/options-and-events';
-import { position } from '../../utils/helpers';
-import { computed, get, set } from '@ember/object';
-import { bind, join, schedule, scheduleOnce } from '@ember/runloop';
+import MapComponent from './map-component';
+import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import { warn } from '@ember/debug';
-import { defer, resolve } from 'rsvp';
 
-const { READY } = MapComponentLifecycleEnum;
+import { toLatLng } from '../../utils/helpers';
+import { addEventListeners } from '../../utils/options-and-events';
 
-/**
- * A wrapper for the google.maps.Overlay class.
- *
- * @class Overlay
- * @namespace GMap
- * @module ember-google-maps/components/g-map/overlay
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
+export default class OverlayView extends MapComponent {
+  id = `ember-google-maps-overlay-${guidFor(this)}`;
 
-  _type: 'overlay',
+  container = window?.document?.createDocumentFragment();
 
-  position: computed('lat', 'lng', position),
+  get zIndex() {
+    return this.args.zIndex ?? 'auto';
+  }
 
-  paneName: 'overlayMouseTarget',
-  zIndex: 'auto',
+  get paneName() {
+    return this.args.paneName ?? 'overlayMouseTarget';
+  }
 
-  _targetPane: null,
+  get position() {
+    let { lat, lng, position } = this.args;
 
-  _contentId: computed(function () {
-    return `ember-google-maps-overlay-${guidFor(this)}`;
-  }),
+    return position ?? toLatLng(lat, lng);
+  }
 
-  _optionsAndEvents: parseOptionsAndEvents([
-    ...ignoredOptions,
-    'paneName',
-    'zIndex',
-  ]),
-
-  init() {
-    this._super(arguments);
-
-    // Remove for 4.0
-    warn(
-      `
-The \`innerContainerStyle\` option has been removed. See the docs for examples of how to offset overlays relative to their coordinates.
-https://ember-google-maps.sandydoo.me/docs/overlays/`,
-      typeof this.innerContainerStyle === 'undefined',
-      { id: 'inner-container-style-removed' }
-    );
-  },
-
-  _addComponent() {
-    let isFinishedDrawing = defer();
-
-    let _contentContainer = document.createElement('div');
-    _contentContainer.setAttribute('id', get(this, '_contentId'));
-    set(this, '_contentContainer', _contentContainer);
-
+  new() {
     let Overlay = new google.maps.OverlayView();
 
-    // Google Maps runs these setup methods asynchronously. This makes it
-    // impossible to schedule all of the DOM operations within one runloop.
-    // That's why we provide noops and then run the setup process properly,
-    // within a runloop, ourselves.
-    Overlay.onAdd = () => {};
-    Overlay.onRemove = bind(this, 'onRemove');
-    Overlay.draw = () => join(this, setupOverlay);
+    Overlay.onAdd = () => this.onAdd();
+    Overlay.onRemove = () => this.onRemove();
+    Overlay.draw = () => this.draw();
 
-    set(this, 'mapComponent', Overlay);
+    Overlay.setMap(this.context.map);
 
-    Overlay.setMap(this.map);
+    return Overlay;
+  }
 
-    function setupOverlay() {
-      if (this.isDestroying || this.isDestroyed) {
-        return;
-      }
-
-      this.onAdd();
-
-      schedule('render', this, 'draw');
-
-      // Set the normal draw function.
-      Overlay.draw = () =>
-        join(this, () => scheduleOnce('render', this, 'draw'));
-
-      schedule('afterRender', this, () => isFinishedDrawing.resolve(Overlay));
-    }
-
-    return isFinishedDrawing.promise;
-  },
-
-  _didAddComponent(_, options, events) {
-    let payload = {
-      map: this.map,
-      publicAPI: this.publicAPI,
-    };
-
-    addEventListeners(
-      this._contentContainer,
-      events,
-      payload
-    ).forEach(({ name, remove }) => this._eventListeners.set(name, remove));
-
-    return resolve();
-  },
-
-  _updateComponent() {
-    if (this.mapComponentLifecycle === READY) {
-      this.mapComponent.draw();
-    }
-  },
+  // TODO: support changing pane?
+  // There’s nothing to update right now, but we need to make sure we’re not
+  // creating new overlays whenever arguments are updated.
+  update(overlay) {
+    return overlay;
+  }
 
   onAdd() {
     let panes = this.mapComponent.getPanes();
-    set(this, '_targetPane', panes[this.paneName]);
+    this.targetPane = panes[this.paneName];
 
-    // Schedule to append the overlay container to the map pane.
-    schedule('render', this, () => {
-      if (this.isDestroying || this.isDestroyed) {
-        return;
-      }
+    this.targetPane.appendChild(this.overlayElement);
 
-      this._targetPane.appendChild(this._contentContainer);
-    });
-  },
+    addEventListeners(this.overlayElement, this.events, this.publicAPI);
+  }
 
   draw() {
-    if (this.isDestroying || this.isDestroyed) {
-      return;
-    }
+    let { position, zIndex } = this;
 
-    let overlayProjection = this.mapComponent.getProjection(),
-      position = get(this, 'position'),
-      point = overlayProjection.fromLatLngToDivPixel(position),
-      zIndex = get(this, 'zIndex');
+    let overlayProjection = this.mapComponent.getProjection();
+    let point = overlayProjection.fromLatLngToDivPixel(position);
 
-    this._contentContainer.style.cssText = `
+    this.overlayElement.style.cssText = `
       position: absolute;
       left: 0;
       top: 0;
@@ -153,19 +66,26 @@ https://ember-google-maps.sandydoo.me/docs/overlays/`,
       z-index: ${zIndex};
       transform: translateX(${point.x}px) translateY(${point.y}px);
     `;
-  },
+  }
 
   onRemove() {
-    if (this.isDestroying || this.isDestroyed) {
-      return;
-    }
-
-    let parentNode = this._contentContainer.parentNode;
+    let parentNode = this.overlayElement.parentNode;
 
     if (parentNode) {
-      parentNode.removeChild(this._contentContainer);
+      parentNode.removeChild(this.overlayElement);
     }
+  }
 
-    this._contentContainer = null;
-  },
-});
+  teardown() {
+    // This calls onRemove.
+    this.mapComponent.setMap(null);
+
+    this.overlayElement = null;
+    this.container = null;
+  }
+
+  @action
+  getOverlay(element) {
+    this.overlayElement = element;
+  }
+}

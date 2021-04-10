@@ -4,7 +4,6 @@ import { setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { get, set } from '@ember/object';
 import { later } from '@ember/runloop';
 
 function randomInt(min, max) {
@@ -18,22 +17,26 @@ function coinToss() {
 function perturbLocations(times) {
   for (let i = 1; i <= times; i++) {
     later(() => {
-      set(this, 'locations', this.originalLocations.filter(coinToss));
+      this.locations = this.originalLocations.filter(coinToss);
     }, 50 * i);
   }
 }
 
-function generateLocations(google, center) {
-  let { lat, lng } = center,
-    maps = get(google, 'maps'),
-    origin = new maps.LatLng(lat, lng);
+async function generateLocations(googlePromise, { lat, lng }) {
+  let google = await googlePromise;
+
+  let origin = new google.maps.LatLng(lat, lng);
 
   return Array(42)
     .fill()
     .map((_e, i) => {
       let heading = randomInt(1, 360),
         distance = randomInt(100, 5000),
-        n = maps.geometry.spherical.computeOffset(origin, distance, heading);
+        n = google.maps.geometry.spherical.computeOffset(
+          origin,
+          distance,
+          heading
+        );
       return { id: i, lat: n.lat(), lng: n.lng() };
     });
 }
@@ -45,8 +48,8 @@ module('Integration | Component | g map/overlay', function (hooks) {
 
   test('it renders a custom overlay', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} @zoom={{12}} as |g|>
-        <g.overlay @lat={{lat}} @lng={{lng}}>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
+        <g.overlay @lat={{this.lat}} @lng={{this.lng}}>
           <div id="custom-overlay"></div>
         </g.overlay>
       </GMap>
@@ -55,7 +58,8 @@ module('Integration | Component | g map/overlay', function (hooks) {
     let {
       id,
       components: { overlays },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let overlay = await waitFor('#custom-overlay');
     let mapDiv = find(`#${id}`);
 
@@ -69,23 +73,27 @@ module('Integration | Component | g map/overlay', function (hooks) {
   test('it survives a performance test without errors', async function (assert) {
     assert.expect(0);
 
-    let center = { lat: this.lat, lng: this.lng },
-      googleMapsApi = this.owner.lookup('service:google-maps-api'),
-      google = await get(googleMapsApi, 'google');
+    let googleMapsApi = this.owner.lookup('service:google-maps-api');
 
-    this.originalLocations = await generateLocations(google, center);
+    this.originalLocations = await generateLocations(googleMapsApi.google, {
+      lat: this.lat,
+      lng: this.lng,
+    });
+
     this.locations = this.originalLocations;
 
     await render(hbs`
-      {{#g-map lat=lat lng=lng zoom=12 as |g|}}
-        {{#each locations as |loc|}}
-          {{#g.overlay lat=loc.lat lng=loc.lng}}
+      <GMap @lat={{this.lat}} @lng={{this.lng}} zoom={{12}} as |g|>
+        {{#each this.locations as |location|}}
+          <g.overlay @lat={{location.lat}} @lng={{location.lng}}>
             <div>Test</div>
-          {{/g.overlay}}
+          </g.overlay>
         {{/each}}
-      {{/g-map}}
+      </GMap>
     `);
 
-    await perturbLocations.call(this, 30);
+    perturbLocations.call(this, 30);
+
+    await this.waitForMap();
   });
 });
