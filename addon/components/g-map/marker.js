@@ -1,34 +1,27 @@
 import MapComponent from './map-component';
-import layout from '../../templates/components/g-map/marker';
-import { position } from '../../utils/helpers';
-import { computed, get, set } from '@ember/object';
-import { resolve } from 'rsvp';
+import { toLatLng } from '../../utils/helpers';
 
-/**
- * A wrapper for the google.maps.Marker class.
- *
- * @class Marker
- * @namespace GMap
- * @module ember-google-maps/components/g-map/marker
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
-  tagName: '',
+export default class Marker extends MapComponent {
+  newOptions(options) {
+    let { lat, lng } = this.args;
 
-  _type: 'marker',
-
-  position: computed('lat', 'lng', position),
-
-  _createOptions(options) {
     return {
+      position: toLatLng(lat, lng),
       ...options,
-      map: this.map,
-      position: get(this, 'position'),
     };
-  },
+  }
 
-  _addComponent(options) {
-    return resolve(set(this, 'mapComponent', new google.maps.Marker(options)));
-  },
-});
+  new(options, events) {
+    let marker = new google.maps.Marker(options);
+
+    this.addEventsToMapComponent(marker, events, this.publicAPI);
+
+    marker.setMap(this.context.map);
+
+    return marker;
+  }
+
+  update() {
+    return this.updateCommon(...arguments);
+  }
+}

@@ -12,15 +12,16 @@ module('Integration | Component | g map/marker', function (hooks) {
 
   test('it renders a marker', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.marker @lat={{lat}} @lng={{lng}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.marker @lat={{this.lat}} @lng={{this.lng}} />
       </GMap>
     `);
 
     let {
       map,
       components: { markers },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let marker = markers[0].mapComponent;
 
     assert.equal(markers.length, 1);
@@ -33,14 +34,15 @@ module('Integration | Component | g map/marker', function (hooks) {
     this.onClick = () => assert.ok('It binds events to actions');
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.marker @lat={{lat}} @lng={{lng}} @onClick={{action onClick}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.marker @lat={{this.lat}} @lng={{this.lng}} @onClick={{action this.onClick}} />
       </GMap>
     `);
 
     let {
       components: { markers },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let marker = markers[0].mapComponent;
 
     trigger(marker, 'click');
@@ -48,14 +50,15 @@ module('Integration | Component | g map/marker', function (hooks) {
 
   test('it sets options on a marker', async function (assert) {
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.marker @lat={{lat}} @lng={{lng}} @draggable={{true}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.marker @lat={{this.lat}} @lng={{this.lng}} @draggable={{true}} />
       </GMap>
     `);
 
     let {
       components: { markers },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let marker = markers[0].mapComponent;
 
     assert.equal(marker.draggable, true);
