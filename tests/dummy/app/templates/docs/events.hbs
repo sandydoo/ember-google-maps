@@ -75,9 +75,9 @@
       @zoom={{12}}
       @styles={{this.primaryMapStyle}}
       class="ember-google-map-responsive"
-      @onBoundsChanged={{action "flashMessageThrottle" "The bounds have changed!"}}
-      @onClick={{action "flashMessage" "You clicked the map!"}}
-      @onDblclick={{action "flashMessage" "Ooh, a double click!!"}}
-      @onZoomChanged={{action "flashMessageThrottle" "Zoooooom!"}} />
+      @onBoundsChanged={{fn this.flashMessageThrottle "The bounds have changed!"}}
+      @onClick={{fn this.flashMessage "You clicked the map!"}}
+      @onDblclick={{fn this.flashMessage "Ooh, a double click!!"}}
+      @onZoomChanged={{fn this.flashMessageThrottle "Zoooooom!"}} />
   </div>
 </div>

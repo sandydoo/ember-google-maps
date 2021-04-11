@@ -18,7 +18,7 @@
   <map.marker
     @lat={{this.london.lat}}
     @lng={{this.london.lng}}
-    @onClick={{action (toggle "markerTooltipOpen" this)}} as |marker|>
+    @onClick={{toggle markerTooltipOpen this}} as |marker|>
 
     <marker.infoWindow
       @isOpen={{this.markerTooltipOpen}}>

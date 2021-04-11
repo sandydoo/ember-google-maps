@@ -26,7 +26,7 @@ module('Integration | Component | g-map/directions', function (hooks) {
           @origin={{origin}}
           @destination={{destination}}
           @travelMode="WALKING"
-          @onDirectionsChanged={{action trackAction "directionsReady"}} />
+          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} />
       </GMap>
     `);
 
@@ -56,7 +56,7 @@ module('Integration | Component | g-map/directions', function (hooks) {
           @origin={{origin}}
           @destination={{destination}}
           @travelMode="WALKING"
-          @onDirectionsChanged={{action trackAction "directionsReady"}} />
+          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} />
       </GMap>
     `);
 

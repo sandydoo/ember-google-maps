@@ -35,7 +35,7 @@ module('Integration | Component | g map/marker', function (hooks) {
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
-        <g.marker @lat={{this.lat}} @lng={{this.lng}} @onClick={{action this.onClick}} />
+        <g.marker @lat={{this.lat}} @lng={{this.lng}} @onClick={{this.onClick}} />
       </GMap>
     `);
 

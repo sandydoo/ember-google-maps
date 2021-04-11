@@ -25,7 +25,7 @@
         {{!-- Display a marker for each step of the route --}}
         <map.marker
           @position={{step.start_location}}
-          @onClick={{action (toggle "showInstructions" step)}} as |marker|>
+          @onClick={{toggle "showInstructions" step}} as |marker|>
 
           {{!-- Add an infoWindow with directions for good measure --}}
           <marker.infoWindow

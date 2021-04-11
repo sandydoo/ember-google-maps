@@ -30,17 +30,17 @@
       @zoomControlOptions={{hash
         position=google.maps.ControlPosition.TOP_LEFT}}
       @fullscreenControl={{true}}
-      @onLoad={{action "saveBounds"}}
-      @onBoundsChanged={{action "saveBounds"}} as |g|>
+      @onLoad={{this.saveBounds}}
+      @onBoundsChanged={{this.saveBounds}} as |g|>
 
       {{#each this.filteredRentals key="id" as |rental index|}}
         <g.overlay
           @lat={{rental.lat}}
           @lng={{rental.lng}}
           @zIndex={{if rental.active 1000 index}}
-          @onClick={{action "scrollToListing" rental}}
-          @onMouseover={{action this.handleMouseEnter rental}}
-          @onMouseleave={{action this.handleMouseLeave rental}}>
+          @onClick={{fn this.scrollToListing rental}}
+          @onMouseover={{fn this.handleMouseEnter rental}}
+          @onMouseleave={{fn this.handleMouseLeave rental}}>
 
           <div class="anchor-middle-bottom">
             <div class="tooltip {{if rental.active "active"}}">

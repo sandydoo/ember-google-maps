@@ -77,7 +77,7 @@ module('Integration | Component | g map', function (hooks) {
         @lat={{this.lat}}
         @lng={{this.lng}}
         @zoom={{12}}
-        @onZoomChanged={{action this.onZoomChanged}} />
+        @onZoomChanged={{this.onZoomChanged}} />
     `);
 
     let { map } = await this.waitForMap();
@@ -105,8 +105,8 @@ module('Integration | Component | g map', function (hooks) {
         @lat={{this.lat}}
         @lng={{this.lng}}
         @zoom={{12}}
-        @onClick={{action this.onClick}}
-        @events={{hash onZoomChanged=(action this.onZoomChanged)}} />
+        @onClick={{this.onClick}}
+        @events={{hash onZoomChanged=this.onZoomChanged}} />
     `);
 
     let { map } = await this.waitForMap();
@@ -127,7 +127,7 @@ module('Integration | Component | g map', function (hooks) {
       <GMap
         @lat={{this.lat}}
         @lng={{this.lng}}
-        @onComponentsLoad={{action this.onComponentsLoad}} as |g|>
+        @onComponentsLoad={{this.onComponentsLoad}} as |g|>
 
         <g.marker @lat={{this.lat}} @lng={{this.lng}} />
 

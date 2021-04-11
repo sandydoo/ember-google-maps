@@ -21,7 +21,7 @@
       @zoom={{10}}
       @styles={{this.primaryMapStyle}}
       class="ember-google-map-responsive"
-      @onClick={{action "appendPolyline"}} as |g|>
+      @onClick={{this.appendPolyline}} as |g|>
 
       <g.polyline
         @path={{this.flightCoordinates}}

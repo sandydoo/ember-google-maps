@@ -35,7 +35,7 @@
           @lng={{location.lng}}
           @visible={{true}}
           @draggable={{false}}
-          @onClick={{action "flashMessage" (concat "Clicked: " location.lat ", " location.lng)}} />
+          @onClick={{fn this.flashMessage (concat "Clicked: " location.lat ", " location.lng)}} />
       {{/each-in}}
     </GMap>
   </div>

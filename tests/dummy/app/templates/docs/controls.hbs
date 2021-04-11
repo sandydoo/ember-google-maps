@@ -51,7 +51,7 @@
 
       <g.control @position="TOP_CENTER">
         <div class="map-control">
-          <button {{action "recenterMap" g.map}} role="button" class="btn btn-light m-2">
+          <button {{on "click" (fn this.recenterMap g.map)}} role="button" class="btn btn-light m-2">
             Recenter map
           </button>
         </div>

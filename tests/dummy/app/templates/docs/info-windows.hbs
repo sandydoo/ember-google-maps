@@ -22,12 +22,12 @@
       </DocTip>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{this.markerTooltipOpen}} @change={{action (toggle "markerTooltipOpen" this)}} class="custom-control-input" @id="toggle-marker-tooltip" />
+        <Input @type="checkbox" @checked={{this.markerTooltipOpen}} @change={{toggle "markerTooltipOpen" this}} class="custom-control-input" @id="toggle-marker-tooltip" />
         <label class="custom-control-label" for="toggle-marker-tooltip">Toggle marker tooltip</label>
       </div>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{this.mapTooltipOpen}} @change={{action (toggle "mapTooltipOpen" this)}} class="custom-control-input" @id="toggle-map-tooltip" />
+        <Input @type="checkbox" @checked={{this.mapTooltipOpen}} @change={{toggle "mapTooltipOpen" this}} class="custom-control-input" @id="toggle-map-tooltip" />
         <label class="custom-control-label" for="toggle-map-tooltip">Toggle map tooltip</label>
       </div>
     </section>
@@ -52,7 +52,7 @@
       <g.marker
         @lat={{this.london.lat}}
         @lng={{this.london.lng}}
-        @onClick={{action (toggle "markerTooltipOpen" this)}} as |m|>
+        @onClick={{toggle "markerTooltipOpen" this}} as |m|>
 
         <m.infoWindow @isOpen={{this.markerTooltipOpen}}>
           <div class="text-center">

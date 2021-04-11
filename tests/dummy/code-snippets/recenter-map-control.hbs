@@ -12,7 +12,7 @@
 
   <map.control @position="TOP_CENTER">
     <div class="map-control">
-      <button {{action "recenterMap" map.map}} role="button" class="btn btn-light m-2">
+      <button {{fn this.recenterMap map.map}} role="button" class="btn btn-light m-2">
         Recenter map
       </button>
     </div>

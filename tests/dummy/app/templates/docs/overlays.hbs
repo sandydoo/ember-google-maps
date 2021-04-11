@@ -80,8 +80,8 @@
           @lat={{l.lat}}
           @lng={{l.lng}}
           @zIndex={{if l.active 1000 index}}
-          @onMouseover={{action (mut l.active) true}}
-          @onMouseleave={{action (mut l.active) false}}>
+          @onMouseover={{fn (mut l.active) true}}
+          @onMouseleave={{fn (mut l.active) false}}>
           <div class="anchor-middle-bottom">
             <div class="tooltip {{if l.active "active"}}">
       			  £{{l.price}}

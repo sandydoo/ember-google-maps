@@ -30,7 +30,7 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
           @origin={{origin}}
           @destination={{destination}}
           @travelMode="WALKING"
-          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
+          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
 
           <d.waypoint @location={{waypointLocation}} />
 
@@ -63,7 +63,7 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
           @origin={{origin}}
           @destination={{destination}}
           @travelMode="WALKING"
-          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
+          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
 
           {{#if addWaypoint}}
             <d.waypoint @location={{waypointLocation}} />

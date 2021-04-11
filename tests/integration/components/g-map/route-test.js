@@ -50,7 +50,7 @@ module('Integration | Component | g-map/route', function (hooks) {
           @origin={{origin}}
           @destination={{destination}}
           @travelMode="WALKING"
-          @onDirectionsChanged={{action trackAction "directionsReady"}} as |d|>
+          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
           {{d.route}}
         </g.directions>
       </GMap>

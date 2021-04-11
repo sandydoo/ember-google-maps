@@ -8,8 +8,8 @@
     <map.overlay
       @lat={{location.lat}}
       @lng={{location.lng}}
-      @onMouseover={{action (mut location.active) true}}
-      @onMouseleave={{action (mut location.active) false}}>
+      @onMouseover={{fn (mut location.active) true}}
+      @onMouseleave={{fn (mut location.active) false}}>
 
       <div class="tooltip {{if location.active "active"}}">
         £{{location.price}}

@@ -66,7 +66,7 @@ Display an array of locations using markers 📍.
     <map.marker
       @lat={{location.lat}}
       @lng={{location.lng}}
-      @onClick={{action "showDetails" location}} />
+      @onClick={{fn this.showDetails location}} />
   {{/each}}
 </GMap>
 ```
