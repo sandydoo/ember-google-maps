@@ -2,22 +2,20 @@ import Service from '@ember/service';
 import { Promise, reject, resolve } from 'rsvp';
 import { getOwner } from '@ember/application';
 import { bind } from '@ember/runloop';
-import { toPromiseProxy, promisify } from '../utils/helpers';
-import { cached } from 'tracked-toolbox';
 import { assert } from '@ember/debug';
 import { waitFor } from '@ember/test-waiters';
 
+import { getAsync } from '../utils/async-data';
+
 export default class GoogleMapsApiService extends Service {
-  @cached
+  @getAsync
   get google() {
-    return toPromiseProxy(() => this._getApi());
+    return this._getApi();
   }
 
-  @cached
+  @getAsync
   get directionsService() {
-    return toPromiseProxy(() =>
-      this.google.then((google) => new google.maps.DirectionsService())
-    );
+    return this.google.then((google) => new google.maps.DirectionsService());
   }
 
   /**
