@@ -52,16 +52,15 @@ export default class GoogleMapsApiService extends Service {
       return reject();
     }
 
-    let google = window.google;
-    if (google && google.maps) {
-      return resolve(google);
+    if (window?.google?.maps) {
+      return resolve(window.google.maps);
     }
 
     let config = this._getConfig();
 
-    return promisify(this.buildGoogleMapsUrl(config)).then(
-      this._loadAndInitApi
-    );
+    return resolve(config)
+      .then(this.buildGoogleMapsUrl)
+      .then(this._loadAndInitApi);
   }
 
   _loadAndInitApi(src) {
