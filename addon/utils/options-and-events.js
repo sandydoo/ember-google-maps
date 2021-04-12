@@ -2,6 +2,7 @@ import { decamelize } from '@ember/string';
 import { next } from '@ember/runloop';
 
 import { DEBUG } from '@glimmer/env';
+import { HAS_NATIVE_PROXY } from './platform';
 
 // TODO: handle options and events hashes.
 export const ignoredOptions = ['lat', 'lng', 'getContext', 'options', 'events', 'classNames'];
@@ -10,7 +11,6 @@ const IGNORED = Symbol('Ignored'),
   EVENT = Symbol('Event'),
   OPTION = Symbol('Option');
 
-// TODO: Provide alternative to Proxy for IE11? Or drop IE11 support?
 export class OptionsAndEvents {
   constructor(rawArgs) {
     this.rawArgs = rawArgs;
@@ -23,20 +23,23 @@ export class OptionsAndEvents {
     // Sort and cache the arguments by type.
     this.parse();
 
-    let target = Object.create(null);
+    if (HAS_NATIVE_PROXY) {
+      let target = Object.create(null);
 
-    let optionsHandler = new ArgsProxyHandler(rawArgs, this.optionsCache);
-    let eventsHandler = new ArgsProxyHandler(rawArgs, this.eventsCache);
+      let optionsHandler = new ArgsProxyHandler(rawArgs, this.optionsCache);
+      let eventsHandler = new ArgsProxyHandler(rawArgs, this.eventsCache);
 
-    this.options = new Proxy(target, optionsHandler);
-    this.events = new Proxy(target, eventsHandler);
+      this.options = new Proxy(target, optionsHandler);
+      this.events = new Proxy(target, eventsHandler);
+    } else {
+      this.options = newNoProxyFallback(rawArgs, this.optionsCache);
+      this.events = newNoProxyFallback(rawArgs, this.eventsCache);
+    }
   }
 
   parse() {
     for (let prop in this.rawArgs) {
-      let identity = this.identify(prop);
-
-      switch (identity) {
+      switch (this.identify(prop)) {
         case OPTION:
           this.optionsCache.add(prop);
           break;
@@ -122,6 +125,29 @@ class ArgsProxyHandler {
       configurable: true,
     };
   }
+}
+
+function newNoProxyFallback(args, chosenSet) {
+  let obj = {};
+
+  chosenSet.forEach((prop) => {
+    Object.defineProperty(obj, prop, {
+      enumerable: true,
+      configurable: true,
+      get() {
+        return args[prop];
+      },
+      set(prop, value) {
+        if (value === undefined) {
+          delete obj[prop];
+        } else {
+          obj[prop] = value;
+        }
+      },
+    });
+  });
+
+  return obj;
 }
 
 /* Events */
