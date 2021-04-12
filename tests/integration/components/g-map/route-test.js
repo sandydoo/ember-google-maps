@@ -21,10 +21,10 @@ module('Integration | Component | g-map/route', function (hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
-          @origin={{origin}}
-          @destination={{destination}}
+          @origin={{this.origin}}
+          @destination={{this.destination}}
           @travelMode="WALKING" as |d|>
           {{d.route}}
         </g.directions>
@@ -33,7 +33,7 @@ module('Integration | Component | g-map/route', function (hooks) {
 
     let {
       components: { routes },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
 
     assert.equal(routes.length, 1);
 
@@ -45,10 +45,10 @@ module('Integration | Component | g-map/route', function (hooks) {
     this.destination = 'Clerkenwell';
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
-          @origin={{origin}}
-          @destination={{destination}}
+          @origin={{this.origin}}
+          @destination={{this.destination}}
           @travelMode="WALKING"
           @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
           {{d.route}}
@@ -60,7 +60,7 @@ module('Integration | Component | g-map/route', function (hooks) {
 
     let {
       components: { routes },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
 
     let directions = routes[0].mapComponent.directions;
     let { origin } = getDirectionsQuery(directions);
@@ -69,7 +69,7 @@ module('Integration | Component | g-map/route', function (hooks) {
 
     await wait(1000);
 
-    this.set('origin', 'Holborn Station');
+    this.origin = 'Holborn Station';
 
     await this.seenAction('directionsReady', { timeout: 10000 });
 
