@@ -1,6 +1,7 @@
 {{#let (component 'g-map/canvas' onCanvasReady=(fn this.getCanvas)) as |canvas|}}
   {{#unless (has-block-params)}}
-    <canvas ...attributes />
+    {{!-- Compatibility: @classNames should be deprecated --}}
+    <canvas class={{@classNames}} ...attributes />
   {{/unless}}
 
   {{yield (hash

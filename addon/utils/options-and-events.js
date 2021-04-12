@@ -4,7 +4,7 @@ import { next } from '@ember/runloop';
 import { DEBUG } from '@glimmer/env';
 
 // TODO: handle options and events hashes.
-export const ignoredOptions = ['lat', 'lng', 'getContext', 'options', 'events'];
+export const ignoredOptions = ['lat', 'lng', 'getContext', 'options', 'events', 'classNames'];
 
 const IGNORED = Symbol('Ignored'),
   EVENT = Symbol('Event'),
