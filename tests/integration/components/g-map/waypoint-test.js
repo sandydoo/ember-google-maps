@@ -25,14 +25,14 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
     this.waypointLocation = 'Leather Lane';
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
-          @origin={{origin}}
-          @destination={{destination}}
+          @origin={{this.origin}}
+          @destination={{this.destination}}
           @travelMode="WALKING"
           @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
 
-          <d.waypoint @location={{waypointLocation}} />
+          <d.waypoint @location={{this.waypointLocation}} />
 
         </g.directions>
       </GMap>
@@ -42,7 +42,8 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
 
     let {
       components: { directions },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let request = directions[0].directions.request;
 
     assert.equal(request.waypoints.length, 1);
@@ -58,15 +59,15 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
     this.addWaypoint = true;
 
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
-          @origin={{origin}}
-          @destination={{destination}}
+          @origin={{this.origin}}
+          @destination={{this.destination}}
           @travelMode="WALKING"
           @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
 
-          {{#if addWaypoint}}
-            <d.waypoint @location={{waypointLocation}} />
+          {{#if this.addWaypoint}}
+            <d.waypoint @location={{this.waypointLocation}} />
           {{/if}}
 
         </g.directions>
@@ -77,18 +78,18 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
 
     let {
       components: { directions },
-    } = this.gMapAPI;
+    } = await this.waitForMap();
+
     let waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 1);
 
     await wait(1000);
 
-    this.set('addWaypoint', false);
+    this.addWaypoint = false;
 
     await this.seenAction('directionsReady', { timeout: 10000 });
 
-    directions = this.gMapAPI.components.directions;
     waypoints = getWaypoints(directions);
 
     assert.equal(waypoints.length, 0);

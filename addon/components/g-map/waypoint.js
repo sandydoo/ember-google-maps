@@ -1,38 +1,30 @@
-import Component from '@ember/component';
-import { get } from '@ember/object';
+import MapComponent from './map-component';
 
-export function WaypointAPI(source) {
+function WaypointAPI(source) {
   return {
     get location() {
-      return get(source, 'location');
+      return source.options.location;
+    },
+
+    get stopover() {
+      return source.options.stopover;
     },
   };
 }
 
-/**
- * A utility component to add waypoints to the directions component.
- *
- * @class Waypoint
- * @namespace GMap
- * @module ember-google-maps/components/g-map/waypoint
- * @extends GMap.MapComponent
- */
-export default Component.extend({
-  tagName: '',
+export default class Waypoint extends MapComponent {
+  publicAPI = WaypointAPI(this);
 
-  _type: 'waypoint',
+  new() {
+    return this.publicAPI;
+  }
 
-  init() {
-    this._super(...arguments);
+  // Removes the waypoint from the directions component.
+  teardown() {
+    this.onTeardown();
+  }
 
-    this.publicAPI = WaypointAPI(this);
-
-    this._internalAPI._registerComponent(this.publicAPI);
-  },
-
-  willDestroyElement() {
-    this._super(...arguments);
-
-    this._internalAPI._unregisterComponent(this.publicAPI);
-  },
-});
+  register() {
+    this.onTeardown = this.args.getContext(this.publicAPI);
+  }
+}

@@ -18,7 +18,7 @@ export default class MapComponent {
     this.options = options;
     this.events = events;
 
-    this.context = args.getContext?.(this.publicAPI);
+    this.register();
   }
 
   newOptions(options) {
@@ -42,6 +42,10 @@ export default class MapComponent {
     if (mapComponent) {
       mapComponent.setMap?.(null);
     }
+  }
+
+  register() {
+    this.context = this.args.getContext?.(this.publicAPI);
   }
 
   // TODO: Fix event payload. Move map to publicAPI?
