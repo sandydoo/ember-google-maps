@@ -58,7 +58,7 @@ module('Integration | Component | g map', function (hooks) {
 
     assert.equal(map.zoom, this.zoom);
 
-    this.set('zoom', 15);
+    this.zoom = 15;
 
     await this.waitForMap();
 

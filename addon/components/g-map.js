@@ -38,6 +38,8 @@ export default class GMap extends MapComponent {
 
     this.addEventsToMapComponent(map, events, { map });
 
+    google.maps.event.addListenerOnce(map, 'idle', () => this.events.onLoad?.(this.publicAPI));
+
     return map;
   }
 
