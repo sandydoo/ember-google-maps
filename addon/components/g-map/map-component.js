@@ -6,10 +6,30 @@ import { assert } from '@ember/debug';
 import { MapComponentManager } from '../../component-managers/map-component-manager';
 import { addEventListeners } from 'ember-google-maps/utils/options-and-events';
 
+export function combine(base, extra) {
+  return Object.defineProperties(base, Object.getOwnPropertyDescriptors(extra));
+}
+
+export function MapComponentAPI(source) {
+  return {
+    get map() {
+      return source.map;
+    },
+
+    get mapComponent() {
+      return source.mapComponent;
+    },
+  };
+}
+
 export default class MapComponent {
   boundEvents = [];
 
-  publicAPI = this;
+  publicAPI = MapComponentAPI(this);
+
+  get map() {
+    return this.context.map;
+  }
 
   constructor(owner, args, options, events) {
     setOwner(this, owner);

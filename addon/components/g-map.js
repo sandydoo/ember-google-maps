@@ -11,8 +11,6 @@ import { DEBUG } from '@glimmer/env';
 export default class GMap extends MapComponent {
   @tracked canvas;
 
-  @tracked mapComponent;
-
   // TODO: Fix components for publicAPI
   components = A([]);
 

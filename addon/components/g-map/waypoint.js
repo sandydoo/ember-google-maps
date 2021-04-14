@@ -1,13 +1,15 @@
 import MapComponent from './map-component';
 
 function WaypointAPI(source) {
+  let { options } = source;
+
   return {
     get location() {
-      return source.options.location;
+      return options.location;
     },
 
     get stopover() {
-      return source.options.stopover;
+      return options.stopover;
     },
   };
 }

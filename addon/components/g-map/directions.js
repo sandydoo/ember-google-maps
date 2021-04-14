@@ -1,4 +1,4 @@
-import MapComponent, { MapComponentAPI, combine } from './map-component';
+import MapComponent from './map-component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -8,9 +8,7 @@ import { schedule } from '@ember/runloop';
 import { didCancel, keepLatestTask } from 'ember-concurrency';
 
 export function DirectionsAPI(source) {
-  let mapComponentAPI = MapComponentAPI(source);
-
-  return combine(mapComponentAPI, {
+  return {
     get directions() {
       return source.directions;
     },
@@ -18,14 +16,12 @@ export function DirectionsAPI(source) {
     get waypoints() {
       return source.waypoints;
     },
-
-    actions: {
-      route: () => source.route(),
-    },
-  });
+  }
 }
 
 export default class Directions extends MapComponent {
+  publicAPI = DirectionsAPI(this);
+
   @tracked directions = null;
 
   @service googleMapsApi;
