@@ -4,48 +4,83 @@ import { next } from '@ember/runloop';
 import { DEBUG } from '@glimmer/env';
 import { HAS_NATIVE_PROXY } from './platform';
 
-// TODO: handle options and events hashes.
-export const ignoredOptions = ['lat', 'lng', 'getContext', 'options', 'events', 'classNames'];
+export const ignoredOptions = ['lat', 'lng', 'getContext', 'classNames'];
 
 const IGNORED = Symbol('Ignored'),
   EVENT = Symbol('Event'),
-  OPTION = Symbol('Option');
+  OPTION = Symbol('Option'),
+  OPTIONS = Symbol('Options'),
+  EVENTS = Symbol('Events');
 
 export class OptionsAndEvents {
-  constructor(rawArgs) {
-    this.rawArgs = rawArgs;
+  whosThatProp = new Map();
+
+  [OPTION] = new Set();
+  [EVENT] = new Set();
+
+  constructor(args) {
+    this.args = args;
 
     this.ignoredSet = new Set(ignoredOptions);
-
-    this.optionsCache = new Set();
-    this.eventsCache = new Set();
 
     // Sort and cache the arguments by type.
     this.parse();
 
+    let getFromArgs = this.getFromArgs.bind(this);
+
     if (HAS_NATIVE_PROXY) {
       let target = Object.create(null);
 
-      let optionsHandler = new ArgsProxyHandler(rawArgs, this.optionsCache);
-      let eventsHandler = new ArgsProxyHandler(rawArgs, this.eventsCache);
+      let optionsHandler = new ArgsProxyHandler(this[OPTION], getFromArgs);
+      let eventsHandler = new ArgsProxyHandler(this[EVENT], getFromArgs);
 
       this.options = new Proxy(target, optionsHandler);
       this.events = new Proxy(target, eventsHandler);
     } else {
-      this.options = newNoProxyFallback(rawArgs, this.optionsCache);
-      this.events = newNoProxyFallback(rawArgs, this.eventsCache);
+      this.options = newNoProxyFallback(this[OPTION], getFromArgs);
+      this.events = newNoProxyFallback(this[EVENT], getFromArgs);
+    }
+  }
+
+  getFromArgs(prop) {
+    let identity = this.whosThatProp.get(prop);
+
+    switch (identity) {
+      case OPTIONS:
+        return this.args.options[prop];
+
+      case EVENTS:
+        return this.args.events[prop];
+
+      case OPTION:
+      case EVENT:
+        return this.args[prop];
     }
   }
 
   parse() {
-    for (let prop in this.rawArgs) {
-      switch (this.identify(prop)) {
+    for (let prop in this.args) {
+      let identity = this.identify(prop);
+
+      switch (identity) {
         case OPTION:
-          this.optionsCache.add(prop);
+        case EVENT:
+          this[identity].add(prop);
+          this.whosThatProp.set(prop, identity);
           break;
 
-        case EVENT:
-          this.eventsCache.add(prop);
+        case OPTIONS:
+          for (let innerProp in this.args[prop]) {
+            this[OPTION].add(innerProp);
+            this.whosThatProp.set(innerProp, identity);
+          }
+          break;
+
+        case EVENTS:
+          for (let innerProp in this.args[prop]) {
+            this[EVENT].add(innerProp);
+            this.whosThatProp.set(innerProp, identity);
+          }
           break;
 
         case IGNORED:
@@ -57,11 +92,21 @@ export class OptionsAndEvents {
   identify(prop) {
     if (this.isIgnored(prop)) {
       return IGNORED;
-    } else if (this.isEvent(prop)) {
-      return EVENT;
-    } else {
-      return OPTION;
     }
+
+    if (prop === 'options') {
+      return OPTIONS;
+    }
+
+    if (prop === 'events') {
+      return EVENTS;
+    }
+
+    if (this.isEvent(prop)) {
+      return EVENT;
+    }
+
+    return OPTION;
   }
 
   isEvent(prop) {
@@ -74,27 +119,23 @@ export class OptionsAndEvents {
 }
 
 class ArgsProxyHandler {
-  constructor(args, cache) {
-    this.args = args;
+  constructor(cache, getFromArgs) {
     this.cache = cache;
+    this.getFromArgs = getFromArgs;
     this.setCache = new Map();
   }
 
   get(_target, prop) {
-    if (this.cache.has(prop)) {
-      return this.setCache.get(prop) ?? this.args[prop];
-    }
+    return this.getFromArgs(prop) ?? this.setCache.get(prop);
   }
 
   // TODO: Google Maps like to set default stuff. Check how this is going to
   // work.
   set(_target, prop, value) {
     if (value !== undefined) {
-      this.cache.add(prop);
       this.setCache.set(prop, value);
       return value;
     } else {
-      this.cache.delete(prop);
       this.setCache.delete(prop);
     }
   }
@@ -127,15 +168,15 @@ class ArgsProxyHandler {
   }
 }
 
-function newNoProxyFallback(args, chosenSet) {
+function newNoProxyFallback(propSet, getFromArgs) {
   let obj = {};
 
-  chosenSet.forEach((prop) => {
+  propSet.forEach((prop) => {
     Object.defineProperty(obj, prop, {
       enumerable: true,
       configurable: true,
       get() {
-        return args[prop];
+        return getFromArgs(prop);
       },
       set(prop, value) {
         if (value === undefined) {
