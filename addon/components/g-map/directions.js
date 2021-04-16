@@ -27,28 +27,28 @@ export default class Directions extends MapComponent {
   @service googleMapsApi;
 
   get waypoints() {
-    return [...(this.options.waypoints ?? []), ...this.waypointsToObjects];
+    return [...(this.options.waypoints ?? []), ...this.waypointsAsOptions];
   }
 
-  newOptions(options) {
+  get newOptions() {
     return {
-      ...options,
+      ...this.options,
       waypoints: this.waypoints,
     };
   }
 
   // We need to explicitly track this, otherwise autotracking doesn’t work.
-  // Seems like Ember arrays are a still a bit special.
+  // Seems like Ember arrays are still a bit special.
   @tracked waypointComponents = A([]);
 
-  get waypointsToObjects() {
+  get waypointsAsOptions() {
     return this.waypointComponents.map((waypoint) => {
       return { location: waypoint.location };
     });
   }
 
   new(options) {
-    return this.route(options)
+    return this.route(this.newOptions)
       .then((directions) => {
         this.directions = directions;
 

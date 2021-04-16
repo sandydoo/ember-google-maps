@@ -75,28 +75,24 @@ export class MapComponentManager {
 
     if (hasUpdate) {
       effect = setupEffect(() => {
-        let options = component.newOptions(component.options);
-
         if (mapComponent === undefined) {
-          console.log('new!', component.toString());
+          mapComponent = component.new(component.options, component.events);
 
-          mapComponent = component.new(options, component.events);
           component.mapComponent = mapComponent;
-        } else {
-          console.log('update!', component.toString());
 
-          component.update(mapComponent, options);
+        } else {
+          component.update(mapComponent, component.options);
         }
 
         return mapComponent;
       });
     } else {
       effect = setupEffect(() => {
-        console.log('new without update');
+        mapComponent = component.new(component.options, component.events);
 
-        let options = component.newOptions(component.options);
-        mapComponent = component.new(options, component.events);
         component.mapComponent = mapComponent;
+
+        return mapComponent;
       });
     }
 

@@ -126,7 +126,7 @@ class ArgsProxyHandler {
   }
 
   get(_target, prop) {
-    return this.getFromArgs(prop) ?? this.setCache.get(prop);
+    return this.setCache.get(prop) ?? this.getFromArgs(prop);
   }
 
   // TODO: Google Maps like to set default stuff. Check how this is going to
@@ -141,11 +141,16 @@ class ArgsProxyHandler {
   }
 
   has(_target, prop) {
-    return this.cache.has(prop);
+    return this.setCache.has(prop) || this.cache.has(prop);
   }
 
   ownKeys() {
-    return Array.from(this.cache.values());
+    return Array.from(
+      new Set([
+        ...this.setCache.keys(),
+        ...this.cache.values(),
+      ])
+    );
   }
 
   isExtensible() {
@@ -153,14 +158,6 @@ class ArgsProxyHandler {
   }
 
   getOwnPropertyDescriptor(_target, prop) {
-    if (DEBUG && !this.cache.has(prop)) {
-      throw new Error(
-        `args proxies do not have real property descriptors, so you should never need to call getOwnPropertyDescriptor yourself. This code exists for enumerability, such as in for-in loops and Object.keys(). Attempted to get the descriptor for \`${String(
-          prop
-        )}\``
-      );
-    }
-
     return {
       enumerable: true,
       configurable: true,
@@ -176,7 +173,7 @@ function newNoProxyFallback(propSet, getFromArgs) {
       enumerable: true,
       configurable: true,
       get() {
-        return getFromArgs(prop);
+        return obj[prop] ?? getFromArgs(prop);
       },
       set(prop, value) {
         if (value === undefined) {

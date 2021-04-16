@@ -2,22 +2,20 @@ import Marker from './marker';
 import { toLatLng } from '../../utils/helpers';
 
 export default class Circle extends Marker {
-  newOptions(options) {
-    let { lat, lng } = this.args;
 
-    return {
-      radius: 500,
-      center: toLatLng(lat, lng),
-      ...options,
-    };
+  get newOptions() {
+    this.options.radius ??= 500;
+    this.options.center ??= toLatLng(this.args.lat, this.args.lng);
+
+    return this.options;
   }
 
   new(options, events) {
-    let circle = new google.maps.Circle(options);
+    let circle = new google.maps.Circle(this.newOptions);
 
     this.addEventsToMapComponent(circle, events, this.publicAPI);
 
-    circle.setMap(this.context.map);
+    circle.setMap(this.map);
 
     return circle;
   }

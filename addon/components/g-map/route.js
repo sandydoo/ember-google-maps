@@ -1,16 +1,16 @@
 import MapComponent from './map-component';
 
 export default class Route extends MapComponent {
-  newOptions(options) {
-    if (!options.directions || options.directions?.status !== 'OK') {
+  get newOptions() {
+    if (this.options.directions?.status !== 'OK') {
       return {};
     }
 
-    return options;
+    return this.options;
   }
 
   new(options, events) {
-    let route = new google.maps.DirectionsRenderer(options);
+    let route = new google.maps.DirectionsRenderer(this.newOptions);
 
     this.addEventsToMapComponent(route, events, this.publicAPI);
 

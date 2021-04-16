@@ -2,26 +2,23 @@ import MapComponent from './map-component';
 import { toLatLng } from '../../utils/helpers';
 
 export default class Marker extends MapComponent {
-  newOptions(options) {
-    let { lat, lng } = this.args;
+  get newOptions() {
+    this.options.position ??= toLatLng(this.args.lat, this.args.lng);
 
-    return {
-      position: toLatLng(lat, lng),
-      ...options,
-    };
+    return this.options;
   }
 
   new(options, events) {
-    let marker = new google.maps.Marker(options);
+    let marker = new google.maps.Marker(this.newOptions);
 
     this.addEventsToMapComponent(marker, events, this.publicAPI);
 
-    marker.setMap(this.context.map);
+    marker.setMap(this.map);
 
     return marker;
   }
 
-  update() {
-    return this.updateCommon(...arguments);
+  update(...args) {
+    return super.updateCommon(...args);
   }
 }

@@ -41,8 +41,8 @@ export default class MapComponent {
     this.register();
   }
 
-  newOptions(options) {
-    return options;
+  get newOptions() {
+    return this.options;
   }
 
   new() {}

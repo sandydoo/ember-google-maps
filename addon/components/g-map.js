@@ -18,21 +18,18 @@ export default class GMap extends MapComponent {
     return this.mapComponent;
   }
 
-  newOptions(options) {
-    let { lat, lng } = this.args;
+  get newOptions() {
+    this.options.zoom ??= 15;
+    this.options.center ??= toLatLng(this.args.lat, this.args.lng);
 
-    return {
-      zoom: 15,
-      center: toLatLng(lat, lng),
-      ...options,
-    };
+    return this.options;
   }
 
   // TODO: What if canvas is conditional? Render helpers? Promise? Force a
   // visible canvas?
   // TODO: Fix publicAPI
   new(options, events) {
-    let map = new google.maps.Map(this.canvas, options);
+    let map = new google.maps.Map(this.canvas, this.newOptions);
 
     this.addEventsToMapComponent(map, events, { map });
 
@@ -42,7 +39,7 @@ export default class GMap extends MapComponent {
   }
 
   update(map, options) {
-    map.setOptions(options);
+    map.setOptions(this.newOptions);
 
     // Pause tests until map is in an idle state.
     if (DEBUG) {
