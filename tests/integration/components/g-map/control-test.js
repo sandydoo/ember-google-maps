@@ -40,7 +40,7 @@ module('Integration | Component | g map/control', function (hooks) {
   test('it renders a control with a class value', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
-        <g.control @position="TOP_CENTER" @class="custom-control-holder">
+        <g.control @position="TOP_CENTER" class="custom-control-holder">
           <div id="custom-control"></div>
         </g.control>
       </GMap>

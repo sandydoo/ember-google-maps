@@ -15,9 +15,12 @@ export default class Control extends MapComponent {
     // TODO: Support an existing control position
     let position = google.maps.ControlPosition[options.position];
 
-    this.context.map.controls[position].push(this.container.firstElementChild);
+    this.map.controls[position].push(this.controlElement);
 
-    return this.container;
+    // Could use {{prop}} for this (from ember-prop-modifier)
+    this.controlElement.index = options.index;
+
+    return this.controlElement;
   }
 
   teardown() {
