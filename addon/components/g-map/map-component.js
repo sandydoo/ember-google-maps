@@ -79,7 +79,7 @@ export default class MapComponent {
   addEventsToMapComponent(mapComponent, events = {}, payload = {}) {
     assert('You need to pass in a component', mapComponent);
 
-    this.boundEvents = addEventListeners(mapComponent, events, payload);
+    this.boundEvents.concat(addEventListeners(mapComponent, events, payload));
   }
 
   // TODO: Fix in production, where names are uglified.

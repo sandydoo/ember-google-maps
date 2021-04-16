@@ -1,76 +1,58 @@
-import MapComponent, { MapComponentAPI, combine } from './map-component';
-import layout from '../../templates/components/g-map/autocomplete';
-import {
-  ignoredOptions,
-  parseOptionsAndEvents,
-} from '../../utils/options-and-events';
-import { get, set } from '@ember/object';
+import MapComponent from './map-component';
+import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 import { assert } from '@ember/debug';
-import { resolve } from 'rsvp';
 
-export function AutocompleteAPI(source) {
-  let mapComponentAPI = MapComponentAPI(source);
+import { addEventListeners } from 'ember-google-maps/utils/options-and-events';
 
-  return combine(mapComponentAPI, {
-    get place() {
-      return source.place;
-    },
-  });
-}
+export default class Autocomplete extends MapComponent {
+  id = `ember-google-maps-autocomplete-${guidFor(this)}`;
 
-/**
- * @class Autocomplete
- * @namespace GMap
- * @module ember-google-maps/components/g-map/autocomplete
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
-  tagName: 'div',
+  get name() {
+    return 'autocompletes';
+  }
 
-  _type: 'autocomplete',
-
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'onSearch']),
-
-  init() {
-    this._super(...arguments);
-
-    this.publicAPI = AutocompleteAPI(this);
-  },
-
-  _addComponent(options) {
-    let map = get(this, 'map');
-
-    let inputElement = this.element.querySelector('input');
-
+  new(options, events) {
     assert(
-      'You must define your own input within the ember-google-maps autocomplete block.',
-      inputElement
+      `
+ember-google-maps: No input found for autocomplete.
+
+When using the block form of the autocomplete component, make sure to call the “setup” method on your input to let autocomplete know about it:
+
+<map.autocomplete as |autocomplete|>
+  <input {{did-insert autocomplete.setup}} />
+</map.autocomplete>
+
+Did you mean to use the block form? You can also do the following:
+
+<map.autocomplete id="my-custom-id" class="my-custom-class" />
+      `,
+      this.inputElement
     );
 
     let autocomplete = new google.maps.places.Autocomplete(
-      inputElement,
+      this.inputElement,
       options
     );
-    set(this, 'mapComponent', autocomplete);
 
-    // Bias the search results to the current map bounds.
-    autocomplete.setBounds(map.getBounds());
+    this.addEventsToMapComponent(autocomplete, events, this.publicAPI);
 
-    map.addListener('bounds_changed', function () {
-      autocomplete.setBounds(map.getBounds());
-    });
+    // Compatibility: Register the custom `onSearch` event.
+    this.addEventsToMapComponent(
+      autocomplete,
+      { onPlaceChanged: this.args.onSearch },
+      this.publicAPI
+    );
 
-    autocomplete.addListener('place_changed', this._onSearch.bind(this));
+    return autocomplete;
+  }
 
-    return resolve(this.mapComponent);
-  },
+  update(...args) {
+    return super.updateCommon(...args);
+  }
 
-  _onSearch() {
-    this.place = this.mapComponent.getPlace();
-
-    if (this.place.geometry) {
-      this.onSearch?.(this.publicAPI);
-    }
-  },
-});
+  @action
+  getInput(input) {
+    this.inputElement = input;
+  }
+}

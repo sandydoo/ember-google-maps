@@ -10,47 +10,44 @@ module('Integration | Component | g map/autocomplete', function (hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a pac-input', async function (assert) {
+  test('it renders an input and binds a custom `onSearch` event', async function (assert) {
+    assert.expect(3);
+
+    this.onSearch = () => assert.ok('Did call `onSearch`');
+
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.autocomplete>
-          <input id="pac-input">
-        </g.autocomplete>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.autocomplete id="custom-id" @onSearch={{this.onSearch}} />
       </GMap>
     `);
 
-    let { autocompletes } = this.gMapAPI.components;
+    let {
+      components: { autocompletes },
+    } = await this.waitForMap();
 
     assert.equal(autocompletes.length, 1);
 
-    let input = find('input');
+    let input = find('#custom-id');
+    let autocomplete = autocompletes[0].mapComponent;
 
     assert.ok(input, 'input rendered');
-    assert.equal(input.id, 'pac-input');
+
+    trigger(autocomplete, 'place_changed');
   });
 
-  test('it returns place results on search', async function (assert) {
+  test('it registers a custom input in block form', async function (assert) {
     assert.expect(1);
 
-    this.onSearch = () => assert.ok(true, 'place');
-
     await render(hbs`
-      <GMap @lat={{lat}} @lng={{lng}} as |g|>
-        <g.autocomplete @onSearch={{action onSearch}}>
-          <input>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.autocomplete as |autocomplete|>
+          <input {{did-insert autocomplete.setup}} />
         </g.autocomplete>
       </GMap>
     `);
 
-    let { autocompletes } = this.gMapAPI.components;
+    await this.waitForMap();
 
-    // Fetch the initialized Autocomplete component and shim the getPlace
-    // function.
-    let autocomplete = autocompletes[0].mapComponent;
-    autocomplete.getPlace = () => {
-      return { geometry: true };
-    };
-
-    trigger(autocomplete, 'place_changed');
+    assert.ok('Everything seems fine');
   });
 });
