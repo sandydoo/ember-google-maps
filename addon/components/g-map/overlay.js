@@ -31,16 +31,21 @@ export default class OverlayView extends MapComponent {
     Overlay.onRemove = () => this.onRemove();
     Overlay.draw = () => this.draw();
 
-    Overlay.setMap(this.context.map);
+    // Make sure we don’t run “draw” before Google Maps has done so first.
+    Overlay.didDraw = false;
 
-    return Overlay;
+    Overlay.setMap(this.map);
+
+    // Explicitly track options here, as the Google Maps performs the setup
+    // asynchronously.
+    return [Overlay, Object.values(this.options)];
   }
 
   // TODO: support changing pane?
-  // There’s nothing to update right now, but we need to make sure we’re not
-  // creating new overlays whenever arguments are updated.
   update(overlay) {
-    return overlay;
+    if (overlay.didDraw) {
+      overlay.draw();
+    }
   }
 
   onAdd() {
@@ -49,7 +54,7 @@ export default class OverlayView extends MapComponent {
 
     this.targetPane.appendChild(this.overlayElement);
 
-    addEventListeners(this.overlayElement, this.events, this.publicAPI);
+    this.addEventsToMapComponent(this.overlayElement, this.events, this.publicAPI);
   }
 
   draw() {
@@ -66,6 +71,8 @@ export default class OverlayView extends MapComponent {
       z-index: ${zIndex};
       transform: translateX(${point.x}px) translateY(${point.y}px);
     `;
+
+    this.mapComponent.didDraw ||= true;
   }
 
   onRemove() {

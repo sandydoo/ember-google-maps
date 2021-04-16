@@ -70,13 +70,16 @@ export class MapComponentManager {
 
     let hasUpdate = typeof component.update === 'function';
 
-    let mapComponent;
-    let effect;
+    let effect, mapComponent, trackThisInstead;
 
     if (hasUpdate) {
       effect = setupEffect(() => {
         if (mapComponent === undefined) {
           mapComponent = component.new(component.options, component.events);
+
+          if (mapComponent.length) {
+            ([mapComponent, trackThisInstead] = mapComponent);
+          }
 
           component.mapComponent = mapComponent;
 
@@ -84,7 +87,7 @@ export class MapComponentManager {
           component.update(mapComponent, component.options);
         }
 
-        return mapComponent;
+        return trackThisInstead ?? mapComponent;
       });
     } else {
       effect = setupEffect(() => {
