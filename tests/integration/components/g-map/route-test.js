@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import {
   getDirectionsQuery,
-  setupActionTracking,
   setupMapTest,
 } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
@@ -14,7 +13,11 @@ module('Integration | Component | g-map/route', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
-  setupActionTracking(hooks);
+
+  // Slow things down to avoid triggering API query limits.
+  hooks.afterEach(async function () {
+    await wait(1000);
+  });
 
   test('it renders a route', async function (assert) {
     this.origin = 'Covent Garden';
@@ -36,27 +39,22 @@ module('Integration | Component | g-map/route', function (hooks) {
     } = await this.waitForMap();
 
     assert.equal(routes.length, 1);
-
-    await wait(1000);
   });
 
   test('it updates a route when the directions change', async function (assert) {
-    this.origin = 'Covent Garden';
-    this.destination = 'Clerkenwell';
+    this.set('origin', 'Covent Garden');
+    this.set('destination', 'Clerkenwell');
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
           @origin={{this.origin}}
           @destination={{this.destination}}
-          @travelMode="WALKING"
-          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} as |d|>
+          @travelMode="WALKING" as |d|>
           {{d.route}}
         </g.directions>
       </GMap>
     `);
-
-    await this.seenAction('directionsReady', { timeout: 10000 });
 
     let {
       components: { routes },
@@ -67,17 +65,13 @@ module('Integration | Component | g-map/route', function (hooks) {
 
     assert.equal(origin, this.origin);
 
-    await wait(1000);
+    this.set('origin', 'Holborn Station');
 
-    this.origin = 'Holborn Station';
-
-    await this.seenAction('directionsReady', { timeout: 10000 });
+    await this.waitForMap();
 
     directions = routes[0].mapComponent.directions;
     ({ origin } = getDirectionsQuery(directions));
 
     assert.equal(origin, this.origin);
-
-    await wait(1000);
   });
 });

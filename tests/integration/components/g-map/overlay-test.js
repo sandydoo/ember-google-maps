@@ -49,6 +49,8 @@ module('Integration | Component | g map/overlay', function (hooks) {
   test('it renders a custom overlay', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
+        <g.canvas id="map-canvas" />
+
         <g.overlay @lat={{this.lat}} @lng={{this.lng}}>
           <div id="custom-overlay"></div>
         </g.overlay>
@@ -56,12 +58,11 @@ module('Integration | Component | g map/overlay', function (hooks) {
     `);
 
     let {
-      id,
       components: { overlays },
     } = await this.waitForMap();
 
     let overlay = await waitFor('#custom-overlay');
-    let mapDiv = find(`#${id}`);
+    let mapDiv = find('#map-canvas');
 
     assert.equal(overlays.length, 1, 'overlay registered');
 

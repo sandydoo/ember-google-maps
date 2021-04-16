@@ -3,7 +3,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import {
   getDirectionsQuery,
   setupMapTest,
-  setupActionTracking,
 } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import wait from 'dummy/tests/helpers/wait';
@@ -14,7 +13,11 @@ module('Integration | Component | g-map/directions', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
-  setupActionTracking(hooks);
+
+  // Slow things down to avoid triggering API query limits.
+  hooks.afterEach(async function () {
+    await wait(1000);
+  });
 
   test('it fetches directions', async function (assert) {
     this.origin = 'Covent Garden';
@@ -25,12 +28,9 @@ module('Integration | Component | g-map/directions', function (hooks) {
         <g.directions
           @origin={{this.origin}}
           @destination={{this.destination}}
-          @travelMode="WALKING"
-          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} />
+          @travelMode="WALKING" />
       </GMap>
     `);
-
-    await this.seenAction('directionsReady', { timeout: 10000 });
 
     let {
       components: { directions },
@@ -42,46 +42,39 @@ module('Integration | Component | g-map/directions', function (hooks) {
 
     assert.equal(origin, this.origin);
     assert.equal(destination, this.destination);
-
-    await wait(1000);
   });
 
   test('it updates the directions when one of the attributes changes', async function (assert) {
-    this.origin = 'Covent Garden';
-    this.destination = 'Clerkenwell';
+    assert.expect(4);
+
+    this.set('origin', 'Covent Garden');
+    this.set('destination', 'Clerkenwell');
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.directions
           @origin={{this.origin}}
           @destination={{this.destination}}
-          @travelMode="WALKING"
-          @onDirectionsChanged={{fn this.trackAction "directionsReady"}} />
+          @travelMode="WALKING" />
       </GMap>
     `);
 
-    await this.seenAction('directionsReady', { timeout: 10000 });
+    let { components } = await this.waitForMap();
 
-    let {
-      components: { directions },
-    } = await this.waitForMap();
+    let directions = components.directions[0];
 
-    let { origin, destination } = getDirectionsQuery(directions[0].directions);
+    let { origin, destination } = getDirectionsQuery(directions.directions);
 
     assert.equal(origin, this.origin);
     assert.equal(destination, this.destination);
 
-    await wait(1000);
+    this.set('origin', 'Holborn Station');
 
-    this.origin = 'Holborn Station';
+    await this.waitForMap();
 
-    await this.seenAction('directionsReady', { timeout: 10000 });
-
-    ({ origin, destination } = getDirectionsQuery(directions[0].directions));
+    ({ origin, destination } = getDirectionsQuery(directions.directions));
 
     assert.equal(origin, this.origin);
     assert.equal(destination, this.destination);
-
-    await wait(1000);
   });
 });

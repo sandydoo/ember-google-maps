@@ -6,6 +6,8 @@ import { A } from '@ember/array';
 import { Promise, reject } from 'rsvp';
 import { schedule } from '@ember/runloop';
 import { didCancel, keepLatestTask } from 'ember-concurrency';
+import { TrackedSet } from 'tracked-maps-and-sets';
+import { waitFor } from '@ember/test-waiters';
 
 export function DirectionsAPI(source) {
   return {
@@ -16,7 +18,7 @@ export function DirectionsAPI(source) {
     get waypoints() {
       return source.waypoints;
     },
-  }
+  };
 }
 
 export default class Directions extends MapComponent {
@@ -32,28 +34,32 @@ export default class Directions extends MapComponent {
 
   @service googleMapsApi;
 
+  waypointComponents = new TrackedSet();
+
   get waypoints() {
-    return [...(this.options.waypoints ?? []), ...this.waypointsAsOptions];
+    return [...(this.options.waypoints ?? []), ...this.serializedWaypoints];
+  }
+
+  get serializedWaypoints() {
+    return Array.from(this.waypointComponents.values()).map((waypoint) => {
+      return {
+        location: waypoint.location,
+        stopover: waypoint.stopover,
+      };
+    });
   }
 
   get newOptions() {
+    // Force options
     return {
       ...this.options,
       waypoints: this.waypoints,
     };
   }
 
-  // We need to explicitly track this, otherwise autotracking doesn’t work.
-  // Seems like Ember arrays are still a bit special.
-  @tracked waypointComponents = A([]);
+  new() {
+    this.directions = null;
 
-  get waypointsAsOptions() {
-    return this.waypointComponents.map((waypoint) => {
-      return { location: waypoint.location };
-    });
-  }
-
-  new(options) {
     return this.route(this.newOptions)
       .then((directions) => {
         this.directions = directions;
@@ -67,6 +73,7 @@ export default class Directions extends MapComponent {
       });
   }
 
+  @waitFor
   route(options) {
     return this.fetchDirections.perform(options);
   }
@@ -92,16 +99,12 @@ export default class Directions extends MapComponent {
 
   @action
   getWaypoint(waypoint) {
-    schedule('actions', () => {
-      this.waypointComponents.pushObject(waypoint);
-    });
+    this.waypointComponents.add(waypoint);
 
     return () => this.removeWaypoint(waypoint);
   }
 
   removeWaypoint(waypoint) {
-    schedule('actions', () => {
-      this.waypointComponents.removeObject(waypoint);
-    });
+    this.waypointComponents.delete(waypoint);
   }
 }
