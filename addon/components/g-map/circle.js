@@ -2,6 +2,9 @@ import Marker from './marker';
 import { toLatLng } from '../../utils/helpers';
 
 export default class Circle extends Marker {
+  get name() {
+    return 'circles';
+  }
 
   get newOptions() {
     this.options.radius ??= 500;

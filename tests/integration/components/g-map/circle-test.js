@@ -12,8 +12,8 @@ module('Integration | Component | g map/circle', function (hooks) {
 
   test('it renders a circle', async function (assert) {
     await render(hbs`
-      <GMap @lat={{thislat}} @lng={{this.lng}} as |g|>
-        <g.circle @lat={{thislat}} @lng={{this.lng}} />
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.circle @lat={{this.lat}} @lng={{this.lng}} />
       </GMap>
     `);
 
