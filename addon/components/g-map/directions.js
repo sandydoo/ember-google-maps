@@ -20,7 +20,13 @@ export function DirectionsAPI(source) {
 }
 
 export default class Directions extends MapComponent {
-  publicAPI = DirectionsAPI(this);
+  get name() {
+    return 'directions';
+  }
+
+  get publicAPI() {
+    return DirectionsAPI(this);
+  }
 
   @tracked directions = null;
 

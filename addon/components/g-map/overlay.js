@@ -10,6 +10,10 @@ export default class OverlayView extends MapComponent {
 
   container = window?.document?.createDocumentFragment();
 
+  get name() {
+    return 'overlays';
+  }
+
   get zIndex() {
     return this.args.zIndex ?? 'auto';
   }

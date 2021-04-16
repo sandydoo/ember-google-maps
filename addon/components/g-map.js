@@ -8,11 +8,26 @@ import { toLatLng } from '../utils/helpers';
 import { waitFor } from '@ember/test-waiters';
 import { DEBUG } from '@glimmer/env';
 
+function GMapPublicAPI(source) {
+  return {
+    get map() {
+      return source.map;
+    },
+
+    get components() {
+      return source.components;
+    }
+  };
+}
+
 export default class GMap extends MapComponent {
   @tracked canvas;
 
-  // TODO: Fix components for publicAPI
-  components = A([]);
+  components = {};
+
+  get publicAPI() {
+    return GMapPublicAPI(this);
+  }
 
   get map() {
     return this.mapComponent;
@@ -27,11 +42,10 @@ export default class GMap extends MapComponent {
 
   // TODO: What if canvas is conditional? Render helpers? Promise? Force a
   // visible canvas?
-  // TODO: Fix publicAPI
   new(options, events) {
     let map = new google.maps.Map(this.canvas, this.newOptions);
 
-    this.addEventsToMapComponent(map, events, { map });
+    this.addEventsToMapComponent(map, events, this.publicAPI);
 
     google.maps.event.addListenerOnce(map, 'idle', () => this.events.onLoad?.(this.publicAPI));
 
@@ -61,10 +75,15 @@ export default class GMap extends MapComponent {
     this.canvas = canvas;
   }
 
-  // TODO: Return the publicAPI here
+  // TODO: Return remove function
   @action
-  getComponent(component) {
-    this.components.pushObject(component);
-    return this;
+  getComponent(component, as = 'other') {
+    let components = this.components[as] ?? [];
+
+    components.push(component);
+
+    this.components[as] ??= components;
+
+    return this.publicAPI;
   }
 }

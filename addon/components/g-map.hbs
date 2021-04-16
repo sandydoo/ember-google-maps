@@ -5,7 +5,7 @@
   {{/unless}}
 
   {{yield (hash
-    map=this.mapComponent
+    map=this.map
     canvas=canvas
     marker=(component 'g-map/marker' getContext=(fn this.getComponent))
     circle=(component 'g-map/circle' getContext=(fn this.getComponent))

@@ -15,7 +15,9 @@ function WaypointAPI(source) {
 }
 
 export default class Waypoint extends MapComponent {
-  publicAPI = WaypointAPI(this);
+  get publicAPI() {
+    return WaypointAPI(this);
+  }
 
   new() {
     return this.publicAPI;

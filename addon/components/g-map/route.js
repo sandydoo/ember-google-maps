@@ -1,6 +1,10 @@
 import MapComponent from './map-component';
 
 export default class Route extends MapComponent {
+  get name() {
+    return 'routes';
+  }
+
   get newOptions() {
     if (this.options.directions?.status !== 'OK') {
       return {};
@@ -14,14 +18,12 @@ export default class Route extends MapComponent {
 
     this.addEventsToMapComponent(route, events, this.publicAPI);
 
+    route.setMap(this.map);
+
     return route;
   }
 
-  update(route) {
-    route.setMap(this.context.map);
-
+  update() {
     this.updateCommon(...arguments);
-
-    return route;
   }
 }

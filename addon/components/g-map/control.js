@@ -7,6 +7,10 @@ export default class Control extends MapComponent {
 
   container = window?.document?.createDocumentFragment();
 
+  get name() {
+    return 'controls';
+  }
+
   new(options) {
     // TODO: Support an existing control position
     let position = google.maps.ControlPosition[options.position];

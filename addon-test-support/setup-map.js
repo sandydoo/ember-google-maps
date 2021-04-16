@@ -37,7 +37,7 @@ export default function setupMapTest(hooks) {
         constructor() {
           super(...arguments);
 
-          addToStore(this.id, this);
+          addToStore(this.id, this.publicAPI);
         }
       }
     );

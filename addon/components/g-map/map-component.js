@@ -11,9 +11,15 @@ export function combine(base, extra) {
 }
 
 export function MapComponentAPI(source) {
+  let name = source.name ?? source.toString();
+
   return {
     get map() {
       return source.map;
+    },
+
+    get [name]() {
+      return source.mapComponent;
     },
 
     get mapComponent() {
@@ -25,10 +31,12 @@ export function MapComponentAPI(source) {
 export default class MapComponent {
   boundEvents = [];
 
-  publicAPI = MapComponentAPI(this);
+  get publicAPI() {
+    return MapComponentAPI(this);
+  }
 
   get map() {
-    return this.context.map;
+    return this.context?.map;
   }
 
   constructor(owner, args, options, events) {
@@ -48,9 +56,7 @@ export default class MapComponent {
   new() {}
 
   updateCommon(mapComponent, options) {
-    if (mapComponent) {
-      mapComponent.setOptions?.(options);
-    }
+    mapComponent?.setOptions?.(this.newOptions);
 
     return mapComponent;
   }
@@ -65,16 +71,10 @@ export default class MapComponent {
   }
 
   register() {
-    this.context = this.args.getContext?.(this.publicAPI);
+    this.context = this.args.getContext?.(this.publicAPI, this.name);
   }
 
-  // TODO: Fix event payload. Move map to publicAPI?
-  get eventPayload() {
-    return {
-      map: this.context.map,
-      publicAPI: this.publicAPI,
-    };
-  }
+  /* Events */
 
   addEventsToMapComponent(mapComponent, events = {}, payload = {}) {
     assert('You need to pass in a component', mapComponent);

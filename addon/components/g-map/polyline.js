@@ -1,6 +1,10 @@
 import MapComponent from './map-component';
 
 export default class Polyline extends MapComponent {
+  get name() {
+    return 'polylines';
+  }
+
   new(options, events) {
     let polyline = new google.maps.Polyline(options);
 
@@ -11,7 +15,7 @@ export default class Polyline extends MapComponent {
     return polyline;
   }
 
-  update() {
-    this.updateCommon(...arguments);
+  update(...args) {
+    return super.updateCommon(...args);
   }
 }

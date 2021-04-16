@@ -48,7 +48,7 @@ module('Integration | Component | g map', function (hooks) {
   });
 
   test('it updates the map when attributes are changed', async function (assert) {
-    this.zoom = 12;
+    this.set('zoom', 12);
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{this.zoom}} />
@@ -58,7 +58,7 @@ module('Integration | Component | g map', function (hooks) {
 
     assert.equal(map.zoom, this.zoom);
 
-    this.zoom = 15;
+    this.set('zoom', 15);
 
     await this.waitForMap();
 
