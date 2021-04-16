@@ -89,6 +89,7 @@ module.exports = {
   options: {
     babel: {
       plugins: [
+        '@babel/plugin-proposal-logical-assignment-operators',
         '@babel/plugin-proposal-object-rest-spread',
         '@babel/plugin-proposal-optional-chaining',
       ],
