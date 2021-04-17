@@ -18,13 +18,13 @@
   <map.marker
     @lat={{this.london.lat}}
     @lng={{this.london.lng}}
-    @onClick={{toggle markerTooltipOpen this}} as |marker|>
+    @onClick={{toggle this.markerTooltipOpen this}} as |marker|>
 
     <marker.infoWindow
       @isOpen={{this.markerTooltipOpen}}>
 
       <div class="text-center">
-        <img src="/images/doge.jpg" alt="Such doge!" width=200>
+        <img src="/images/doge.jpg" alt="Such doge!" width="200">
         <div>
           Custom <i>HTML</i> content in infoWindow!
         </div>

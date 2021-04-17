@@ -22,7 +22,7 @@ module('Integration | Component | g map/control', function (hooks) {
     let {
       map,
       components: { controls },
-   } = await this.waitForMap();
+    } = await this.waitForMap();
 
     assert.equal(controls.length, 1);
 

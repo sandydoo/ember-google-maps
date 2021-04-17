@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 
 import { toLatLng } from '../../utils/helpers';
-import { addEventListeners } from '../../utils/options-and-events';
 
 export default class OverlayView extends MapComponent {
   id = `ember-google-maps-overlay-${guidFor(this)}`;
@@ -60,7 +59,11 @@ export default class OverlayView extends MapComponent {
 
     this.targetPane.appendChild(this.overlayElement);
 
-    this.addEventsToMapComponent(this.overlayElement, this.events, this.publicAPI);
+    this.addEventsToMapComponent(
+      this.overlayElement,
+      this.events,
+      this.publicAPI
+    );
   }
 
   draw() {

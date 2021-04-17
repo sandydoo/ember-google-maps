@@ -3,13 +3,22 @@
 module.exports = {
   extends: 'octane',
 
-  // Disable this for now. Investigate what the specific rules
-  // are and decide whether to adopt. Seems to demand some
-  // really crap styling for block components...
-  ignore: [
-    'addon/templates/components/**',
-    'lib/in-repo-pin-addon/**',
-    'tests/**',
-    'dummy/templates/**',
+  rules: {
+    // Used in g-map.hbs. This rule is overreacting.
+    'simple-unless': 'off',
+  },
+
+  // Deal with the docs app later…
+  ignore: ['tests/dummy/app/templates/**'],
+
+  overrides: [
+    {
+      files: ['**/code-snippets/**'],
+      rules: {
+        'no-log': 'off',
+        'no-inline-styles': 'off',
+        'no-implicit-this': { allow: ['location.lat', 'location.lng'] },
+      },
+    },
   ],
 };

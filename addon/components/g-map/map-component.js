@@ -1,4 +1,3 @@
-import { tracked } from '@glimmer/tracking';
 import { setOwner } from '@ember/application';
 import { setComponentManager } from '@ember/component';
 import { assert } from '@ember/debug';
@@ -55,7 +54,7 @@ export default class MapComponent {
 
   new() {}
 
-  updateCommon(mapComponent, options) {
+  updateCommon(mapComponent) {
     mapComponent?.setOptions?.(this.newOptions);
 
     return mapComponent;

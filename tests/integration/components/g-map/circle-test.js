@@ -18,7 +18,6 @@ module('Integration | Component | g map/circle', function (hooks) {
     `);
 
     let {
-      map,
       components: { circles },
     } = await this.waitForMap();
 

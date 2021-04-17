@@ -1,7 +1,6 @@
 import MapComponent from './g-map/map-component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 
 import { toLatLng } from '../utils/helpers';
 
@@ -16,7 +15,7 @@ function GMapPublicAPI(source) {
 
     get components() {
       return source.components;
-    }
+    },
   };
 }
 
@@ -47,12 +46,14 @@ export default class GMap extends MapComponent {
 
     this.addEventsToMapComponent(map, events, this.publicAPI);
 
-    google.maps.event.addListenerOnce(map, 'idle', () => this.events.onLoad?.(this.publicAPI));
+    google.maps.event.addListenerOnce(map, 'idle', () =>
+      this.events.onLoad?.(this.publicAPI)
+    );
 
     return map;
   }
 
-  update(map, options) {
+  update(map) {
     map.setOptions(this.newOptions);
 
     // Pause tests until map is in an idle state.

@@ -185,6 +185,6 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     assert.notOk(find('#info-window-test'), 'info window is not in DOM');
     assert.notOk(isVisible(infoWindow), 'info window is not visible');
-    assert.equal(this.get('isOpen'), false, 'isOpen is set to false');
+    assert.equal(this.isOpen, false, 'isOpen is set to false');
   });
 });

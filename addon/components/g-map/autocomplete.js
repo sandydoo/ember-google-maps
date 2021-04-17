@@ -3,8 +3,6 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { assert } from '@ember/debug';
 
-import { addEventListeners } from 'ember-google-maps/utils/options-and-events';
-
 export default class Autocomplete extends MapComponent {
   id = `ember-google-maps-autocomplete-${guidFor(this)}`;
 

@@ -22,17 +22,7 @@ module.exports = {
   globals: {
     google: false,
   },
-  rules: {
-    'ember/order-in-components': 'off',
-
-    // TODO: Remove in 4.0
-    'ember/no-get': 'off',
-    'ember/no-observers': 'off',
-    'ember/no-classic-components': 'off',
-    'ember/no-classic-classes': 'off',
-    'ember/no-component-lifecycle-hooks': 'off',
-    'ember/require-tagless-components': 'off',
-  },
+  rules: {},
   overrides: [
     // node files
     {

@@ -1,12 +1,12 @@
-{{#let (component 'g-map/canvas' onCanvasReady=(fn this.getCanvas)) as |canvas|}}
+{{#let (component 'g-map/canvas' onCanvasReady=(fn this.getCanvas)) as |Canvas|}}
   {{#unless (has-block-params)}}
     {{!-- Compatibility: @classNames should be deprecated --}}
-    <canvas class={{@classNames}} ...attributes />
+    <Canvas class={{@classNames}} ...attributes />
   {{/unless}}
 
   {{yield (hash
     map=this.map
-    canvas=canvas
+    canvas=Canvas
     marker=(component 'g-map/marker' getContext=(fn this.getComponent))
     circle=(component 'g-map/circle' getContext=(fn this.getComponent))
     polyline=(component 'g-map/polyline' getContext=(fn this.getComponent))

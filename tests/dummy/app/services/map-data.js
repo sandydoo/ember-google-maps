@@ -52,7 +52,14 @@ export default class MapDataService extends Service {
           ),
           type = randomInt(1, 5);
 
-        return { id: i, lat: n.lat(), lng: n.lng(), price, type, active: false };
+        return {
+          id: i,
+          lat: n.lat(),
+          lng: n.lng(),
+          price,
+          type,
+          active: false,
+        };
       });
   }
 }
