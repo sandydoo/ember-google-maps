@@ -81,7 +81,7 @@ export class MapComponentManager {
             [mapComponent, trackThisInstead] = mapComponent;
           }
 
-          component.mapComponent ??= mapComponent;
+          component.mapComponent = mapComponent;
         } else {
           component.update(mapComponent, component.options);
         }
@@ -92,7 +92,7 @@ export class MapComponentManager {
       effect = setupEffect(() => {
         mapComponent = component.new(component.options, component.events);
 
-        component.mapComponent ??= mapComponent;
+        component.mapComponent = mapComponent;
 
         return mapComponent;
       });

@@ -8,7 +8,7 @@ export default class InfoWindow extends MapComponent {
   }
 
   get isOpen() {
-    return Boolean(this.mapComponent.getMap());
+    return Boolean(this.infoWindow.getMap());
   }
 
   // TODO: Sanitize this.args.content?
@@ -38,7 +38,7 @@ export default class InfoWindow extends MapComponent {
     let infoWindow = new google.maps.InfoWindow(this.newOptions);
 
     // This is kind of annoying. Maybe we can refactor stuff to not use `this`.
-    this.mapComponent = infoWindow;
+    this.infoWindow = infoWindow;
 
     this.addEventsToMapComponent(infoWindow, this.events, this.publicAPI);
 
@@ -68,10 +68,10 @@ export default class InfoWindow extends MapComponent {
   }
 
   open() {
-    this.mapComponent.open(this.map, this.options.target);
+    this.infoWindow.open(this.map, this.options.target);
   }
 
   close() {
-    this.mapComponent.close();
+    this.infoWindow.close();
   }
 }

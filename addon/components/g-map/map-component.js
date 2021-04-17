@@ -1,5 +1,6 @@
 import { setOwner } from '@ember/application';
 import { setComponentManager } from '@ember/component';
+import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 
 import { MapComponentManager } from '../../component-managers/map-component-manager';
@@ -28,6 +29,8 @@ export function MapComponentAPI(source) {
 }
 
 export default class MapComponent {
+  @tracked mapComponent;
+
   boundEvents = [];
 
   get publicAPI() {
