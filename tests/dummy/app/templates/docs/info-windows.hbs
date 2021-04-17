@@ -47,6 +47,7 @@
         @lat={{this.london.lat}}
         @lng={{this.london.lng}}
         @isOpen={{this.mapTooltipOpen}}
+        @onCloseclick={{fn (mut this.mapTooltipOpen) false}}
         @content="<i>Simple text tooltip</i>" />
 
       <g.marker
@@ -54,7 +55,9 @@
         @lng={{this.london.lng}}
         @onClick={{toggle "markerTooltipOpen" this}} as |m|>
 
-        <m.infoWindow @isOpen={{this.markerTooltipOpen}}>
+        <m.infoWindow
+          @isOpen={{this.markerTooltipOpen}}
+          @onCloseclick={{fn (mut this.markerTooltipOpen) false}}>
           <div class="text-center">
             <img src="/images/doge.jpg" alt="Such doge!" width=200>
             <div>Custom <i>HTML</i> content in infoWindow!</div>

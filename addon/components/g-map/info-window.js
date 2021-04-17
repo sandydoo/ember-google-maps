@@ -15,7 +15,8 @@ export default class InfoWindow extends MapComponent {
     return this.args.content ?? this.container;
   }
 
-  container = window?.document?.createDocumentFragment();
+  // Can’t use a fragment here because Google Maps consumes it.
+  container = window?.document?.createElement('div');
 
   get newOptions() {
     let options = this.options;
