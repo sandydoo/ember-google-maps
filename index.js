@@ -3,83 +3,29 @@
 'use strict';
 
 const Funnel = require('broccoli-funnel');
-const path = require('path');
 const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
-const IS_COMPONENT = /components\//;
-
-function intersection(a, b) {
-  let intersection = new Set();
-
-  for (let e of b) {
-    if (a.has(e)) {
-      intersection.add(e);
-    }
-  }
-
-  return intersection;
-}
-
-function difference(a, b) {
-  let difference = new Set(a);
-
-  for (let e of b) {
-    difference.delete(e);
-  }
-
-  return difference;
-}
+const {
+  newIncludedList,
+  newExcludedList,
+  newExcludeName,
+  newExcludeComponent,
+  skipTreeshaking,
+} = require('./lib/treeshaking');
 
 let dependencies = {
   circle: ['marker'],
 };
 
-function excludeComponent(included, excluded) {
-  let shouldExclude = excludeName(included, excluded);
-
-  return function (name) {
-    if (!IS_COMPONENT.test(name)) {
-      return false;
-    }
-
-    let baseName = path.basename(name).split('.').shift();
-
-    return shouldExclude(baseName);
-  };
-}
-
-function excludeName(included, excluded) {
-  return function (rawName) {
-    let name = camelCase(rawName),
-      isIncluded = included.indexOf(name) !== -1,
-      isExcluded = excluded.indexOf(name) !== -1;
-
-    if (included.length === 0 && excluded.length === 0) {
-      return false;
-    }
-
-    // Include if both included and excluded
-    if (isIncluded && isExcluded) {
-      return false;
-    }
-
-    // Only included
-    if (included.length && excluded.length === 0) {
-      return !isIncluded;
-    }
-
-    // Only excluded
-    if (excluded.length && included.length === 0) {
-      return isExcluded;
-    }
-
-    return !isIncluded || isExcluded;
-  };
-}
-
 let FOUND_GMAP_ADDONS = {};
+
+let PARAMS_FOR_TREESHAKER = {
+  included: null,
+  excluded: null,
+  isProduction: true,
+};
 
 module.exports = {
   name: require('./package').name,
@@ -110,21 +56,23 @@ module.exports = {
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
+    // Treeshaking setup
+
     let { only = [], except = [] } = config;
 
     only = only.map(camelCase);
     except = except.map(camelCase);
 
-    let included = this.createIncludedList(only, except),
-      excluded = this.createExcludedList(only, except);
+    let included = newIncludedList(only, except),
+      excluded = newExcludedList(only, except);
 
     if (this.isProduction) {
       excluded.push('warnMissingComponent');
     }
 
-    // Ensure that we include the base map components.
+    // Include the base map components and any dependencies
     if (included.length) {
-      included.push('gMap', 'canvas', 'mapComponent');
+      included.push('canvas', 'mapComponent');
 
       if (this.isDevelopment) {
         included.push('warnMissingComponent');
@@ -139,12 +87,31 @@ module.exports = {
       });
     }
 
-    this.excludeName = excludeName(included, excluded);
-    this.excludeComponent = excludeComponent(included, excluded);
+    // Excluded components that depend on excluded ones
+    if (excluded.length) {
+      excluded.forEach((name) => {
+        Object.entries(dependencies).forEach(([dependant, dependencies]) => {
+          if (dependencies.includes(name)) {
+            excluded.push(dependant);
+          }
+        });
+      });
+    }
 
-    this.skipTreeshaking =
-      (!included || included.length === 0) &&
-      (!excluded || excluded.length === 0);
+    this.excludeName = newExcludeName(included, excluded);
+    this.excludeComponent = newExcludeComponent(included, excluded);
+
+    this.skipTreeshaking = skipTreeshaking(included, excluded);
+
+    // Save treeshaking params for Babel
+    Object.assign(PARAMS_FOR_TREESHAKER, {
+      included: included,
+      excluded: excluded,
+      isProduction: this.isProduction,
+    });
+
+    // Get “addons for this addon”™️
+    Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
   },
 
   config(env, config) {
@@ -172,18 +139,19 @@ module.exports = {
 
     registry.add('htmlbars-ast-plugin', canvasPlugin);
 
+    // These should only run on this addon (self), but they rely on data from
+    // the parent app.
     if (type === 'self') {
       let addonFactoryPlugin = this._addonFactoryPlugin();
       registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
-    }
 
-    if (type === 'parent') {
-      Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
+      let treeshakerPlugin = this._treeshakerPlugin();
+      registry.add('htmlbars-ast-plugin', treeshakerPlugin);
     }
   },
 
   _addonFactoryPlugin({ addons } = {}) {
-    const AddonFactory = require('./lib/broccoli/addon-factory')(addons);
+    const AddonFactory = require('./lib/ast-transforms/addon-factory')(addons);
 
     return {
       name: 'ember-google-maps:addon-factory',
@@ -199,10 +167,27 @@ module.exports = {
     };
   },
 
+  _treeshakerPlugin(params = {}) {
+    const Treeshaker = require('./lib/ast-transforms/treeshaker')(params);
+
+    return {
+      name: 'ember-google-maps:treeshaker',
+      plugin: Treeshaker,
+      baseDir() {
+        return __dirname;
+      },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_treeshakerPlugin',
+        params: PARAMS_FOR_TREESHAKER,
+      },
+    };
+  },
+
   _canvasBuildPlugin() {
     return {
       name: 'ember-google-maps:canvas-enforcer',
-      plugin: require('./lib/broccoli/canvas-enforcer'),
+      plugin: require('./lib/ast-transforms/canvas-enforcer'),
       baseDir() {
         return __dirname;
       },
@@ -214,60 +199,9 @@ module.exports = {
     };
   },
 
-  createAddonFactoryTree(templatePath) {
-    let AddonRegistry = require('./lib/broccoli/addon-registry');
-
-    let addons = new AddonRegistry(this.project).components.concat([
-      { key: 'marker', component: 'g-map/marker' },
-      { key: 'circle', component: 'g-map/circle' },
-      { key: 'polyline', component: 'g-map/polyline' },
-      { key: 'infoWindow', component: 'g-map/info-window' },
-      { key: 'overlay', component: 'g-map/overlay' },
-      { key: 'control', component: 'g-map/control' },
-      { key: 'autocomplete', component: 'g-map/autocomplete' },
-      { key: 'directions', component: 'g-map/directions' },
-      { key: 'route', component: 'g-map/route' },
-    ]);
   getAddonsFromProject(project) {
-    const AddonRegistry = require('./lib/broccoli/addon-registry');
+    const AddonRegistry = require('./lib/addons/registry');
 
-    if (this.isProduction) {
-      // Exclude components that we don't want in the production build.
-      addons = addons.filter(({ key }) => !this.excludeName(key));
-    } else {
-      // Replace an excluded component with a debug component in development and
-      // testing. This component should throw an assertion to warn the user of
-      // misconfigured treeshaking.
-      addons = addons.map((component) => {
-        let { key } = component;
-
-        if (this.excludeName(key)) {
-          return {
-            key,
-            component: '-private-api/warn-missing-component',
-          };
-        }
-
-        return component;
-      });
-    }
-
-    let template = Handlebars.compile(
-      stripIndent(`
-      \\{{yield
-          (hash
-            {{#each addons as |addon|}}
-              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI _name="{{addon.key}}")
-            {{/each}}
-          )
-        }}
-    `)
-    );
-
-    return writeFile(
-      `${templatePath}/-private-api/addon-factory.hbs`,
-      template({ addons })
-    );
     return new AddonRegistry(project).components;
   },
 
@@ -279,28 +213,6 @@ module.exports = {
     return new Funnel(tree, {
       exclude: [this.excludeComponent],
     });
-  },
-
-  createIncludedList(onlyList = [], exceptList = []) {
-    let only = new Set(onlyList),
-      except = new Set(exceptList);
-
-    if (except && except.length) {
-      return difference(only, except);
-    }
-
-    return Array.from(only);
-  },
-
-  createExcludedList(onlyList = [], exceptList = []) {
-    let only = new Set(onlyList),
-      except = new Set(exceptList);
-
-    if (only && only.length) {
-      return intersection(except, only);
-    }
-
-    return Array.from(except);
   },
 
   buildGoogleMapsUrl(config = {}) {
