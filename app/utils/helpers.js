@@ -1,5 +1,1 @@
-export {
-  toPromiseProxy,
-  promisify,
-  position,
-} from 'ember-google-maps/utils/helpers';
+export { toLatLng } from 'ember-google-maps/utils/helpers';
