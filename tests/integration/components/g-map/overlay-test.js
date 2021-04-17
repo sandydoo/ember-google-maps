@@ -14,14 +14,6 @@ function coinToss() {
   return Math.random() >= 0.5 ? true : false;
 }
 
-function perturbLocations(times) {
-  for (let i = 1; i <= times; i++) {
-    later(() => {
-      this.locations = this.originalLocations.filter(coinToss);
-    }, 50 * i);
-  }
-}
-
 async function generateLocations(googlePromise, { lat, lng }) {
   let google = await googlePromise;
 
@@ -81,7 +73,15 @@ module('Integration | Component | g map/overlay', function (hooks) {
       lng: this.lng,
     });
 
-    this.locations = this.originalLocations;
+    this.perturbLocations = (times) => {
+      for (let i = 1; i <= times; i++) {
+        later(() => {
+          this.set('locations', this.originalLocations.filter(coinToss));
+        }, 100 * i);
+      }
+    };
+
+    this.set('locations', this.originalLocations);
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} zoom={{12}} as |g|>
@@ -93,7 +93,7 @@ module('Integration | Component | g map/overlay', function (hooks) {
       </GMap>
     `);
 
-    perturbLocations.call(this, 30);
+    this.perturbLocations(20);
 
     await this.waitForMap();
   });
