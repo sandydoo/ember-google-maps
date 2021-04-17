@@ -20,7 +20,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.ok(map, 'map initialized');
   });
 
-  test('it passes attributes as options to the map', async function (assert) {
+  test('it passes arguments as options to the map', async function (assert) {
     await render(hbs`
       <GMap
         @lat={{this.lat}}
@@ -47,7 +47,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
-  test('it updates the map when attributes are changed', async function (assert) {
+  test('it updates the map when arguments are changed', async function (assert) {
     this.set('zoom', 12);
 
     await render(hbs`
@@ -65,7 +65,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.equal(map.zoom, this.zoom);
   });
 
-  test('it extracts events from attributes and binds them to the map', async function (assert) {
+  test('it extracts events from the arguments and binds them to the map', async function (assert) {
     assert.expect(1);
 
     this.onZoomChanged = ({ eventName }) => {
@@ -119,8 +119,12 @@ module('Integration | Component | g map', function (hooks) {
   test('it calls the `onComponentsLoad` hook when all the components are ready', async function (assert) {
     assert.expect(2);
 
-    this.onComponentsLoad = () => {
+    this.onComponentsLoad = ({ components }) => {
       assert.ok('onComponentsLoad called');
+
+      let marker = components.markers?.[0]?.mapComponent?.getMap();
+
+      assert.ok(marker, 'The component is rendered on the map');
     };
 
     await render(hbs`
@@ -133,20 +137,9 @@ module('Integration | Component | g map', function (hooks) {
 
       </GMap>
     `);
-
-    let {
-      components: { markers },
-    } = await this.waitForMap();
-
-    markers[0].isInitialized.promise.then(() =>
-      assert.ok('Component is actually loaded')
-    );
   });
 
-  /**
-   * Octane support tests
-   */
-  test('octane: it passes attributes to the default canvas', async function (assert) {
+  test('it passes attributes to the default canvas', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
     `);
@@ -160,7 +153,7 @@ module('Integration | Component | g map', function (hooks) {
     );
   });
 
-  test('octane: it renders a default canvas in block form', async function (assert) {
+  test('it renders a default canvas in block form', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" as |g|>
       </GMap>

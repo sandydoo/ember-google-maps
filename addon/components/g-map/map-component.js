@@ -10,7 +10,7 @@ export function combine(base, extra) {
 }
 
 export function MapComponentAPI(source) {
-  let name = source.name ?? source.toString();
+  let name = source.name ?? 'unknown';
 
   return {
     get map() {
@@ -79,11 +79,6 @@ export default class MapComponent {
     assert('You need to pass in a component', mapComponent);
 
     this.boundEvents.concat(addEventListeners(mapComponent, events, payload));
-  }
-
-  // TODO: Fix in production, where names are uglified.
-  toString() {
-    return this.constructor.name;
   }
 }
 
