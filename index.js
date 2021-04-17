@@ -3,12 +3,8 @@
 'use strict';
 
 const Funnel = require('broccoli-funnel');
-const MergeTrees = require('broccoli-merge-trees');
 const path = require('path');
 const chalk = require('chalk');
-const Handlebars = require('handlebars');
-const stripIndent = require('strip-indent');
-const writeFile = require('broccoli-file-creator');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
@@ -83,6 +79,8 @@ function excludeName(included, excluded) {
   };
 }
 
+let FOUND_GMAP_ADDONS = {};
+
 module.exports = {
   name: require('./package').name,
 
@@ -126,7 +124,7 @@ module.exports = {
 
     // Ensure that we include the base map components.
     if (included.length) {
-      included.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
+      included.push('gMap', 'canvas', 'mapComponent');
 
       if (this.isDevelopment) {
         included.push('warnMissingComponent');
@@ -159,10 +157,6 @@ module.exports = {
   treeForAddon(tree) {
     tree = this.debugTree(tree, 'addon-tree:input');
 
-    // let addonFactoryTree = this.createAddonFactoryTree('templates/components');
-    // tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    // tree = this.debugTree(tree, 'addon-tree:with-addon-factory');
-
     tree = this.filterComponents(tree);
     tree = this.debugTree(tree, 'addon-tree:post-filter');
 
@@ -173,10 +167,36 @@ module.exports = {
     return tree;
   },
 
-  setupPreprocessorRegistry(_type, registry) {
-    let plugin = this._canvasBuildPlugin();
+  setupPreprocessorRegistry(type, registry) {
+    let canvasPlugin = this._canvasBuildPlugin();
 
-    registry.add('htmlbars-ast-plugin', plugin);
+    registry.add('htmlbars-ast-plugin', canvasPlugin);
+
+    if (type === 'self') {
+      let addonFactoryPlugin = this._addonFactoryPlugin();
+      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+    }
+
+    if (type === 'parent') {
+      Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
+    }
+  },
+
+  _addonFactoryPlugin({ addons } = {}) {
+    const AddonFactory = require('./lib/broccoli/addon-factory')(addons);
+
+    return {
+      name: 'ember-google-maps:addon-factory',
+      plugin: AddonFactory,
+      baseDir() {
+        return __dirname;
+      },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_addonFactoryPlugin',
+        params: { addons: FOUND_GMAP_ADDONS },
+      },
+    };
   },
 
   _canvasBuildPlugin() {
@@ -208,6 +228,8 @@ module.exports = {
       { key: 'directions', component: 'g-map/directions' },
       { key: 'route', component: 'g-map/route' },
     ]);
+  getAddonsFromProject(project) {
+    const AddonRegistry = require('./lib/broccoli/addon-registry');
 
     if (this.isProduction) {
       // Exclude components that we don't want in the production build.
@@ -246,6 +268,7 @@ module.exports = {
       `${templatePath}/-private-api/addon-factory.hbs`,
       template({ addons })
     );
+    return new AddonRegistry(project).components;
   },
 
   filterComponents(tree) {
