@@ -50,6 +50,9 @@
     "tracked-toolbox": "^1.2.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.13.8",
+    "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
+    "@babel/plugin-proposal-optional-chaining": "^7.13.12",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^1.7.2",
     "@ember/test-waiters": "^2.4.3",
