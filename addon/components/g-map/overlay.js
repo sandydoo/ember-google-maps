@@ -1,4 +1,5 @@
 import MapComponent from './map-component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 
@@ -8,6 +9,7 @@ import { addEventListeners } from '../../utils/options-and-events';
 export default class OverlayView extends MapComponent {
   id = `ember-google-maps-overlay-${guidFor(this)}`;
 
+  @tracked
   container = window?.document?.createDocumentFragment();
 
   get name() {

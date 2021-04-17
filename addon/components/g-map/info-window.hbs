@@ -1,7 +1,9 @@
-{{#in-element this.container}}
-  {{#if (has-block)}}
-    {{yield this.publicAPI}}
-  {{else}}
-    {{this.content}}
-  {{/if}}
-{{/in-element}}
+{{#if this.container}}
+  {{#in-element this.container}}
+    {{#if (has-block)}}
+      {{yield this.publicAPI}}
+    {{else}}
+      {{this.content}}
+    {{/if}}
+  {{/in-element}}
+{{/if}}

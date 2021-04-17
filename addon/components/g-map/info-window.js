@@ -1,4 +1,5 @@
 import MapComponent from './map-component';
+import { tracked } from '@glimmer/tracking';
 import { toLatLng } from '../../utils/helpers';
 
 export default class InfoWindow extends MapComponent {
@@ -16,6 +17,7 @@ export default class InfoWindow extends MapComponent {
   }
 
   // Can’t use a fragment here because Google Maps consumes it.
+  @tracked
   container = window?.document?.createElement('div');
 
   get newOptions() {

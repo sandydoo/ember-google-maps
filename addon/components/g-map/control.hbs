@@ -1,4 +1,6 @@
-{{#in-element this.container}}
-  {{!-- Compatibility: @classNames should be deprecated --}}
-  <div id={{this.id}} class={{@classNames}} ...attributes {{did-insert this.getControl}}>{{yield}}</div>
-{{/in-element}}
+{{#if this.container}}
+  {{#in-element this.container}}
+    {{!-- Compatibility: @classNames should be deprecated --}}
+    <div id={{this.id}} class={{@classNames}} ...attributes {{did-insert this.getControl}}>{{yield}}</div>
+  {{/in-element}}
+{{/if}}
