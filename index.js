@@ -31,6 +31,9 @@ module.exports = {
   name: require('./package').name,
 
   options: {
+    '@embroider/macros': {
+      setOwnConfig: {},
+    },
     babel: {
       plugins: [
         '@babel/plugin-proposal-logical-assignment-operators',
@@ -110,6 +113,8 @@ module.exports = {
       isProduction: this.isProduction,
     });
 
+    this.options['@embroider/macros'].setOwnConfig.addons = this.getAddonsFromProject(this.project);
+
     // Get “addons for this addon”™️
     Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
   },
@@ -141,13 +146,13 @@ module.exports = {
 
     // These should only run on this addon (self), but they rely on data from
     // the parent app.
-    if (type === 'self') {
-      let addonFactoryPlugin = this._addonFactoryPlugin();
-      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+    // if (type === 'self') {
+    //   let addonFactoryPlugin = this._addonFactoryPlugin();
+    //   registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
 
-      let treeshakerPlugin = this._treeshakerPlugin();
-      registry.add('htmlbars-ast-plugin', treeshakerPlugin);
-    }
+    //   let treeshakerPlugin = this._treeshakerPlugin();
+    //   registry.add('htmlbars-ast-plugin', treeshakerPlugin);
+    // }
   },
 
   _addonFactoryPlugin({ addons } = {}) {

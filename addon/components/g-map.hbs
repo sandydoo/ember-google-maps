@@ -4,7 +4,7 @@
     <Canvas class={{@classNames}} ...attributes />
   {{/unless}}
 
-  {{yield (hash
+  {{#let (hash
     map=this.map
     canvas=Canvas
     marker=(component 'g-map/marker' getContext=(fn this.getComponent))
@@ -15,5 +15,16 @@
     overlay=(component 'g-map/overlay' getContext=(fn this.getComponent))
     infoWindow=(component 'g-map/info-window' getContext=(fn this.getComponent))
     autocomplete=(component 'g-map/autocomplete' getContext=(fn this.getComponent))
-    )}}
+  ) as |context|}}
+
+    {{#each-in (macroGetOwnConfig "addons") as |name addon|}}
+      {{g-map-assign
+        context
+        key=name
+        value=(component addon getContext=(fn this.getComponent))
+      }}
+    {{/each-in}}
+
+    {{yield context}}
+  {{/let}}
 {{/let}}
