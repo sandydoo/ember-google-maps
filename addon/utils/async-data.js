@@ -1,6 +1,25 @@
 import { tracked } from '@glimmer/tracking';
 
-import { HAS_NATIVE_PROXY } from './platform';
+// import { HAS_NATIVE_PROXY } from './platform';
+import { getOwnConfig, importSync, macroCondition } from '@embroider/macros';
+
+let newProxyOrFallback;
+
+if (macroCondition(getOwnConfig().hasNativeProxy)) {
+  console.log("HAS PROXY")
+  newProxyOrFallback = function (promise) {
+    return new PromiseProxy(promise);
+  };
+} else {
+  const ObjectProxy = importSync('@ember/object/proxy');
+  const PromiseProxyMixin = importSync('@ember/object/promise-proxy-mixin');
+
+  const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
+
+  newProxyOrFallback = function (promise) {
+    return ObjectPromiseProxy.create({ promise });
+  };
+}
 
 class PromiseProxy {
   @tracked isRejected = false;
@@ -50,13 +69,13 @@ export function getAsync(prototype, key, desc) {
 
     let promise = desc.get.call(this, ...args);
 
-    let proxy;
+    let proxy = newProxyOrFallback(promise);
 
-    if (HAS_NATIVE_PROXY) {
-      proxy = new PromiseProxy(promise);
-    } else {
-      proxy = getAsyncNoProxyFallback(promise);
-    }
+    // if (HAS_NATIVE_PROXY) {
+      // proxy = new PromiseProxy(promise);
+    // } else {
+      // proxy = getAsyncNoProxyFallback(promise);
+    // }
 
     PROMISES.set(desc, proxy);
 
@@ -66,13 +85,4 @@ export function getAsync(prototype, key, desc) {
   return {
     get: getter,
   };
-}
-
-import ObjectProxy from '@ember/object/proxy';
-import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
-
-const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
-
-function getAsyncNoProxyFallback(promise) {
-  return ObjectPromiseProxy.create({ promise });
 }

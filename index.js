@@ -7,6 +7,28 @@ const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 
+const lite = require('caniuse-lite');
+const browserslist = require('browserslist');
+
+function canIUseProxy(targets = {}) {
+  let compatTable = lite.feature(lite.features['proxy']).stats;
+
+  let browsers = browserslist(targets.browsers);
+
+  let compat = browsers.map((browser) => {
+    let parts = browser.split(' ');
+    let nestedPath = compatTable;
+
+    for (let part of parts) {
+      nestedPath = nestedPath[part];
+    }
+
+    return nestedPath;
+  });
+
+  return compat.every((x) => x === 'y');
+}
+
 const {
   newIncludedList,
   newExcludedList,
@@ -31,6 +53,11 @@ module.exports = {
   name: require('./package').name,
 
   options: {
+    '@embroider/macros': {
+      setOwnConfig: {
+        // hasNativeProxy: false,
+      },
+    },
     babel: {
       plugins: [
         '@babel/plugin-proposal-logical-assignment-operators',
@@ -38,6 +65,10 @@ module.exports = {
         '@babel/plugin-proposal-optional-chaining',
       ],
     },
+  },
+
+  setBuildMacro(key, value) {
+    this.options['@embroider/macros'].setOwnConfig[key] = value;
   },
 
   init() {
@@ -55,6 +86,9 @@ module.exports = {
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
+
+    // this.setBuildMacro('hasNativeProxy', canIUseProxy(this.project.targets));
+    // this.options['@embroider/macros'].setOwnConfig.hasNativeProxy = canIUseProxy(this.project.targets);
 
     // Treeshaking setup
 
@@ -141,13 +175,13 @@ module.exports = {
 
     // These should only run on this addon (self), but they rely on data from
     // the parent app.
-    if (type === 'self') {
-      let addonFactoryPlugin = this._addonFactoryPlugin();
-      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+    // if (type === 'self') {
+    //   let addonFactoryPlugin = this._addonFactoryPlugin();
+    //   registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
 
-      let treeshakerPlugin = this._treeshakerPlugin();
-      registry.add('htmlbars-ast-plugin', treeshakerPlugin);
-    }
+    //   let treeshakerPlugin = this._treeshakerPlugin();
+    //   registry.add('htmlbars-ast-plugin', treeshakerPlugin);
+    // }
   },
 
   _addonFactoryPlugin({ addons } = {}) {
