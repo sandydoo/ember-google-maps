@@ -4,7 +4,56 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
-    // Add options here
+    snippetPaths: ['code-snippets'],
+
+    babel: {
+      plugins: ['@babel/plugin-proposal-optional-chaining'],
+    },
+
+    'ember-cli-babel': {
+      includePolyfill: true,
+    },
+
+    sassOptions: {
+      precision: 10,
+      onlyIncluded: true,
+      includePaths: ['app/styles', 'node_modules/bootstrap/scss'],
+    },
+
+    minifyCSS: {
+      options: {
+        // Don't break Bootstrap with css mangling.
+        // Remove for clean-css 4.0
+        advanced: false,
+      },
+    },
+
+    'ember-composable-helpers': {
+      only: ['array', 'join', 'toggle'],
+    },
+
+    prember: {
+      baseRoot: 'https://ember-google-maps.sandydoo.me',
+      urls: [
+        '/',
+        '/docs',
+        '/docs/about',
+        '/docs/getting-started',
+        '/docs/map',
+        '/docs/events',
+        '/docs/components',
+        '/docs/canvas',
+        '/docs/markers',
+        '/docs/circles',
+        '/docs/polylines',
+        '/docs/info-windows',
+        '/docs/controls',
+        '/docs/directions',
+        '/docs/overlays',
+        '/docs/complex-ui',
+        '/examples/sweet-rentals',
+      ],
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated

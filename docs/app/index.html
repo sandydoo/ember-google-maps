@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>EmberGoogleMapsDocs</title>
-    <meta name="description" content="">
+    <title>Ember Google Maps</title>
+    <meta name="description" content="A friendly Ember addon for working with Google Maps.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{content-for "head"}}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Pacifico&display=swap" rel="stylesheet">
 
     <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
     <link integrity="" rel="stylesheet" href="{{rootURL}}assets/ember-google-maps-docs.css">
@@ -16,6 +19,11 @@
   </head>
   <body>
     {{content-for "body"}}
+
+    <script>
+      window.Prism = window.Prism || {};
+      window.Prism.manual = true;
+    </script>
 
     <script src="{{rootURL}}assets/vendor.js"></script>
     <script src="{{rootURL}}assets/ember-google-maps-docs.js"></script>

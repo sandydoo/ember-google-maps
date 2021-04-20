@@ -1,4 +1,3 @@
-/* eslint-env node */
 'use strict';
 
 module.exports = function (environment) {
@@ -21,16 +20,6 @@ module.exports = function (environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    },
-
-    flashMessageDefaults: {
-      extendedTimeout: 500,
-    },
-
-    'ember-google-maps': {
-      language: 'en',
-      libraries: ['geometry', 'places'],
-      key: process.env.GOOGLE_MAPS_API_KEY,
     },
   };
 

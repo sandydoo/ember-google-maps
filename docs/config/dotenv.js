@@ -9,6 +9,6 @@ module.exports = function (env) {
     enabled: !isCI, // disable for CI
     clientAllowedKeys: ['GOOGLE_MAPS_API_KEY'],
     failOnMissingKey: false,
-    path: path.join(path.dirname(__dirname), `.env.${env}`),
+    path: path.join(path.dirname(__dirname), '..', `.env.${env}`),
   };
 };
