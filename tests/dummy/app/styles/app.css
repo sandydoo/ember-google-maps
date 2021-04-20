@@ -1,0 +1,9 @@
+/**
+ * This is used in tests. Some tests, like for controls, will fail if the map
+ * isn’t actually visible.
+ */
+.ember-google-map {
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
