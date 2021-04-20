@@ -37,7 +37,7 @@ export default class MapDataService extends Service {
 
   createLocations(numLocations = 42) {
     let { lat, lng } = this.london,
-      origin = new google.maps.LatLng(lat, lng);
+      origin = new this.google.maps.LatLng(lat, lng);
 
     return Array(numLocations)
       .fill()
@@ -45,7 +45,7 @@ export default class MapDataService extends Service {
         let heading = randomInt(1, 360),
           distance = randomInt(100, 5000),
           price = randomInt(0, 2000),
-          n = google.maps.geometry.spherical.computeOffset(
+          n = this.google.maps.geometry.spherical.computeOffset(
             origin,
             distance,
             heading

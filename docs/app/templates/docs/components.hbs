@@ -3,7 +3,7 @@
     <section>
       <h5 id="components">Contextual components</h5>
 
-      <p>In block form, the <LinkTo @route="docs.map"><tt>g-map</tt></LinkTo> component yields all sorts of map components. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready!</p>
+      <p>In block form, the <LinkTo @route="docs.map"><code>g-map</code></LinkTo> component yields all sorts of map components. These contextual components automatically register with the parent and bind themselves to the map. Even better, they wait to render until the map is ready!</p>
 
       <p>The addon currently provides the following components:
         <ul>
@@ -29,7 +29,7 @@
     <section>
       <h5>Accessing component instances</h5>
 
-      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – <LinkTo @route="docs.map"><tt>g-map</tt></LinkTo>. The parent map then provides a <tt>publicAPI</tt>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <tt>onLoad</tt> action, you can get access to this object once the map loads.</p>
+      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – <LinkTo @route="docs.map"><code>g-map</code></LinkTo>. The parent map then provides a <code>publicAPI</code>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <code>onLoad</code> action, you can get access to this object once the map loads.</p>
 
       <CodeSnippet @name="map-public-api.js" />
 
@@ -37,7 +37,7 @@
 
       <CodeSnippet @name="handle-on-load.js" />
 
-      <p>Some components may take some time to initialise and render on the map. You can provide an <tt>onComponentsLoad</tt> action to the map that will be called once all the components have been registered with the map.</p>
+      <p>Some components may take some time to initialise and render on the map. You can provide an <code>onComponentsLoad</code> action to the map that will be called once all the components have been registered with the map.</p>
     </section>
     <p>Learn more about what you can do with these components in the next section.</p>
     <LinkToNext @nextPage={{this.nextPage}} />

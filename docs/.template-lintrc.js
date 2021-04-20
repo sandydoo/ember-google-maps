@@ -3,8 +3,9 @@
 module.exports = {
   extends: 'octane',
 
-  // Deal with the docs app later…
-  ignore: ['app/templates/**'],
+  rules: {
+    'no-inline-styles': 'off',
+  },
 
   overrides: [
     {

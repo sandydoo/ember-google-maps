@@ -4,7 +4,7 @@
 
     <p>In some cases, you may want to set the URL used to load the Google Maps API while your Ember app is actually running. For example, you could dynamically set the language parameter of the URL based on the language preferences of the current user.</p>
 
-    <p>To change the URL, overwrite the <tt>buildGoogleMapsURL</tt> function in the google-maps-api service. It receives all of the ember-google-maps configuration options.</p>
+    <p>To change the URL, overwrite the <code>buildGoogleMapsURL</code> function in the google-maps-api service. It receives all of the ember-google-maps configuration options.</p>
 
     <CodeSnippet @name="build-google-maps-url.js" />
 
@@ -17,7 +17,7 @@
 
     <p>Ember apps that rely heavily on the addon ecosystem can eventually become quite large, negatively impacting load times. Addons, like this one, serve the needs of a diverse group of developers and include features that you may never need.</p>
 
-    <p>In your <tt>ember-cli-build.js</tt>, you can specify which components to include or exclude from the build using <tt>only</tt> and <tt>except</tt>.</p>
+    <p>In your <code>ember-cli-build.js</code>, you can specify which components to include or exclude from the build using <code>only</code> and <code>except</code>.</p>
 
     <DocDanger>
       This is an advanced feature and may break your app. Manually excluding components from your build can be quite finicky and time-consuming. Use at your own peril.

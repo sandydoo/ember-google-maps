@@ -5,15 +5,15 @@
 
       <p>These are your basic, run-of-the-mill white tooltips. While the <LinkTo @route="docs.overlays">custom overlay</LinkTo> is way more customizable, these tooltips can be quite useful since they “just work”™.</p>
 
-      <p>The <tt>infoWindow</tt> component accepts three new arguments: <tt>isOpen</tt>, <tt>content</tt>, and <tt>target</tt>. For all the other options, read <GoogleDocs @section="info-window#InfoWindowOptions">InfoWindowOptions</GoogleDocs>.</p>
+      <p>The <code>infoWindow</code> component accepts three new arguments: <code>isOpen</code>, <code>content</code>, and <code>target</code>. For all the other options, read <GoogleDocs @section="info-window#InfoWindowOptions">InfoWindowOptions</GoogleDocs>.</p>
 
-      <p>The <tt>isOpen</tt> attribute can be used to control the opening and closing of the tooltip using <tt>true</tt> or <tt>false</tt>. It automatically reverts back to <tt>false</tt> when the user closes the info window.</p>
+      <p>The <code>isOpen</code> attribute can be used to control the opening and closing of the tooltip using <code>true</code> or <code>false</code>. It automatically reverts back to <code>false</code> when the user closes the info window.</p>
 
-      <p><tt>content</tt> lets you provide a string with text or even HTML that will be rendered in the tooltip. However, if you really want to render HTML content, I would recommend using the block form of the component. Anything defined within the block, will be rendered inside the info window.</p>
+      <p><code>content</code> lets you provide a string with text or even HTML that will be rendered in the tooltip. However, if you really want to render HTML content, I would recommend using the block form of the component. Anything defined within the block, will be rendered inside the info window.</p>
 
-      <p>The <tt>target</tt> attribute is used to attach the info window to a map component, like a <tt>marker</tt>. The <tt>infoWindow</tt> component yielded by the map is already attached to the map. You can override the position by overriding the <tt>target</tt> or setting the <tt>lat</tt> and <tt>lng</tt> coordinates manually.</p>
+      <p>The <code>target</code> attribute is used to attach the info window to a map component, like a <code>marker</code>. The <code>infoWindow</code> component yielded by the map is already attached to the map. You can override the position by overriding the <code>target</code> or setting the <code>lat</code> and <code>lng</code> coordinates manually.</p>
 
-      <p>Map components, like markers and circles, also yield their own <tt>infoWindow</tt>. These ones are already attached to the parent marker component, so the only thing left to do is set the <tt>isOpen</tt> attribute.</p>
+      <p>Map components, like markers and circles, also yield their own <code>infoWindow</code>. These ones are already attached to the parent marker component, so the only thing left to do is set the <code>isOpen</code> attribute.</p>
 
       <CodeSnippet @name="basic-info-windows.hbs" />
 
@@ -22,12 +22,24 @@
       </DocTip>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{this.markerTooltipOpen}} @change={{toggle "markerTooltipOpen" this}} class="custom-control-input" @id="toggle-marker-tooltip" />
+        <Input
+          id="toggle-marker-tooltip"
+          class="custom-control-input"
+          @type="checkbox"
+          @checked={{this.markerTooltipOpen}}
+          {{on "input" (toggle "markerTooltipOpen" this)}} />
+
         <label class="custom-control-label" for="toggle-marker-tooltip">Toggle marker tooltip</label>
       </div>
 
       <div class="custom-control custom-checkbox">
-        <Input @type="checkbox" @checked={{this.mapTooltipOpen}} @change={{toggle "mapTooltipOpen" this}} class="custom-control-input" @id="toggle-map-tooltip" />
+        <Input
+          id="toggle-map-tooltip"
+          class="custom-control-input"
+          @type="checkbox"
+          @checked={{this.mapTooltipOpen}}
+          {{on "input" (toggle "mapTooltipOpen" this)}} />
+
         <label class="custom-control-label" for="toggle-map-tooltip">Toggle map tooltip</label>
       </div>
     </section>
@@ -59,7 +71,7 @@
           @isOpen={{this.markerTooltipOpen}}
           @onCloseclick={{fn (mut this.markerTooltipOpen) false}}>
           <div class="text-center">
-            <img src="/images/doge.jpg" alt="Such doge!" width=200>
+            <img src="/images/doge.jpg" alt="Such doge!" width="200">
             <div>Custom <i>HTML</i> content in infoWindow!</div>
           </div>
         </m.infoWindow>

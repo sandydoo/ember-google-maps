@@ -7,16 +7,16 @@
   <section>
     <h5>Loading Google Maps</h5>
 
-    <p>You can configure the options used for loading the Google Maps API in your app’s <tt>config/environment.js</tt>. The <tt>key</tt> option is <b>required</b>. Everything else is optional, however, I strongly suggest explicitly setting the language and version options to avoid any nasty surprises.</p>
+    <p>You can configure the options used for loading the Google Maps API in your app’s <code>config/environment.js</code>. The <code>key</code> option is <b>required</b>. Everything else is optional, however, I strongly suggest explicitly setting the language and version options to avoid any nasty surprises.</p>
 
     <p>As your app is built, these options will be used to generate the URL for the API. The API is automatically loaded — on-demand — only when it is needed.</p>
 
     <CodeSnippet @name="config.js" @language="js" />
 
-    <p>If your requirements are more complex and statically building the URL is too restrictive, you can always override the URL at runtime. {{link-to "Learn more about the advanced options of this addon." "docs.advanced"}}</p>
+    <p>If your requirements are more complex and statically building the URL is too restrictive, you can always override the URL at runtime. <LinkTo @route="docs.advanced">Learn more about the advanced options of this addon.</LinkTo></p>
   </section>
 
-  <p>{{nextPage.text}}</p>
+  <p>{{this.nextPage.text}}</p>
 
   <LinkToNext @nextPage={{this.nextPage}} />
 </div>

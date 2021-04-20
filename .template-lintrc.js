@@ -8,5 +8,5 @@ module.exports = {
     'simple-unless': 'off',
   },
 
-  ignore: ['docs'],
+  ignore: ['docs/**'],
 };

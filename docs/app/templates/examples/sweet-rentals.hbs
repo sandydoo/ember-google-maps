@@ -1,7 +1,7 @@
 <div class="navbar fixed-top navbar-light">
   <div class="navbar-brand ember">sweet rentals</div>
   <ul class="navbar-nav">
-    <li class="nav-item"><LinkTo @route="docs.complex-ui" @classNames="btn btn-primary">Back to docs ›</LinkTo></li>
+    <li class="nav-item"><LinkTo @route="docs.complex-ui" class="btn btn-primary">Back to docs ›</LinkTo></li>
   </ul>
 </div>
 
@@ -28,7 +28,7 @@
       @disableDefaultUI={{true}}
       @zoomControl={{true}}
       @zoomControlOptions={{hash
-        position=google.maps.ControlPosition.TOP_LEFT}}
+        position=this.google.maps.ControlPosition.TOP_LEFT}}
       @fullscreenControl={{true}}
       @onLoad={{this.saveBounds}}
       @onBoundsChanged={{this.saveBounds}} as |g|>
