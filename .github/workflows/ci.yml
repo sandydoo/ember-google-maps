@@ -1,16 +1,16 @@
-name: CI
+name: CI Release 3.x
 
 on:
   push:
     branches:
-      - '*'
+      - 'release-3.0'
     tags:
-      - 'v*'
+      - 'v3.*'
   pull_request:
     branches:
-      - main
+      - release-3.0
   schedule:
-    - cron: '0 3 * * 1' # Mondays at 3am
+    - cron: '0 3 * * 3' # Wednesdays at 3am
 
 env:
   CI: true
