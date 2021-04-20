@@ -94,7 +94,7 @@ export default class OverlayView extends MapComponent {
 
   teardown() {
     // This calls onRemove.
-    this.mapComponent.setMap(null);
+    this.mapComponent?.setMap(null);
 
     this.overlayElement = null;
     this.container = null;
