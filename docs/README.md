@@ -1,7 +1,8 @@
 # ember-google-maps-docs
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is the documentation app for `ember-google-maps`.
+
+[View the docs →](https://ember-google-maps.sandydoo.me/)
 
 ## Prerequisites
 
@@ -15,8 +16,8 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd ember-google-maps-docs`
+* `git clone https://github.com/sandydoo/ember-google-maps/` this repository
+* `cd ember-google-maps-docs/docs`
 * `yarn install`
 
 ## Running / Development
