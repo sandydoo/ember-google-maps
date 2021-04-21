@@ -22,7 +22,8 @@
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
     "test": "npm-run-all lint test:*",
-    "test:ember": "ember test"
+    "test:ember": "ember test",
+    "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
