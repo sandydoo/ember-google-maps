@@ -22,6 +22,10 @@ module.exports = function (environment) {
       // when it is created
     },
 
+    fastboot: {
+      hostWhitelist: ['ember-google-maps.sandydoo.me', /^localhost:\d+$/],
+    },
+
     flashMessageDefaults: {
       extendedTimeout: 500,
     },

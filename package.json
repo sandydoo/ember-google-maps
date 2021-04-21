@@ -34,7 +34,8 @@
     "test": "npm-run-all lint test:*",
     "test:ember": "ember test",
     "test:ember-compatibility": "ember try:each",
-    "test:build": "node build-tests/build-test"
+    "test:build": "node build-tests/build-test",
+    "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
   "dependencies": {
     "@ember/render-modifiers": "^1.0.2",
