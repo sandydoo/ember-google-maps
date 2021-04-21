@@ -26,11 +26,11 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 
 <br>
 
-- [Documentation](#documentation)
-  - [Quick start](#quickstart-for-the-impatient)
-- [Compatibility](#compatibility)
-- [Examples](#examples-of-what-to-expect)
-- [Maintainers](#maintainers)
+- [Documentation](#-documentation)
+  - [Quick start](#-quick-start-for-the-impatient)
+- [Compatibility](#-compatibility)
+- [Examples](#-examples)
+- [Maintainers](#-maintainers)
 - [Contributing](#contributing)
 - [License](#license)
 - [Disclaimer](#disclaimer)
