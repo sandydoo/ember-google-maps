@@ -136,15 +136,14 @@ module.exports = {
 
   setupPreprocessorRegistry(type, registry) {
     let canvasPlugin = this._canvasBuildPlugin();
-
     registry.add('htmlbars-ast-plugin', canvasPlugin);
 
-    // These should only run on this addon (self), but they rely on data from
-    // the parent app.
-    if (type === 'self') {
-      let addonFactoryPlugin = this._addonFactoryPlugin();
-      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+    let addonFactoryPlugin = this._addonFactoryPlugin();
+    registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
 
+    // We only need to run the treeshaker plugin on the addon, but it still
+    // relies on data from the parent app.
+    if (type === 'self') {
       let treeshakerPlugin = this._treeshakerPlugin();
       registry.add('htmlbars-ast-plugin', treeshakerPlugin);
     }
