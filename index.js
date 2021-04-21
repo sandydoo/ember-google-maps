@@ -6,6 +6,7 @@ const Funnel = require('broccoli-funnel');
 const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
+const { createHash } = require('crypto');
 
 const {
   newIncludedList,
@@ -26,6 +27,10 @@ let PARAMS_FOR_TREESHAKER = {
   excluded: null,
   isProduction: true,
 };
+
+function toHash(obj) {
+  return createHash('sha256').update(JSON.stringify(obj)).digest('base64');
+}
 
 module.exports = {
   name: require('./package').name,
@@ -150,13 +155,17 @@ module.exports = {
   },
 
   _addonFactoryPlugin({ addons } = {}) {
+    const name = 'ember-google-maps:addon-factory';
     const AddonFactory = require('./lib/ast-transforms/addon-factory')(addons);
 
     return {
-      name: 'ember-google-maps:addon-factory',
+      name,
       plugin: AddonFactory,
       baseDir() {
         return __dirname;
+      },
+      cacheKey() {
+        return `${name}:${toHash(FOUND_GMAP_ADDONS)}`;
       },
       parallelBabel: {
         requireFile: __filename,
@@ -167,13 +176,17 @@ module.exports = {
   },
 
   _treeshakerPlugin(params = {}) {
+    const name = 'ember-google-maps:treeshaker';
     const Treeshaker = require('./lib/ast-transforms/treeshaker')(params);
 
     return {
-      name: 'ember-google-maps:treeshaker',
+      name,
       plugin: Treeshaker,
       baseDir() {
         return __dirname;
+      },
+      cacheKey() {
+        return `${name}:${toHash(PARAMS_FOR_TREESHAKER)}`;
       },
       parallelBabel: {
         requireFile: __filename,
@@ -184,8 +197,10 @@ module.exports = {
   },
 
   _canvasBuildPlugin() {
+    const name = 'ember-google-maps:canvas-enforcer';
+
     return {
-      name: 'ember-google-maps:canvas-enforcer',
+      name,
       plugin: require('./lib/ast-transforms/canvas-enforcer'),
       baseDir() {
         return __dirname;
