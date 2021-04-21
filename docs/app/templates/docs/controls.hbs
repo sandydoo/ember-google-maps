@@ -3,14 +3,14 @@
     <section>
       <h5>Adding, removing and modifying map controls</h5>
 
-      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <code>true</code> or <code>false</code>. You can also pass in a <code>hash</code> to set further options. Learn more by following the guides at <GoogleDocs @section="controls" @type="guides">Controls Guide</GoogleDocs>.</p>
+      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <var>true</var> or <var>false</var>. You can also pass in a <var>hash</var> to set further options. Learn more by following the guides at <GoogleDocs @section="controls" @type="guides">Controls Guide</GoogleDocs>.</p>
 
       <p>Let’s disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
 
       <CodeSnippet @name="show-hide-controls.hbs" />
 
       <DocTip>
-        Unfortunately, you have to reference the position using the constants defined under <code>google.maps.ControlPosition</code>. These actually map to integers that then define the position of the control. Now you wouldn’t normally have access to the <code>google</code> global in the template. A safe way of accessing it is via the <code>googleMapsApi</code> service. That way, when <code>google</code> is done initializing, the template will be updated with the position value.
+        Unfortunately, you have to reference the position using the constants defined under <var>google.maps.ControlPosition</var>. These actually map to integers that then define the position of the control. Now you wouldn’t normally have access to the <var>google</var> global in the template. A safe way of accessing it is via the <var>googleMapsApi</var> service. That way, when <var>google</var> is done initializing, the template will be updated with the position value.
       </DocTip>
 
       <CodeSnippet @name="safely-accessing-google.js" />
@@ -18,13 +18,13 @@
     <section>
       <h5>Adding custom map controls</h5>
 
-      <p>For more complex map UIs, you might want to add your own map controls to let the user initiate custom actions right from the map. Let’s try adding a button to the <code>top center</code> of the map that pans back to the center of London and sets the zoom level back to <code>12</code>.</p>
+      <p>For more complex map UIs, you might want to add your own map controls to let the user initiate custom actions right from the map. Let’s try adding a button to the <var>top center</var> of the map that pans back to the center of London and sets the zoom level back to <var>12</var>.</p>
 
       <DocTip @badgeText="Test">
         Try out the custom control to recenter the map.
       </DocTip>
 
-      <p>The <code>control</code> component accepts a <code>position</code> attribute and a block template. The <code>position</code> is a string that specifies the placement of the control on the map. It should be one of the control position constants defined in <GoogleDocs @section="control#ControlPosition">ControlPosition</GoogleDocs>. The component will map these to the correct <code>google.maps.controlPosition</code> behind the scenes. In our case, to place the control in the top center, we use <code>TOP_CENTER</code>. From there, we just bind an action to the button and pass the yielded map object.</p>
+      <p>The <var>control</var> component accepts a <var>position</var> attribute and a block template. The <var>position</var> is a string that specifies the placement of the control on the map. It should be one of the control position constants defined in <GoogleDocs @section="control#ControlPosition">ControlPosition</GoogleDocs>. The component will map these to the correct <var>google.maps.controlPosition</var> behind the scenes. In our case, to place the control in the top center, we use <var>TOP_CENTER</var>. From there, we just bind an action to the button and pass the yielded map object.</p>
 
       <CodeSnippet @name="recenter-map-control.hbs" />
 

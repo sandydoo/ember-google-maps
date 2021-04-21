@@ -3,14 +3,14 @@
     <section>
       <h5 id="events">Handling events 💥</h5>
 
-      <p>Parameters prefixed by <code>on</code> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google’s API docs for each component.</p>
+      <p>Parameters prefixed by <var>on</var> are reserved in this addon. The parameter name is stripped of the prefix, decamelized and the provided action is bound to the event name. The event names used by Google are different from the ones you may be used to in <span class="ember">ember</span>, so make sure to consult Google’s API docs for each component.</p>
 
-      <p>As an example, to register an action for the <code>bounds_changed</code> event, you would pass an action to the <code>onBoundsChanged</code> attribute. For <code>dragend</code>, you would use <code>onDragend</code>.</p>
+      <p>As an example, to register an action for the <var>bounds_changed</var> event, you would pass an action to the <var>onBoundsChanged</var> attribute. For <var>dragend</var>, you would use <var>onDragend</var>.</p>
 
       <CodeSnippet @name="map-events.hbs" />
 
       <DocDanger>
-        Some Google event names break the expected naming style. Notice how <code>dragend</code> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <code>e</code> in <code>onDragend</code>.
+        Some Google event names break the expected naming style. Notice how <var>dragend</var> is a single word and not two words separated by an underscore. This directly translates to the camelized name, so you would <b>not</b> capitalize the <var>e</var> in <var>onDragend</var>.
       </DocDanger>
 
       <p>Every single map component provided by this addon follows this convention. It allows the addon to remain lightweight and decoupled from the API. If an event or option name changes, this addon does not have to be updated – only your own code does.</p>
@@ -59,7 +59,7 @@
 
       <p>There are two ways to avoid this issue: refactor your code to eliminate the unintended effects of bubbling or disable bubbling.</p>
 
-      <p>You can disable bubbling by calling <code>stopPropagation</code> on the event object you receive as an argument.</p>
+      <p>You can disable bubbling by calling <var>stopPropagation</var> on the event object you receive as an argument.</p>
 
       <CodeSnippet @name="event-stop-propagation.js" />
 

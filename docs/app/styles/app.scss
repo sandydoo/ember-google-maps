@@ -86,10 +86,11 @@ section {
   line-height: 1;
 }
 
-tt {
+var {
   font-family: $font-family-monospace;
   font-size: 0.9em;
   font-weight: 600;
+  font-style: normal;
   color: lighten($body-color, 10);
 }
 

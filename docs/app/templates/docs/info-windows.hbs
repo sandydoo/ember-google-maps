@@ -5,15 +5,15 @@
 
       <p>These are your basic, run-of-the-mill white tooltips. While the <LinkTo @route="docs.overlays">custom overlay</LinkTo> is way more customizable, these tooltips can be quite useful since they “just work”™.</p>
 
-      <p>The <code>infoWindow</code> component accepts three new arguments: <code>isOpen</code>, <code>content</code>, and <code>target</code>. For all the other options, read <GoogleDocs @section="info-window#InfoWindowOptions">InfoWindowOptions</GoogleDocs>.</p>
+      <p>The <var>infoWindow</var> component accepts three new arguments: <var>isOpen</var>, <var>content</var>, and <var>target</var>. For all the other options, read <GoogleDocs @section="info-window#InfoWindowOptions">InfoWindowOptions</GoogleDocs>.</p>
 
-      <p>The <code>isOpen</code> attribute can be used to control the opening and closing of the tooltip using <code>true</code> or <code>false</code>. It automatically reverts back to <code>false</code> when the user closes the info window.</p>
+      <p>The <var>isOpen</var> attribute can be used to control the opening and closing of the tooltip using <var>true</var> or <var>false</var>. It automatically reverts back to <var>false</var> when the user closes the info window.</p>
 
-      <p><code>content</code> lets you provide a string with text or even HTML that will be rendered in the tooltip. However, if you really want to render HTML content, I would recommend using the block form of the component. Anything defined within the block, will be rendered inside the info window.</p>
+      <p><var>content</var> lets you provide a string with text or even HTML that will be rendered in the tooltip. However, if you really want to render HTML content, I would recommend using the block form of the component. Anything defined within the block, will be rendered inside the info window.</p>
 
-      <p>The <code>target</code> attribute is used to attach the info window to a map component, like a <code>marker</code>. The <code>infoWindow</code> component yielded by the map is already attached to the map. You can override the position by overriding the <code>target</code> or setting the <code>lat</code> and <code>lng</code> coordinates manually.</p>
+      <p>The <var>target</var> attribute is used to attach the info window to a map component, like a <var>marker</var>. The <var>infoWindow</var> component yielded by the map is already attached to the map. You can override the position by overriding the <var>target</var> or setting the <var>lat</var> and <var>lng</var> coordinates manually.</p>
 
-      <p>Map components, like markers and circles, also yield their own <code>infoWindow</code>. These ones are already attached to the parent marker component, so the only thing left to do is set the <code>isOpen</code> attribute.</p>
+      <p>Map components, like markers and circles, also yield their own <var>infoWindow</var>. These ones are already attached to the parent marker component, so the only thing left to do is set the <var>isOpen</var> attribute.</p>
 
       <CodeSnippet @name="basic-info-windows.hbs" />
 

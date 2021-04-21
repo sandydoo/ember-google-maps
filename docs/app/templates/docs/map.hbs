@@ -8,23 +8,23 @@
 
       <CodeSnippet @name="basic-map.hbs" />
 
-      <p>To get the map to render, the map canvas needs to be styled with dimensions. For example, in your <code>app.css</code>:</p>
+      <p>To get the map to render, the map canvas needs to be styled with dimensions. For example, in your <var>app.css</var>:</p>
 
       <CodeSnippet @name="map-canvas-style.css" />
 
-      <p>Most of the components in this addon accept <code>lat</code> and <code>lng</code> parameters for
-      convenience and consistency. This lets you avoid the hassle of remembering whether to use <code>position</code> or <code>center</code> and lets you provide the coordinates separately, as that’s how you are likely storing them if you’re using Ember Data. We don’t assert the usage of <code>lat</code> and <code>lng</code>, so you can still use the native Google options if you wish.</p>
+      <p>Most of the components in this addon accept <var>lat</var> and <var>lng</var> parameters for
+      convenience and consistency. This lets you avoid the hassle of remembering whether to use <var>position</var> or <var>center</var> and lets you provide the coordinates separately, as that’s how you are likely storing them if you’re using Ember Data. We don’t assert the usage of <var>lat</var> and <var>lng</var>, so you can still use the native Google options if you wish.</p>
 
-      <p>The <code>g-map</code> component accepts all of the <GoogleDocs @section="map#MapOptions">MapOptions</GoogleDocs> options you would pass to a Google Map instance. These are automatically watched for changes.</p>
+      <p>The <var>g-map</var> component accepts all of the <GoogleDocs @section="map#MapOptions">MapOptions</GoogleDocs> options you would pass to a Google Map instance. These are automatically watched for changes.</p>
 
       <CodeSnippet @name="map-passing-options.hbs" />
 
-      <p>You can also pass an <code>options</code> object, but note that <b>it will not be watched for changes</b>. You can use the <code>hash</code> helper instead if you need the options to be watched.</p>
+      <p>You can also pass an <var>options</var> object, but note that <b>it will not be watched for changes</b>. You can use the <var>hash</var> helper instead if you need the options to be watched.</p>
     </section>
     <section>
       <h5 id="map-instance">Accessing the map instance</h5>
 
-      <p>If you need access the map instance – to call <code>panTo</code> for example – you can use the <code>onLoad</code> hook. It will return the map instance once the map has been initialised.</p>
+      <p>If you need access the map instance – to call <var>panTo</var> for example – you can use the <var>onLoad</var> hook. It will return the map instance once the map has been initialised.</p>
     </section>
 
     <LinkToNext @nextPage={{this.nextPage}} />
