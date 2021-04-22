@@ -158,16 +158,15 @@ module.exports = {
     return tree;
   },
 
+  // Don’t use `type === 'self'` in Embroider.
   setupPreprocessorRegistry(type, registry) {
-    let canvasPlugin = this._canvasBuildPlugin();
-    registry.add('htmlbars-ast-plugin', canvasPlugin);
+    if (type === 'parent') {
+      let canvasPlugin = this._canvasBuildPlugin();
+      registry.add('htmlbars-ast-plugin', canvasPlugin);
 
-    let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
-    registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+      let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
+      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
 
-    // We only need to run the treeshaker plugin on the addon, but it still
-    // relies on data from the parent app.
-    if (type === 'self') {
       let treeshakerPlugin = this._treeshakerPlugin(PARAMS_FOR_TREESHAKER);
       registry.add('htmlbars-ast-plugin', treeshakerPlugin);
     }
