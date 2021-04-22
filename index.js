@@ -224,6 +224,9 @@ module.exports = {
       baseDir() {
         return __dirname;
       },
+      cacheKey() {
+        return name;
+      },
       parallelBabel: {
         requireFile: __filename,
         buildUsing: '_canvasBuildPlugin',
