@@ -143,18 +143,18 @@ module.exports = {
     let canvasPlugin = this._canvasBuildPlugin();
     registry.add('htmlbars-ast-plugin', canvasPlugin);
 
-    let addonFactoryPlugin = this._addonFactoryPlugin();
+    let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
     registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
 
     // We only need to run the treeshaker plugin on the addon, but it still
     // relies on data from the parent app.
     if (type === 'self') {
-      let treeshakerPlugin = this._treeshakerPlugin();
+      let treeshakerPlugin = this._treeshakerPlugin(PARAMS_FOR_TREESHAKER);
       registry.add('htmlbars-ast-plugin', treeshakerPlugin);
     }
   },
 
-  _addonFactoryPlugin({ addons } = {}) {
+  _addonFactoryPlugin(addons = {}) {
     const name = 'ember-google-maps:addon-factory';
     const AddonFactory = require('./lib/ast-transforms/addon-factory')(addons);
 
@@ -170,7 +170,7 @@ module.exports = {
       parallelBabel: {
         requireFile: __filename,
         buildUsing: '_addonFactoryPlugin',
-        params: { addons: FOUND_GMAP_ADDONS },
+        params: FOUND_GMAP_ADDONS,
       },
     };
   },
