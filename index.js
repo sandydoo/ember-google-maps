@@ -32,6 +32,18 @@ function toHash(obj) {
   return createHash('sha256').update(JSON.stringify(obj)).digest('base64');
 }
 
+// Copied from @embroider/test-setup. We use this to figure out when Embroider used as the build system.
+// https://github.com/embroider-build/embroider/blob/8b2c20d6dccb006c4cc51cb18504f5a489c948f2/packages/test-setup/src/index.ts#L98
+function shouldUseEmbroider(app) {
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'classic') {
+    return false;
+  }
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'embroider') {
+    return true;
+  }
+  return '@embroider/core' in app.dependencies();
+}
+
 module.exports = {
   name: require('./package').name,
 
@@ -62,6 +74,11 @@ module.exports = {
     this.isDevelopment = !this.isProduction;
 
     // Treeshaking setup
+
+    // Don’t manipulate the broccoli trees when using Embroider. Things will
+    // break. Just clear out the template exports and Embroider will do the
+    // rest.
+    this.isUsingEmbroider = shouldUseEmbroider(app);
 
     let { only = [], except = [] } = config;
 
@@ -129,8 +146,10 @@ module.exports = {
   treeForAddon(tree) {
     tree = this.debugTree(tree, 'addon-tree:input');
 
-    tree = this.filterComponents(tree);
-    tree = this.debugTree(tree, 'addon-tree:post-filter');
+    if (!this.isUsingEmbroider) {
+      tree = this.filterComponents(tree);
+      tree = this.debugTree(tree, 'addon-tree:post-filter');
+    }
 
     // Run super now, which processes and removes `.hbs`` template files.
     tree = this._super.treeForAddon.call(this, tree);
