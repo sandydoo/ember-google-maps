@@ -39,7 +39,7 @@ module.exports = {
         'tests/dummy/config/**/*.js',
         'build-tests/build-test.js',
         'build-tests/**/config/**/*.js',
-        'lib/broccoli/**/*.js',
+        'lib/**/*.js',
       ],
       excludedFiles: [
         'addon/**',
@@ -49,6 +49,7 @@ module.exports = {
         'tests/dummy/app/**',
       ],
       parserOptions: {
+        ecmaVersion: 2018,
         sourceType: 'script',
       },
       env: {
