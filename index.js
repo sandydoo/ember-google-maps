@@ -134,6 +134,7 @@ module.exports = {
 
     // Get “addons for this addon”™️
     Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
+    console.log(FOUND_GMAP_ADDONS);
   },
 
   config(env, config) {
@@ -158,18 +159,43 @@ module.exports = {
     return tree;
   },
 
-  // Don’t use `type === 'self'` in Embroider.
   setupPreprocessorRegistry(type, registry) {
-    if (type === 'parent') {
-      let canvasPlugin = this._canvasBuildPlugin();
-      registry.add('htmlbars-ast-plugin', canvasPlugin);
+    if (this.isUsingEmbroider) {
+      // `type === 'self'` seems kind of broken under Embroider. The good news
+      // is that we don’t need it — plugins are run on everything, so there’s no
+      // distinction between addon and app “trees”.
+      if (type === 'parent') {
+        this._setupCanvasPlugin(registry);
+        this._setupAddonPlugin(registry);
+        this._setupTreeshakerPlugin(registry);
+      }
+    } else {
+      // The canvas plugin should run on `self` and `parent`.
+      this._setupCanvasPlugin(registry);
 
-      let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
-      registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+      // The canvas plugin should run on `self` (for the in-repo addon test) and
+      // `parent`.
+      this._setupAddonPlugin(registry);
 
-      let treeshakerPlugin = this._treeshakerPlugin(PARAMS_FOR_TREESHAKER);
-      registry.add('htmlbars-ast-plugin', treeshakerPlugin);
+      if (type === 'self') {
+        this._setupTreeshakerPlugin(registry);
+      }
     }
+  },
+
+  _setupCanvasPlugin(registry) {
+    let canvasPlugin = this._canvasBuildPlugin();
+    registry.add('htmlbars-ast-plugin', canvasPlugin);
+  },
+
+  _setupAddonPlugin(registry) {
+    let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
+    registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+  },
+
+  _setupTreeshakerPlugin(registry) {
+    let treeshakerPlugin = this._treeshakerPlugin(PARAMS_FOR_TREESHAKER);
+    registry.add('htmlbars-ast-plugin', treeshakerPlugin);
   },
 
   _addonFactoryPlugin(addons = {}) {
