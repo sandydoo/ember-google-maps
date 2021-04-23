@@ -21,7 +21,6 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +41,6 @@ jobs:
   test-build:
     name: Build Tests
     runs-on: ubuntu-latest
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
