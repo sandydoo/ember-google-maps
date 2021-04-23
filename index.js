@@ -134,7 +134,6 @@ module.exports = {
 
     // Get “addons for this addon”™️
     Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
-    console.log(FOUND_GMAP_ADDONS);
   },
 
   config(env, config) {
