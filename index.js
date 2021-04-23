@@ -35,13 +35,22 @@ function toHash(obj) {
 // Copied from @embroider/test-setup. We use this to figure out when Embroider used as the build system.
 // https://github.com/embroider-build/embroider/blob/8b2c20d6dccb006c4cc51cb18504f5a489c948f2/packages/test-setup/src/index.ts#L98
 function shouldUseEmbroider(app) {
-  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'classic') {
-    return false;
-  }
-  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'embroider') {
+  if (isForcedEmbroider()) {
     return true;
   }
   return '@embroider/core' in app.dependencies();
+}
+
+function isForcedEmbroider() {
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'embroider') {
+    return true;
+  }
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'classic') {
+    return false;
+  }
+
+  // Our best guess is no.
+  return false;
 }
 
 module.exports = {
@@ -158,11 +167,33 @@ module.exports = {
     return tree;
   },
 
+  checkIfWillProbablyUseEmbroider() {
+    const pkg = this.project.pkg;
+
+    // Extra check for “classic” builds that need to run plugins on `self`. We
+    // need to know this before `init` and `included` are run, which is
+    // unfortunate.
+    if (
+      pkg &&
+      pkg.devDependencies &&
+      '@embroider/core' in pkg.devDependencies
+    ) {
+      return true;
+    }
+
+    if (isForcedEmbroider()) {
+      return true;
+    }
+
+    return false;
+  },
+
   setupPreprocessorRegistry(type, registry) {
-    if (this.isUsingEmbroider) {
-      // `type === 'self'` seems kind of broken under Embroider. The good news
+    if (this.checkIfWillProbablyUseEmbroider()) {
+      // `type === 'self'` seems kind of broken under Embroider. It doesn’t seem
+      // to pass plugins correctly to `broccoli-babel-transpiler`. The good news
       // is that we don’t need it — plugins are run on everything, so there’s no
-      // distinction between addon and app “trees”.
+      // more distinction between addon and app “trees”.
       if (type === 'parent') {
         this._setupCanvasPlugin(registry);
         this._setupAddonPlugin(registry);
@@ -172,11 +203,10 @@ module.exports = {
       // The canvas plugin should run on `self` and `parent`.
       this._setupCanvasPlugin(registry);
 
-      // The canvas plugin should run on `self` (for the in-repo addon test) and
-      // `parent`.
-      this._setupAddonPlugin(registry);
-
       if (type === 'self') {
+        // The addon plugin should run on `self`.
+        this._setupAddonPlugin(registry);
+
         this._setupTreeshakerPlugin(registry);
       }
     }
