@@ -11,7 +11,8 @@ module.exports = function (defaults) {
     },
 
     'ember-cli-babel': {
-      includePolyfill: true,
+      disablePresetEnv: false,
+      includePolyfill: false,
     },
 
     sassOptions: {
@@ -70,5 +71,6 @@ module.exports = function (defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
-  return app.toTree();
+  const { Webpack } = require('@embroider/webpack');
+  return require('@embroider/compat').compatBuild(app, Webpack);
 };

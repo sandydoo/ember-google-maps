@@ -26,8 +26,12 @@
     "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.13.12",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.5",
+    "@embroider/compat": "^0.39.1",
+    "@embroider/core": "^0.39.1",
+    "@embroider/webpack": "^0.39.1",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "babel-eslint": "^10.1.0",
