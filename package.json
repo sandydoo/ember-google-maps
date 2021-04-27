@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/sandydoo/ember-google-maps"
+    "url": "https://github.com/sandydoo/ember-google-maps.git"
   },
   "license": "MIT",
   "author": "Sander Melnikov <hey@sandydoo.me>",
@@ -89,6 +89,8 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "qunit-dom": "^1.6.0",
+    "release-it": "^14.6.1",
+    "release-it-lerna-changelog": "^3.1.0",
     "tracked-maps-and-sets": "^2.2.1"
   },
   "resolutions": {
@@ -109,6 +111,29 @@
     "paths": [
       "lib/in-repo-pin-addon"
     ]
+  },
+  "changelog": {
+    "labels": {
+      "breaking": ":boom: Breaking Change",
+      "enhancement": ":star: Features",
+      "bug": ":bug: Bug fixes",
+      "documentation": ":book: Documentation",
+      "internal": "Internal"
+    }
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true
+    }
   },
   "volta": {
     "node": "14.16.1",
