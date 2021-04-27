@@ -112,9 +112,12 @@
       "lib/in-repo-pin-addon"
     ]
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "changelog": {
     "labels": {
-      "breaking": ":boom: Breaking Change",
+      "breaking": ":boom: Breaking changes",
       "enhancement": ":star: Features",
       "bug": ":bug: Bug fixes",
       "documentation": ":book: Documentation",
@@ -132,7 +135,8 @@
       "tagName": "v${version}"
     },
     "github": {
-      "release": true
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
     }
   },
   "volta": {
