@@ -3,8 +3,8 @@ import { _backburner } from '@ember/runloop';
 import { registerDestructor } from '@ember/destroyable';
 
 /**
- * It’s been very clear since launch that Octane’s design doesn’t account for a
- * few important use-cases:
+ * It’s been clear since launch that Octane’s design doesn’t account for a few
+ * important use-cases:
  *
  * - Data with side-effects
  * - Side-effects
