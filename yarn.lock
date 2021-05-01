@@ -3955,6 +3955,22 @@ broccoli-funnel-reducer@^1.0.0:
   resolved "https://registry.yarnpkg.com/broccoli-funnel-reducer/-/broccoli-funnel-reducer-1.0.0.tgz#11365b2a785aec9b17972a36df87eef24c5cc0ea"
   integrity sha1-ETZbKnha7JsXlyo234fu8kxcwOo=
 
+broccoli-funnel@>=2.0.0:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/broccoli-funnel/-/broccoli-funnel-3.0.4.tgz#0fe6b7e8745fa4585f30470fbfe54653ce058e3c"
+  integrity sha512-6w0nhWvBeTnOQ0DGVM9mCvFN32duLbXxyE06qLFi9jcd0HwfODkQ0QMtvvuM60+i7pHa+JQ75MStWHpj1DIaoA==
+  dependencies:
+    array-equal "^1.0.0"
+    blank-object "^1.0.1"
+    broccoli-plugin "^4.0.1"
+    debug "^4.1.1"
+    fast-ordered-set "^1.0.0"
+    fs-tree-diff "^2.0.1"
+    heimdalljs "^0.2.0"
+    minimatch "^3.0.0"
+    path-posix "^1.0.0"
+    walk-sync "^2.0.2"
+
 broccoli-funnel@^1.0.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/broccoli-funnel/-/broccoli-funnel-1.2.0.tgz#cddc3afc5ff1685a8023488fff74ce6fb5a51296"
