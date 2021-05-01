@@ -1,5 +1,15 @@
 # Changelog
 
+## v4.0.0-beta.6 (2021-05-01)
+
+#### :bug: Bug fixes
+- [#103](https://github.com/sandydoo/ember-google-maps/pull/103) Fix runloop imports for older Ember versions ([@sandydoo](https://github.com/sandydoo))
+- [#104](https://github.com/sandydoo/ember-google-maps/pull/104) Fix builds for node@10 ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.5 (2021-04-23)
 
 ### 🐞 Bug fixes
