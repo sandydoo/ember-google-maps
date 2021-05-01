@@ -5,6 +5,9 @@
 # dependencies
 /bower_components/
 
+# docs
+/docs/
+
 # misc
 /.bowerrc
 /.editorconfig
@@ -19,11 +22,11 @@
 /.template-lintrc.js
 /.watchmanconfig
 /bower.json
+/jsconfig.json
 /config/ember-try.js
 /CONTRIBUTING.md
 /ember-cli-build.js
 /testem.js
-/docs/
 /build-tests/
 /tests/
 /yarn.lock
