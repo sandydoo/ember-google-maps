@@ -11,7 +11,6 @@ require('dotenv').config(dotenvConf);
 
 const log = (msg) => console.log(chalk.green(msg));
 const debug = (msg) => console.log(chalk.gray(msg));
-const warn = (msg) => console.log(chalk.red(msg));
 
 function prepareOptions(options = {}) {
   return Object.entries(options)
@@ -29,6 +28,7 @@ async function createApp(appName) {
   await app.create(appName, {
     emberVersion: url,
     fixturesPath: 'build-tests/fixtures/',
+    log: debug,
   });
 
   return app;
@@ -39,7 +39,7 @@ async function buildApp(app, options = {}) {
 
   let buildOptions = prepareOptions(options);
 
-  await app.run('ember', 'build', ...buildOptions, { log: debug });
+  await app.runEmberCommand('build', ...buildOptions, { log: debug });
 
   return app;
 }
@@ -53,8 +53,7 @@ async function testCI(app, options = {}) {
   debug(`Serving from: ${distPath}`);
 
   let testOptions = prepareOptions(options);
-  await app.run(
-    'ember',
+  await app.runEmberCommand(
     'test',
     ...testOptions,
     '--path',
@@ -68,14 +67,11 @@ async function testCI(app, options = {}) {
 }
 
 async function runTests() {
-  try {
-    let app = await createApp('treeshaking-test');
+  let app = await createApp('treeshaking-test');
 
-    await buildApp(app, { environment: 'test' });
-    await testCI(app);
-  } catch (error) {
-    warn(`Something went wrong. ${error.message}`);
-  }
+  await buildApp(app, { environment: 'test' });
+
+  await testCI(app);
 }
 
 runTests();
