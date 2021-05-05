@@ -18,7 +18,7 @@
       <ol>
         <li>We set the center of the map and the zoom level in the first line.</li>
         <li>We then set a bunch of map options: we modify the look of the map tiles with <var>styles</var>, disable the scroll wheel to force the feed to scroll down instead, and mess around with the map controls to achieve a minimalist look.</li>
-        <li>We use <var>onLoad</var> and <var>onBoundsChanged</var> events to fetch the current map bounds. We use these bounds to filter the random array of markers on the map. This filtered array is called <var>boundedLondonLocations</var>. This simulates loading external data when panning or zooming the map.</li>
+        <li>We use <var>onceOnIdle</var> and <var>onBoundsChanged</var> events to fetch the current map bounds. We use these bounds to filter the random array of markers on the map. This filtered array is called <var>boundedLondonLocations</var>. This simulates loading external data when panning or zooming the map.</li>
         <li>We use the <var>{{"{{each}}"}}</var> helper to loop over the locations and display an <var>overlay</var> with custom content at the given location coordinates. Inside the overlay, we render a custom, styled tooltip <var>div</var>, containing the price of the rental.</li>
         <li>The <var>onMouseover</var> and <var>onMouseleave</var> events modify the <var>active</var> property on the rental, which lets us animate the tooltip and the card in the feed. Finally, the <var>onClick</var> event receives the clicked rental and scrolls to its card in the feed.</li>
       </ol>

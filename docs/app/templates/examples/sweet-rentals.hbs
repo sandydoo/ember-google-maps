@@ -30,7 +30,7 @@
       @zoomControlOptions={{hash
         position=this.google.maps.ControlPosition.TOP_LEFT}}
       @fullscreenControl={{true}}
-      @onLoad={{this.saveBounds}}
+      @onceOnIdle={{this.saveBounds}}
       @onBoundsChanged={{this.saveBounds}} as |g|>
 
       {{#each this.filteredRentals key="id" as |rental index|}}

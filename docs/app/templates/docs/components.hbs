@@ -29,9 +29,13 @@
     <section>
       <h5>Accessing component instances</h5>
 
-      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – <LinkTo @route="docs.map"><var>g-map</var></LinkTo>. The parent map then provides a <var>publicAPI</var>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <var>onLoad</var> action, you can get access to this object once the map loads.</p>
+      <p>Since the Ember components are just light wrappers for the actual Google map classes, you may need access to the instances of the map components. Each map component automatically registers with the parent map component – <LinkTo @route="docs.map"><var>g-map</var></LinkTo>. The parent map then provides a <var>publicAPI</var>. This object contains the the map component instances that are accessible by the plural of the component name. Using the <var>onceOnIdle</var> action, you can get access to this object once the map loads.</p>
 
       <CodeSnippet @name="map-public-api.js" />
+
+      <CodeSnippet @name="map-once-on-idle.hbs" />
+
+      <CodeSnippet @name="handle-once-on-idle.js" />
     </section>
     <p>Learn more about what you can do with these components in the next section.</p>
     <LinkToNext @nextPage={{this.nextPage}} />
