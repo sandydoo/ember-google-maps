@@ -1,7 +1,9 @@
 const publicAPI = {
-  markers: [],
-  circles: [],
-  polylines: [],
-  infoWindows: [],
-  // ...
-}
+  components: {
+    markers: [],
+    circles: [],
+    polylines: [],
+    infoWindows: [],
+    // ...
+  },
+};
