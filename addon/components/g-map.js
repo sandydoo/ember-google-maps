@@ -49,12 +49,6 @@ export default class GMap extends MapComponent {
     google.maps.event.addListenerOnce(map, 'idle', () => {
       // Compatibility: You should use `idle` directly instead of this.
       this.events.onLoad?.(this.publicAPI);
-
-      // Compatibility: We don’t really track this anymore and I don’t think
-      // it’s that useful in Octane. You should either use `idle` or use a
-      // specific component event for things that happen asynchronously, for
-      // example, `onDirectionsChanged`.
-      this.events.onComponentsLoad?.(this.publicAPI);
     });
 
     return map;

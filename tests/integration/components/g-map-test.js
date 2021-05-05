@@ -116,29 +116,6 @@ module('Integration | Component | g map', function (hooks) {
     map.setZoom(10);
   });
 
-  test('it calls the `onComponentsLoad` hook when all the components are ready', async function (assert) {
-    assert.expect(2);
-
-    this.onComponentsLoad = ({ components }) => {
-      assert.ok('onComponentsLoad called');
-
-      let marker = components.markers?.[0]?.mapComponent?.getMap();
-
-      assert.ok(marker, 'The component is rendered on the map');
-    };
-
-    await render(hbs`
-      <GMap
-        @lat={{this.lat}}
-        @lng={{this.lng}}
-        @onComponentsLoad={{this.onComponentsLoad}} as |g|>
-
-        <g.marker @lat={{this.lat}} @lng={{this.lng}} />
-
-      </GMap>
-    `);
-  });
-
   test('it passes attributes to the default canvas', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
