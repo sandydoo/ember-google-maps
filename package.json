@@ -102,7 +102,8 @@
     "prember-sitemap-generator": "0.1.1",
     "prismjs": "^1.19.0",
     "qunit-dom": "^1.5.0",
-    "sass": "^1.23.7"
+    "sass": "^1.23.7",
+    "webpack": "^5.36.2"
   },
   "engines": {
     "node": "10.* || >= 12"
