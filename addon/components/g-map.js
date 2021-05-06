@@ -51,13 +51,6 @@ export default class GMap extends MapComponent {
       this.events.onLoad?.(this.publicAPI);
     });
 
-    return map;
-  }
-
-  update(map) {
-    map.setOptions(this.newOptions);
-
-    // Pause tests until map is in an idle state.
     if (DEBUG) {
       this.pauseTestForIdle(map);
     }
@@ -65,6 +58,17 @@ export default class GMap extends MapComponent {
     return map;
   }
 
+  update(map) {
+    map.setOptions(this.newOptions);
+
+    if (DEBUG) {
+      this.pauseTestForIdle(map);
+    }
+
+    return map;
+  }
+
+  // Pause tests until map is in an idle state.
   @waitFor
   async pauseTestForIdle(map) {
     await new Promise((resolve) => {
