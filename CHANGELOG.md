@@ -1,5 +1,24 @@
 # Changelog
 
+## v4.0.0-beta.7 (2021-05-06)
+
+#### :boom: Breaking changes
+* [#107](https://github.com/sandydoo/ember-google-maps/pull/107) Add `onceOn` events that fire only once ([@sandydoo](https://github.com/sandydoo))
+* [#106](https://github.com/sandydoo/ember-google-maps/pull/106) Remove `onComponentsLoad` hook ([@sandydoo](https://github.com/sandydoo))
+
+#### :star: Features
+* [#107](https://github.com/sandydoo/ember-google-maps/pull/107) Add `onceOn` events that fire only once ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#108](https://github.com/sandydoo/ember-google-maps/pull/108) Fix build errors when using both only and except lists to treeshake components ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#109](https://github.com/sandydoo/ember-google-maps/pull/109) Improve how we wait for the map in tests ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.6 (2021-05-01)
 
 #### :bug: Bug fixes
