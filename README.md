@@ -170,7 +170,7 @@ This software is not endorsed, maintained, or supported by Google LLC.
 [npm-url]: https://www.npmjs.org/package/ember-google-maps
 [npm-url-beta]: https://www.npmjs.com/package/ember-google-maps/v/beta
 
-[ci-badge]: https://github.com/sandydoo/ember-google-maps/workflows/CI/badge.svg
+[ci-badge]: https://github.com/sandydoo/ember-google-maps/workflows/CI/badge.svg?branch=main
 [ci-url]: https://github.com/sandydoo/ember-google-maps/actions?query=workflow%3ACI
 
 [ember-observer-badge]: https://emberobserver.com/badges/ember-google-maps.svg
