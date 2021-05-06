@@ -94,8 +94,8 @@ module.exports = {
     only = only.map(camelCase);
     except = except.map(camelCase);
 
-    let included = newIncludedList(only, except),
-      excluded = newExcludedList(only, except);
+    let included = newIncludedList(only, except);
+    let excluded = newExcludedList(only, except);
 
     if (this.isProduction) {
       excluded.push('warnMissingComponent');
