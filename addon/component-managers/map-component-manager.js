@@ -3,7 +3,9 @@ import { setOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { associateDestroyableChild, destroy } from '@ember/destroyable';
 import { assert } from '@ember/debug';
-import { waitFor } from '@ember/test-waiters';
+
+import { buildWaiter } from '@ember/test-waiters';
+let testWaiter = buildWaiter('ember-google-maps:map-component-waiter');
 
 import { OptionsAndEvents } from 'ember-google-maps/utils/options-and-events';
 import { setupEffect } from 'ember-google-maps/effects/tracking';
@@ -64,9 +66,10 @@ export class MapComponentManager {
     return component ?? {};
   }
 
-  @waitFor
   setupMapComponent(component) {
     assert('Implement new', component.new);
+
+    let token = testWaiter.beginAsync();
 
     let hasUpdate = typeof component.update === 'function';
 
@@ -86,6 +89,8 @@ export class MapComponentManager {
           component.update(mapComponent, component.options);
         }
 
+        testWaiter.endAsync(token);
+
         return trackThisInstead ?? mapComponent;
       });
     } else {
@@ -94,6 +99,8 @@ export class MapComponentManager {
 
         component.mapComponent = mapComponent;
 
+        testWaiter.endAsync(token);
+
         return mapComponent;
       });
     }
@@ -101,7 +108,6 @@ export class MapComponentManager {
     // Destroy effects when the component is destroyed.
     associateDestroyableChild(component, effect);
 
-    // Fix for @waitFor
-    return mapComponent ?? {};
+    return mapComponent;
   }
 }
