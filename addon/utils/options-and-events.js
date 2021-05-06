@@ -17,6 +17,14 @@ const IGNORED = Symbol('Ignored'),
   OPTIONS = Symbol('Options'),
   EVENTS = Symbol('Events');
 
+function isEvent(name) {
+  return name.startsWith('on');
+}
+
+function isOnceEvent(name) {
+  return name.startsWith('onceOn');
+}
+
 export class OptionsAndEvents {
   whosThatProp = new Map();
 
@@ -115,7 +123,7 @@ export class OptionsAndEvents {
   }
 
   isEvent(prop) {
-    return prop.slice(0, 2) === 'on';
+    return isOnceEvent(prop) || isEvent(prop);
   }
 
   isIgnored(prop) {
@@ -198,7 +206,20 @@ export function addEventListener(
   action,
   payload = {}
 ) {
-  let eventName = decamelize(originalEventName).slice(3);
+  let isDom = target instanceof Element;
+  let isOnce = isOnceEvent(originalEventName);
+
+  let maybeDom = isDom ? 'Dom' : '';
+  let maybeOnce = isOnce ? 'Once' : '';
+
+  let listenerType = `add${maybeDom}Listener${maybeOnce}`;
+  let addGoogleListener = google.maps.event[listenerType];
+
+  let eventName = isOnce
+    ? originalEventName.slice(6) // onceOn
+    : originalEventName.slice(2); // on
+
+  eventName = decamelize(eventName);
 
   function callback(googleEvent) {
     let params = {
@@ -211,11 +232,6 @@ export function addEventListener(
 
     next(target, action, params);
   }
-
-  let addGoogleListener =
-    target instanceof Element
-      ? google.maps.event.addDomListener
-      : google.maps.event.addListener;
 
   let listener = addGoogleListener(target, eventName, callback);
 

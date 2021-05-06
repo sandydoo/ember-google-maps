@@ -85,6 +85,28 @@ module('Integration | Component | g map', function (hooks) {
     map.setZoom(10);
   });
 
+  test('it supports events that trigger only once', async function (assert) {
+    assert.expect(1);
+
+    this.onLoad = ({ eventName }) => {
+      assert.equal(eventName, 'idle', 'map loaded and idle');
+    };
+
+    await render(hbs`
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @zoom={{12}}
+        @onceOnIdle={{this.onLoad}} />
+    `);
+
+    let { map } = await this.waitForMap();
+
+    map.panBy(250, 250);
+
+    await this.waitForMap();
+  });
+
   test('it accepts both an events hash and individual attribute events', async function (assert) {
     assert.expect(2);
 

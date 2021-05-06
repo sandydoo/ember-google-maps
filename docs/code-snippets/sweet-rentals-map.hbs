@@ -10,7 +10,7 @@
   @zoomControlOptions={{hash
     position=this.google.maps.ControlPosition.TOP_LEFT}}
   @fullscreenControl={{true}}
-  @onLoad={{this.saveBounds}}
+  @onceOnIdle={{this.saveBounds}}
   @onBoundsChanged={{this.saveBounds}}
   class="ember-google-map-cover" as |map|>
 
