@@ -9,8 +9,10 @@ const getURLFor = require('ember-source-channel-url');
 const dotenvConf = require('../config/dotenv')('development');
 require('dotenv').config(dotenvConf);
 
-const log = (msg) => console.log(chalk.green(msg));
-const debug = (msg) => console.log(chalk.gray(msg));
+const log = (...msgs) =>
+  console.log(...msgs.map((msg) => chalk.green(msg.trim())));
+const debug = (...msgs) =>
+  console.log(...msgs.map((msg) => chalk.gray(msg.trim())));
 
 function prepareOptions(options = {}) {
   return Object.entries(options)
@@ -27,6 +29,7 @@ async function createApp(appName) {
 
   await app.create(appName, {
     emberVersion: url,
+    emberDataVersion: 'latest', // By default, ember-cli-addon-tests hardcodes ~3.8 -_-
     fixturesPath: 'build-tests/fixtures/',
     log: debug,
   });
@@ -37,8 +40,10 @@ async function createApp(appName) {
 async function buildApp(app, options = {}) {
   log('Building app...');
 
-  let buildOptions = prepareOptions(options);
+  let emberVersion = await app.runEmberCommand('version');
+  log(...emberVersion.output);
 
+  let buildOptions = prepareOptions(options);
   await app.runEmberCommand('build', ...buildOptions, { log: debug });
 
   return app;
