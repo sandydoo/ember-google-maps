@@ -19,7 +19,7 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 >
 > If you use ember-google-maps in your commercial work or find it valuable, consider leaving a donation to support on-going maintenance.
 >
-> [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P8242XD)
+> [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/sandydoo)
 >
 > Thank you! 🙌🙌🙌\
 > — @sandydoo

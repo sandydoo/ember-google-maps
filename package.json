@@ -22,6 +22,10 @@
     "test": "tests"
   },
   "homepage": "https://ember-google-maps.sandydoo.me",
+  "funding": {
+    "type" : "individual",
+    "url" : "https://ko-fi.com/sandydoo"
+  },
   "scripts": {
     "build": "ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
