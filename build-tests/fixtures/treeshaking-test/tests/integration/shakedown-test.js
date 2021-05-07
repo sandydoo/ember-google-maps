@@ -1,20 +1,10 @@
 import { module, test } from 'qunit';
-import {
-  find,
-  render,
-  resetOnerror,
-  setupOnerror,
-  waitFor,
-} from '@ember/test-helpers';
+import { find, render, waitFor } from '@ember/test-helpers';
 import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Treeshaking', function (hooks) {
   setupRenderingTest(hooks);
-
-  hooks.afterEach(() => {
-    resetOnerror();
-  });
 
   test('shakedown test of map', async function (assert) {
     await render(hbs`
@@ -38,22 +28,29 @@ module('Integration | Treeshaking', function (hooks) {
   });
 
   test('missing component test', async function (assert) {
-    let expectedError = /Ember Google Maps couldn't find a map component called "circle"!/;
-
-    setupOnerror(function (error) {
-      if (expectedError.test(error.message)) {
-        assert.ok('missing component assertion thrown');
-      }
-    });
-
     assert.expect(1);
 
-    // Shame try/catch doesn't work on this. Would have been great!
+    let originalConsoleWarn = console.warn;
+
+    let expectedError = /^Ember Google Maps couldn't find a map component called "circle"!$/m;
+
+    console.warn = (...messages) => {
+      messages.forEach((message) => {
+        if (expectedError.test(message)) {
+          assert.ok('missing component assertion thrown');
+        }
+
+        originalConsoleWarn(message);
+      });
+    };
+
     await render(hbs`
       <GMap @lat="51.507568" @lng="-0.127762" as |g|>
         {{!-- Should throw error --}}
         {{g.circle}}
       </GMap>
     `);
+
+    console.warn = originalConsoleWarn;
   });
 });
