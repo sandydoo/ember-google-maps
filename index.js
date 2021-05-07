@@ -103,7 +103,7 @@ module.exports = {
 
     // Include the base map components and any dependencies
     if (included.length) {
-      included.push('canvas', 'mapComponent');
+      included.push('gMap', 'canvas', 'mapComponent');
 
       if (this.isDevelopment) {
         included.push('warnMissingComponent');
