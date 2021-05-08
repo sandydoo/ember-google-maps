@@ -36,7 +36,8 @@ module('Integration | Treeshaking', function (hooks) {
 
     console.warn = (...messages) => {
       messages.forEach((message) => {
-        if (expectedError.test(message)) {
+        let messageText = message.text ?? message;
+        if (expectedError.test(messageText)) {
           assert.ok('missing component assertion thrown');
         }
 
