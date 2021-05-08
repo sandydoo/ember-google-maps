@@ -1,5 +1,20 @@
 # Changelog
 
+## v4.0.0-beta.8 (2021-05-08)
+
+#### :boom: Breaking changes
+* [#111](https://github.com/sandydoo/ember-google-maps/pull/111) Deprecate the `onLoad` event ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#110](https://github.com/sandydoo/ember-google-maps/pull/110) Fix build tests ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#110](https://github.com/sandydoo/ember-google-maps/pull/110) Fix build tests ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.7 (2021-05-06)
 
 #### :boom: Breaking changes
