@@ -57,12 +57,6 @@ export default class MapComponent {
 
   new() {}
 
-  updateCommon(mapComponent) {
-    mapComponent?.setOptions?.(this.newOptions);
-
-    return mapComponent;
-  }
-
   teardown(mapComponent) {
     this.boundEvents.forEach(({ remove }) => remove());
 

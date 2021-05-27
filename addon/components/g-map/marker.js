@@ -1,7 +1,7 @@
-import MapComponent from './map-component';
+import TypicalMapComponent from './typical-map-component';
 import { toLatLng } from '../../utils/helpers';
 
-export default class Marker extends MapComponent {
+export default class Marker extends TypicalMapComponent {
   get name() {
     return 'markers';
   }
@@ -12,17 +12,7 @@ export default class Marker extends MapComponent {
     return this.options;
   }
 
-  new(options, events) {
-    let marker = new google.maps.Marker(this.newOptions);
-
-    this.addEventsToMapComponent(marker, events, this.publicAPI);
-
-    marker.setMap(this.map);
-
-    return marker;
-  }
-
-  update(...args) {
-    return super.updateCommon(...args);
+  fresh(options = {}) {
+    return new google.maps.Marker(options);
   }
 }
