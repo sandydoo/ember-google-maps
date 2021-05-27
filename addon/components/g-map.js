@@ -8,6 +8,20 @@ import { waitFor } from '@ember/test-waiters';
 import { DEBUG } from '@glimmer/env';
 import { deprecate } from '@ember/debug';
 
+/**
+ * Pause tests until the map is in an idle state.
+ * This function is removed from production builds.
+ */
+let pauseTestForIdle = () => {};
+
+if (DEBUG) {
+  pauseTestForIdle = waitFor(async function (map) {
+    await new Promise((resolve) => {
+      google.maps.event.addListenerOnce(map, 'idle', () => resolve(map));
+    });
+  });
+}
+
 function GMapPublicAPI(source) {
   return {
     get map() {
@@ -77,7 +91,7 @@ export default class GMap extends MapComponent {
     }
 
     if (DEBUG) {
-      this.pauseTestForIdle(map);
+      pauseTestForIdle(map);
     }
 
     return map;
@@ -87,18 +101,10 @@ export default class GMap extends MapComponent {
     map.setOptions(this.newOptions);
 
     if (DEBUG) {
-      this.pauseTestForIdle(map);
+      pauseTestForIdle(map);
     }
 
     return map;
-  }
-
-  // Pause tests until map is in an idle state.
-  @waitFor
-  async pauseTestForIdle(map) {
-    await new Promise((resolve) => {
-      google.maps.event.addListenerOnce(map, 'idle', () => resolve(map));
-    });
   }
 
   @action
