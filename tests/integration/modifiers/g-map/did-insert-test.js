@@ -3,13 +3,20 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Modifier | g-map/did-insert', function(hooks) {
+module('Integration | Modifier | g-map/did-insert', function (hooks) {
   setupRenderingTest(hooks);
 
-  // Replace this with your real tests.
-  test('it renders', async function(assert) {
-    await render(hbs`<div {{g-map/did-insert}}></div>`);
+  test('it works', async function (assert) {
+    assert.expect(3);
 
-    assert.ok(true);
+    this.onDidInsert = (element, positional, named) => {
+      assert.ok(element instanceof Element, 'passes the element');
+      assert.equal(positional.length, 1, 'passes positional args');
+      assert.equal(Object.keys(named).length, 1, 'passes named args');
+    };
+
+    await render(hbs`
+      <div {{g-map/did-insert this.onDidInsert "positonal arg" oneMoreThing="named arg" }}></div>
+    `);
   });
 });
