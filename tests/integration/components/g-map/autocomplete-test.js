@@ -41,7 +41,7 @@ module('Integration | Component | g map/autocomplete', function (hooks) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.autocomplete as |autocomplete|>
-          <input {{did-insert autocomplete.setup}} />
+          <input {{g-map/did-insert autocomplete.setup}} />
         </g.autocomplete>
       </GMap>
     `);
