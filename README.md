@@ -13,11 +13,11 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
 
 <br>
 
-> #### Thanks for checking out the addon!
+> #### Thanks for using the addon!
 >
 > ember-google-maps is over 3 years old now. In that time, I’ve completely rewritten it multiple times over to support changes in both Ember and Google Maps. I’d love to keep working on this addon in my free time, but could use your support.
 >
-> If you use ember-google-maps in your commercial work or find it valuable, consider leaving a donation to support on-going maintenance.
+> If you use ember-google-maps in your commercial work or find it valuable, consider leaving a donation to support on-going maintenance and API costs.
 >
 > [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/sandydoo)
 >
