@@ -67,7 +67,10 @@ export class MapComponentManager {
   }
 
   setupMapComponent(component) {
-    assert('Implement new', component.new);
+    assert(
+      'Each map component needs to have a `setup` method.',
+      component.setup
+    );
 
     let token = testWaiter.beginAsync();
 
@@ -78,7 +81,7 @@ export class MapComponentManager {
     if (hasUpdate) {
       effect = setupEffect(() => {
         if (mapComponent === undefined) {
-          mapComponent = component.new(component.options, component.events);
+          mapComponent = component.setup(component.options, component.events);
 
           if (mapComponent.length) {
             [mapComponent, trackThisInstead] = mapComponent;
@@ -95,7 +98,7 @@ export class MapComponentManager {
       });
     } else {
       effect = setupEffect(() => {
-        mapComponent = component.new(component.options, component.events);
+        mapComponent = component.setup(component.options, component.events);
 
         component.mapComponent = mapComponent;
 

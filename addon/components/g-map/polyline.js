@@ -5,7 +5,7 @@ export default class Polyline extends TypicalMapComponent {
     return 'polylines';
   }
 
-  fresh(options = {}) {
+  newMapComponent(options = {}) {
     return new google.maps.Polyline(options);
   }
 }

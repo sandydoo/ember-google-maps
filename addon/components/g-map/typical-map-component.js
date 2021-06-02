@@ -5,8 +5,8 @@ export default class TypicalMapComponent extends MapComponent {
     return this.options;
   }
 
-  new() {
-    let mapComponent = this.fresh(this.newOptions);
+  setup() {
+    let mapComponent = this.newMapComponent(this.newOptions);
 
     this.addEventsToMapComponent(mapComponent, this.events, this.publicAPI);
 

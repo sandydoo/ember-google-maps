@@ -51,11 +51,7 @@ export default class MapComponent {
     this.register();
   }
 
-  get newOptions() {
-    return this.options;
-  }
-
-  new() {}
+  setup() {}
 
   teardown(mapComponent) {
     this.boundEvents.forEach(({ remove }) => remove());
@@ -73,9 +69,11 @@ export default class MapComponent {
   /* Events */
 
   addEventsToMapComponent(mapComponent, events = {}, payload = {}) {
-    assert('You need to pass in a component', mapComponent);
+    assert('You need to pass in a map component', mapComponent);
 
-    this.boundEvents.concat(addEventListeners(mapComponent, events, payload));
+    let boundEvents = addEventListeners(mapComponent, events, payload);
+
+    this.boundEvents.concat(boundEvents);
   }
 }
 

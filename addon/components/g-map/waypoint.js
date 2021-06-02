@@ -19,16 +19,16 @@ export default class Waypoint extends MapComponent {
     return WaypointAPI(this);
   }
 
-  new() {
+  register() {
+    this.onTeardown = this.args.getContext(this.publicAPI);
+  }
+
+  setup() {
     return this.publicAPI;
   }
 
   // Removes the waypoint from the directions component.
   teardown() {
     this.onTeardown();
-  }
-
-  register() {
-    this.onTeardown = this.args.getContext(this.publicAPI);
   }
 }

@@ -13,7 +13,7 @@ export default class Route extends TypicalMapComponent {
     return this.options;
   }
 
-  fresh(options = {}) {
+  newMapComponent(options = {}) {
     return new google.maps.DirectionsRenderer(options);
   }
 }

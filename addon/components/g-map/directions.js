@@ -55,7 +55,7 @@ export default class Directions extends MapComponent {
     };
   }
 
-  new() {
+  setup() {
     this.directions = null;
 
     return this.route(this.newOptions)

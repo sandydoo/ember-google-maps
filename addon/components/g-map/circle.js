@@ -13,7 +13,7 @@ export default class Circle extends Marker {
     return this.options;
   }
 
-  fresh(options = {}) {
+  newMapComponent(options = {}) {
     return new google.maps.Circle(options);
   }
 }

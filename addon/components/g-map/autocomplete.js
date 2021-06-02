@@ -10,7 +10,7 @@ export default class Autocomplete extends MapComponent {
     return 'autocompletes';
   }
 
-  new(options, events) {
+  setup(options, events) {
     assert(
       `
 ember-google-maps: No input found for autocomplete.
@@ -45,8 +45,10 @@ Did you mean to use the block form? You can also do the following:
     return autocomplete;
   }
 
-  update(...args) {
-    return super.updateCommon(...args);
+  update(mapComponent) {
+    mapComponent?.setOptions?.(this.newOptions);
+
+    return mapComponent;
   }
 
   @action

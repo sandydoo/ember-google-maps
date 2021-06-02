@@ -13,7 +13,7 @@ export default class Control extends MapComponent {
     return 'controls';
   }
 
-  new(options) {
+  setup(options) {
     // TODO: Support an existing control position
     let position = google.maps.ControlPosition[options.position];
 

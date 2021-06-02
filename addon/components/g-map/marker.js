@@ -12,7 +12,7 @@ export default class Marker extends TypicalMapComponent {
     return this.options;
   }
 
-  fresh(options = {}) {
+  newMapComponent(options = {}) {
     return new google.maps.Marker(options);
   }
 }
