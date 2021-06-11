@@ -1,5 +1,20 @@
 # Changelog
 
+## v4.0.0-beta.9 (2021-06-11)
+
+#### :boom: Breaking changes
+* [#115](https://github.com/sandydoo/ember-google-maps/pull/115) Drop IE11 as a target ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#112](https://github.com/sandydoo/ember-google-maps/pull/112) Fix modifier manager capabilities deprecation ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#113](https://github.com/sandydoo/ember-google-maps/pull/113) Fix test waiter deprecations in CI logs ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.8 (2021-05-08)
 
 #### :boom: Breaking changes
