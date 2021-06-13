@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { Promise, reject } from 'rsvp';
 import { didCancel, keepLatestTask } from 'ember-concurrency';
-import { TrackedSet } from 'tracked-maps-and-sets';
+import { TrackedSet } from '@sandydoo/tracked-maps-and-sets';
 import { waitFor } from '@ember/test-waiters';
 
 export function DirectionsAPI(source) {

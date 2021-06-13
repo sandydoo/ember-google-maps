@@ -1,7 +1,7 @@
 import ApplicationController from './application';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { TrackedMap } from 'tracked-maps-and-sets';
+import { TrackedMap } from '@sandydoo/tracked-maps-and-sets';
 import darkStyle from '../map-styles/dark';
 import lightStyle from '../map-styles/light';
 
