@@ -41,6 +41,7 @@
     "test:build": "node build-tests/build-test"
   },
   "dependencies": {
+    "@sandydoo/tracked-maps-and-sets": "^2.2.2",
     "babel-plugin-ember-modules-api-polyfill": ">=3.5.0",
     "broccoli-debug": "^0.6.5",
     "broccoli-funnel": ">=2.0.0",
@@ -50,8 +51,7 @@
     "ember-cli-htmlbars": "^5.3.2",
     "ember-concurrency": "^2.0.0",
     "ember-in-element-polyfill": "^1.0.0",
-    "ember-modifier": "^2.1.2",
-    "tracked-toolbox": "^1.2.2"
+    "ember-modifier": "^2.1.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-logical-assignment-operators": "^7.13.8",
@@ -95,8 +95,7 @@
     "qunit": "^2.16.0",
     "qunit-dom": "^1.6.0",
     "release-it": "^14.6.1",
-    "release-it-lerna-changelog": "^3.1.0",
-    "tracked-maps-and-sets": "^2.2.1"
+    "release-it-lerna-changelog": "^3.1.0"
   },
   "resolutions": {
     "qunit": "~2.11.0"
