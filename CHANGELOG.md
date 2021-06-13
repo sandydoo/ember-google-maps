@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.0.0-beta.10 (2021-06-13)
+
+#### :bug: Bug fixes
+* [#116](https://github.com/sandydoo/ember-google-maps/pull/116) Temporarily switch to a patched version of `tracked-maps-and-sets` ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.9 (2021-06-11)
 
 #### :boom: Breaking changes
