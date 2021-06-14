@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.0.1 (2021-06-14)
+
+Update the README with the new supported versions of the addon.
+
+
 ## v4.0.0 (2021-06-14)
 
 First stable release of the 4.0 beta cycle! 🎉
