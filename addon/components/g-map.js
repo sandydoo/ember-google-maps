@@ -42,7 +42,7 @@ export default class GMap extends MapComponent {
 
   // TODO: What if canvas is conditional? Render helpers? Promise? Force a
   // visible canvas?
-  new(options, events) {
+  setup(options, events) {
     let map = new google.maps.Map(this.canvas, this.newOptions);
 
     this.addEventsToMapComponent(map, events, this.publicAPI);

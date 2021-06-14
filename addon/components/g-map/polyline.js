@@ -1,21 +1,11 @@
-import MapComponent from './map-component';
+import TypicalMapComponent from './typical-map-component';
 
-export default class Polyline extends MapComponent {
+export default class Polyline extends TypicalMapComponent {
   get name() {
     return 'polylines';
   }
 
-  new(options, events) {
-    let polyline = new google.maps.Polyline(options);
-
-    this.addEventsToMapComponent(polyline, events, this.publicAPI);
-
-    polyline.setMap(this.context.map);
-
-    return polyline;
-  }
-
-  update(...args) {
-    return super.updateCommon(...args);
+  newMapComponent(options = {}) {
+    return new google.maps.Polyline(options);
   }
 }

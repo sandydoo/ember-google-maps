@@ -34,7 +34,7 @@ export default class InfoWindow extends MapComponent {
     return options;
   }
 
-  new() {
+  setup() {
     let infoWindow = new google.maps.InfoWindow(this.newOptions);
 
     // This is kind of annoying. Maybe we can refactor stuff to not use `this`.

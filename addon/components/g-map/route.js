@@ -1,6 +1,6 @@
-import MapComponent from './map-component';
+import TypicalMapComponent from './typical-map-component';
 
-export default class Route extends MapComponent {
+export default class Route extends TypicalMapComponent {
   get name() {
     return 'routes';
   }
@@ -13,17 +13,7 @@ export default class Route extends MapComponent {
     return this.options;
   }
 
-  new(options, events) {
-    let route = new google.maps.DirectionsRenderer(this.newOptions);
-
-    this.addEventsToMapComponent(route, events, this.publicAPI);
-
-    route.setMap(this.map);
-
-    return route;
-  }
-
-  update() {
-    this.updateCommon(...arguments);
+  newMapComponent(options = {}) {
+    return new google.maps.DirectionsRenderer(options);
   }
 }

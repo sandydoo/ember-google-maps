@@ -29,7 +29,7 @@ export default class OverlayView extends MapComponent {
     return position ?? toLatLng(lat, lng);
   }
 
-  new() {
+  setup() {
     let Overlay = new google.maps.OverlayView();
 
     Overlay.onAdd = () => this.onAdd();
