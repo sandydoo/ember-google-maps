@@ -1,7 +1,7 @@
 # Ember Google Maps
 
 [![Latest version][npm-version-badge]][npm-url]
-[![Beta version][npm-beta-version-badge]][npm-url-beta]
+[![Classic version][npm-classic-version-badge]][npm-classic-url]
 [![npm][npm-downloads-badge]][npm-url]
 [![Ember Observer Score][ember-observer-badge]][ember-observer-url]
 [![Build Status][ci-badge]][ci-url]
@@ -82,14 +82,14 @@ ember install ember-google-maps
 🔗 Compatibility
 --------------------------------------------------------------------------------
 
-### [![Beta version][npm-beta-version-badge]][npm-url-beta]
+### [![Latest version][npm-version-badge]][npm-url]
   - Ember.js v3.16 or above
   - Ember CLI v3.16 or above
   - Node.js v10 or above
 
-<!-- TODO: Update links when 4.0 is released -->
-### [![Latest version][npm-version-badge]][npm-url]
-  - Ember.js v2.18 or above
+### [![Classic version][npm-classic-version-badge]][npm-classic-url]
+  Anything outside this range isn't officially supported. Your mileage may vary. Things _might_ work, but Ember will definitely throw lots of errors and warnings at you.
+  - v2.18 <= Ember.js <= v3.25
   - Ember CLI v3.11 or above
   - Node.js v10 or above
 
@@ -165,10 +165,10 @@ This software is not endorsed, maintained, or supported by Google LLC.
 
 
 [npm-version-badge]: https://img.shields.io/npm/v/ember-google-maps.svg?label=latest
-[npm-beta-version-badge]: https://img.shields.io/npm/v/ember-google-maps/beta.svg?label=beta
+[npm-classic-version-badge]: https://img.shields.io/npm/v/ember-google-maps/classic.svg?label=classic&color=gray
 [npm-downloads-badge]: https://img.shields.io/npm/dm/ember-google-maps
 [npm-url]: https://www.npmjs.org/package/ember-google-maps
-[npm-url-beta]: https://www.npmjs.com/package/ember-google-maps/v/beta
+[npm-classic-url]: https://www.npmjs.com/package/ember-google-maps/v/classic
 
 [ci-badge]: https://github.com/sandydoo/ember-google-maps/workflows/CI/badge.svg?branch=main
 [ci-url]: https://github.com/sandydoo/ember-google-maps/actions?query=workflow%3ACI
