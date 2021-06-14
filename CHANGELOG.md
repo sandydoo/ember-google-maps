@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.0 (2021-06-14)
+
+First stable release of the 4.0 beta cycle! 🎉
+
+#### Internal
+* [#117](https://github.com/sandydoo/ember-google-maps/pull/117) Extract the common map component setup pattern into a new class ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.0-beta.10 (2021-06-13)
 
 #### :bug: Bug fixes
