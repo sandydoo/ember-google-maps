@@ -15,17 +15,24 @@ module.exports = function (defaults) {
       includePolyfill: false,
     },
 
-    sassOptions: {
-      precision: 10,
-      onlyIncluded: true,
-      includePaths: ['app/styles', 'node_modules/bootstrap/scss'],
-    },
-
-    minifyCSS: {
-      options: {
-        // Don't break Bootstrap with css mangling.
-        // Remove for clean-css 4.0
-        advanced: false,
+    postcssOptions: {
+      compile: {
+        enabled: true,
+        cacheInclude: [/.*\.(css|scss)$/, /.tailwind\.js$/],
+        plugins: [
+          {
+            module: require('tailwindcss'),
+            options: { config: './config/tailwind.config.js' },
+          },
+        ],
+      },
+      filter: {
+        enabled: true,
+        plugins: [
+          {
+            module: require('autoprefixer'),
+          },
+        ],
       },
     },
 
