@@ -10,6 +10,18 @@ module('Integration | Component | g map', function (hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
+  test('it renders without any coordinates or options', async function (assert) {
+    // Google Maps considers all options optional, so this should just render a
+    // gray square and not throw any errors.
+    await render(hbs`
+      <GMap />
+    `);
+
+    let api = await this.waitForMap();
+
+    assert.ok(api.map);
+  });
+
   test('it renders a map', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} />
