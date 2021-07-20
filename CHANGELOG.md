@@ -1,5 +1,18 @@
 # Changelog
 
+## v4.1.0 (2021-07-20)
+
+#### :star: Features
+* [#118](https://github.com/sandydoo/ember-google-maps/pull/118) Add rectangle component ([@sandydoo](https://github.com/sandydoo))
+* [#119](https://github.com/sandydoo/ember-google-maps/pull/119) Add polygon component ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#121](https://github.com/sandydoo/ember-google-maps/pull/121) Don't error out when setting an undefined option ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.0.1 (2021-06-14)
 
 Update the README with the new supported versions of the addon.
