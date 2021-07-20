@@ -142,15 +142,15 @@ class ArgsProxyHandler {
     return this.setCache.get(prop) ?? this.getFromArgs(prop);
   }
 
-  // TODO: Google Maps like to set default stuff. Check how this is going to
-  // work.
   set(_target, prop, value) {
     if (value !== undefined) {
       this.setCache.set(prop, value);
-      return value;
     } else {
       this.setCache.delete(prop);
     }
+
+    // Never fail to set a value
+    return true;
   }
 
   has(_target, prop) {
