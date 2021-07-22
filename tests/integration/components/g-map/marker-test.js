@@ -63,4 +63,30 @@ module('Integration | Component | g map/marker', function (hooks) {
 
     assert.equal(marker.draggable, true);
   });
+
+  test('it unregisters a marker on teardown', async function (assert) {
+    assert.expect(2);
+
+    this.set('showMarker', true);
+
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        {{#if this.showMarker}}
+          <g.marker @lat={{this.lat}} @lng={{this.lng}} @draggable={{true}} />
+        {{/if}}
+      </GMap>
+    `);
+
+    let {
+      components: { markers },
+    } = await this.waitForMap();
+
+    assert.equal(markers.length, 1, 'marker registered');
+
+    this.set('showMarker', false);
+    await this.waitForMap();
+
+    // This tests makes sure that the markers array is updated.
+    assert.equal(markers.length, 0, 'marker unregistered');
+  });
 });
