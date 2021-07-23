@@ -15,7 +15,7 @@ function GMapPublicAPI(source) {
     },
 
     get components() {
-      return source.components;
+      return source.deprecatedPublicComponents;
     },
   };
 }
@@ -23,7 +23,7 @@ function GMapPublicAPI(source) {
 export default class GMap extends MapComponent {
   @tracked canvas;
 
-  components = {};
+  components = new Set();
 
   get publicAPI() {
     return GMapPublicAPI(this);
@@ -106,15 +106,42 @@ export default class GMap extends MapComponent {
     this.canvas = canvas;
   }
 
-  // TODO: Return remove function
   @action
   getComponent(component, as = 'other') {
-    let components = this.components[as] ?? [];
+    let storedComponent = { component, as };
+    this.components.add(storedComponent);
 
-    components.push(component);
+    this.addToDeprecatedPublicComponents(storedComponent);
 
-    this.components[as] ??= components;
+    return {
+      context: this.publicAPI,
+      remove: () => {
+        this.components.delete(storedComponent);
+        this.removeFromDeprecatedPublicComponents(storedComponent);
+      },
+    };
+  }
 
-    return this.publicAPI;
+  // TODO Deprecate access to this and replace with API methods.
+  deprecatedPublicComponents = {};
+
+  addToDeprecatedPublicComponents({ as, component }) {
+    if (!(as in this.deprecatedPublicComponents)) {
+      this.deprecatedPublicComponents[as] = [];
+    }
+
+    this.deprecatedPublicComponents[as].push(component);
+  }
+
+  removeFromDeprecatedPublicComponents({ as, component }) {
+    let group = this.deprecatedPublicComponents[as];
+    let index = group.indexOf(component);
+
+    if (index > -1) {
+      group.splice(index, 1);
+    }
+
+    // For backwards compatibility, we don't remove the groups when they're
+    // empty.
   }
 }

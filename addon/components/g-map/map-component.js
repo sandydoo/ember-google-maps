@@ -60,10 +60,17 @@ export default class MapComponent {
     if (mapComponent) {
       mapComponent.setMap?.(null);
     }
+
+    // Unregister from the parent component
+    this.onTeardown?.();
   }
 
   register() {
-    this.context = this.args.getContext?.(this.publicAPI, this.name);
+    if (typeof this.args.getContext === 'function') {
+      let { context, remove } = this.args.getContext(this.publicAPI, this.name);
+      this.context = context;
+      this.onTeardown = remove;
+    }
   }
 
   /* Events */
