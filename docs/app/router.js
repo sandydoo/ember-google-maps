@@ -15,7 +15,7 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('docs', { path: '/*path' });
+  this.route('not-found', { path: '/*path' });
 
   this.route('index', { path: '/' });
 
