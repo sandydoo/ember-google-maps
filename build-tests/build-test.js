@@ -72,7 +72,7 @@ async function testCI(app, options = {}) {
 }
 
 async function runTests() {
-  let app = await createApp('treeshaking-test');
+  let app = await createApp('compilation-test');
 
   await buildApp(app, { environment: 'test' });
 

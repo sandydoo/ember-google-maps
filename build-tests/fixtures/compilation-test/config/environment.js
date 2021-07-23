@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'treeshaking-test',
+    modulePrefix: 'compilation-test',
     environment,
     rootURL: '/',
     locationType: 'auto',
