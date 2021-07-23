@@ -10,6 +10,18 @@ module.exports = function (defaults) {
         // to the component helper.
         customMarker: 'the-name-of-the-component-to-use',
       },
+      // An optional function to let you merge custom components declared by
+      // other addons. This shouldn't be necessary in most cases, unless there
+      // is a naming conflict.
+      mergeCustomComponents(componentsByAddonName) {
+        let components = {};
+
+        for (([addonName, customComponents] of componentsByAddonName)) {
+          Object.assign(components, customComponents);
+        }
+
+        return components;
+      }
     },
   });
 
