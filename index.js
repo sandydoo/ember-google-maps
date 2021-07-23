@@ -82,6 +82,8 @@ module.exports = {
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
+    this.customComponents = config.customComponents;
+
     // Treeshaking setup
 
     // Don’t manipulate the broccoli trees when using Embroider. Things will
@@ -291,8 +293,9 @@ module.exports = {
 
   getAddonsFromProject(project) {
     const AddonRegistry = require('./lib/addons/registry');
+    let componentsFromAddons = new AddonRegistry(project).components;
 
-    return new AddonRegistry(project).components;
+    return Object.assign({}, componentsFromAddons, this.customComponents);
   },
 
   filterComponents(tree) {

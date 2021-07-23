@@ -7,6 +7,9 @@ module.exports = function (defaults) {
   let options = {
     'ember-google-maps': {
       only: ['marker', 'info-window'],
+      customComponents: {
+        customMarker: 'custom-marker',
+      },
     },
   };
 
