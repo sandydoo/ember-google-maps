@@ -58,7 +58,7 @@ async function testCI(app, options = {}) {
   debug(`Serving from: ${distPath}`);
 
   let testOptions = prepareOptions(options);
-  await app.runEmberCommand(
+  let testResults = await app.runEmberCommand(
     'test',
     ...testOptions,
     '--path',
@@ -68,15 +68,17 @@ async function testCI(app, options = {}) {
     { log: console.log }
   );
 
-  return app;
+  return testResults;
 }
 
 async function runTests() {
-  let app = await createApp('treeshaking-test');
+  let app = await createApp('compilation-test');
 
   await buildApp(app, { environment: 'test' });
 
-  await testCI(app);
+  let testResults = await testCI(app);
+
+  return testResults;
 }
 
 runTests();

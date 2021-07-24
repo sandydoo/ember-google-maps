@@ -7,14 +7,16 @@ const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 const { createHash } = require('crypto');
+const _ = require('lodash');
 
 const {
   newIncludedList,
   newExcludedList,
-  newExcludeName,
   newExcludeComponent,
   skipTreeshaking,
 } = require('./lib/treeshaking');
+
+const CustomComponents = require('./lib/addons/custom-components');
 
 let dependencies = {
   circle: ['marker'],
@@ -53,6 +55,10 @@ function isForcedEmbroider() {
   return false;
 }
 
+function getCustomComponentsFromOptions(options) {
+  return _.get(options, ['ember-google-maps', 'customComponents']);
+}
+
 module.exports = {
   name: require('./package').name,
 
@@ -73,16 +79,23 @@ module.exports = {
     );
   },
 
-  included() {
+  included(parent) {
     this._super.included.apply(this, arguments);
 
-    let app = this._findHost(),
-      config = app.options['ember-google-maps'] || {};
+    let app = this._findHost();
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
-    // Treeshaking setup
+    let config = app.options['ember-google-maps'] || {};
+
+    // Collect all of the custom components from every app and addon that
+    // includes ember-google-maps.
+    this.customComponents = CustomComponents.for(app)
+      .useMergeTactic(config.mergeCustomComponents)
+      .add(parent.name, getCustomComponentsFromOptions(parent.options));
+
+    // Set up treeshaking
 
     // Don’t manipulate the broccoli trees when using Embroider. Things will
     // break. Just clear out the template exports and Embroider will do the
@@ -103,7 +116,13 @@ module.exports = {
 
     // Include the base map components and any dependencies
     if (included.length) {
-      included.push('gMap', 'canvas', 'mapComponent', 'typicalMapComponent');
+      included.push(
+        'gMap',
+        'canvas',
+        'mapComponent',
+        'typicalMapComponent',
+        'customComponentTemplate'
+      );
 
       if (this.isDevelopment) {
         included.push('warnMissingComponent');
@@ -129,7 +148,6 @@ module.exports = {
       });
     }
 
-    this.excludeName = newExcludeName(included, excluded);
     this.excludeComponent = newExcludeComponent(included, excluded);
 
     this.skipTreeshaking = skipTreeshaking(included, excluded);
@@ -291,8 +309,13 @@ module.exports = {
 
   getAddonsFromProject(project) {
     const AddonRegistry = require('./lib/addons/registry');
+    let componentsFromAddons = new AddonRegistry(project).components;
 
-    return new AddonRegistry(project).components;
+    return Object.assign(
+      {},
+      componentsFromAddons,
+      this.customComponents.merge()
+    );
   },
 
   filterComponents(tree) {

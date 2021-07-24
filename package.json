@@ -52,7 +52,8 @@
     "ember-cli-htmlbars": "^5.3.2",
     "ember-concurrency": "^2.0.0",
     "ember-in-element-polyfill": "^1.0.0",
-    "ember-modifier": "^2.1.2"
+    "ember-modifier": "^2.1.2",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/plugin-proposal-logical-assignment-operators": "^7.13.8",
