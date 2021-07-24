@@ -12,7 +12,6 @@ const _ = require('lodash');
 const {
   newIncludedList,
   newExcludedList,
-  newExcludeName,
   newExcludeComponent,
   skipTreeshaking,
 } = require('./lib/treeshaking');
@@ -149,7 +148,6 @@ module.exports = {
       });
     }
 
-    this.excludeName = newExcludeName(included, excluded);
     this.excludeComponent = newExcludeComponent(included, excluded);
 
     this.skipTreeshaking = skipTreeshaking(included, excluded);
