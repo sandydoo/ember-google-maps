@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.2.0 (2021-07-24)
+
+#### :star: Features
+* [#125](https://github.com/sandydoo/ember-google-maps/pull/125) Allow registering custom components ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#123](https://github.com/sandydoo/ember-google-maps/pull/123) Unregister components on teardown ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.1.0 (2021-07-20)
 
 #### :star: Features
