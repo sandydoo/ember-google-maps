@@ -98,6 +98,11 @@ export class MapComponentManager {
       });
     } else {
       effect = setupEffect(() => {
+        // Teardown the previous map component if it exists
+        if (mapComponent) {
+          component.teardown(mapComponent);
+        }
+
         mapComponent = component.setup(component.options, component.events);
 
         component.mapComponent = mapComponent;
