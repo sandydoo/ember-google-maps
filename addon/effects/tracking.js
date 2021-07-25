@@ -2,6 +2,14 @@ import { createCache, getValue } from '@glimmer/tracking/primitives/cache';
 import { _backburner } from '@ember/runloop';
 import { registerDestructor } from '@ember/destroyable';
 
+// TODO Revisit when Glimmer gets effects
+let untrack = (fn) => fn();
+
+import Ember from 'ember';
+if (Object.keys(Ember.__loader.registry).includes('@glimmer/validator')) {
+  ({ untrack } = Ember.__loader.require('@glimmer/validator'));
+}
+
 /**
  * It’s been clear since launch that Octane’s design doesn’t account for a few
  * important use-cases:
@@ -65,15 +73,10 @@ function teardownEffect(effect) {
 export function setupEffect(fn) {
   let effect = createCache(fn);
 
-  // Force the computation immediately, because there seems to be a timing issue
-  // with backburner and promises. The effects just aren’t run if they’re added
-  // when a promise resolves. Perhaps it’s a matter of making sure we’re in a
-  // runloop when we resolve, but I’m not yet sure where that needs to happen.
-  getValue(effect);
-
   EFFECTS_TO_RUN.add(effect);
-
   registerDestructor(effect, teardownEffect);
 
   return effect;
 }
+
+export { untrack };
