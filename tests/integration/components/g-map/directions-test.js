@@ -20,8 +20,8 @@ module('Integration | Component | g-map/directions', function (hooks) {
   });
 
   test('it fetches directions', async function (assert) {
-    this.origin = 'Covent Garden';
-    this.destination = 'Clerkenwell';
+    this.set('origin', 'Covent Garden');
+    this.set('destination', 'Clerkenwell');
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
