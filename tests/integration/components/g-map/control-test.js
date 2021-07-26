@@ -5,16 +5,20 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { render, waitFor } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
+const timeoutForElements = 5000;
+
 module('Integration | Component | g map/control', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
   test('it renders a custom control', async function (assert) {
+    this.set('position', 'TOP_CENTER');
+
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
-        <g.control @position="TOP_CENTER">
-          <div id="custom-control"></div>
+        <g.control @position={{this.position}}>
+          <div style="padding: 1em; background-color: red;" id="custom-control">Hi there</div>
         </g.control>
       </GMap>
     `);
@@ -26,15 +30,29 @@ module('Integration | Component | g map/control', function (hooks) {
 
     assert.equal(controls.length, 1);
 
-    let control = await waitFor('#custom-control');
+    let control = await waitFor('#custom-control', {
+      timeout: timeoutForElements,
+    });
     assert.ok(control, 'control rendered');
 
-    let mapControls = map.controls[google.maps.ControlPosition.TOP_CENTER];
+    let mapControls = map.controls[google.maps.ControlPosition[this.position]];
     assert.equal(
       controls[0].mapComponent,
       mapControls.getAt(0),
       'control rendered in correct position'
     );
+
+    this.set('position', 'BOTTOM_CENTER');
+    await this.waitForMap();
+
+    let newMapControls =
+      map.controls[google.maps.ControlPosition[this.position]];
+    assert.equal(
+      0,
+      mapControls.length,
+      'controls removed from previous position'
+    );
+    assert.equal(1, newMapControls.length, 'control now in new position');
   });
 
   test('it renders a control with a class value', async function (assert) {
@@ -46,7 +64,9 @@ module('Integration | Component | g map/control', function (hooks) {
       </GMap>
     `);
 
-    let control = await waitFor('.custom-control-holder');
+    let control = await waitFor('.custom-control-holder', {
+      timeout: timeoutForElements,
+    });
 
     assert.ok(control, 'control rendered');
   });
@@ -64,8 +84,12 @@ module('Integration | Component | g map/control', function (hooks) {
       </GMap>
     `);
 
-    let control1 = await waitFor('#first-control');
-    let control2 = await waitFor('#second-control');
+    let control1 = await waitFor('#first-control', {
+      timeout: timeoutForElements,
+    });
+    let control2 = await waitFor('#second-control', {
+      timeout: timeoutForElements,
+    });
 
     assert.ok(control1, 'control rendered');
     assert.ok(control2, 'control rendered');

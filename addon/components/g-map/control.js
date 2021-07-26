@@ -9,6 +9,10 @@ export default class Control extends MapComponent {
   @tracked
   container = window?.document?.createDocumentFragment();
 
+  // Keep track of the current control position so that it can be removed on
+  // teardown
+  lastControlPosition = null;
+
   get name() {
     return 'controls';
   }
@@ -22,10 +26,21 @@ export default class Control extends MapComponent {
     // Could use {{prop}} for this (from ember-prop-modifier)
     this.controlElement.index = options.index;
 
+    this.lastControlPosition = position;
+
     return this.controlElement;
   }
 
   teardown() {
+    let controls = this.map.controls[this.lastControlPosition];
+    let index = controls.indexOf(this.controlElement);
+
+    controls.removeAt(index);
+  }
+
+  // If the Glimmer component is actually destroyed, THEN we forcefully clear
+  // the stored div elements.
+  willDestroy() {
     this.container = null;
     this.controlElement = null;
   }
