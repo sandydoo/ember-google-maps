@@ -99,9 +99,6 @@
     "release-it": "^14.6.1",
     "release-it-lerna-changelog": "^3.1.0"
   },
-  "resolutions": {
-    "qunit": "~2.11.0"
-  },
   "engines": {
     "node": "10.* || >= 12"
   },
