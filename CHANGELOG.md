@@ -1,5 +1,20 @@
 # Changelog
 
+
+## v4.2.1 (2021-07-27)
+
+#### :bug: Bug fixes
+* [#128](https://github.com/sandydoo/ember-google-maps/pull/128) Tear down controls properly ([@sandydoo](https://github.com/sandydoo))
+* [#126](https://github.com/sandydoo/ember-google-maps/pull/126) Tear down components that don't have an update method ([@sandydoo](https://github.com/sandydoo))
+* [#127](https://github.com/sandydoo/ember-google-maps/pull/127) Fix issue where directions were re-fetched when resolved ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#129](https://github.com/sandydoo/ember-google-maps/pull/129) Upgrade miscellaneous dependencies and fixup testing ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.0 (2021-07-24)
 
 #### :star: Features
