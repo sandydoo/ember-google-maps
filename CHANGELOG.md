@@ -1,6 +1,16 @@
 # Changelog
 
 
+
+## v4.2.2 (2021-07-27)
+
+#### :bug: Bug fixes
+* [#131](https://github.com/sandydoo/ember-google-maps/pull/131) Move test-waiters to dependencies ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.1 (2021-07-27)
 
 #### :bug: Bug fixes
