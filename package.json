@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@sandydoo/tracked-maps-and-sets": "^2.2.2",
+    "@ember/test-waiters": "^2.4.5",
     "babel-plugin-ember-modules-api-polyfill": ">=3.5.0",
     "broccoli-debug": "^0.6.5",
     "broccoli-funnel": ">=3.0.8",
@@ -61,7 +62,6 @@
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.9",
-    "@ember/test-waiters": "^2.4.5",
     "@embroider/test-setup": "^0.43.0",
     "@glimmer/component": "^1.0.3",
     "@glimmer/tracking": "^1.0.3",
