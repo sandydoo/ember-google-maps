@@ -38,13 +38,6 @@ export default class Control extends MapComponent {
     controls.removeAt(index);
   }
 
-  // If the Glimmer component is actually destroyed, THEN we forcefully clear
-  // the stored div elements.
-  willDestroy() {
-    this.container = null;
-    this.controlElement = null;
-  }
-
   @action
   getControl(element) {
     this.controlElement = element;

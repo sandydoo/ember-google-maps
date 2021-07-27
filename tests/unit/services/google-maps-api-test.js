@@ -18,7 +18,8 @@ module('Unit | Service | google-maps-api', function (hooks) {
   });
 
   test('it skips loading the Google Maps API if it is already loaded', async function (assert) {
-    let multipleAPIsRegex = /Google Maps JavaScript API multiple times on this page/;
+    let multipleAPIsRegex =
+      /Google Maps JavaScript API multiple times on this page/;
     let error = console.error;
 
     try {
