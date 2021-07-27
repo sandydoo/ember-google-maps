@@ -30,6 +30,7 @@ A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-u
   - [Quick start](#-quick-start-for-the-impatient)
 - [Compatibility](#-compatibility)
 - [Examples](#-examples)
+- [Addons](#-extra-addons)
 - [Maintainers](#-maintainers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -134,6 +135,12 @@ This lets you do all sorts of fancy things, like adding CSS animations and bindi
 ```
 
 **[Learn more →][docs-url]**
+
+
+🛒 Extra addons
+--------------------------------------------------------------------------------
+
+- [MarkerClustererPlus](https://github.com/sandydoo/ember-google-maps-markerclustererplus) — Add marker clustering to your maps with [@googlemaps/markerclustererplus](https://github.com/googlemaps/js-markerclustererplus).
 
 
 😇 Maintainers
