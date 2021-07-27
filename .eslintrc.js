@@ -45,8 +45,8 @@ module.exports = {
         'addon/**',
         'addon-test-support/**',
         'app/**',
-        'lib/in-repo-pin-addon/**',
         'tests/dummy/app/**',
+        'lib/in-repo-pin-addon/{addon,app}/**',
       ],
       parserOptions: {
         ecmaVersion: 2018,

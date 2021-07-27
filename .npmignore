@@ -8,6 +8,9 @@
 # docs
 /docs/
 
+# dev
+/lib/ast-transforms/debug-canvas-enforcer.js
+
 # misc
 /.bowerrc
 /.editorconfig
@@ -18,6 +21,8 @@
 /.eslintrc.js
 /.git/
 /.gitignore
+/.prettierignore
+/.prettierrc.js
 /.github/
 /.template-lintrc.js
 /.watchmanconfig
