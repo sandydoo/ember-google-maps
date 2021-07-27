@@ -32,7 +32,8 @@ module('Integration | Treeshaking', function (hooks) {
 
     let originalConsoleWarn = console.warn;
 
-    let expectedError = /^Ember Google Maps couldn't find a map component called "circle"!$/m;
+    let expectedError =
+      /^Ember Google Maps couldn't find a map component called "circle"!$/m;
 
     console.warn = (...messages) => {
       messages.forEach((message) => {
