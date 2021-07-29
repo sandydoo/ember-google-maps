@@ -2,6 +2,16 @@
 
 
 
+
+## v4.2.3 (2021-07-29)
+
+#### :bug: Bug fixes
+* [#134](https://github.com/sandydoo/ember-google-maps/pull/134) Fix errors trying to find a `template` component ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.2 (2021-07-27)
 
 #### :bug: Bug fixes
