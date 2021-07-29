@@ -64,6 +64,7 @@
     "ember-composable-helpers": "^4.5.0",
     "ember-export-application-global": "^2.0.1",
     "ember-fetch": "^8.1.0",
+    "ember-google-maps": "^4.2.3",
     "ember-load-initializers": "^2.1.2",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-page-title": "^6.2.2",
@@ -86,17 +87,13 @@
     "prismjs": "^1.24.1",
     "qunit": "^2.15.0",
     "qunit-dom": "^1.6.0",
-    "sass": "^1.36.0"
+    "sass": "^1.36.0",
+    "webpack": "^5.47.0"
   },
   "engines": {
     "node": "10.* || >= 12"
   },
   "ember": {
     "edition": "octane"
-  },
-  "ember-addon": {
-    "paths": [
-      ".."
-    ]
   }
 }
