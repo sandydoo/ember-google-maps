@@ -6806,10 +6806,10 @@ ember-fetch@^8.1.0:
     node-fetch "^2.6.1"
     whatwg-fetch "^3.6.2"
 
-ember-google-maps@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/ember-google-maps/-/ember-google-maps-4.2.2.tgz#3d1d0dd382e185f86af2898a01765d9a65c8769b"
-  integrity sha512-ewR3wrUWhwmJ6tFvVZAEJ/CF+2QQTmfE7UuEp5JiU8dg1n/QpFQ02NN/+KjasrkYb1LT9gUqA2R8RB/fhEQV4g==
+ember-google-maps@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/ember-google-maps/-/ember-google-maps-4.2.3.tgz#c00a26c5b90b371d4992c8bcf83436fe4f79b21c"
+  integrity sha512-i5axBFLcKmPbdhAqs/qZF1ywrZM744Oh9OleaxyWldEftG0prh1Oxk3vmVTSHDX0zG8ZLiJ/t6OBtfJbDYDBSg==
   dependencies:
     "@ember/test-waiters" "^2.4.5"
     "@sandydoo/tracked-maps-and-sets" "^2.2.2"
