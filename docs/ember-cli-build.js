@@ -35,6 +35,7 @@ module.exports = function (defaults) {
 
     prember: {
       baseRoot: 'https://ember-google-maps.sandydoo.me',
+      // TODO automate this bit
       urls: [
         '/',
         '/docs',
@@ -52,6 +53,7 @@ module.exports = function (defaults) {
         '/docs/directions',
         '/docs/overlays',
         '/docs/complex-ui',
+        '/docs/clustering',
         '/docs/advanced',
         '/examples/sweet-rentals',
       ],
