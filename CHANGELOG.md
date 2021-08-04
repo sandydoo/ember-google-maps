@@ -3,6 +3,22 @@
 
 
 
+
+## v4.2.4 (2021-08-04)
+
+#### :bug: Bug fixes
+* [#139](https://github.com/sandydoo/ember-google-maps/pull/139) Fix teardown errors in FastBoot ([@sandydoo](https://github.com/sandydoo))
+
+#### :book: Documentation
+* [#138](https://github.com/sandydoo/ember-google-maps/pull/138) Pre-render docs when building with Embroider ([@sandydoo](https://github.com/sandydoo))
+* [#137](https://github.com/sandydoo/ember-google-maps/pull/137) Pre-render the clustering docs ([@sandydoo](https://github.com/sandydoo))
+* [#136](https://github.com/sandydoo/ember-google-maps/pull/136) Document `ember-google-maps-markerclustererplus` ([@sandydoo](https://github.com/sandydoo))
+* [#135](https://github.com/sandydoo/ember-google-maps/pull/135) [docs] Fix docs build ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.3 (2021-07-29)
 
 #### :bug: Bug fixes
