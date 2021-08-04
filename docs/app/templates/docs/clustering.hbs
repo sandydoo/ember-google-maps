@@ -1,0 +1,53 @@
+{{page-title "Clustering"}}
+
+<div class="row">
+  <div class="col-md-7 order-2 order-md-1">
+    <section>
+      <h5>Clustering</h5>
+
+      <p>Drawing a lot of markers in close proximity can quickly turn into a usability nightmare. Grouping, or clustering, markers is a common way of simplifying how markers are displayed when used in large numbers.</p>
+
+      <p>You can add support for marker clustering to <var>ember-google-maps</var> by installing an extra addon: <a href="https://github.com/sandydoo/ember-google-maps-markerclustererplus"><var>ember-google-maps-markerclustererplus</var></a>. It installs the <a href="https://googlemaps.github.io/js-markerclustererplus/index.html">MarkerClustererPlus</a> library, a clustering library maintained by Google, and adds the <var>markerClusterer</var> component to the map.</p>
+
+      <CodeSnippet @name="install-markerclustererplus.sh" @language="shell-session" />
+
+      <p>MarkerClustererPlus accepts a bunch of options to configure the clusters. As with any map component, you can pass these options straight to the <var>markerClusterer</var> component. <a href="https://googlemaps.github.io/js-markerclustererplus/interfaces/markerclustereroptions.html">Here’s a full list of supported options&nbsp;↗</a></p>
+
+      <DocTip>
+        The <var>markerClusterer</var> component yields its own special marker that’s added to the cluster instead of the map. Don’t confuse it with the regular marker yielded by the map itself!
+      </DocTip>
+
+      <CodeSnippet @name="basic-cluster.hbs" />
+    </section>
+    <section>
+      <h5>Default cluster icons</h5>
+
+      <p>MarkerClustererPlus comes with a small collection of default cluster icons to choose from. These are copied to <var>/assets/markerclustererplus/images/</var> when your app is built, but you can always set your own using the <var>imagePath</var> option.</p>
+    </section>
+    <section>
+      <h5>Cluster events</h5>
+
+      <p>You can also register events. You've got your usual suspects, like <var>click</var>, <var>dblclick</var>, and others; and also two special events: <var>clusteringbegin</var> and <var>clusteringend</var>. These are both native, albeit poorly publicized, markerclustererplus events. But beware! These clustering events may be called several times during a single render because MarkerClustererPlus clusters markers in batches.</p>
+
+      <CodeSnippet @name="cluster-events.hbs" />
+    </section>
+
+    <p>{{this.nextPage.text}}</p>
+
+    <LinkToNext @nextPage={{this.nextPage}} />
+  </div>
+  <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
+    <GMap
+      @lat={{this.lat}}
+      @lng={{this.lng}}
+      @zoom={{12}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |map|>
+      <map.markerClusterer as |cluster|>
+        {{#each-in this.locations key="id" as |_ location|}}
+          <cluster.marker @lat={{location.lat}} @lng={{location.lng}} />
+        {{/each-in}}
+      </map.markerClusterer>
+    </GMap>
+  </div>
+</div>

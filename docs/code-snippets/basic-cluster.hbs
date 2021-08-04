@@ -1,0 +1,10 @@
+<GMap @lat="51.508530" @lng="-0.076132" as |map|>
+
+  <map.markerClusterer as |cluster|>
+
+    {{#each this.locations as |location|}}
+      <cluster.marker @lat={{location.lat}} @lng={{location.lng}} />
+    {{/each}}
+
+  </map.markerClusterer>
+</GMap>
