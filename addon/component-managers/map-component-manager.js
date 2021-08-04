@@ -57,9 +57,11 @@ export class MapComponentManager {
   }
 
   destroyComponent(component) {
-    destroy(component);
+    if (component.mapComponent) {
+      component?.teardown(component.mapComponent);
+    }
 
-    component.teardown(component.mapComponent);
+    destroy(component);
   }
 
   getContext(component) {
