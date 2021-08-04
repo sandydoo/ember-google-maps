@@ -94,6 +94,11 @@ export default class DocsController extends ApplicationController {
       text: 'Let’s see what we can build with these components.',
     },
     {
+      title: 'Clustering',
+      path: 'docs.clustering',
+      text: 'Let’s see how we can efficiently deal with large numbers of markers using clustering.',
+    },
+    {
       title: 'Advanced',
       path: 'docs.advanced',
       text: 'Learn about some of the more advanced options of this addon.',
