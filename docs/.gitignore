@@ -10,6 +10,7 @@
 
 # misc
 /.env*
+/public/46830d7e7843d054dc6ab36416baf9dd942126f9.*
 /.pnp*
 /.sass-cache
 /.eslintcache
