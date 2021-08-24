@@ -37,6 +37,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Prepare
+        run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Lint
@@ -57,6 +59,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Prepare
+        run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Test
@@ -75,6 +79,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Prepare
+        run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
         run: yarn install --no-lockfile --non-interactive
       - name: Test
@@ -114,6 +120,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Prepare
+        run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Test
