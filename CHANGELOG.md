@@ -4,6 +4,25 @@
 
 
 
+
+## v4.2.5 (2021-08-24)
+
+This release is compatible with the upcoming v4.0 release of Ember.js.
+
+#### :bug: Bug fixes
+* [#140](https://github.com/sandydoo/ember-google-maps/pull/140) Return the `google` global from the API service if Google Maps has already been loaded ([@grodriguez85](https://github.com/grodriguez85))
+
+#### Internal
+* [#144](https://github.com/sandydoo/ember-google-maps/pull/144) Cache yarn's global cache of packages in CI ([@sandydoo](https://github.com/sandydoo))
+* [#141](https://github.com/sandydoo/ember-google-maps/pull/141) Fix CI for external PRs ([@sandydoo](https://github.com/sandydoo))
+* [#143](https://github.com/sandydoo/ember-google-maps/pull/143) Fix test-waiters import errors in embroider builds ([@sandydoo](https://github.com/sandydoo))
+* [#142](https://github.com/sandydoo/ember-google-maps/pull/142) Refactor AST plugins to match new plugin format ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 2
+- Gustavo Rodriguez ([@grodriguez85](https://github.com/grodriguez85))
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.4 (2021-08-04)
 
 #### :bug: Bug fixes
