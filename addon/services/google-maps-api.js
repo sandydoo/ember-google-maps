@@ -51,7 +51,7 @@ export default class GoogleMapsApiService extends Service {
     }
 
     if (window?.google?.maps) {
-      return resolve(window.google.maps);
+      return resolve(window.google);
     }
 
     let config = this._getConfig();
