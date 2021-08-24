@@ -41,8 +41,8 @@
     "test:build": "node build-tests/build-test"
   },
   "dependencies": {
+    "@ember/test-waiters": "^3.0.0",
     "@sandydoo/tracked-maps-and-sets": "^2.2.2",
-    "@ember/test-waiters": "^2.4.5",
     "babel-plugin-ember-modules-api-polyfill": ">=3.5.0",
     "broccoli-debug": "^0.6.5",
     "broccoli-funnel": ">=3.0.8",
@@ -61,8 +61,8 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@ember/optional-features": "^2.0.0",
-    "@ember/test-helpers": "^2.2.9",
-    "@embroider/test-setup": "^0.43.0",
+    "@ember/test-helpers": "^2.4.2",
+    "@embroider/test-setup": "^0.43.5",
     "@glimmer/component": "^1.0.3",
     "@glimmer/tracking": "^1.0.3",
     "babel-eslint": "^10.1.0",
