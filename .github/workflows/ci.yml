@@ -33,10 +33,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
@@ -55,10 +52,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
@@ -75,10 +69,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
@@ -116,10 +107,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ci-modules-${{ hashFiles('**/yarn.lock') }}
+          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
       - name: Install dependencies
