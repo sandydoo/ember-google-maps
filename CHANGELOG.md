@@ -5,6 +5,21 @@
 
 
 
+
+## v4.2.6 (2021-09-08)
+
+#### :book: Documentation
+* [#149](https://github.com/sandydoo/ember-google-maps/pull/149) Explain how to write acceptance and integrations tests with maps ([@sandydoo](https://github.com/sandydoo))
+* [#146](https://github.com/sandydoo/ember-google-maps/pull/146) Upgrade dependencies ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#148](https://github.com/sandydoo/ember-google-maps/pull/148) Add an acceptance test to the test suite ([@sandydoo](https://github.com/sandydoo))
+* [#147](https://github.com/sandydoo/ember-google-maps/pull/147) Update yarn.lock ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.5 (2021-08-24)
 
 This release is compatible with the upcoming v4.0 release of Ember.js.
