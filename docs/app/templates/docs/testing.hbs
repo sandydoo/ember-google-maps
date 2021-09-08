@@ -1,0 +1,57 @@
+{{page-title "Testing"}}
+
+<div class="col-text">
+  <section>
+    <h5>Testing</h5>
+
+    <p><a href="https://guides.emberjs.com/release/testing/">Learn how and why to test your Ember apps →</a></p>
+
+    <p>Maps introduce two additional complications to testing.</p>
+
+    <p>The first is timing. How do we know when to run the tests? Is the map ready? Are the components there?</p>
+
+    <p>The second is interaction. There’s no guarantee that any of the map components have DOM elements to interact with, and Google Maps doesn’t provide an official API to label, find, and interact with components drawn on the map. So you generally can’t just find some marker and click on it.</p>
+
+    <p>These two issues are tackled by the <var>setupMapTest</var> and <var>waitForMap</var> functions exported by the <var>test-support</var> module.</p>
+
+    <p>The <var>setupMapTest</var> hook is similar to the <var>setupRenderingTest</var> and <var>setupApplicationTest</var> hooks used in Ember tests. You run it once in your test module and it will set up everything for tracking any maps that are drawn during the tests.</p>
+
+    <p>And <var>waitForMap</var> let’s you pause the test while the map is rendering. Once the map is idle, it’ll resolve with the map instance and all of it’s components. You can use those instances to simulate users interacting with the map.</p>
+
+    <p>It’ll make a bit more sense in the context of an example. Let’s look at a sample acceptance test first.</p>
+  </section>
+  <section>
+    <h5>Acceptance testing</h5>
+
+    <p>Let’s say we draw a marker in our app which should show a popup with some text when clicked.</p>
+    <CodeSnippet @name="test-acceptance.hbs" />
+
+    <p>That popup is very important to our app’s functionality, so we’d like to make sure that it’s actually shown. Here’s how you’d write an acceptance test for that.</p>
+    <CodeSnippet @name="test-acceptance.js" />
+
+    <p>If you’re wondering how to find a specific marker out of hundreds, remember that you can always pass extra arguments to the marker component to help you find it later.</p>
+    <CodeSnippet @name="test-pass-id-to-marker.hbs" />
+    <CodeSnippet @name="test-find-marker-by-id.js" />
+  </section>
+  <section>
+    <h5>Multiple maps on the same page</h5>
+
+    <p>If, for some reason, you have more than one map visible in a single test, you can differentiate between them by providing an <var>id</var>.</p>
+
+    <p>In your template, pass an <var>id</var> to the map.</p>
+    <CodeSnippet @name="test-id.hbs" />
+
+    <p>Then, in your tests, give the same <var>id</var> to the <var>waitForMap</var> function.</p>
+    <CodeSnippet @name="test-wait-for-map-with-id.js" />
+  </section>
+  <section>
+    <h5>Integration testing</h5>
+
+    <p>When it comes to maps, integration testing isn’t too different to acceptance testing. Run the <var>setupMapTest</var> hook and use <var>waitForMap</var> to wait for the map to render. Just don’t forget about <var>waitForMap</var>! Even if you don’t need any of the map instances it returns, you should still wait for it to resolve.</p>
+    <CodeSnippet @name="test-integration.js" />
+  </section>
+
+  <p>{{this.nextPage.text}}</p>
+
+  <LinkToNext @nextPage={{this.nextPage}} />
+</div>
