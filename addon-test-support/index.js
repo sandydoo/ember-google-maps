@@ -1,4 +1,4 @@
-import setupMapTest from './setup-map';
+import { setupMapTest, waitForMap } from './setup-map';
 import { getDirectionsQuery, trigger } from './helpers';
 
-export { getDirectionsQuery, setupMapTest, trigger };
+export { getDirectionsQuery, setupMapTest, trigger, waitForMap };

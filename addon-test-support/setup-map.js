@@ -1,5 +1,6 @@
 import GMap from 'ember-google-maps/components/g-map';
 import { settled } from '@ember/test-helpers';
+import { action } from '@ember/object';
 
 let lastKey;
 const MAP_STORE = new Map();
@@ -23,21 +24,22 @@ function resetStore() {
 
 export async function waitForMap(id) {
   await settled();
-
   return getFromStore(id);
 }
 
-export default function setupMapTest(hooks) {
+export function setupMapTest(hooks) {
   hooks.beforeEach(function () {
     this.waitForMap = waitForMap.bind(this);
 
+    // TODO can we do this from within g-map? I guess the main issue with that
+    // is figuring out how to remove all this code from the production build.
     this.owner.register(
       'component:g-map',
       class InstrumentedGMap extends GMap {
-        constructor() {
-          super(...arguments);
-
-          addToStore(this.id, this.publicAPI);
+        @action
+        getCanvas(canvas) {
+          super.getCanvas(canvas);
+          addToStore(canvas.id, this.publicAPI);
         }
       }
     );
