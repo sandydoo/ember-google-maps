@@ -94,6 +94,11 @@ export default class DocsController extends ApplicationController {
       text: 'Let’s see what we can build with these components.',
     },
     {
+      title: 'Testing',
+      path: 'docs.testing',
+      text: 'Let’s learn how to test apps with maps.',
+    },
+    {
       title: 'Clustering',
       path: 'docs.clustering',
       text: 'Let’s see how we can efficiently deal with large numbers of markers using clustering.',

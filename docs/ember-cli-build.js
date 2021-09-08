@@ -53,6 +53,7 @@ module.exports = function (defaults) {
         '/docs/directions',
         '/docs/overlays',
         '/docs/complex-ui',
+        '/docs/testing',
         '/docs/clustering',
         '/docs/advanced',
         '/examples/sweet-rentals',

@@ -1,0 +1,8 @@
+<GMap @lat={{this.london.lat}} @lng={{this.london.lng}} as |map|>
+  {{#each this.locations as |location|}}
+    <map.marker
+      @locationId={{location.id}}
+      @lat={{location.lat}}
+      @lng={{location.lng}} />
+  {{/each}}
+</GMap>
