@@ -4,6 +4,7 @@ import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { toLatLng } from 'ember-google-maps/utils/helpers';
 
 module('Integration | Component | g map', function (hooks) {
   setupRenderingTest(hooks);
@@ -60,7 +61,11 @@ module('Integration | Component | g map', function (hooks) {
   });
 
   test('it updates the map when arguments are changed', async function (assert) {
-    this.set('zoom', 12);
+    this.setProperties({
+      lat: this.lat,
+      lng: this.lng,
+      zoom: 12,
+    });
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{this.zoom}} />
@@ -74,7 +79,20 @@ module('Integration | Component | g map', function (hooks) {
 
     await this.waitForMap();
 
-    assert.equal(map.zoom, this.zoom);
+    assert.equal(map.zoom, this.zoom, 'map zoom updated');
+
+    let newLatLng = google.maps.geometry.spherical.computeOffset(
+      toLatLng(this.lat, this.lng),
+      500,
+      0
+    );
+
+    this.set('lat', newLatLng.lat());
+    this.set('lng', newLatLng.lng());
+
+    await this.waitForMap();
+
+    assert.ok(newLatLng.equals(map.getCenter()), 'map center updated');
   });
 
   test('it extracts events from the arguments and binds them to the map', async function (assert) {
