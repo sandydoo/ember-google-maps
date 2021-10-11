@@ -6,6 +6,16 @@
 
 
 
+
+## v4.2.7 (2021-10-11)
+
+#### :bug: Bug fixes
+* [#151](https://github.com/sandydoo/ember-google-maps/pull/151) Update the coordinates when `lat` and `lng` are updated ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.6 (2021-09-08)
 
 #### :book: Documentation
