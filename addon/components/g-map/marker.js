@@ -7,7 +7,9 @@ export default class Marker extends TypicalMapComponent {
   }
 
   get newOptions() {
-    this.options.position ??= toLatLng(this.args.lat, this.args.lng);
+    if (!this.args.position) {
+      this.options.position = toLatLng(this.args.lat, this.args.lng);
+    }
 
     return this.options;
   }

@@ -4,6 +4,7 @@ import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render, waitFor, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { toLatLng } from 'ember-google-maps/utils/helpers';
 
 function isVisible(infoWindow) {
   return infoWindow.getMap() && infoWindow.getPosition();
@@ -186,5 +187,42 @@ module('Integration | Component | g-map/info-window', function (hooks) {
     assert.notOk(find('#info-window-test'), 'info window is not in DOM');
     assert.notOk(isVisible(infoWindow), 'info window is not visible');
     assert.equal(this.isOpen, false, 'isOpen is set to false');
+  });
+
+  test('it updates the infoWindow’s position', async function (assert) {
+    this.setProperties({
+      infoWindowLat: this.lat,
+      infoWindowLng: this.lng,
+    });
+
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
+        <g.infoWindow
+          @lat={{this.infoWindowLat}}
+          @lng={{this.infoWindowLng}}
+          @isOpen={{true}}
+          @content="test" />
+      </GMap>
+    `);
+
+    let infoWindow = await this.getFirstInfoWindow();
+
+    let newLatLng = google.maps.geometry.spherical.computeOffset(
+      toLatLng(this.infoWindowLat, this.infoWindowLng),
+      500,
+      0
+    );
+
+    this.setProperties({
+      infoWindowLat: newLatLng.lat(),
+      infoWindowLng: newLatLng.lng(),
+    });
+
+    await this.waitForMap();
+
+    assert.ok(
+      newLatLng.equals(infoWindow.getPosition()),
+      'info window position updated'
+    );
   });
 });

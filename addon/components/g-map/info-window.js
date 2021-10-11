@@ -23,8 +23,8 @@ export default class InfoWindow extends MapComponent {
   get newOptions() {
     let options = this.options;
 
-    if (!options.target) {
-      options.position ??= toLatLng(this.args.lat, this.args.lng);
+    if (!options.target && !this.args.position) {
+      options.position = toLatLng(this.args.lat, this.args.lng);
     }
 
     if (options.isOpen) {

@@ -35,7 +35,10 @@ export default class GMap extends MapComponent {
 
   get newOptions() {
     this.options.zoom ??= 15;
-    this.options.center ??= toLatLng(this.args.lat, this.args.lng);
+
+    if (!this.args.center) {
+      this.options.center = toLatLng(this.args.lat, this.args.lng);
+    }
 
     return this.options;
   }
