@@ -47,8 +47,10 @@ module('Integration | Component | g map/circle', function (hooks) {
       0
     );
 
-    this.set('lat', newLatLng.lat());
-    this.set('lng', newLatLng.lng());
+    this.setProperties({
+      circleLat: newLatLng.lat(),
+      circleLng: newLatLng.lng(),
+    });
 
     await this.waitForMap();
 

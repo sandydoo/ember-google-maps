@@ -214,8 +214,8 @@ module('Integration | Component | g-map/info-window', function (hooks) {
     );
 
     this.setProperties({
-      lat: newLatLng.lat(),
-      lng: newLatLng.lng(),
+      infoWindowLat: newLatLng.lat(),
+      infoWindowLng: newLatLng.lng(),
     });
 
     await this.waitForMap();
