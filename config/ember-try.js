@@ -34,16 +34,24 @@ module.exports = async function () {
       {
         name: 'ember-beta',
         npm: {
+          dependencies: {
+            'ember-auto-import': '^2.0.0',
+          },
           devDependencies: {
             'ember-source': await getChannelURL('beta'),
+            webpack: '^5.0.0',
           },
         },
       },
       {
         name: 'ember-canary',
         npm: {
+          dependencies: {
+            'ember-auto-import': '^2.0.0',
+          },
           devDependencies: {
             'ember-source': await getChannelURL('canary'),
+            webpack: '^5.0.0',
           },
         },
       },
@@ -75,8 +83,26 @@ module.exports = async function () {
           },
         },
       },
-      embroiderSafe(),
-      embroiderOptimized(),
+      embroiderSafe({
+        npm: {
+          dependencies: {
+            'ember-auto-import': '^2.0.0',
+          },
+          devDependencies: {
+            webpack: '^5.0.0',
+          },
+        },
+      }),
+      embroiderOptimized({
+        npm: {
+          dependencies: {
+            'ember-auto-import': '^2.0.0',
+          },
+          devDependencies: {
+            webpack: '^5.0.0',
+          },
+        },
+      }),
     ],
   };
 };
