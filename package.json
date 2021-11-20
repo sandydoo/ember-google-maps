@@ -53,7 +53,7 @@
     "ember-cli-htmlbars": "^5.3.2",
     "ember-concurrency": "^2.1.0",
     "ember-in-element-polyfill": "^1.0.0",
-    "ember-modifier": "^2.1.2",
+    "ember-modifier": "^3.0.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
