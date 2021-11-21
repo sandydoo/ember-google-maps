@@ -28,7 +28,7 @@ module('Integration | Component | g map/control', function (hooks) {
       components: { controls },
     } = await this.waitForMap();
 
-    assert.equal(controls.length, 1);
+    assert.strictEqual(controls.length, 1);
 
     let control = await waitFor('#custom-control', {
       timeout: timeoutForElements,
@@ -36,7 +36,7 @@ module('Integration | Component | g map/control', function (hooks) {
     assert.ok(control, 'control rendered');
 
     let mapControls = map.controls[google.maps.ControlPosition[this.position]];
-    assert.equal(
+    assert.deepEqual(
       controls[0].mapComponent,
       mapControls.getAt(0),
       'control rendered in correct position'
@@ -47,12 +47,12 @@ module('Integration | Component | g map/control', function (hooks) {
 
     let newMapControls =
       map.controls[google.maps.ControlPosition[this.position]];
-    assert.equal(
-      0,
+    assert.strictEqual(
       mapControls.length,
+      0,
       'controls removed from previous position'
     );
-    assert.equal(1, newMapControls.length, 'control now in new position');
+    assert.strictEqual(newMapControls.length, 1, 'control now in new position');
   });
 
   test('it renders a control with a class value', async function (assert) {

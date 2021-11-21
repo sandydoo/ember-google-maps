@@ -73,13 +73,13 @@ module('Integration | Component | g map', function (hooks) {
 
     let { map } = await this.waitForMap();
 
-    assert.equal(map.zoom, this.zoom);
+    assert.strictEqual(map.zoom, this.zoom);
 
     this.set('zoom', 15);
 
     await this.waitForMap();
 
-    assert.equal(map.zoom, this.zoom, 'map zoom updated');
+    assert.strictEqual(map.zoom, this.zoom, 'map zoom updated');
 
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.lat, this.lng),
@@ -99,7 +99,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.expect(1);
 
     this.onZoomChanged = ({ eventName }) => {
-      assert.equal(eventName, 'zoom_changed', 'zoom changed event');
+      assert.strictEqual(eventName, 'zoom_changed', 'zoom changed event');
     };
 
     await render(hbs`
@@ -119,7 +119,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.expect(1);
 
     this.onLoad = ({ eventName }) => {
-      assert.equal(eventName, 'idle', 'map loaded and idle');
+      assert.strictEqual(eventName, 'idle', 'map loaded and idle');
     };
 
     await render(hbs`
@@ -145,9 +145,10 @@ module('Integration | Component | g map', function (hooks) {
     console.warn = (msg) => {
       let msgText = msg.text ?? msg;
 
-      if (/The `onLoad` event has been deprecated/.test(msgText)) {
-        assert.ok(true, 'Using the onLoad event displays a deprecation notice');
-      } else {
+      let test = /The `onLoad` event has been deprecated/.test(msgText);
+      assert.ok(test, 'Using the onLoad event displays a deprecation notice');
+
+      if (!test) {
         originalConsoleWarn(msg);
       }
     };
@@ -173,11 +174,11 @@ module('Integration | Component | g map', function (hooks) {
     assert.expect(2);
 
     this.onClick = ({ eventName }) => {
-      assert.equal(eventName, 'click', 'click attribute event');
+      assert.strictEqual(eventName, 'click', 'click attribute event');
     };
 
     this.onZoomChanged = ({ eventName }) => {
-      assert.equal(
+      assert.strictEqual(
         eventName,
         'zoom_changed',
         'zoom changed event from events hash'

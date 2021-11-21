@@ -24,7 +24,7 @@ module('Integration | Addon System', function (hooks) {
 
     let marker = markers[0].mapComponent;
 
-    assert.equal(markers.length, 1);
-    assert.equal(marker.getMap(), map);
+    assert.strictEqual(markers.length, 1);
+    assert.deepEqual(marker.getMap(), map);
   });
 });

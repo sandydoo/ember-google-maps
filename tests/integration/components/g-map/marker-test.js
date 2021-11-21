@@ -25,8 +25,8 @@ module('Integration | Component | g map/marker', function (hooks) {
 
     let marker = markers[0].mapComponent;
 
-    assert.equal(markers.length, 1);
-    assert.equal(marker.map, map);
+    assert.strictEqual(markers.length, 1);
+    assert.deepEqual(marker.map, map);
   });
 
   test('it attaches an event to a marker', async function (assert) {
@@ -62,7 +62,7 @@ module('Integration | Component | g map/marker', function (hooks) {
 
     let marker = markers[0].mapComponent;
 
-    assert.equal(marker.draggable, true);
+    assert.true(marker.draggable);
   });
 
   test('it unregisters a marker on teardown', async function (assert) {
@@ -82,13 +82,13 @@ module('Integration | Component | g map/marker', function (hooks) {
       components: { markers },
     } = await this.waitForMap();
 
-    assert.equal(markers.length, 1, 'marker registered');
+    assert.strictEqual(markers.length, 1, 'marker registered');
 
     this.set('showMarker', false);
     await this.waitForMap();
 
     // This tests makes sure that the markers array is updated.
-    assert.equal(markers.length, 0, 'marker unregistered');
+    assert.strictEqual(markers.length, 0, 'marker unregistered');
   });
 
   test('it updates the marker’s position', async function (assert) {

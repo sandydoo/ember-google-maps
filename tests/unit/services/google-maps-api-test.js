@@ -18,22 +18,20 @@ module('Unit | Service | google-maps-api', function (hooks) {
   });
 
   test('it skips loading the Google Maps API if it is already loaded', async function (assert) {
+    assert.expect(1);
+
     let multipleAPIsRegex =
       /Google Maps JavaScript API multiple times on this page/;
     let error = console.error;
 
     try {
       console.error = function (msg) {
-        if (multipleAPIsRegex.test(msg)) {
-          assert.ok(
-            false,
-            'The API loader should not load the API multiple times.'
-          );
-        }
+        assert.false(
+          multipleAPIsRegex.test(msg),
+          'The API loader should not load the API multiple times.'
+        );
 
-        if (error) {
-          error.apply(console, arguments);
-        }
+        error.apply(console, arguments);
       };
 
       await this.service._getApi();

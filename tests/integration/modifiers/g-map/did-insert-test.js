@@ -11,8 +11,8 @@ module('Integration | Modifier | g-map/did-insert', function (hooks) {
 
     this.onDidInsert = (element, positional, named) => {
       assert.ok(element instanceof Element, 'passes the element');
-      assert.equal(positional.length, 1, 'passes positional args');
-      assert.equal(Object.keys(named).length, 1, 'passes named args');
+      assert.strictEqual(positional.length, 1, 'passes positional args');
+      assert.strictEqual(Object.keys(named).length, 1, 'passes named args');
     };
 
     await render(hbs`

@@ -44,8 +44,11 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
 
     let request = directions[0].directions.request;
 
-    assert.equal(request.waypoints.length, 1);
-    assert.equal(request.waypoints[0].location.query, this.waypointLocation);
+    assert.strictEqual(request.waypoints.length, 1);
+    assert.strictEqual(
+      request.waypoints[0].location.query,
+      this.waypointLocation
+    );
   });
 
   test('it updates the current directions when added', async function (assert) {
@@ -75,7 +78,7 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
 
     let waypoints = getWaypoints(directions);
 
-    assert.equal(waypoints.length, 1);
+    assert.strictEqual(waypoints.length, 1);
 
     this.set('addWaypoint', false);
 
@@ -83,6 +86,6 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
 
     waypoints = getWaypoints(directions);
 
-    assert.equal(waypoints.length, 0);
+    assert.strictEqual(waypoints.length, 0);
   });
 });

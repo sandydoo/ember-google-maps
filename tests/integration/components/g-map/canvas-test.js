@@ -33,7 +33,11 @@ module('Integration | Component | g map/canvas', function (hooks) {
       'canvas rendered with extra class names'
     );
 
-    assert.equal(canvas.id, 'custom-id', 'canvas rendered with a special id');
+    assert.strictEqual(
+      canvas.id,
+      'custom-id',
+      'canvas rendered with a special id'
+    );
   });
 
   test('compatibility: it passes class names via `@classNames` to the default canvas', async function (assert) {
