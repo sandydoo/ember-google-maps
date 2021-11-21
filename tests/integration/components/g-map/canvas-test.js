@@ -40,17 +40,6 @@ module('Integration | Component | g map/canvas', function (hooks) {
     );
   });
 
-  test('compatibility: it passes class names via `@classNames` to the default canvas', async function (assert) {
-    await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} @classNames="extra-class-names" />
-    `);
-
-    assert.ok(
-      find('.extra-class-names'),
-      'canvas rendered with extra class names'
-    );
-  });
-
   test('it renders a custom canvas div', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
