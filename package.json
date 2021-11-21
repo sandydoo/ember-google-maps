@@ -106,7 +106,7 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "versionCompatibility": {
-      "ember": ">=3.16.0"
+      "ember": ">=3.24.0"
     },
     "demoURL": "https://ember-google-maps.sandydoo.me",
     "paths": [
