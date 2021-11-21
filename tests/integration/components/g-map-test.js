@@ -137,39 +137,6 @@ module('Integration | Component | g map', function (hooks) {
     await this.waitForMap();
   });
 
-  test('it deprecates the custom onLoad event', async function (assert) {
-    assert.expect(2);
-
-    let originalConsoleWarn = console.warn;
-
-    console.warn = (msg) => {
-      let msgText = msg.text ?? msg;
-
-      let test = /The `onLoad` event has been deprecated/.test(msgText);
-      assert.ok(test, 'Using the onLoad event displays a deprecation notice');
-
-      if (!test) {
-        originalConsoleWarn(msg);
-      }
-    };
-
-    this.onLoad = () => {
-      assert.ok(true, 'onLoad is still called');
-    };
-
-    await render(hbs`
-      <GMap
-        @lat={{this.lat}}
-        @lng={{this.lng}}
-        @zoom={{12}}
-        @onLoad={{this.onLoad}} />
-    `);
-
-    await this.waitForMap();
-
-    console.warn = originalConsoleWarn;
-  });
-
   test('it accepts both an events hash and individual attribute events', async function (assert) {
     assert.expect(2);
 

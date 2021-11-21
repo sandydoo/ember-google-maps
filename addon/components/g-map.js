@@ -6,7 +6,6 @@ import { toLatLng } from '../utils/helpers';
 
 import { waitFor } from '@ember/test-waiters';
 import { DEBUG } from '@glimmer/env';
-import { deprecate } from '@ember/debug';
 
 function GMapPublicAPI(source) {
   return {
@@ -49,35 +48,6 @@ export default class GMap extends MapComponent {
     let map = new google.maps.Map(this.canvas, this.newOptions);
 
     this.addEventsToMapComponent(map, events, this.publicAPI);
-
-    if (typeof this.args.onLoad === 'function') {
-      deprecate(
-        `The \`onLoad\` event has been deprecated. You should replace it with \`onceOnIdle\`.
-
-        If you had the following:
-
-        <GMap @lat={{this.lat}} @lng={{this.lng}} @onLoad={{this.didLoadMap}} />
-
-        Replace it with:
-
-        <GMap @lat={{this.lat}} @lng={{this.lng}} @onceOnIdle={{this.didLoadMap}} />
-
-        `.replace(/^[\s]+/gm, '\n'),
-        false,
-        {
-          id: 'events.onLoad',
-          until: '5.0.0',
-          for: 'ember-google-maps',
-          since: {
-            enabled: '4.0.0-beta.8',
-          },
-        }
-      );
-
-      google.maps.event.addListenerOnce(map, 'idle', () => {
-        this.args.onLoad(this.publicAPI);
-      });
-    }
 
     if (DEBUG) {
       this.pauseTestForIdle(map);
