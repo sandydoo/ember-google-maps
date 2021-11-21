@@ -56,7 +56,7 @@ module('Integration | Component | g map/overlay', function (hooks) {
     let overlay = await waitFor('#custom-overlay');
     let mapDiv = find('#map-canvas');
 
-    assert.equal(overlays.length, 1, 'overlay registered');
+    assert.strictEqual(overlays.length, 1, 'overlay registered');
 
     assert.ok(overlay, 'overlay rendered');
 

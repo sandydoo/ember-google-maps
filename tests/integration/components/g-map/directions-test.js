@@ -36,12 +36,12 @@ module('Integration | Component | g-map/directions', function (hooks) {
       components: { directions },
     } = await this.waitForMap();
 
-    assert.equal(directions.length, 1);
+    assert.strictEqual(directions.length, 1);
 
     let { origin, destination } = getDirectionsQuery(directions[0].directions);
 
-    assert.equal(origin, this.origin);
-    assert.equal(destination, this.destination);
+    assert.strictEqual(origin, this.origin);
+    assert.strictEqual(destination, this.destination);
   });
 
   test('it updates the directions when one of the attributes changes', async function (assert) {
@@ -65,8 +65,8 @@ module('Integration | Component | g-map/directions', function (hooks) {
 
     let { origin, destination } = getDirectionsQuery(directions.directions);
 
-    assert.equal(origin, this.origin);
-    assert.equal(destination, this.destination);
+    assert.strictEqual(origin, this.origin);
+    assert.strictEqual(destination, this.destination);
 
     this.set('origin', 'Holborn Station');
 
@@ -74,7 +74,7 @@ module('Integration | Component | g-map/directions', function (hooks) {
 
     ({ origin, destination } = getDirectionsQuery(directions.directions));
 
-    assert.equal(origin, this.origin);
-    assert.equal(destination, this.destination);
+    assert.strictEqual(origin, this.origin);
+    assert.strictEqual(destination, this.destination);
   });
 });

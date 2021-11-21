@@ -40,7 +40,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
       components: { infoWindows },
     } = await this.waitForMap();
 
-    assert.equal(infoWindows.length, 1);
+    assert.strictEqual(infoWindows.length, 1);
 
     let infoWindow = infoWindows[0].mapComponent;
     assert.ok(infoWindow);
@@ -186,7 +186,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     assert.notOk(find('#info-window-test'), 'info window is not in DOM');
     assert.notOk(isVisible(infoWindow), 'info window is not visible');
-    assert.equal(this.isOpen, false, 'isOpen is set to false');
+    assert.false(this.isOpen, 'isOpen is set to false');
   });
 
   test('it updates the infoWindow’s position', async function (assert) {

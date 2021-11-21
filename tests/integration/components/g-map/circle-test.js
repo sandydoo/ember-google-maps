@@ -22,7 +22,7 @@ module('Integration | Component | g map/circle', function (hooks) {
       components: { circles },
     } = await this.waitForMap();
 
-    assert.equal(circles.length, 1);
+    assert.strictEqual(circles.length, 1);
     assert.ok(circles[0].mapComponent.getMap());
   });
 

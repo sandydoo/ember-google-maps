@@ -25,7 +25,7 @@ module('Integration | Component | g map/autocomplete', function (hooks) {
       components: { autocompletes },
     } = await this.waitForMap();
 
-    assert.equal(autocompletes.length, 1);
+    assert.strictEqual(autocompletes.length, 1);
 
     let input = find('#custom-id');
     let autocomplete = autocompletes[0].mapComponent;

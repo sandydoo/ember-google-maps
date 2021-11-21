@@ -38,7 +38,7 @@ module('Integration | Component | g-map/route', function (hooks) {
       components: { routes },
     } = await this.waitForMap();
 
-    assert.equal(routes.length, 1);
+    assert.strictEqual(routes.length, 1);
   });
 
   test('it updates a route when the directions change', async function (assert) {
@@ -63,7 +63,7 @@ module('Integration | Component | g-map/route', function (hooks) {
     let directions = routes[0].mapComponent.directions;
     let { origin } = getDirectionsQuery(directions);
 
-    assert.equal(origin, this.origin);
+    assert.strictEqual(origin, this.origin);
 
     this.set('origin', 'Holborn Station');
 
@@ -72,6 +72,6 @@ module('Integration | Component | g-map/route', function (hooks) {
     directions = routes[0].mapComponent.directions;
     ({ origin } = getDirectionsQuery(directions));
 
-    assert.equal(origin, this.origin);
+    assert.strictEqual(origin, this.origin);
   });
 });
