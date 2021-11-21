@@ -65,9 +65,10 @@ module.exports = {
   options: {
     babel: {
       plugins: [
-        '@babel/plugin-proposal-logical-assignment-operators',
-        '@babel/plugin-proposal-object-rest-spread',
-        '@babel/plugin-proposal-optional-chaining',
+        // Must resolve these for the build test harness to find them. eslint is complaining about nothing.
+        require.resolve('@babel/plugin-proposal-logical-assignment-operators'), // eslint-disable-line node/no-unpublished-require
+        require.resolve('@babel/plugin-proposal-object-rest-spread'), // eslint-disable-line node/no-unpublished-require
+        require.resolve('@babel/plugin-proposal-optional-chaining'), // eslint-disable-line node/no-unpublished-require
       ],
     },
   },

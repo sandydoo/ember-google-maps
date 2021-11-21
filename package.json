@@ -38,7 +38,7 @@
     "test": "npm-run-all lint test:*",
     "test:ember": "ember test",
     "test:ember-compatibility": "ember try:each",
-    "test:build": "node build-tests/build-test"
+    "test:build": "qunit build-tests/build-test.js"
   },
   "dependencies": {
     "@ember/test-waiters": "^3.0.0",
@@ -70,7 +70,6 @@
     "dotenv": "^10.0.0",
     "ember-auto-import": "^2.2.2",
     "ember-cli": "~3.25.3",
-    "ember-cli-addon-tests": "^0.11.1",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-dotenv": "^3.1.0",
     "ember-cli-inject-live-reload": "^2.1.0",
@@ -98,6 +97,7 @@
     "qunit-dom": "^1.6.0",
     "release-it": "^14.10.1",
     "release-it-lerna-changelog": "^3.1.0",
+    "scenario-tester": "^2.0.1",
     "webpack": "^5.58.2"
   },
   "engines": {
