@@ -1,4 +1,4 @@
-{{#let (component 'g-map/canvas' onCanvasReady=(fn this.getCanvas)) as |Canvas|}}
+{{#let (component 'g-map/canvas' onCanvasReady=this.getCanvas) as |Canvas|}}
   {{#unless (has-block-params)}}
     {{!-- Compatibility: @classNames should be deprecated --}}
     <Canvas class={{@classNames}} ...attributes />
@@ -7,16 +7,16 @@
   {{yield (hash
     map=this.map
     canvas=Canvas
-    marker=(component 'g-map/marker' getContext=(fn this.getComponent))
-    circle=(component 'g-map/circle' getContext=(fn this.getComponent))
-    rectangle=(component 'g-map/rectangle' getContext=(fn this.getComponent))
-    polyline=(component 'g-map/polyline' getContext=(fn this.getComponent))
-    polygon=(component 'g-map/polygon' getContext=(fn this.getComponent))
-    directions=(component 'g-map/directions' getContext=(fn this.getComponent))
-    control=(component 'g-map/control' getContext=(fn this.getComponent))
-    overlay=(component 'g-map/overlay' getContext=(fn this.getComponent))
-    infoWindow=(component 'g-map/info-window' getContext=(fn this.getComponent))
-    autocomplete=(component 'g-map/autocomplete' getContext=(fn this.getComponent))
-    customComponentTemplate=(component 'template' getContext=(fn this.getComponent))
+    marker=(component 'g-map/marker' getContext=this.getComponent)
+    circle=(component 'g-map/circle' getContext=this.getComponent)
+    rectangle=(component 'g-map/rectangle' getContext=this.getComponent)
+    polyline=(component 'g-map/polyline' getContext=this.getComponent)
+    polygon=(component 'g-map/polygon' getContext=this.getComponent)
+    directions=(component 'g-map/directions' getContext=this.getComponent)
+    control=(component 'g-map/control' getContext=this.getComponent)
+    overlay=(component 'g-map/overlay' getContext=this.getComponent)
+    infoWindow=(component 'g-map/info-window' getContext=this.getComponent)
+    autocomplete=(component 'g-map/autocomplete' getContext=this.getComponent)
+    customComponentTemplate=(component 'template' getContext=this.getComponent)
     )}}
 {{/let}}
