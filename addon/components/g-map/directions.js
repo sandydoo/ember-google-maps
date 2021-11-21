@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
 import { keepLatestTask } from 'ember-concurrency';
-import { TrackedSet } from '@sandydoo/tracked-maps-and-sets';
+import { TrackedSet } from 'tracked-maps-and-sets';
 import { waitFor } from '@ember/test-waiters';
 import { untrack } from '../../effects/tracking';
 

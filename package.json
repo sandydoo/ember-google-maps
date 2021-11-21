@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@ember/test-waiters": "^3.0.0",
-    "@sandydoo/tracked-maps-and-sets": "^2.2.2",
     "babel-plugin-ember-modules-api-polyfill": ">=3.5.0",
     "broccoli-debug": "^0.6.5",
     "broccoli-funnel": ">=3.0.8",
@@ -54,7 +53,8 @@
     "ember-concurrency": "^2.1.0",
     "ember-in-element-polyfill": "^1.0.0",
     "ember-modifier": "^3.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "tracked-maps-and-sets": "^3.0.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-logical-assignment-operators": "^7.14.5",
