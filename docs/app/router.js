@@ -20,7 +20,6 @@ Router.map(function () {
   this.route('index', { path: '/' });
 
   this.route('docs', function () {
-    this.route('about');
     this.route('getting-started');
     this.route('map');
     this.route('events');
