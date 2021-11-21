@@ -3,13 +3,7 @@ import { next } from '@ember/runloop';
 
 import { HAS_NATIVE_PROXY } from './platform';
 
-export const ignoredOptions = [
-  'lat',
-  'lng',
-  'getContext',
-  'classNames',
-  'onLoad',
-];
+export const ignoredOptions = ['lat', 'lng', 'getContext', 'classNames'];
 
 const IGNORED = Symbol('Ignored'),
   EVENT = Symbol('Event'),
