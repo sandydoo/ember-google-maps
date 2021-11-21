@@ -55,7 +55,6 @@ export default class DocsController extends ApplicationController {
   }
 
   links = [
-    { title: 'About', path: 'docs.about', text: '' },
     { title: 'Getting started', path: 'docs.getting-started' },
     {
       title: 'Map',

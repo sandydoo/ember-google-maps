@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default class extends Route {
-  controllerName = 'application';
+  beforeModel() {
+    this.transitionTo('docs.getting-started');
+  }
 }

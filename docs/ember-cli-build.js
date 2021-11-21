@@ -39,7 +39,6 @@ module.exports = function (defaults) {
       urls: [
         '/',
         '/docs',
-        '/docs/about',
         '/docs/getting-started',
         '/docs/map',
         '/docs/events',
