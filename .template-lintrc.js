@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  extends: 'octane',
+  extends: 'recommended',
 
   rules: {
     // Used in g-map.hbs. This rule is overreacting.
