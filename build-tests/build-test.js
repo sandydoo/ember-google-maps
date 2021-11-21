@@ -1,84 +1,180 @@
+// You need to run `yarn install` in the template app directory before running
+// tests. This will be fixed when ember-google-maps is converted to a v2 addon.
+const { PreparedApp, Project } = require('scenario-tester');
+const path = require('path');
+const fs = require('fs');
+const { merge } = require('lodash');
+const QUnit = require('qunit');
+const { module: Qmodule, test } = QUnit;
+
+// Path to ember-google-maps
+const pathToParentProject = path.resolve(__dirname, '..');
+
+// Fetch the API key from either the environment when running in CI, or from the
+// parent addon
+let googleMapsApiKey =
+  process.env.GOOGLE_MAPS_API_KEY ||
+  readApiKeyFrom(path.resolve(pathToParentProject, '.env.test'));
+
+// Create the project from an app template
+let project = Project.fromDir(path.resolve(__dirname, './app-template'), {
+  linkDevDeps: true,
+});
+
+project.linkDevDependency('ember-google-maps', { target: pathToParentProject });
+
+// Add tests and fixture files
+merge(project.files, {
+  'ember-cli-build.js': `\
+/* eslint-env node */
 'use strict';
 
-const path = require('path');
-const chalk = require('chalk');
-const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
-const getURLFor = require('ember-source-channel-url');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-// Set up Google Maps key
-const dotenvConf = require('../config/dotenv')('development');
-require('dotenv').config(dotenvConf);
+module.exports = function (defaults) {
+  let options = {
+    'ember-google-maps': {
+      only: ['marker', 'info-window'],
+      customComponents: {
+        customMarker: 'custom-marker',
+      },
+    },
+  };
 
-const log = (...msgs) =>
-  console.log(...msgs.map((msg) => chalk.green(msg.trim())));
-const debug = (...msgs) =>
-  console.log(...msgs.map((msg) => chalk.gray(msg.trim())));
+  let app = new EmberApp(defaults, options);
 
-function prepareOptions(options = {}) {
-  return Object.entries(options)
-    .reduce((acc, v) => acc.concat(v), []) // .flat()
-    .map((v, i) => (i % 2 === 0 ? '--' + v : v));
+  return app.toTree();
+};
+`,
+  app: {
+    components: {
+      'custom-marker.js': `\
+import Marker from 'ember-google-maps/components/g-map/marker';
+
+export default class CustomMarker extends Marker {
+  get name() {
+    return 'customMarkers';
+  }
 }
+`,
+    },
+  },
+  tests: {
+    integration: {
+      // Render a custom component and check that it is correctly registered.
+      'custom-components-test.js': `\
+import { module, test } from 'qunit';
+import { render } from '@ember/test-helpers';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMapTest } from 'ember-google-maps/test-support';
+import hbs from 'htmlbars-inline-precompile';
 
-async function createApp(appName) {
-  log('Creating app...');
+module('Integration | Custom Components', function (hooks) {
+  setupRenderingTest(hooks);
+  setupMapTest(hooks);
 
-  let app = new AddonTestApp();
+  test('custom marker is provided by the map', async function (assert) {
+    await render(hbs\`
+      <GMap @lat="51.507568" @lng="-0.127762" as |g|>
+        <g.customMarker @lat="51.507568" @lng="-0.127762" />
+      </GMap>
+    \`);
 
-  let url = await getURLFor('release');
+    let { components } = await this.waitForMap();
 
-  await app.create(appName, {
-    emberVersion: url,
-    emberDataVersion: 'latest', // By default, ember-cli-addon-tests hardcodes ~3.8 -_-
-    fixturesPath: 'build-tests/fixtures/',
-    log: debug,
+    assert.strictEqual(components.customMarkers.length, 1);
+  });
+});
+`,
+      'shakedown-test.js': `\
+import { module, test } from 'qunit';
+import { find, render, waitFor } from '@ember/test-helpers';
+import { setupRenderingTest } from 'ember-qunit';
+import hbs from 'htmlbars-inline-precompile';
+
+module('Integration | Treeshaking', function (hooks) {
+  setupRenderingTest(hooks);
+
+  test('shakedown test of map', async function (assert) {
+    await render(hbs\`
+      <GMap @lat="51.507568" @lng="-0.127762" as |g|>
+        <g.marker @lat="51.507568" @lng="-0.127762" as |marker|>
+          <marker.infoWindow @isOpen={{true}}>
+            <p id="test-complete">Test complete</p>
+          </marker.infoWindow>
+        </g.marker>
+      </GMap>
+    \`);
+
+    let map = await find('.ember-google-map');
+    assert.ok(map, 'map rendered');
+
+    let infoWindow = await waitFor('#test-complete', {
+      timeout: 6000,
+      count: 1,
+    });
+    assert.ok(infoWindow, 'info window rendered');
   });
 
-  return app;
+  test('missing component test', async function (assert) {
+    assert.expect(1);
+
+    let originalConsoleWarn = console.warn;
+    let expectedError =
+      /^Ember Google Maps couldn't find a map component called "circle"!$/m;
+
+    let errorMessages = [];
+    console.warn = (...messages) => {
+      messages.forEach((message) => {
+        let messageText = message.text ?? message;
+        errorMessages.push(messageText);
+        originalConsoleWarn(message);
+      });
+    };
+
+    await render(hbs\`
+      <GMap @lat="51.507568" @lng="-0.127762" as |g|>
+        {{!-- Should throw error --}}
+        {{g.circle}}
+      </GMap>
+    \`);
+
+    assert.true(
+      errorMessages.some((msg) => expectedError.test(msg)),
+      'missing component assertion thrown'
+    );
+
+    console.warn = originalConsoleWarn;
+  });
+});
+`,
+    },
+  },
+});
+
+// Write the project, including fixtures, to disk
+project.writeSync();
+
+Qmodule('Built tests', function (hooks) {
+  let app;
+  hooks.before(function () {
+    app = new PreparedApp(project.baseDir);
+  });
+  test('Treeshaking and custom component tests', async function (assert) {
+    // TODO: it would be nice to pipe out stdout, and not just on promise
+    // resolution.
+    let result = await app.execute('yarn test:ember', {
+      env: { GOOGLE_MAPS_API_KEY: googleMapsApiKey },
+    });
+    assert.strictEqual(result.exitCode, 0, result.output);
+  });
+});
+
+function readApiKeyFrom(filepath) {
+  try {
+    let data = fs.readFileSync(filepath, 'utf-8');
+    return data.split('=')[1];
+  } catch (err) {
+    console.error(err);
+  }
 }
-
-async function buildApp(app, options = {}) {
-  log('Building app...');
-
-  let emberVersion = await app.runEmberCommand('version');
-  log(...emberVersion.output);
-
-  let buildOptions = prepareOptions(options);
-  await app.runEmberCommand('build', ...buildOptions, { log: debug });
-
-  return app;
-}
-
-async function testCI(app, options = {}) {
-  log('Running test suite...');
-
-  let distPath = path.resolve(app.path, 'dist'),
-    testPage = path.resolve(distPath, 'tests/index.html');
-
-  debug(`Serving from: ${distPath}`);
-
-  let testOptions = prepareOptions(options);
-  let testResults = await app.runEmberCommand(
-    'test',
-    ...testOptions,
-    '--path',
-    distPath,
-    '--test-page',
-    testPage,
-    { log: console.log }
-  );
-
-  return testResults;
-}
-
-async function runTests() {
-  let app = await createApp('compilation-test');
-
-  await buildApp(app, { environment: 'test' });
-
-  let testResults = await testCI(app);
-
-  return testResults;
-}
-
-runTests();
