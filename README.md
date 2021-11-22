@@ -179,4 +179,4 @@ This software is not endorsed, maintained, or supported by Google LLC.
 
 [docs-url]: https://ember-google-maps.sandydoo.me/docs/getting-started
 [maintainer-url]: https://github.com/sandydoo
-[license-url]: https://github.com/sandydoo/ember-google-maps/blob/main/LICENSE.md
+[license-url]: https://github.com/sandydoo/ember-google-maps/blob/main/LICENSE
