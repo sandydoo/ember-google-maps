@@ -7,6 +7,48 @@
 
 
 
+
+## v5.0.0 (2021-11-22)
+
+#### :boom: Breaking changes
+* [#161](https://github.com/sandydoo/ember-google-maps/pull/161) Drop support for `@classNames`. Use `class` instead. ([@sandydoo](https://github.com/sandydoo))
+
+If you had the following:
+```hbs
+<GMap @classNames="my-custom-class" />
+```
+
+Replace `@classNames` with the `class` attribute:
+```hbs
+<GMap class="my-custom-class" />
+```
+
+* [#160](https://github.com/sandydoo/ember-google-maps/pull/160) Drop support for the `onLoad` event ([@sandydoo](https://github.com/sandydoo))
+
+The `onLoad` event has been removed. You should replace it with `onceOnIdle`.
+
+If you had the following:
+```hbs
+<GMap @lat={{this.lat}} @lng={{this.lng}} @onLoad={{this.didLoadMap}} />
+```
+
+Replace it with:
+```hbs
+<GMap @lat={{this.lat}} @lng={{this.lng}} @onceOnIdle={{this.didLoadMap}} />
+```
+
+* [#158](https://github.com/sandydoo/ember-google-maps/pull/158) Drop support for Ember `<3.24` and Node `10` ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#159](https://github.com/sandydoo/ember-google-maps/pull/159) Fix broken build tests ([@sandydoo](https://github.com/sandydoo))
+* [#157](https://github.com/sandydoo/ember-google-maps/pull/157) Remove the landing page ([@sandydoo](https://github.com/sandydoo))
+* [#154](https://github.com/sandydoo/ember-google-maps/pull/154) Implement simpler workaround for auto-import #152 ([@sandydoo](https://github.com/sandydoo))
+* [#153](https://github.com/sandydoo/ember-google-maps/pull/153) Fix tests against ember `>=4` ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander Melnikov ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v4.2.7 (2021-10-11)
 
 #### :bug: Bug fixes
