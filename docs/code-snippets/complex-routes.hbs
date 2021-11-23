@@ -18,7 +18,7 @@
         strokeOpacity=0.7}} as |route|>
 
       {{!-- Add a waypoint to make sure we grab our coffee --}}
-      <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
+      <d.waypoint @location="Leather Lane" />
 
       {{!-- Use a custom helper to process the directions --}}
       {{#each (get-route-steps route.directions) as |step|}}
