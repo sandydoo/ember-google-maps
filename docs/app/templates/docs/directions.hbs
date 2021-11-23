@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-7 order-2 order-md-1">
+  <div class="col-lg-7 order-2 order-lg-1">
     <section>
       <h5>Fetching directions</h5>
 
@@ -30,7 +30,7 @@
     <section>
       <h5>Complex routing</h5>
 
-      <p>Let’s recreate one of the more complex examples from <GoogleDocs @section="directions-complex" @type="examples">Complex directions example</GoogleDocs>. We want to walk from Covent Garden to Clerkenwell. We’re going to fetch the route and display markers along the route for each step of the route. Each marker has an <var><LinkTo @route="docs.info-windows">infoWindow</LinkTo></var> attached to it that displays the instructions for the specific step. You know what? Let’s also add a waypoint to pass by Leather Lane and grab some coffee from the Department of Coffee and Social Affairs!</p>
+      <p>Let’s recreate one of the more complex examples from <GoogleDocs @section="directions-complex" @type="examples">Complex directions example</GoogleDocs>. We want to walk from Covent Garden to Clerkenwell. We’re going to fetch the route and display markers along the route for each step of the route. Each marker has an <var><LinkTo @route="docs.info-windows">infoWindow</LinkTo></var> attached to it that displays the instructions for the specific step. You know what? Let’s also add a waypoint to pass by Leather Lane and grab some coffee!</p>
 
       <CodeSnippet @name="complex-routes.hbs" />
 
@@ -42,7 +42,7 @@
     <p>{{this.nextPage.text}}</p>
     <LinkToNext @nextPage={{this.nextPage}} />
   </div>
-  <div class="col-md-5 order-1 order-md-2 sticky-top sticky-map">
+  <div class="col-lg-5 order-1 order-lg-2 sticky-top sticky-map">
     <GMap
       @lat={{this.london.lat}}
       @lng={{this.london.lng}}
@@ -55,7 +55,7 @@
         @destination="Clerkenwell"
         @travelMode="WALKING" as |d|>
 
-        <d.waypoint @location="Leather Lane Department of Coffee and Social Affairs" />
+        <d.waypoint @location="Leather Lane" />
 
         <d.route
           @polylineOptions={{hash
