@@ -1,3 +1,9 @@
+$yellow: #f8e08e;
+$blue: #6083f2;
+$purple: #2f3061;
+$orange: #f4845f;
+$red: #db2b39;
+
 $floral-white: #fffbf7;
 
 $primary: black;
@@ -39,16 +45,21 @@ html {
 
 body {
   min-height: 100vh;
-  padding-top: 6rem;
+  padding-top: $spacer * 2;
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   font-feature-settings: "liga", "dlig", "kern";
+  letter-spacing: -0.009em;
 
   &.white {
     background: #fff;
+  }
+
+  @include media-breakpoint-up(md) {
+    padding-top: $spacer * 4;
   }
 }
 
@@ -80,7 +91,8 @@ var {
   font-feature-settings: "liga=0", "dlig=0", "kern=0";
   font-weight: 500;
   font-style: normal;
-  color: inherit;
+  color: lighten($body-color, 3);
+  letter-spacing: -0.03em;
 }
 
 // Containers
@@ -102,7 +114,7 @@ var {
 .col-sidebar {
   flex-shrink: 0;
   margin-top: -0.4em;
-  margin-bottom: 2rem;
+  margin-bottom: $spacer * 2;
 
   @include media-breakpoint-up(sm) {
     text-align: right;
@@ -201,7 +213,7 @@ footer {
   padding: $grid-gutter-width / 2;
   padding-bottom: $grid-gutter-width;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(lg) {
     position: relative;
     top: 0;
   }
@@ -239,8 +251,15 @@ footer {
 .ember-google-map-responsive {
   width: 100%;
   height: auto;
+  aspect-ratio: 1 / 1;
   padding-top: 100%;
   margin: 0;
+
+  @include media-breakpoint-down(md) {
+    aspect-ratio: auto;
+    height: 30em;
+    padding-top: 0;
+  }
 }
 
 .ember-google-maps-overlay {
