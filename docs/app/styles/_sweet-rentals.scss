@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .navbar-light {
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
@@ -38,9 +40,9 @@
   box-shadow: none;
 }
 .col-rental-card {
-  padding-left: $grid-gutter-width / 4;
-  padding-right: $grid-gutter-width / 4;
-  padding-bottom: $grid-gutter-width / 2;
+  padding-left: math.div($grid-gutter-width, 4);
+  padding-right: math.div($grid-gutter-width, 4);
+  padding-bottom: math.div($grid-gutter-width, 2);
 }
 .rental-card {
   cursor: pointer;

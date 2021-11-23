@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $yellow: #f8e08e;
 $blue: #6083f2;
 $purple: #2f3061;
@@ -210,7 +212,7 @@ footer {
 .sticky-map {
   height: 100%;
   top: $grid-gutter-width;
-  padding: $grid-gutter-width / 2;
+  padding: math.div($grid-gutter-width, 2);
   padding-bottom: $grid-gutter-width;
 
   @include media-breakpoint-down(lg) {
