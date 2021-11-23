@@ -1,19 +1,11 @@
-$yellow: #f8e08e;
-$blue: #6083f2;
-$purple: #2f3061;
-$blue-gray: #545677;
-$orange: #f4845f;
-$dark-orange: darken($orange, 10);
-$red: #db2b39;
-$gray: #65737e;
 $floral-white: #fffbf7;
 
-$primary:       $blue-gray;
-$info:          $yellow;
+$primary: black;
+$info: lighten($floral-white, 2);
 
 $body-bg: $floral-white;
-$body-color: $blue-gray;
-$link-color: $dark-orange;
+$body-color: black;
+$link-color: $body-color;
 
 $container-max-widths: (
   sm: 540px,
@@ -22,19 +14,17 @@ $container-max-widths: (
   xl: 1140px
 ) !default;
 
-$grid-gutter-width: 32px;
-
+$grid-gutter-width: 2rem;
 $spacer: 2rem;
 
 $line-height-base: 1.6;
 $paragraph-margin-bottom: 2rem;
 
-$font-family-cursive: 'Pacifico', cursive;
-
-$headings-font-family: 'Montserrat';
+$font-family-sans-serif: 'Inter', sans-serif;
+$font-family-monospace: 'IBM Plex Mono', monospace;
 $headings-font-weight: 700;
 
-$input-bg: lighten($floral-white, 3);
+$input-bg: lighten($body-bg, 2);
 
 $btn-font-weight: 600;
 
@@ -44,11 +34,12 @@ $box-shadow: 0 15px 35px rgba(50,50,93,0.05), 0 5px 15px rgba(0,0,0,0.07);
 @import 'base-16-github';
 
 html {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 body {
   min-height: 100vh;
+  padding-top: 6rem;
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -66,8 +57,12 @@ input[type=color].form-control {
   height: $input-height;
 }
 
+a {
+  text-decoration: underline;
+}
+
 section {
-  margin-bottom: $spacer * 2;
+  margin-bottom: $spacer * 3;
 }
 
 
@@ -80,25 +75,19 @@ section {
   }
 }
 
-.ember {
-  font-family: $font-family-cursive;
-  font-size: 1.2em;
-  line-height: 1;
-}
-
 var {
   font-family: $font-family-monospace;
-  font-size: 0.9em;
-  font-weight: 600;
+  font-feature-settings: "liga=0", "dlig=0", "kern=0";
+  font-weight: 500;
   font-style: normal;
-  color: lighten($body-color, 10);
+  color: inherit;
 }
 
 // Containers
 
 .container-fluid {
-  padding-left: $grid-gutter-width;
-  padding-right: $grid-gutter-width;
+  padding-left: 3rem;
+  padding-right: 3rem;
   max-width: 1440px;
   @include media-breakpoint-down(xs) {
     padding-left: inherit;
@@ -112,10 +101,8 @@ var {
 
 .col-sidebar {
   flex-shrink: 0;
-
-  .nav-item:first-child > a {
-    padding-top: 0;
-  }
+  margin-top: -0.4em;
+  margin-bottom: 2rem;
 
   @include media-breakpoint-up(sm) {
     text-align: right;
@@ -134,7 +121,10 @@ footer {
 
 .shields {
   margin-top: 0.6em;
-  filter: grayscale(0.4);
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .shield-inline {
@@ -144,10 +134,12 @@ footer {
 // Navigation
 
 .nav-link {
-  color: desaturate(darken($body-bg, 45), 95);
+  color: lighten($body-color, 45);
   font-size: $font-size-sm;
-  font-weight: 700;
-  padding: 0.4em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  padding: 0.3em 0.4em;
 }
 
 .nav-link.active {
