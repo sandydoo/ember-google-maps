@@ -90,7 +90,7 @@ section {
 
 var {
   font-family: $font-family-monospace;
-  font-feature-settings: "liga=0", "dlig=0", "kern=0";
+  font-feature-settings: "liga" 0, "dlig" 0, "kern" 0;
   font-weight: 500;
   font-style: normal;
   color: lighten($body-color, 3);
