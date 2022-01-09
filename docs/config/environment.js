@@ -5,7 +5,7 @@ module.exports = function (environment) {
     modulePrefix: 'ember-google-maps-docs',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -28,6 +28,7 @@ module.exports = function (environment) {
 
     flashMessageDefaults: {
       extendedTimeout: 500,
+      injectionFactories: [],
     },
 
     'ember-google-maps': {
