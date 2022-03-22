@@ -36,11 +36,14 @@ Did you mean to use the block form? You can also do the following:
     this.addEventsToMapComponent(autocomplete, events, this.publicAPI);
 
     // Compatibility: Register the custom `onSearch` event.
-    this.addEventsToMapComponent(
-      autocomplete,
-      { onPlaceChanged: this.args.onSearch },
-      this.publicAPI
-    );
+    let onSearch = this.args.onSearch;
+    if (onSearch && typeof onSearch === 'function') {
+      this.addEventsToMapComponent(
+        autocomplete,
+        { onPlaceChanged: onSearch },
+        this.publicAPI
+      );
+    }
 
     return autocomplete;
   }
