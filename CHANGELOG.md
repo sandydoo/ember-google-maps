@@ -8,6 +8,23 @@
 
 
 
+
+## v5.0.1 (2022-03-22)
+
+#### :bug: Bug fixes
+* [#167](https://github.com/sandydoo/ember-google-maps/pull/167) Fix an error thrown when trying to listen for the `place_changed` event on an autocomplete input ([@sandydoo](https://github.com/sandydoo))
+
+#### :book: Documentation
+* [#165](https://github.com/sandydoo/ember-google-maps/pull/165) Fix docs in production ([@sandydoo](https://github.com/sandydoo))
+* [#163](https://github.com/sandydoo/ember-google-maps/pull/163) Update doc app styling ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#162](https://github.com/sandydoo/ember-google-maps/pull/162) Update license year, copyright holder, and formatting ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v5.0.0 (2021-11-22)
 
 #### :boom: Breaking changes
