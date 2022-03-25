@@ -9,6 +9,16 @@
 
 
 
+
+## v5.0.2 (2022-03-25)
+
+#### :bug: Bug fixes
+* [#168](https://github.com/sandydoo/ember-google-maps/pull/168) Guard call to associateDestroyableChild ([@colenso](https://github.com/colenso))
+
+#### Committers: 1
+- [@colenso](https://github.com/colenso)
+
+
 ## v5.0.1 (2022-03-22)
 
 #### :bug: Bug fixes
