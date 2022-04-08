@@ -10,6 +10,18 @@
 
 
 
+
+## v6.0.0 (2022-04-08)
+
+Upgraded from Ember `3.x` to `4.x`, hence the major revision.
+
+#### :snake: Dependencies
+* [#169](https://github.com/sandydoo/ember-google-maps/pull/169) Update Ember to v4.3.0 ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v5.0.2 (2022-03-25)
 
 #### :bug: Bug fixes
