@@ -15,7 +15,6 @@
 /.eslintcache
 /connect.lock
 /coverage/
-/DEBUG/
 /libpeerconnection.log
 /npm-debug.log*
 /testem.log
@@ -25,3 +24,6 @@
 /.node_modules.ember-try/
 /bower.json.ember-try
 /package.json.ember-try
+
+# broccoli-debug
+/DEBUG/
