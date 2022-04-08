@@ -122,6 +122,7 @@
       "enhancement": ":star: Features",
       "bug": ":bug: Bug fixes",
       "documentation": ":book: Documentation",
+      "dependencies": ":snake: Dependencies",
       "internal": "Internal"
     }
   },
