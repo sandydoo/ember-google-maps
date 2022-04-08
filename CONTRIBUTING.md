@@ -33,7 +33,7 @@ Assign this key to the `GOOGLE_MAPS_API_KEY` variable in `.env` or just run thes
 * `ember serve`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+For more information on using ember-cli, visit [https://cli.emberjs.com/release/](https://cli.emberjs.com/release/).
 
 
 ## Debugging the build process
