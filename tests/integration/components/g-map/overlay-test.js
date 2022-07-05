@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMapTest } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
-import { find, render, waitFor } from '@ember/test-helpers';
+import { find, render, waitFor, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { later } from '@ember/runloop';
 
@@ -39,11 +39,15 @@ module('Integration | Component | g map/overlay', function (hooks) {
   setupLocations(hooks);
 
   test('it renders a custom overlay', async function (assert) {
+    assert.expect(4);
+
+    this.onClick = () => assert.ok('can attach events to overlays');
+
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} as |g|>
         <g.canvas id="map-canvas" />
 
-        <g.overlay @lat={{this.lat}} @lng={{this.lng}}>
+        <g.overlay id="overlay-container" @lat={{this.lat}} @lng={{this.lng}} @onClick={{this.onClick}}>
           <div id="custom-overlay"></div>
         </g.overlay>
       </GMap>
@@ -61,6 +65,8 @@ module('Integration | Component | g map/overlay', function (hooks) {
     assert.ok(overlay, 'overlay rendered');
 
     assert.ok(mapDiv.contains(overlay), 'overlay is child of map node');
+
+    await click('#overlay-container');
   });
 
   test('it survives a performance test without errors', async function (assert) {

@@ -203,11 +203,12 @@ export function addEventListener(
   let isDom = target instanceof Element;
   let isOnce = isOnceEvent(originalEventName);
 
-  let maybeDom = isDom ? 'Dom' : '';
-  let maybeOnce = isOnce ? 'Once' : '';
-
-  let listenerType = `add${maybeDom}Listener${maybeOnce}`;
-  let addGoogleListener = google.maps.event[listenerType];
+  let nativeListener = (target, eventName, callback) => {
+    target.addEventListener(eventName, callback, { once: isOnce });
+  };
+  let addListener = isDom
+    ? nativeListener
+    : google.maps.event[`addListener${isOnce ? 'Once' : ''}`];
 
   let eventName = isOnce
     ? originalEventName.slice(6) // onceOn
@@ -227,7 +228,7 @@ export function addEventListener(
     next(target, action, params);
   }
 
-  let listener = addGoogleListener(target, eventName, callback);
+  let listener = addListener(target, eventName, callback);
 
   return {
     name: eventName,
