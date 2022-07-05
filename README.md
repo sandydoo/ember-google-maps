@@ -163,7 +163,7 @@ This software is not endorsed, maintained, or supported by Google LLC.
 
 
 [npm-version-badge]: https://img.shields.io/npm/v/ember-google-maps.svg?label=latest
-[npm-downloads-badge]: https://img.shields.io/npm/dm/ember-google-maps
+[npm-downloads-badge]: https://img.shields.io/npm/dt/ember-google-maps
 [npm-url]: https://www.npmjs.org/package/ember-google-maps
 
 [ci-badge]: https://github.com/sandydoo/ember-google-maps/workflows/CI/badge.svg?branch=main
