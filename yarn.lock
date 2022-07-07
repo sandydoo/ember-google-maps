@@ -4967,6 +4967,10 @@ ember-export-application-global@^2.0.1:
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-2.0.1.tgz#b120a70e322ab208defc9e2daebe8d0dfc2dcd46"
   integrity sha512-B7wiurPgsxsSGzJuPFkpBWnaeuCu2PGpG2BjyrfA1VcL7//o+5RSnZqiCEY326y7qmxb2GoCgo0ft03KBU0rRw==
 
+ember-google-maps-addon@sandydoo/ember-google-maps-addon:
+  version "0.0.1"
+  resolved "https://codeload.github.com/sandydoo/ember-google-maps-addon/tar.gz/5cf4ccfac5ca9fd66f4aca9dea07a194633ca048"
+
 ember-load-initializers@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ember-load-initializers/-/ember-load-initializers-2.1.2.tgz#8a47a656c1f64f9b10cecdb4e22a9d52ad9c7efa"

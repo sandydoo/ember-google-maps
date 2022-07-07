@@ -7,7 +7,6 @@ const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
 const camelCase = require('camelcase');
 const { createHash } = require('crypto');
-const _ = require('lodash');
 
 const {
   newIncludedList,
@@ -16,7 +15,7 @@ const {
   skipTreeshaking,
 } = require('./lib/treeshaking');
 
-const CustomComponents = require('./lib/addons/custom-components');
+const { CustomComponents, getCustomComponentsFromOptions } = require('ember-google-maps-addon');
 
 let dependencies = {
   circle: ['marker'],
@@ -55,10 +54,6 @@ function isForcedEmbroider() {
   return false;
 }
 
-function getCustomComponentsFromOptions(options) {
-  return _.get(options, ['ember-google-maps', 'customComponents']);
-}
-
 module.exports = {
   name: require('./package').name,
 
@@ -84,6 +79,8 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     let app = this._findHost();
+    console.log("INCLUDED");
+    this.appInstance = app;
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
@@ -92,6 +89,7 @@ module.exports = {
 
     // Collect all of the custom components from every app and addon that
     // includes ember-google-maps.
+    console.log(CustomComponents);
     this.customComponents = CustomComponents.for(app)
       .useMergeTactic(config.mergeCustomComponents)
       .add(parent.name, getCustomComponentsFromOptions(parent.options));
@@ -162,6 +160,8 @@ module.exports = {
 
     // Get “addons for this addon”™️
     Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
+    console.log("GMAP");
+    console.log(FOUND_GMAP_ADDONS);
   },
 
   config(env, config) {
@@ -208,6 +208,7 @@ module.exports = {
   },
 
   setupPreprocessorRegistry(type, registry) {
+    console.log("PREPROCESSOR REGISTRY");
     if (this.checkIfWillProbablyUseEmbroider()) {
       // `type === 'self'` seems kind of broken under Embroider. It doesn’t seem
       // to pass plugins correctly to `broccoli-babel-transpiler`. The good news
