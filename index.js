@@ -208,26 +208,14 @@ module.exports = {
   },
 
   setupPreprocessorRegistry(type, registry) {
-    if (this.checkIfWillProbablyUseEmbroider()) {
-      // `type === 'self'` seems kind of broken under Embroider. It doesn’t seem
-      // to pass plugins correctly to `broccoli-babel-transpiler`. The good news
-      // is that we don’t need it — plugins are run on everything, so there’s no
-      // more distinction between addon and app “trees”.
-      if (type === 'parent') {
-        this._setupCanvasPlugin(registry);
-        this._setupAddonPlugin(registry);
-        this._setupTreeshakerPlugin(registry);
-      }
-    } else {
-      // The canvas plugin should run on `self` and `parent`.
-      this._setupCanvasPlugin(registry);
+    // The canvas plugin should run on `self` and `parent`.
+    this._setupCanvasPlugin(registry);
 
-      if (type === 'self') {
-        // The addon plugin should run on `self`.
-        this._setupAddonPlugin(registry);
+    if (type === 'self') {
+      // The addon plugin should run on `self`.
+      this._setupAddonPlugin(registry);
 
-        this._setupTreeshakerPlugin(registry);
-      }
+      this._setupTreeshakerPlugin(registry);
     }
   },
 
