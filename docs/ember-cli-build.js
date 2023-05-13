@@ -74,7 +74,18 @@ module.exports = function(defaults) {
   // along with the exports of each module as its value.
 
   const { Webpack } = require('@embroider/webpack');
-  const compiledApp = require('@embroider/compat').compatBuild(app, Webpack);
+  const compiledApp = require('@embroider/compat').compatBuild(app, Webpack, {
+    skipBabel: [
+      {
+        package: 'qunit',
+      },
+    ],
+    staticAddonTrees: true,
+    staticAddonTestSupportTrees: true,
+    staticHelpers: true,
+    staticModifiers: true,
+    staticComponents: true,
+  });
 
   return require('prember').prerender(app, compiledApp);
 };
