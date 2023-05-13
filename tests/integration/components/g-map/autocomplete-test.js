@@ -66,7 +66,8 @@ module('Integration | Component | g map/autocomplete', function (hooks) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         <g.autocomplete as |autocomplete|>
-          <input {{g-map/did-insert autocomplete.setup}} />
+          <label for="custom-id">Custom input</label>
+          <input id="custom-id" {{g-map/did-insert autocomplete.setup}} />
         </g.autocomplete>
       </GMap>
     `);
