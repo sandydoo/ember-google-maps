@@ -66,9 +66,9 @@ module.exports = {
     babel: {
       plugins: [
         // Must resolve these for the build test harness to find them. eslint is complaining about nothing.
-        require.resolve('@babel/plugin-proposal-logical-assignment-operators'), // eslint-disable-line node/no-unpublished-require
-        require.resolve('@babel/plugin-proposal-object-rest-spread'), // eslint-disable-line node/no-unpublished-require
-        require.resolve('@babel/plugin-proposal-optional-chaining'), // eslint-disable-line node/no-unpublished-require
+        // require.resolve('@babel/plugin-proposal-logical-assignment-operators'), // eslint-disable-line n/no-unpublished-require
+        // require.resolve('@babel/plugin-proposal-object-rest-spread'), // eslint-disable-line n/no-unpublished-require
+        // require.resolve('@babel/plugin-proposal-optional-chaining'), // eslint-disable-line n/no-unpublished-require
       ],
     },
   },
@@ -208,26 +208,14 @@ module.exports = {
   },
 
   setupPreprocessorRegistry(type, registry) {
-    if (this.checkIfWillProbablyUseEmbroider()) {
-      // `type === 'self'` seems kind of broken under Embroider. It doesn’t seem
-      // to pass plugins correctly to `broccoli-babel-transpiler`. The good news
-      // is that we don’t need it — plugins are run on everything, so there’s no
-      // more distinction between addon and app “trees”.
-      if (type === 'parent') {
-        this._setupCanvasPlugin(registry);
-        this._setupAddonPlugin(registry);
-        this._setupTreeshakerPlugin(registry);
-      }
-    } else {
-      // The canvas plugin should run on `self` and `parent`.
-      this._setupCanvasPlugin(registry);
+    // The canvas plugin should run on `self` and `parent`.
+    this._setupCanvasPlugin(registry);
 
-      if (type === 'self') {
-        // The addon plugin should run on `self`.
-        this._setupAddonPlugin(registry);
+    if (type === 'self') {
+      // The addon plugin should run on `self`.
+      this._setupAddonPlugin(registry);
 
-        this._setupTreeshakerPlugin(registry);
-      }
+      this._setupTreeshakerPlugin(registry);
     }
   },
 
