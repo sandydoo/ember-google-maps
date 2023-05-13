@@ -106,11 +106,11 @@ jobs:
           - ember-classic
         allow-failure: [false]
         include:
-          - scenario: ember-canary
+          - try-scenario: ember-canary
             allow-failure: true
-          - scenario: embroider-safe
+          - try-scenario: embroider-safe
             allow-failure: true
-          - scenario: embroider-optimized
+          - try-scenario: embroider-optimized
             allow-failure: true
 
     steps:
