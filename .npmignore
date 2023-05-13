@@ -24,12 +24,11 @@
 /.gitignore
 /.prettierignore
 /.prettierrc.js
-/.github/
+/.stylelintignore
+/.stylelintrc.js
 /.template-lintrc.js
 /.watchmanconfig
 /bower.json
-/jsconfig.json
-/config/ember-try.js
 /CONTRIBUTING.md
 /ember-cli-build.js
 /testem.js

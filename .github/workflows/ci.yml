@@ -32,71 +32,75 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
           cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
       - name: Lint
         run: yarn lint
-      - name: Test
+      - name: Run Tests
         run: yarn test:ember
 
-  test-build:
-    name: Build Tests
+  floating:
+    name: "Floating Dependencies"
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
           cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install dependencies
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run Tests
+        run: yarn test:ember
+
+  build:
+    name: Build Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+          cache: yarn
+      - name: Prepare
+        run: ./.github/scripts/setup-ci.sh
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Install template app dependencies
         working-directory: ./build-tests/app-template
         run: yarn install --frozen-lockfile --non-interactive
-      - name: Test
+      - name: Run Tests
         run: yarn test:build
 
-  test-floating:
-    name: Floating Dependencies
+  try-scenarios:
+    name: "Scenario: ${{ matrix.try-scenario }} | optional: ${{ matrix.allow-failure }}"
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.node-version }}
-          cache: yarn
-      - name: Prepare
-        run: ./.github/scripts/setup-ci.sh
-      - name: Install dependencies
-        run: yarn install --no-lockfile
-      - name: Test
-        run: yarn test:ember
-
-  test-compatibility:
-    name: "Scenario: ${{ matrix.scenario }} | optional: ${{ matrix.allow-failure }}"
-    runs-on: ubuntu-latest
-    needs: [test, test-build, test-floating]
+    needs: [test, build, floating]
     continue-on-error: ${{ matrix.allow-failure }}
+    timeout-minutes: 10
+
     strategy:
       fail-fast: false
       matrix:
-        command:
-          - ember test
-        scenario:
-          - ember-lts-3.24
+        try-scenario:
           - ember-lts-3.28
+          - ember-lts-4.4
           - ember-release
           - ember-beta
           - ember-classic
@@ -108,16 +112,17 @@ jobs:
             allow-failure: true
           - scenario: embroider-optimized
             allow-failure: true
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
           cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
-      - name: Test
-        timeout-minutes: 10
-        run: ./node_modules/.bin/ember try:one ${{ matrix.scenario }}
+      - name: Run Tests
+        run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
