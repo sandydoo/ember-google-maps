@@ -1,4 +1,7 @@
-import { clearMapInstances, getMapInstance } from '../component-managers/map-component-manager';
+import {
+  clearMapInstances,
+  getMapInstance,
+} from '../component-managers/map-component-manager';
 
 function toLatLng(lat, lng) {
   return lat && lng && google?.maps

@@ -5,12 +5,12 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 // import { render } from '@ember/test-helpers';
 // import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Addon System', function(hooks) {
+module('Integration | Addon System', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it registers a pin (marker) component from an addon with the keyword “ember-google-maps-addon”', async function(assert) {
+  test('it registers a pin (marker) component from an addon with the keyword “ember-google-maps-addon”', async function (assert) {
     assert.ok('test disabled');
 
     // await render(hbs`

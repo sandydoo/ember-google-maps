@@ -1,12 +1,15 @@
-import { clearMapInstances, getMapInstance } from 'ember-google-maps/utils/helpers';
+import {
+  clearMapInstances,
+  getMapInstance,
+} from 'ember-google-maps/utils/helpers';
 import { settled } from '@ember/test-helpers';
 
 export function setupMapTest(hooks) {
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.waitForMap = waitForMap.bind(this);
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     clearMapInstances();
   });
 }
