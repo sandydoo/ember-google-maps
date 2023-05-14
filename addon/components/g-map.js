@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { toLatLng } from '../utils/helpers';
+import { registerMapInstance } from '../component-managers/map-component-manager';
 
 import { waitFor } from '@ember/test-waiters';
 import { DEBUG } from '@glimmer/env';
@@ -77,6 +78,9 @@ export default class GMap extends MapComponent {
   @action
   getCanvas(canvas) {
     this.canvas = canvas;
+    if (DEBUG) {
+      registerMapInstance(canvas.id, this.publicAPI);
+    }
   }
 
   @action
