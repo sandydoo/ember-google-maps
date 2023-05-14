@@ -116,10 +116,7 @@
     "versionCompatibility": {
       "ember": ">=3.24.0"
     },
-    "demoURL": "https://ember-google-maps.sandydoo.me",
-    "paths": [
-      "lib/in-repo-pin-addon"
-    ]
+    "demoURL": "https://ember-google-maps.sandydoo.me"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
