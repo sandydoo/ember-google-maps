@@ -51,8 +51,9 @@
     "ember-auto-import": "^2.6.3",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-htmlbars": "^6.2.0",
+    "ember-cli-version-checker": "^5.1.2",
     "ember-concurrency": "^3.0.0",
-    "ember-modifier": "^4.1.0",
+    "ember-modifier": "^3.2.7",
     "lodash": "^4.17.21",
     "tracked-maps-and-sets": "^3.0.2"
   },
@@ -116,10 +117,7 @@
     "versionCompatibility": {
       "ember": ">=3.24.0"
     },
-    "demoURL": "https://ember-google-maps.sandydoo.me",
-    "paths": [
-      "lib/in-repo-pin-addon"
-    ]
+    "demoURL": "https://ember-google-maps.sandydoo.me"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

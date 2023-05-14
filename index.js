@@ -5,6 +5,7 @@
 const Funnel = require('broccoli-funnel');
 const chalk = require('chalk');
 const BroccoliDebug = require('broccoli-debug');
+const VersionChecker = require('ember-cli-version-checker');
 const camelCase = require('camelcase');
 const { createHash } = require('crypto');
 const _ = require('lodash');
@@ -186,21 +187,15 @@ module.exports = {
     return tree;
   },
 
-  checkIfWillProbablyUseEmbroider() {
-    const pkg = this.project.pkg;
+  doesNeedEmbroiderHack() {
+    const checker = new VersionChecker(this.project);
+    const embroider = checker.for('@embroider/core');
+    const embroiderTest = checker.for('@embroider/test-setup');
 
-    // Extra check for “classic” builds that need to run plugins on `self`. We
-    // need to know this before `init` and `included` are run, which is
-    // unfortunate.
     if (
-      pkg &&
-      pkg.devDependencies &&
-      '@embroider/core' in pkg.devDependencies
+      embroider.lt('1.9.0') ||
+      (embroiderTest.lt('1.9.0') && isForcedEmbroider())
     ) {
-      return true;
-    }
-
-    if (isForcedEmbroider()) {
       return true;
     }
 
@@ -208,14 +203,25 @@ module.exports = {
   },
 
   setupPreprocessorRegistry(type, registry) {
-    // The canvas plugin should run on `self` and `parent`.
-    this._setupCanvasPlugin(registry);
+    if (this.doesNeedEmbroiderHack()) {
+      // `type === 'self'` is broken in older Embroider versions. It doesn’t seem
+      // to correctly pass the plugins to `broccoli-babel-transpiler`. This works
+      // for some reason.
+      if (type === 'parent') {
+        this._setupCanvasPlugin(registry);
+        this._setupAddonPlugin(registry);
+        this._setupTreeshakerPlugin(registry);
+      }
+    } else {
+      // The canvas plugin should run on `self` and `parent`.
+      this._setupCanvasPlugin(registry);
 
-    if (type === 'self') {
-      // The addon plugin should run on `self`.
-      this._setupAddonPlugin(registry);
+      if (type === 'self') {
+        // The addon plugin should run on `self`.
+        this._setupAddonPlugin(registry);
 
-      this._setupTreeshakerPlugin(registry);
+        this._setupTreeshakerPlugin(registry);
+      }
     }
   },
 

@@ -15,6 +15,30 @@ let testWaiter = buildWaiter('ember-google-maps:map-component-waiter');
 import { OptionsAndEvents } from 'ember-google-maps/utils/options-and-events';
 import { setupEffect } from 'ember-google-maps/effects/tracking';
 
+const MAP_INSTANCES = new Map();
+let lastMapId = null;
+
+export function registerMapInstance(id, instance) {
+  MAP_INSTANCES.set(id, instance);
+  lastMapId = id;
+}
+
+export function unregisterMapInstance(id) {
+  MAP_INSTANCES.delete(id);
+}
+
+export function clearMapInstances() {
+  MAP_INSTANCES.clear();
+}
+
+export function getMapInstance(id) {
+  if (id) {
+    return MAP_INSTANCES.get(id);
+  }
+
+  return MAP_INSTANCES.get(lastMapId);
+}
+
 export class MapComponentManager {
   @service
   googleMapsApi;
@@ -62,6 +86,10 @@ export class MapComponentManager {
   }
 
   destroyComponent(component) {
+    if (component.canvas) {
+      MAP_INSTANCES.delete(component.canvas.id);
+    }
+
     if (component.mapComponent) {
       component?.teardown(component.mapComponent);
     }
