@@ -11,6 +11,23 @@
 
 
 
+
+## v6.1.0 (2023-05-22)
+
+#### :bug: Bug fixes
+* [#173](https://github.com/sandydoo/ember-google-maps/pull/173) Fix support for newer versions of Embroider ([@sandydoo](https://github.com/sandydoo))
+* [#170](https://github.com/sandydoo/ember-google-maps/pull/170) Fix deprecation warning for `addDomListener` ([@sandydoo](https://github.com/sandydoo))
+
+#### :book: Documentation
+* [#175](https://github.com/sandydoo/ember-google-maps/pull/175) docs: Upgrade Ember v4.4.0...v4.12.1 ([@sandydoo](https://github.com/sandydoo))
+
+#### :snake: Dependencies
+* [#172](https://github.com/sandydoo/ember-google-maps/pull/172) Upgrade Ember to v4.12.1 ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- Sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v6.0.0 (2022-04-08)
 
 Upgraded from Ember `3.x` to `4.x`, hence the major revision.
