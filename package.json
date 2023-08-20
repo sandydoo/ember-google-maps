@@ -53,7 +53,7 @@
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-version-checker": "^5.1.2",
     "ember-concurrency": "^3.0.0",
-    "ember-modifier": "^3.2.7",
+    "ember-modifier": "^4.1.0",
     "lodash": "^4.17.21",
     "tracked-maps-and-sets": "^3.0.2"
   },
