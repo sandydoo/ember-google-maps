@@ -12,6 +12,16 @@
 
 
 
+
+## v6.1.1 (2023-08-21)
+
+#### :snake: Dependencies
+* [#176](https://github.com/sandydoo/ember-google-maps/pull/176) Update ember-modifier to v4 ([@CvX](https://github.com/CvX))
+
+#### Committers: 1
+- Jarek Radosz ([@CvX](https://github.com/CvX))
+
+
 ## v6.1.0 (2023-05-22)
 
 #### :bug: Bug fixes
