@@ -13,6 +13,15 @@
 
 
 
+## v6.1.2 (2023-12-05)
+
+#### :bug: Bug fixes
+* [#177](https://github.com/sandydoo/ember-google-maps/issues/177) Remove peer dependency on Ember 4.0+ ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- [@sandydoo](https://github.com/sandydoo)
+
+
 ## v6.1.1 (2023-08-21)
 
 #### :snake: Dependencies
