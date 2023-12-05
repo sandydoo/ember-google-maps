@@ -27,6 +27,7 @@
     "test:ember": "ember test",
     "deploy": "DOTENV_FILE=production EMBER_ENV=production ember deploy production"
   },
+  "dependencies": {},
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
     "@babel/plugin-proposal-decorators": "^7.21.0",
