@@ -2,17 +2,7 @@
 /dist/
 /tmp/
 
-# dependencies
-/bower_components/
-
-# docs
-/docs/
-
-# dev
-/lib/ast-transforms/debug-canvas-enforcer.js
-
 # misc
-/.bowerrc
 /.editorconfig
 /.ember-cli
 /.env*
@@ -28,7 +18,6 @@
 /.stylelintrc.js
 /.template-lintrc.js
 /.watchmanconfig
-/bower.json
 /CONTRIBUTING.md
 /ember-cli-build.js
 /testem.js
@@ -40,8 +29,13 @@
 
 # ember-try
 /.node_modules.ember-try/
-/bower.json.ember-try
 /npm-shrinkwrap.json.ember-try
 /package.json.ember-try
 /package-lock.json.ember-try
 /yarn.lock.ember-try
+
+# docs
+/docs/
+
+# dev
+/lib/ast-transforms/debug-canvas-enforcer.js

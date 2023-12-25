@@ -19,7 +19,7 @@ on:
     - cron: '0 3 * * 1' # Mondays at 3am
 
 env:
-  node-version: '14.x'
+  node-version: '18'
   CI: true
   GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
 
@@ -101,6 +101,8 @@ jobs:
         try-scenario:
           - ember-lts-3.28
           - ember-lts-4.4
+          - ember-lts-4.8
+          - ember-lts-4.12
           - ember-release
           - ember-beta
           - ember-classic
