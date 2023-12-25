@@ -7,7 +7,7 @@ export default class Control extends MapComponent {
   id = `ember-google-maps-control-${guidFor(this)}`;
 
   @tracked
-  container = window?.document?.createDocumentFragment();
+  container = window?.document?.createElement('div');
 
   // Keep track of the current control position so that it can be removed on
   // teardown
