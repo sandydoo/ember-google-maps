@@ -3,7 +3,7 @@ ENV['ember-google-maps'] = {
   language: 'en',
   region: 'GB',
   protocol: 'https',
-  version: '3.49',
+  version: '3.55',
   libraries: ['geometry', 'places'], // Optional libraries
   // client: undefined,
   // channel: undefined,
