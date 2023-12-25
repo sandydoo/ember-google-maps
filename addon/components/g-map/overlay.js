@@ -9,7 +9,7 @@ export default class OverlayView extends MapComponent {
   id = `ember-google-maps-overlay-${guidFor(this)}`;
 
   @tracked
-  container = window?.document?.createDocumentFragment();
+  container = window?.document?.createElement();
 
   get name() {
     return 'overlays';
