@@ -29,7 +29,7 @@ module('Integration | Component | g-map/rectangle', function (hooks) {
     assert.ok(rectangle, 'rectangle rendered');
     assert.ok(
       rectangle.getBounds().equals(map.getBounds()),
-      "rectangle rendered with the map's bounds"
+      "rectangle rendered with the map's bounds",
     );
   });
 });

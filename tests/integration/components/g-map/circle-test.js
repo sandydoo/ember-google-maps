@@ -44,7 +44,7 @@ module('Integration | Component | g map/circle', function (hooks) {
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.circleLat, this.circleLng),
       500,
-      0
+      0,
     );
 
     this.setProperties({

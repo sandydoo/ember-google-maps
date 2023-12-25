@@ -30,13 +30,13 @@ module('Integration | Component | g map/canvas', function (hooks) {
     assert.deepEqual(
       Array.from(canvas.classList),
       ['ember-google-map', 'extra-class-names'],
-      'canvas rendered with extra class names'
+      'canvas rendered with extra class names',
     );
 
     assert.strictEqual(
       canvas.id,
       'custom-id',
-      'canvas rendered with a special id'
+      'canvas rendered with a special id',
     );
   });
 

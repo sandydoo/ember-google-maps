@@ -67,7 +67,7 @@ export default class GoogleMapsApiService extends Service {
 ember-google-maps: You tried to load the Google Maps API, but the source URL was empty. \
 Perhaps you forgot to specify the API key? \
 Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
-      src
+      src,
     );
 
     return new Promise((resolve, reject) => {

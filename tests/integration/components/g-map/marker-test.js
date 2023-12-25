@@ -108,7 +108,7 @@ module('Integration | Component | g map/marker', function (hooks) {
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.markerLat, this.markerLng),
       500,
-      0
+      0,
     );
 
     this.setProperties({
@@ -121,7 +121,7 @@ module('Integration | Component | g map/marker', function (hooks) {
 
     assert.ok(
       newLatLng.equals(marker.getPosition()),
-      'marker position updated'
+      'marker position updated',
     );
   });
 });

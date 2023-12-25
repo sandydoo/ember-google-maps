@@ -104,7 +104,7 @@ export class MapComponentManager {
   setupMapComponent(component) {
     assert(
       'Each map component needs to have a `setup` method.',
-      component.setup
+      component.setup,
     );
 
     let token = testWaiter.beginAsync();

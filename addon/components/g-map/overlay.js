@@ -62,7 +62,7 @@ export default class OverlayView extends MapComponent {
     this.addEventsToMapComponent(
       this.overlayElement,
       this.events,
-      this.publicAPI
+      this.publicAPI,
     );
   }
 

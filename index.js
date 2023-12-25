@@ -77,7 +77,7 @@ module.exports = {
   init() {
     this._super.init.apply(this, arguments);
     this.debugTree = BroccoliDebug.buildDebugCallback(
-      `ember-google-maps:${this.name}`
+      `ember-google-maps:${this.name}`,
     );
   },
 
@@ -123,7 +123,7 @@ module.exports = {
         'canvas',
         'mapComponent',
         'typicalMapComponent',
-        'customComponentTemplate'
+        'customComponentTemplate',
       );
 
       if (this.isDevelopment) {
@@ -309,7 +309,7 @@ module.exports = {
     return Object.assign(
       {},
       componentsFromAddons,
-      this.customComponents.merge()
+      this.customComponents.merge(),
     );
   },
 
@@ -345,13 +345,13 @@ module.exports = {
 
     if (key && client) {
       this.warn(
-        'You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started'
+        'You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
       );
     }
 
     if (channel && !client) {
       this.warn(
-        'The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started'
+        'The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
       );
     }
 

@@ -210,7 +210,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.infoWindowLat, this.infoWindowLng),
       500,
-      0
+      0,
     );
 
     this.setProperties({
@@ -222,7 +222,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     assert.ok(
       newLatLng.equals(infoWindow.getPosition()),
-      'info window position updated'
+      'info window position updated',
     );
   });
 });
