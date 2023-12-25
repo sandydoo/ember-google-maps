@@ -13,6 +13,7 @@ module('Acceptance | app', function (hooks) {
 
   test('visiting /', async function (assert) {
     await visit('/');
+
     let { components } = await waitForMap('main-map');
 
     let marker = components.markers
