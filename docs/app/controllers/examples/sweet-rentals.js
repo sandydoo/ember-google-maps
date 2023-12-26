@@ -59,12 +59,12 @@ export default class SweetRentalsController extends Controller {
           newNorthEast = google.maps.geometry.spherical.computeOffset(
             northEast,
             distance,
-            45
+            45,
           ),
           newSouthWest = google.maps.geometry.spherical.computeOffset(
             southWest,
             distance,
-            -135
+            -135,
           ),
           extendedBounds = mapBounds.extend(newNorthEast).extend(newSouthWest);
 
@@ -78,7 +78,7 @@ export default class SweetRentalsController extends Controller {
   getRentals() {
     return this.google.then(() => {
       return this.mapData.londonLocations.map(
-        (location) => new Rental({ ...location, active: false })
+        (location) => new Rental({ ...location, active: false }),
       );
     });
   }

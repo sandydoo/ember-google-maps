@@ -39,7 +39,7 @@ module('Integration | Component | g map/control', function (hooks) {
     assert.deepEqual(
       controls[0].mapComponent,
       mapControls.getAt(0),
-      'control rendered in correct position'
+      'control rendered in correct position',
     );
 
     this.set('position', 'BOTTOM_CENTER');
@@ -50,7 +50,7 @@ module('Integration | Component | g map/control', function (hooks) {
     assert.strictEqual(
       mapControls.length,
       0,
-      'controls removed from previous position'
+      'controls removed from previous position',
     );
     assert.strictEqual(newMapControls.length, 1, 'control now in new position');
   });
@@ -101,7 +101,7 @@ module('Integration | Component | g map/control', function (hooks) {
     // These are positioned absolutely, so we compare their left offsets.
     assert.ok(
       parent1.offsetLeft < parent2.offsetLeft,
-      'controls rendered in correct order'
+      'controls rendered in correct order',
     );
   });
 });

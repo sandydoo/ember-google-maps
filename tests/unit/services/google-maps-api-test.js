@@ -28,7 +28,7 @@ module('Unit | Service | google-maps-api', function (hooks) {
       console.error = function (msg) {
         assert.false(
           multipleAPIsRegex.test(msg),
-          'The API loader should not load the API multiple times.'
+          'The API loader should not load the API multiple times.',
         );
 
         error.apply(console, arguments);

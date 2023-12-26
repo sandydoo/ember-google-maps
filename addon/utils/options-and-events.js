@@ -153,7 +153,7 @@ class ArgsProxyHandler {
 
   ownKeys() {
     return Array.from(
-      new Set([...this.setCache.keys(), ...this.cache.values()])
+      new Set([...this.setCache.keys(), ...this.cache.values()]),
     );
   }
 
@@ -198,7 +198,7 @@ export function addEventListener(
   target,
   originalEventName,
   action,
-  payload = {}
+  payload = {},
 ) {
   let isDom = target instanceof Element;
   let isOnce = isOnceEvent(originalEventName);

@@ -84,7 +84,7 @@ module('Integration | Component | g map', function (hooks) {
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.lat, this.lng),
       500,
-      0
+      0,
     );
 
     this.set('lat', newLatLng.lat());
@@ -148,7 +148,7 @@ module('Integration | Component | g map', function (hooks) {
       assert.strictEqual(
         eventName,
         'zoom_changed',
-        'zoom changed event from events hash'
+        'zoom changed event from events hash',
       );
     };
 
@@ -178,7 +178,7 @@ module('Integration | Component | g map', function (hooks) {
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
     assert.ok(
       find('.ember-google-map'),
-      'default class appended to attributes'
+      'default class appended to attributes',
     );
   });
 

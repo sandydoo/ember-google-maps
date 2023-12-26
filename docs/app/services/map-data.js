@@ -48,7 +48,7 @@ export default class MapDataService extends Service {
           n = this.google.maps.geometry.spherical.computeOffset(
             origin,
             distance,
-            heading
+            heading,
           ),
           type = randomInt(1, 5);
 

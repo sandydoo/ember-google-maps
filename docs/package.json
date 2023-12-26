@@ -106,5 +106,6 @@
   },
   "ember": {
     "edition": "octane"
-  }
+  },
+  "dependencies": {}
 }

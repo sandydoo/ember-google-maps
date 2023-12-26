@@ -25,12 +25,12 @@ Did you mean to use the block form? You can also do the following:
 
 <map.autocomplete id="my-custom-id" class="my-custom-class" />
       `,
-      this.inputElement
+      this.inputElement,
     );
 
     let autocomplete = new google.maps.places.Autocomplete(
       this.inputElement,
-      options
+      options,
     );
 
     this.addEventsToMapComponent(autocomplete, events, this.publicAPI);
@@ -41,7 +41,7 @@ Did you mean to use the block form? You can also do the following:
       this.addEventsToMapComponent(
         autocomplete,
         { onPlaceChanged: onSearch },
-        this.publicAPI
+        this.publicAPI,
       );
     }
 

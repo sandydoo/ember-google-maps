@@ -27,7 +27,7 @@ async function generateLocations(googlePromise, { lat, lng }) {
         n = google.maps.geometry.spherical.computeOffset(
           origin,
           distance,
-          heading
+          heading,
         );
       return { id: i, lat: n.lat(), lng: n.lng() };
     });

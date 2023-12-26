@@ -47,7 +47,7 @@ module('Integration | Component | g-map/waypoint', function (hooks) {
     assert.strictEqual(request.waypoints.length, 1);
     assert.strictEqual(
       request.waypoints[0].location.query,
-      this.waypointLocation
+      this.waypointLocation,
     );
   });
 
