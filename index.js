@@ -63,17 +63,6 @@ function getCustomComponentsFromOptions(options) {
 module.exports = {
   name: require('./package').name,
 
-  options: {
-    babel: {
-      plugins: [
-        // Must resolve these for the build test harness to find them. eslint is complaining about nothing.
-        // require.resolve('@babel/plugin-proposal-logical-assignment-operators'), // eslint-disable-line n/no-unpublished-require
-        // require.resolve('@babel/plugin-proposal-object-rest-spread'), // eslint-disable-line n/no-unpublished-require
-        // require.resolve('@babel/plugin-proposal-optional-chaining'), // eslint-disable-line n/no-unpublished-require
-      ],
-    },
-  },
-
   init() {
     this._super.init.apply(this, arguments);
     this.debugTree = BroccoliDebug.buildDebugCallback(

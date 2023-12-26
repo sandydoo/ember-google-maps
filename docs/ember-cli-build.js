@@ -6,10 +6,6 @@ module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
     snippetPaths: ['code-snippets'],
 
-    babel: {
-      plugins: ['@babel/plugin-proposal-optional-chaining'],
-    },
-
     'ember-cli-babel': {
       disablePresetEnv: false,
       includePolyfill: false,
