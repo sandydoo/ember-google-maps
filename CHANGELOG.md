@@ -13,6 +13,29 @@
 
 
 
+
+## v7.0.0 (2023-12-26)
+
+#### :boom: Breaking changes
+* [#183](https://github.com/sandydoo/ember-google-maps/pull/183) Update the official minimum Node version to >=v18 ([@sandydoo](https://github.com/sandydoo))
+* [#181](https://github.com/sandydoo/ember-google-maps/pull/181) Deprecate Ember v3.24 support ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#180](https://github.com/sandydoo/ember-google-maps/pull/180) Pass attributes to the default canvas in new Ember versions ([@sandydoo](https://github.com/sandydoo))
+* [#178](https://github.com/sandydoo/ember-google-maps/pull/178) fix: resolve DocumentFragment errors in newer Ember versions ([@sandydoo](https://github.com/sandydoo))
+
+#### :snake: Dependencies
+* [#184](https://github.com/sandydoo/ember-google-maps/pull/184) Drop upstreamed babel plugins ([@sandydoo](https://github.com/sandydoo))
+* [#183](https://github.com/sandydoo/ember-google-maps/pull/183) Update the official minimum Node version to >=v18 ([@sandydoo](https://github.com/sandydoo))
+* [#182](https://github.com/sandydoo/ember-google-maps/pull/182) Upgrade Ember to v5.5.0 ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#184](https://github.com/sandydoo/ember-google-maps/pull/184) Drop upstreamed babel plugins ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v6.1.2 (2023-12-05)
 
 #### :bug: Bug fixes
