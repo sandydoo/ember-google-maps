@@ -39,7 +39,6 @@
     "@embroider/webpack": "~3.2.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@sandydoo/tracked-maps-and-sets": "^2.2.2",
     "bootstrap": "^4.4.1",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.2.2",
@@ -97,6 +96,7 @@
     "stylelint-config-standard": "^36.0.0",
     "stylelint-prettier": "^5.0.0",
     "tracked-built-ins": "^3.3.0",
+    "tracked-maps-and-sets": "^3.0.2",
     "webpack": "^5.89.0"
   },
   "engines": {
