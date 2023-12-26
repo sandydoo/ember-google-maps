@@ -70,6 +70,7 @@
     "@embroider/test-setup": "^3.0.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@release-it-plugins/lerna-changelog": "^6.0.0",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.2.2",
     "dotenv": "^16.3.1",
@@ -97,8 +98,7 @@
     "prettier": "^3.1.1",
     "qunit": "^2.20.0",
     "qunit-dom": "^3.0.0",
-    "release-it": "^17.0.1",
-    "release-it-lerna-changelog": "^5.0.0",
+    "release-it": "^16.0.0",
     "scenario-tester": "^3.0.0",
     "stylelint": "^16.1.0",
     "stylelint-config-standard": "^36.0.0",
@@ -133,7 +133,7 @@
   },
   "release-it": {
     "plugins": {
-      "release-it-lerna-changelog": {
+      "@release-it-plugins/lerna-changelog": {
         "infile": "CHANGELOG.md",
         "launchEditor": true
       }
