@@ -2042,7 +2042,7 @@
     ember-cli-version-checker "^5.1.2"
     semver "^7.3.5"
 
-"@ember/test-waiters@^3.0.2":
+"@ember/test-waiters@^3.0.2", "@ember/test-waiters@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@ember/test-waiters/-/test-waiters-3.1.0.tgz#61399919cbf793978da0b8bfdfdb7bca0cb80e9e"
   integrity sha512-bb9h95ktG2wKY9+ja1sdsFBdOms2lB19VWs8wmNpzgHv1NCetonBoV5jHBV4DHt0uS1tg9z66cZqhUVlYs96KQ==
@@ -6888,7 +6888,7 @@ ember-concurrency@^2.1.0:
     ember-compatibility-helpers "^1.2.0"
     ember-destroyable-polyfill "^2.0.2"
 
-ember-concurrency@^3.0.0:
+ember-concurrency@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-3.1.1.tgz#7f55ba4bfa4f42cfb23f8cb70aa3c6ef224e9500"
   integrity sha512-doXFYYfy1C7jez+jDDlfahTp03QdjXeSY/W3Zbnx/q3UNJ9g10Shf2d7M/HvWo/TC22eU+6dPLIpqd/6q4pR+Q==
@@ -6965,21 +6965,23 @@ ember-google-maps@^4.2.1:
     ember-modifier "^2.1.2"
     lodash "^4.17.21"
 
-ember-google-maps@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/ember-google-maps/-/ember-google-maps-6.1.2.tgz#0113464b36f82ba1ddf1193d67b38455cdacb525"
-  integrity sha512-C+En7vUdkKSWMFPKr8BHxtHvdAKLvJwpnNXOjA/K+btKnNh8JCkZTlj1RH9/VpjArb1w0ITLfAEGSeOpiD/12A==
+ember-google-maps@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ember-google-maps/-/ember-google-maps-7.0.0.tgz#e57d5ace16c7a6daff70f1ccbba485c581561776"
+  integrity sha512-o/FvXGJ9dOqLTic1exwWqrl+qJO65+AxpWchLpNsVrApR0FxZ7gO+K1ABn6FbX38XY+dwoLe3TGTSXGpR51i2g==
   dependencies:
-    "@ember/test-waiters" "^3.0.0"
+    "@babel/core" "^7.23.6"
+    "@ember/string" "^3.1.1"
+    "@ember/test-waiters" "^3.1.0"
     broccoli-debug "^0.6.5"
     broccoli-funnel ">=3.0.8"
     camelcase "^6.3.0"
     chalk "^4.1.2"
-    ember-auto-import "^2.6.3"
-    ember-cli-babel "^7.26.11"
-    ember-cli-htmlbars "^6.2.0"
+    ember-auto-import "^2.7.0"
+    ember-cli-babel "^8.2.0"
+    ember-cli-htmlbars "^6.3.0"
     ember-cli-version-checker "^5.1.2"
-    ember-concurrency "^3.0.0"
+    ember-concurrency "^3.1.1"
     ember-modifier "^4.1.0"
     lodash "^4.17.21"
     tracked-maps-and-sets "^3.0.2"
