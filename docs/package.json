@@ -68,7 +68,7 @@
     "ember-code-snippet": "^3.0.0",
     "ember-composable-helpers": "^5.0.0",
     "ember-fetch": "^8.1.2",
-    "ember-google-maps": "^7.0.0",
+    "ember-google-maps": "file:..",
     "ember-google-maps-markerclustererplus": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
@@ -104,6 +104,5 @@
   },
   "ember": {
     "edition": "octane"
-  },
-  "dependencies": {}
+  }
 }

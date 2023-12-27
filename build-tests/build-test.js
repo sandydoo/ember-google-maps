@@ -1,4 +1,4 @@
-// You need to run `yarn install` in the template app directory before running
+// You need to run `pnpm install` in the template app directory before running
 // tests. This will be fixed when ember-google-maps is converted to a v2 addon.
 const { PreparedApp, Project } = require('scenario-tester');
 const path = require('path');
@@ -170,7 +170,7 @@ Qmodule('Built tests', function (hooks) {
   test('Treeshaking and custom component tests', async function (assert) {
     // TODO: it would be nice to pipe out stdout, and not just on promise
     // resolution.
-    let result = await app.execute('yarn test:ember', {
+    let result = await app.execute('pnpm test:ember', {
       env: { GOOGLE_MAPS_API_KEY: googleMapsApiKey },
     });
     assert.strictEqual(result.exitCode, 0, result.output);

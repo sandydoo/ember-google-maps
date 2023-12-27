@@ -35,19 +35,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - uses: wyvox/action-setup-pnpm@v2
+        with:
+          node-version: ${{ env.node-version }}
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
       - name: Run Tests
-        run: yarn test:ember
+        run: pnpm test:ember
 
   floating:
     name: "Floating Dependencies"
@@ -56,16 +52,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - uses: wyvox/action-setup-pnpm@v2
+        with:
+          node-version: ${{ env.node-version }}
+          args: '--no-lockfile'
       - name: Run Tests
-        run: yarn test:ember
+        run: pnpm test:ember
 
   build:
     name: Build Tests
@@ -74,19 +68,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+      - uses: wyvox/action-setup-pnpm@v2
+        with:
+          node-version: ${{ env.node-version }}
       - name: Install template app dependencies
         working-directory: ./build-tests/app-template
-        run: yarn install --frozen-lockfile --non-interactive
+        run: pnpm install
       - name: Run Tests
-        run: yarn test:build
+        run: pnpm test:build
 
   try-scenarios:
     name: "Scenario: ${{ matrix.try-scenario }} | optional: ${{ matrix.allow-failure }}"
@@ -116,14 +107,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-          cache: yarn
       - name: Prepare
         run: ./.github/scripts/setup-ci.sh
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - uses: wyvox/action-setup-pnpm@v2
+        with:
+          node-version: ${{ env.node-version }}
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
