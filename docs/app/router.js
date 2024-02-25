@@ -36,6 +36,7 @@ Router.map(function () {
     this.route('testing');
     this.route('clustering');
     this.route('advanced');
+    this.route('transit-layers');
   });
 
   this.route('examples', function () {

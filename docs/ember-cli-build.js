@@ -46,6 +46,7 @@ module.exports = function (defaults) {
         '/docs/info-windows',
         '/docs/controls',
         '/docs/directions',
+        '/docs/transit-layers',
         '/docs/overlays',
         '/docs/complex-ui',
         '/docs/testing',

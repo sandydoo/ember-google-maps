@@ -82,6 +82,10 @@ export default class DocsController extends ApplicationController {
       path: 'docs.directions',
       text: 'Let’s look at how to query and display routing information.',
     },
+    { title: 'Transit layers',
+      path: 'docs.transit-layers',
+      text: '',
+    },
     {
       title: 'Custom overlays',
       path: 'docs.overlays',
