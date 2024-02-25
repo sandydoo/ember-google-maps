@@ -3,7 +3,7 @@
     <section>
       <h5>Adding, removing and modifying map controls</h5>
 
-      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <var>true</var> or <var>false</var>. You can also pass in a <var>hash</var> to set further options. Learn more by following the guides at <GoogleDocs @section="controls" @type="guides">Controls Guide</GoogleDocs>.</p>
+      <p>Recall that almost anything you pass to the component is passed on as an option to the map. The options for controls are no exception. You can add or remove specific controls by setting the corresponding control variable to <var>true</var> or <var>false</var>. You can also pass in a <var>g-map/hash</var> to set further options. Learn more by following the guides at <GoogleDocs @section="controls" @type="guides">Controls Guide</GoogleDocs>.</p>
 
       <p>Let’s disable the default UI, make sure that we display the zoom control and move it to the top left.</p>
 
@@ -44,7 +44,7 @@
       @styles={{this.primaryMapStyle}}
       @disableDefaultUI={{true}}
       @zoomControl={{true}}
-      @zoomControlOptions={{hash position=this.google.maps.ControlPosition.TOP_LEFT}}
+      @zoomControlOptions={{g-map/hash position=this.google.maps.ControlPosition.TOP_LEFT}}
       class="ember-google-map-responsive" as |g|>
 
       <g.marker @lat={{this.london.lat}} @lng={{this.london.lng}} />

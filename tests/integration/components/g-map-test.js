@@ -52,7 +52,7 @@ module('Integration | Component | g map', function (hooks) {
       <GMap
         @lat={{this.lat}}
         @lng={{this.lng}}
-        @options={{hash zoom=12 zoomControl=false}} />
+        @options={{g-map/hash zoom=12 zoomControl=false}} />
     `);
 
     let { map } = await this.waitForMap();
@@ -158,7 +158,7 @@ module('Integration | Component | g map', function (hooks) {
         @lng={{this.lng}}
         @zoom={{12}}
         @onClick={{this.onClick}}
-        @events={{hash onZoomChanged=this.onZoomChanged}} />
+        @events={{g-map/hash onZoomChanged=this.onZoomChanged}} />
     `);
 
     let { map } = await this.waitForMap();
