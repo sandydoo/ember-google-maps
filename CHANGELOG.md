@@ -14,6 +14,22 @@
 
 
 
+
+## v7.1.0 (2024-02-25)
+
+#### :star: Features
+* [#189](https://github.com/sandydoo/ember-google-maps/pull/189) Add traffic, transit, and bicycling layers ([@sandydoo](https://github.com/sandydoo))
+
+#### :bug: Bug fixes
+* [#188](https://github.com/sandydoo/ember-google-maps/pull/188) Add g-map/hash helper ([@sandydoo](https://github.com/sandydoo))
+
+#### Internal
+* [#185](https://github.com/sandydoo/ember-google-maps/pull/185) Switch from yarn to pnpm ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v7.0.0 (2023-12-26)
 
 #### :boom: Breaking changes
