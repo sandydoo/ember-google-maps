@@ -14,17 +14,21 @@ import nw from 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace'
 /* eslint-enable */
 
 export default class CodeSnippet extends Component {
-  constructor() {
-    super(...arguments);
+  get snippet() {
+    return getCodeSnippet(this.args.name);
+  }
 
-    let { language, source } = getCodeSnippet(this.args.name);
+  get language() {
+    return this.args.language ?? this.snippet.language;
+  }
 
-    language = this.args.language ?? language;
-    this.languageClass = `language-${language}`;
+  get languageClass() {
+    return `language-${this.language}`;
+  }
 
-    let grammar = Prism.languages[language];
-    let highlightedCode = Prism.highlight(source, grammar, language);
-
-    this.code = htmlSafe(highlightedCode);
+  get code() {
+    let grammar = Prism.languages[this.language];
+    let highlightedCode = Prism.highlight(this.snippet.source, grammar, this.language);
+    return htmlSafe(highlightedCode);
   }
 }

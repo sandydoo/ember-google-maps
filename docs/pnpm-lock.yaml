@@ -13678,8 +13678,6 @@ packages:
     id: file:..
     name: ember-google-maps
     engines: {node: '>= 18'}
-    peerDependencies:
-      ember-source: ^3.0.0 || ^4.0.0 || ^5.0.0
     dependencies:
       '@babel/core': 7.23.6(supports-color@8.1.1)
       '@ember/string': 3.1.1
@@ -13699,6 +13697,7 @@ packages:
       tracked-maps-and-sets: 3.0.2
     transitivePeerDependencies:
       - '@glint/template'
+      - ember-source
       - supports-color
       - webpack
     dev: true
