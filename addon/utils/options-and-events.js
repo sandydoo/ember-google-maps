@@ -204,7 +204,11 @@ export function addEventListener(
   let isOnce = isOnceEvent(originalEventName);
 
   let nativeListener = (target, eventName, callback) => {
-    target.addEventListener(eventName, callback, { once: isOnce });
+    if (target?.nodeName === 'GMP-INTERNAL-AM') {
+      target.addListener(eventName, callback, { once: isOnce });
+    } else {
+      target.addEventListener(eventName, callback, { once: isOnce });
+    }
   };
   let addListener = isDom
     ? nativeListener

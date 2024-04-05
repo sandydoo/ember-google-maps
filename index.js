@@ -360,8 +360,11 @@ module.exports = {
     }
 
     if (libraries && libraries.length) {
-      params.push('libraries=' + encodeURIComponent(libraries.join(',')));
+      if (!libraries.includes('marker')) libraries.push('marker');
+    } else {
+      libraries = ['marker'];
     }
+    params.push('libraries=' + encodeURIComponent(libraries.join(',')));
 
     if (region) {
       params.push('region=' + encodeURIComponent(region));

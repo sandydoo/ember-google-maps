@@ -15,6 +15,6 @@ export default class Marker extends TypicalMapComponent {
   }
 
   newMapComponent(options = {}) {
-    return new google.maps.Marker(options);
+    return new google.maps.marker.AdvancedMarkerElement(options);
   }
 }
