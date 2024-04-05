@@ -71,6 +71,8 @@ Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
     );
 
     return new Promise((resolve, reject) => {
+      const params = new URLSearchParams(new URL(src).search);
+
       window.initGoogleMap = bind(async () => {
         for (let library of params.get('libraries').split(',')) {
           await google.maps.importLibrary(library);
@@ -78,7 +80,6 @@ Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started`,
         resolve(window.google);
       });
 
-      const params = new URLSearchParams(new URL(src).search);
       let version = params.get('version');
       let versionString = version ? `version: "${version}",` : '';
       let channel = params.get('channel');
