@@ -1,0 +1,32 @@
+<GMap
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
+  @zoom={{12}}
+  @styles={{this.myMapStyle}}
+  @scrollwheel={{false}}
+  @gestureHandling="greedy"
+  @disableDefaultUI={{true}}
+  @zoomControl={{true}}
+  @zoomControlOptions={{g-map/hash
+    position=this.google.maps.ControlPosition.TOP_LEFT}}
+  @fullscreenControl={{true}}
+  @onceOnIdle={{this.saveBounds}}
+  @onBoundsChanged={{this.saveBounds}}
+  class="ember-google-map-cover" as |map|>
+
+  {{#each this.boundedLondonLocations as |location|}}
+    <map.overlay
+      @lat={{location.lat}}
+      @lng={{location.lng}}
+      @onClick={{fn this.scrollToListing location}}
+      @onMouseover={{fn (mut location.active) true}}
+      @onMouseleave={{fn (mut location.active) false}}>
+
+      <div class="tooltip {{if location.active "active"}}">
+        £{{location.price}}
+      </div>
+
+    </map.overlay>
+  {{/each}}
+
+</GMap>

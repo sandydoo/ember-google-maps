@@ -3,135 +3,123 @@
 'use strict';
 
 const Funnel = require('broccoli-funnel');
-const MergeTrees = require('broccoli-merge-trees');
-const path = require('path');
 const chalk = require('chalk');
-const Handlebars = require('handlebars');
-const stripIndent = require('strip-indent');
-const writeFile = require('broccoli-file-creator');
 const BroccoliDebug = require('broccoli-debug');
+const VersionChecker = require('ember-cli-version-checker');
 const camelCase = require('camelcase');
+const { createHash } = require('crypto');
+const _ = require('lodash');
 
+const {
+  newIncludedList,
+  newExcludedList,
+  newExcludeComponent,
+  skipTreeshaking,
+} = require('./lib/treeshaking');
 
-const IS_COMPONENT = /components\//;
-
-function intersection(a, b) {
-  let intersection = new Set();
-
-  for (let e of b) {
-    if (a.has(e)) {
-      intersection.add(e);
-    }
-  }
-
-  return intersection;
-}
-
-function difference(a, b) {
-  let difference = new Set(a);
-
-  for (let e of b) {
-    difference.delete(e);
-  }
-
-  return difference;
-}
+const CustomComponents = require('./lib/addons/custom-components');
 
 let dependencies = {
-  'circle': ['marker'],
+  circle: ['marker'],
 };
 
-function excludeComponent(included, excluded) {
-  let shouldExclude = excludeName(included, excluded);
+let FOUND_GMAP_ADDONS = {};
 
-  return function(name) {
-    if (!IS_COMPONENT.test(name)) {
-      return false;
-    }
+let PARAMS_FOR_TREESHAKER = {
+  included: null,
+  excluded: null,
+  isProduction: true,
+};
 
-    let baseName = path.basename(name).split('.').shift();
-
-    return shouldExclude(baseName);
-  }
+function toHash(obj) {
+  return createHash('sha256').update(JSON.stringify(obj)).digest('base64');
 }
 
-function excludeName(included, excluded) {
-  return function(rawName) {
-    let name = camelCase(rawName),
-        isIncluded = included.indexOf(name) !== -1,
-        isExcluded = excluded.indexOf(name) !== -1;
-
-    if (included.length === 0 && excluded.length === 0) {
-      return false;
-    }
-
-    // Include if both included and excluded
-    if (isIncluded && isExcluded) {
-      return false;
-    }
-
-    // Only included
-    if (included.length && excluded.length === 0) {
-      return !isIncluded;
-    }
-
-    // Only excluded
-    if (excluded.length && included.length === 0) {
-      return isExcluded;
-    }
-
-    return !isIncluded || isExcluded;
+// Copied from @embroider/test-setup. We use this to figure out when Embroider used as the build system.
+// https://github.com/embroider-build/embroider/blob/8b2c20d6dccb006c4cc51cb18504f5a489c948f2/packages/test-setup/src/index.ts#L98
+function shouldUseEmbroider(app) {
+  if (isForcedEmbroider()) {
+    return true;
   }
+  return '@embroider/core' in app.dependencies();
 }
 
+function isForcedEmbroider() {
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'embroider') {
+    return true;
+  }
+  if (process.env.EMBROIDER_TEST_SETUP_FORCE === 'classic') {
+    return false;
+  }
+
+  // Our best guess is no.
+  return false;
+}
+
+function getCustomComponentsFromOptions(options) {
+  return _.get(options, ['ember-google-maps', 'customComponents']);
+}
 
 module.exports = {
   name: require('./package').name,
 
-  options: {
-    babel: {
-      plugins: ['@babel/plugin-proposal-object-rest-spread']
-    }
-  },
-
   init() {
     this._super.init.apply(this, arguments);
-    this.debugTree = BroccoliDebug.buildDebugCallback(`ember-google-maps:${this.name}`);
+    this.debugTree = BroccoliDebug.buildDebugCallback(
+      `ember-google-maps:${this.name}`,
+    );
   },
 
-  included() {
+  included(parent) {
     this._super.included.apply(this, arguments);
 
-    let app = this._findHost(),
-        config = app.options['ember-google-maps'] || {};
+    let app = this._findHost();
 
     this.isProduction = app.isProduction;
     this.isDevelopment = !this.isProduction;
 
-    let {
-      only = [],
-      except = [],
-    } = config;
+    let config = app.options['ember-google-maps'] || {};
+
+    // Collect all of the custom components from every app and addon that
+    // includes ember-google-maps.
+    this.customComponents = CustomComponents.for(app)
+      .useMergeTactic(config.mergeCustomComponents)
+      .add(parent.name, getCustomComponentsFromOptions(parent.options));
+
+    // Set up treeshaking
+
+    // Don’t manipulate the broccoli trees when using Embroider. Things will
+    // break. Just clear out the template exports and Embroider will do the
+    // rest.
+    this.isUsingEmbroider = shouldUseEmbroider(app);
+
+    let { only = [], except = [] } = config;
 
     only = only.map(camelCase);
     except = except.map(camelCase);
 
-    let included = this.createIncludedList(only, except),
-        excluded = this.createExcludedList(only, except);
+    let included = newIncludedList(only, except);
+    let excluded = newExcludedList(only, except);
 
     if (this.isProduction) {
       excluded.push('warnMissingComponent');
     }
 
-    // Ensure that we include the base map components.
+    // Include the base map components and any dependencies
     if (included.length) {
-      included.push('gMap', 'canvas', 'mapComponent', 'addonFactory');
+      included.push(
+        'gMap',
+        'canvas',
+        'mapComponent',
+        'typicalMapComponent',
+        'customComponentTemplate',
+      );
 
       if (this.isDevelopment) {
         included.push('warnMissingComponent');
       }
 
-      included.forEach(name => {
+      included.forEach((name) => {
         let deps = dependencies[name];
 
         if (deps) {
@@ -140,12 +128,30 @@ module.exports = {
       });
     }
 
-    this.excludeName = excludeName(included, excluded);
-    this.excludeComponent = excludeComponent(included, excluded);
+    // Excluded components that depend on excluded ones
+    if (excluded.length) {
+      excluded.forEach((name) => {
+        Object.entries(dependencies).forEach(([dependant, dependencies]) => {
+          if (dependencies.includes(name)) {
+            excluded.push(dependant);
+          }
+        });
+      });
+    }
 
-    this.skipTreeshaking =
-      (!included || included.length === 0) &&
-      (!excluded || excluded.length === 0);
+    this.excludeComponent = newExcludeComponent(included, excluded);
+
+    this.skipTreeshaking = skipTreeshaking(included, excluded);
+
+    // Save treeshaking params for Babel
+    Object.assign(PARAMS_FOR_TREESHAKER, {
+      included: included,
+      excluded: excluded,
+      isProduction: this.isProduction,
+    });
+
+    // Get “addons for this addon”™️
+    Object.assign(FOUND_GMAP_ADDONS, this.getAddonsFromProject(this.project));
   },
 
   config(env, config) {
@@ -158,12 +164,10 @@ module.exports = {
   treeForAddon(tree) {
     tree = this.debugTree(tree, 'addon-tree:input');
 
-    let addonFactoryTree = this.createAddonFactoryTree('templates/components');
-    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    tree = this.debugTree(tree, 'addon-tree:with-addon-factory');
-
-    tree = this.filterComponents(tree);
-    tree = this.debugTree(tree, 'addon-tree:post-filter');
+    if (!this.isUsingEmbroider) {
+      tree = this.filterComponents(tree);
+      tree = this.debugTree(tree, 'addon-tree:post-filter');
+    }
 
     // Run super now, which processes and removes `.hbs`` template files.
     tree = this._super.treeForAddon.call(this, tree);
@@ -172,73 +176,129 @@ module.exports = {
     return tree;
   },
 
-  // This hook is deprecated in Ember-CLI 3.13+.
-  // In older versions, it still runs and seems to overwrite our work in
-  // `treeForAddon`.
-  treeForAddonTemplates() {
-    let tree = this._super.treeForAddonTemplates.apply(this, arguments);
-    tree = this.debugTree(tree, 'addon-templates-tree:input');
+  doesNeedEmbroiderHack() {
+    const checker = new VersionChecker(this.project);
+    const embroider = checker.for('@embroider/core');
+    const embroiderTest = checker.for('@embroider/test-setup');
 
-    let addonFactoryTree = this.createAddonFactoryTree('components');
-    tree = new MergeTrees([tree, addonFactoryTree], { overwrite: true });
-    tree = this.debugTree(tree, 'addon-templates-tree:with-addon-factory');
-
-    tree = this.filterComponents(tree);
-    tree = this.debugTree(tree, 'addon-templates-tree:post-filter');
-
-    return tree;
-  },
-
-  createAddonFactoryTree(templatePath) {
-    let AddonRegistry = require('./lib/broccoli/addon-registry');
-
-    let addons = new AddonRegistry(this.project).components.concat([
-      { key: 'marker', component: 'g-map/marker' },
-      { key: 'circle', component: 'g-map/circle' },
-      { key: 'polyline', component: 'g-map/polyline' },
-      { key: 'infoWindow', component: 'g-map/info-window' },
-      { key: 'overlay', component: 'g-map/overlay' },
-      { key: 'control', component: 'g-map/control' },
-      { key: 'autocomplete', component: 'g-map/autocomplete' },
-      { key: 'directions', component: 'g-map/directions' },
-      { key: 'route', component: 'g-map/route' }
-    ]);
-
-    if (this.isProduction) {
-      // Exclude components that we don't want in the production build.
-      addons = addons.filter(({ key }) => !this.excludeName(key));
-
-    } else {
-      // Replace an excluded component with a debug component in development and
-      // testing. This component should throw an assertion to warn the user of
-      // misconfigured treeshaking.
-      addons = addons.map(component => {
-        let { key } = component;
-
-        if (this.excludeName(key)) {
-          return {
-            key,
-            component: '-private-api/warn-missing-component',
-          };
-        }
-
-        return component;
-      });
+    if (
+      embroider.lt('1.9.0') ||
+      (embroiderTest.lt('1.9.0') && isForcedEmbroider())
+    ) {
+      return true;
     }
 
-    let template = Handlebars.compile(stripIndent(`
-      \\{{yield
-          (hash
-            {{#each addons as |addon|}}
-              {{addon.key}}=(component "{{addon.component}}" map=map _internalAPI=_internalAPI gMap=gMap _name="{{addon.key}}")
-            {{/each}}
-          )
-        }}
-    `));
+    return false;
+  },
 
-    return writeFile(
-      `${templatePath}/-private-api/addon-factory.hbs`,
-      template({ addons })
+  setupPreprocessorRegistry(type, registry) {
+    if (this.doesNeedEmbroiderHack()) {
+      // `type === 'self'` is broken in older Embroider versions. It doesn’t seem
+      // to correctly pass the plugins to `broccoli-babel-transpiler`. This works
+      // for some reason.
+      if (type === 'parent') {
+        this._setupCanvasPlugin(registry);
+        this._setupAddonPlugin(registry);
+        this._setupTreeshakerPlugin(registry);
+      }
+    } else {
+      // The canvas plugin should run on `self` and `parent`.
+      this._setupCanvasPlugin(registry);
+
+      if (type === 'self') {
+        // The addon plugin should run on `self`.
+        this._setupAddonPlugin(registry);
+
+        this._setupTreeshakerPlugin(registry);
+      }
+    }
+  },
+
+  _setupCanvasPlugin(registry) {
+    let canvasPlugin = this._canvasBuildPlugin();
+    registry.add('htmlbars-ast-plugin', canvasPlugin);
+  },
+
+  _setupAddonPlugin(registry) {
+    let addonFactoryPlugin = this._addonFactoryPlugin(FOUND_GMAP_ADDONS);
+    registry.add('htmlbars-ast-plugin', addonFactoryPlugin);
+  },
+
+  _setupTreeshakerPlugin(registry) {
+    let treeshakerPlugin = this._treeshakerPlugin(PARAMS_FOR_TREESHAKER);
+    registry.add('htmlbars-ast-plugin', treeshakerPlugin);
+  },
+
+  _addonFactoryPlugin(addons = {}) {
+    const name = 'ember-google-maps:addon-factory';
+    const AddonFactory = require('./lib/ast-transforms/addon-factory')(addons);
+
+    return {
+      name,
+      plugin: AddonFactory,
+      baseDir() {
+        return __dirname;
+      },
+      cacheKey() {
+        return `${name}:${toHash(FOUND_GMAP_ADDONS)}`;
+      },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_addonFactoryPlugin',
+        params: FOUND_GMAP_ADDONS,
+      },
+    };
+  },
+
+  _treeshakerPlugin(params = {}) {
+    const name = 'ember-google-maps:treeshaker';
+    const Treeshaker = require('./lib/ast-transforms/treeshaker')(params);
+
+    return {
+      name,
+      plugin: Treeshaker,
+      baseDir() {
+        return __dirname;
+      },
+      cacheKey() {
+        return `${name}:${toHash(PARAMS_FOR_TREESHAKER)}`;
+      },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_treeshakerPlugin',
+        params: PARAMS_FOR_TREESHAKER,
+      },
+    };
+  },
+
+  _canvasBuildPlugin() {
+    const name = 'ember-google-maps:canvas-enforcer';
+
+    return {
+      name,
+      plugin: require('./lib/ast-transforms/canvas-enforcer'),
+      baseDir() {
+        return __dirname;
+      },
+      cacheKey() {
+        return name;
+      },
+      parallelBabel: {
+        requireFile: __filename,
+        buildUsing: '_canvasBuildPlugin',
+        params: {},
+      },
+    };
+  },
+
+  getAddonsFromProject(project) {
+    const AddonRegistry = require('./lib/addons/registry');
+    let componentsFromAddons = new AddonRegistry(project).components;
+
+    return Object.assign(
+      {},
+      componentsFromAddons,
+      this.customComponents.merge(),
     );
   },
 
@@ -248,30 +308,8 @@ module.exports = {
     }
 
     return new Funnel(tree, {
-      exclude: [this.excludeComponent]
+      exclude: [this.excludeComponent],
     });
-  },
-
-  createIncludedList(onlyList = [], exceptList = []) {
-    let only = new Set(onlyList),
-        except = new Set(exceptList);
-
-    if (except && except.length) {
-      return difference(only, except);
-    }
-
-    return Array.from(only);
-  },
-
-  createExcludedList(onlyList = [], exceptList = []) {
-    let only = new Set(onlyList),
-        except = new Set(exceptList);
-
-    if (only && only.length) {
-      return intersection(except, only);
-    }
-
-    return Array.from(except);
   },
 
   buildGoogleMapsUrl(config = {}) {
@@ -295,15 +333,19 @@ module.exports = {
     }
 
     if (key && client) {
-      this.warn('You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+      this.warn(
+        'You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
+      );
     }
 
     if (channel && !client) {
-      this.warn('The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started');
+      this.warn(
+        'The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
+      );
     }
 
     let src = baseUrl,
-        params = [];
+      params = [];
 
     if (version) {
       params.push('v=' + encodeURIComponent(version));
@@ -348,5 +390,5 @@ module.exports = {
 
   warn(message) {
     this.ui.writeLine(chalk.yellow(message));
-  }
+  },
 };

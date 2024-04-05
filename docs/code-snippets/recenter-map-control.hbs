@@ -1,0 +1,21 @@
+<GMap
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
+  @zoom={{12}}
+  @disableDefaultUI={{true}}
+  @mapTypeControl={{false}}
+  @zoomControl={{true}}
+  @zoomControlOptions={{g-map/hash
+    position=this.google.maps.ControlPosition.TOP_LEFT}} as |map|>
+
+  <map.marker @lat={{this.london.lat}} @lng={{this.london.lng}} />
+
+  <map.control @position="TOP_CENTER">
+    <div class="map-control">
+      <button {{fn this.recenterMap map.map}} type="button" class="btn btn-light m-2">
+        Recenter map
+      </button>
+    </div>
+  </map.control>
+
+</GMap>

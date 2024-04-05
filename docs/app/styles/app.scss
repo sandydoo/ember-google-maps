@@ -1,0 +1,325 @@
+@use "sass:math";
+
+$yellow: #f8e08e;
+$blue: #6083f2;
+$purple: #2f3061;
+$orange: #f4845f;
+$red: #db2b39;
+
+$floral-white: #fffbf7;
+
+$primary: #1F3240;
+$info: lighten($floral-white, 2);
+
+$body-bg: $floral-white;
+$body-color: black;
+$link-color: $body-color;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 768px,
+  lg: 960px,
+  xl: 1140px
+) !default;
+
+$grid-gutter-width: 2rem;
+$spacer: 2rem;
+
+$line-height-base: 1.6;
+$paragraph-margin-bottom: 2rem;
+
+$font-family-sans-serif: 'Inter', sans-serif;
+$font-family-monospace: 'IBM Plex Mono', monospace;
+$headings-font-weight: 700;
+
+$input-bg: lighten($body-bg, 2);
+
+$btn-font-weight: 600;
+
+$box-shadow: 0 15px 35px rgba(50,50,93,0.05), 0 5px 15px rgba(0,0,0,0.07);
+
+@import 'bootstrap-custom';
+@import 'base-16-github';
+
+html {
+  font-size: 15px;
+}
+
+body {
+  min-height: 100vh;
+  padding-top: $spacer * 2;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-feature-settings: "liga", "dlig", "kern";
+  letter-spacing: -0.009em;
+
+  &.white {
+    background: #fff;
+  }
+
+  @include media-breakpoint-up(md) {
+    padding-top: $spacer * 4;
+  }
+}
+
+// Fix color inputs
+input[type=color].form-control {
+  height: $input-height;
+}
+
+a {
+  text-decoration: underline;
+}
+
+section {
+  margin-bottom: $spacer * 3;
+}
+
+
+// Text helpers
+
+.no-link-decor {
+  color: inherit;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+var {
+  font-family: $font-family-monospace;
+  font-feature-settings: "liga" 0, "dlig" 0, "kern" 0;
+  font-weight: 500;
+  font-style: normal;
+  color: lighten($body-color, 3);
+  letter-spacing: -0.03em;
+}
+
+// Containers
+
+.container-fluid {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  max-width: 1440px;
+  @include media-breakpoint-down(xs) {
+    padding-left: inherit;
+    padding-right: inherit;
+  }
+}
+
+.container-body {
+  max-width: 46em;
+}
+
+.col-sidebar {
+  flex-shrink: 0;
+  margin-top: -0.4em;
+  margin-bottom: $spacer * 2;
+
+  @include media-breakpoint-up(sm) {
+    text-align: right;
+  }
+}
+
+.col-text {
+  max-width: 39em;
+}
+
+footer {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  padding: 12em 0 1.5em 0;
+}
+
+.shields {
+  margin-top: 0.6em;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.shield-inline {
+  height: 1.2em;
+}
+
+// Navigation
+
+.nav-link {
+  color: lighten($body-color, 45);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  padding: 0.3em 0.4em;
+}
+
+.nav-link.active {
+  color: $link-hover-color;
+}
+
+// Alerts
+
+.alerts-container {
+  position: fixed;
+  top: $grid-gutter-width;
+  right: $grid-gutter-width;
+  z-index: 2000;
+}
+
+.alert {
+  opacity: 0;
+  transition: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  &.active {
+    opacity: 1;
+
+    &.exiting {
+      opacity: 0;
+    }
+  }
+}
+
+// Doc components
+
+.doc-card {
+  background: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left-width: 4px;
+  border-left-style: solid;
+  border-radius: 6px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: $box-shadow;
+
+  &.doc-tip {
+    border-left-color: $primary;
+  }
+  &.doc-danger {
+    border-left-color: $danger;
+  }
+}
+
+// Maps
+
+.sticky-top-offset {
+  top: $grid-gutter-width;
+}
+
+.sticky-map {
+  height: 100%;
+  top: $grid-gutter-width;
+  padding: math.div($grid-gutter-width, 2);
+  padding-bottom: $grid-gutter-width;
+
+  @include media-breakpoint-down(lg) {
+    position: relative;
+    top: 0;
+  }
+}
+
+.ember-google-map {
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  margin: 0 auto;
+  box-shadow: $box-shadow;
+
+  @include media-breakpoint-down(xs) {
+    width: 100%;
+    height: auto;
+    padding-top: 100%;
+  }
+}
+
+.ember-google-map-full-width {
+  width: 100%;
+}
+
+.ember-google-map-16-9 {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  padding-top: 56.25%;
+}
+
+.ember-google-map,
+.ember-google-map > div {
+  background: $body-bg !important;
+}
+
+.ember-google-map-responsive {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  padding-top: 100%;
+  margin: 0;
+
+  @include media-breakpoint-down(md) {
+    aspect-ratio: auto;
+    height: 30em;
+    padding-top: 0;
+  }
+}
+
+.ember-google-maps-overlay {
+  position: absolute;
+}
+
+/* Tooltips */
+
+.emoji {
+  margin-right: -0.2em;
+}
+
+// Overwrite Roboto to allow emoji!
+div.gm-style {
+  font-family: $font-family-sans-serif !important;
+}
+
+.anchor-middle-bottom {
+  transform: translateX(-50%) translateY(-100%);
+}
+
+.tooltip {
+  position: relative;
+  max-width: 200px;
+  padding: 6px 10px;
+  color: $body-color;
+  background-color: $orange;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.485, 1.65, 0.545, 0.835);
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    margin: -5px;
+    background: inherit;
+    transform: rotate(45deg);
+
+    bottom: 0;
+  }
+
+  &.active {
+    transform: scale(1.25);
+    z-index: 1000;
+  }
+}
+
+.tooltip-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@import 'sweet-rentals';

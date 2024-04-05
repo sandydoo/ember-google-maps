@@ -1,202 +1,87 @@
-import Component from '@ember/component';
-import { addEventListeners, ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
-import { get } from '@ember/object';
-import { readOnly } from '@ember/object/computed';
-import { tryInvoke } from '@ember/utils';
-import { defer, resolve, reject } from 'rsvp';
+import { setOwner } from '@ember/application';
+import { setComponentManager } from '@ember/component';
+import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 
+import { MapComponentManager } from '../../component-managers/map-component-manager';
+import { addEventListeners } from 'ember-google-maps/utils/options-and-events';
 
 export function combine(base, extra) {
-  return Object.defineProperties(
-    base,
-    Object.getOwnPropertyDescriptors(extra)
-  );
+  return Object.defineProperties(base, Object.getOwnPropertyDescriptors(extra));
 }
 
 export function MapComponentAPI(source) {
+  let name = source.name ?? 'unknown';
+
   return {
     get map() {
       return source.map;
     },
 
-    get mapComponent() {
+    get [name]() {
       return source.mapComponent;
     },
 
-    get isInitialized() {
-      return source.isInitialized;
+    get mapComponent() {
+      return source.mapComponent;
     },
-
-    actions: {
-      update: () => source._updateComponent
-    }
   };
 }
 
-const NOT_READY = 1,
-      IN_PROGRESS = 2,
-      READY = 3;
+export default class MapComponent {
+  @tracked mapComponent;
 
-const MapComponentLifecycleEnum = {
-  NOT_READY,
-  IN_PROGRESS,
-  READY,
-};
+  boundEvents = [];
 
-
-/**
- * @class MapComponent
- * @module ember-google-maps/components/g-map/map-component
- * @namespace GMap
- * @extends Component
- */
-const MapComponent = Component.extend({
-  tagName: '',
-
-  _type: undefined,
-
-  mapComponentLifecycle: NOT_READY,
-
-
-  /* Options and events */
-
-  _createOptions(options) {
-    return options;
-  },
-
-  _createEvents(events) {
-    return events;
-  },
-
-  _optionsAndEvents: parseOptionsAndEvents(ignoredOptions),
-
-  _options: readOnly('_optionsAndEvents.options'),
-
-  _events: readOnly('_optionsAndEvents.events'),
-
-
-  /* Lifecycle hooks */
-
-  init() {
-    this._super(...arguments);
-
-    assert('You must set a _type property on the map component.', typeof this._type !== 'undefined');
-
-    this._registrationType = this._pluralType || `${this._type}s`;
-
-    this.isInitialized = defer();
-
-    /**
-     * An array of bound event listeners. Call `remove` on each before
-     * destroying the component.
-     */
-    this._eventListeners = new Map();
-
-    this.publicAPI = MapComponentAPI(this);
-  },
-
-  didInsertElement() {
-    this._super(...arguments);
-
-    this._internalAPI._registerComponent(this._registrationType, this.publicAPI);
-
-    this._updateOrAddComponent();
-  },
-
-  didUpdateAttrs() {
-    this._updateOrAddComponent();
-  },
-
-  willDestroyElement() {
-    this._super(...arguments);
-
-    this._eventListeners.forEach((remove) => remove());
-
-    tryInvoke(this.mapComponent, 'setMap', [null]);
-
-    this._internalAPI._unregisterComponent(this._registrationType, this.publicAPI);
-  },
-
-
-  _updateOrAddComponent() {
-    let options, events;
-
-    switch (this.mapComponentLifecycle) {
-      case READY:
-        options = this._createOptions(get(this, '_options'));
-        events = this._createEvents(get(this, '_events'));
-
-        this._updateComponent(this.mapComponent, options, events);
-        break;
-
-      case IN_PROGRESS:
-        break; // PASS
-
-      case NOT_READY:
-        if (typeof this.map === 'undefined') { break; }
-
-        this.mapComponentLifecycle = IN_PROGRESS;
-
-        options = this._createOptions(get(this, '_options'));
-        events = this._createEvents(get(this, '_events'));
-
-        resolve()
-          .then(() => this._addComponent(options, events))
-          .then(mapComponent => this._didAddComponent(mapComponent, options, events))
-          .then(() => {
-            this.isInitialized.resolve();
-            this.mapComponentLifecycle = READY;
-          })
-          .catch(() => { this.mapComponentLifecycle = NOT_READY; });
-
-        break;
-    }
-  },
-
-
-  /* Map component hooks */
-
-  /**
-   * Run when the map component is first initialized. Normally this happens as
-   * soon as the map is ready.
-   *
-   * @method _addComponent
-   * @return
-   */
-  _addComponent(/* options, events */) {
-    assert('Map components must implement the _addComponent hook.');
-    return reject();
-  },
-
-  /**
-   * Run after the map component has been initialized. This hook should be used
-   * to register events, etc.
-   *
-   * @method _didAddComponent
-   * @return
-   */
-  _didAddComponent(mapComponent, options, events) {
-    let payload = {
-      map: this.map,
-      publicAPI: this.publicAPI,
-    };
-
-    addEventListeners(mapComponent, events, payload)
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
-
-    return resolve();
-  },
-
-  /**
-   * Run when any of the attributes or watched options change.
-   *
-   * @method _updateComponent
-   * @return
-   */
-  _updateComponent(mapComponent, options /* , events */) {
-    mapComponent.setOptions(options);
+  get publicAPI() {
+    return MapComponentAPI(this);
   }
-});
 
-export { MapComponent as default, MapComponentLifecycleEnum };
+  get map() {
+    return this.context?.map;
+  }
+
+  constructor(owner, args, options, events) {
+    setOwner(this, owner);
+
+    this.args = args;
+    this.options = options;
+    this.events = events;
+
+    this.register();
+  }
+
+  setup() {}
+
+  teardown(mapComponent) {
+    this.boundEvents.forEach(({ remove }) => remove());
+
+    // Cleanup events by removing map.
+    if (mapComponent) {
+      mapComponent.setMap?.(null);
+    }
+
+    // Unregister from the parent component
+    this.onTeardown?.();
+  }
+
+  register() {
+    if (typeof this.args.getContext === 'function') {
+      let { context, remove } = this.args.getContext(this.publicAPI, this.name);
+      this.context = context;
+      this.onTeardown = remove;
+    }
+  }
+
+  /* Events */
+
+  addEventsToMapComponent(mapComponent, events = {}, payload = {}) {
+    assert('You need to pass in a map component', mapComponent);
+
+    let boundEvents = addEventListeners(mapComponent, events, payload);
+
+    this.boundEvents.concat(boundEvents);
+  }
+}
+
+setComponentManager((owner) => new MapComponentManager(owner), MapComponent);

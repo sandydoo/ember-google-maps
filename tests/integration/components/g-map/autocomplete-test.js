@@ -5,50 +5,75 @@ import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | g map/autocomplete', function(hooks) {
+module('Integration | Component | g map/autocomplete', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a pac-input', async function(assert) {
+  test('it renders an input and binds the `place_changed` event', async function (assert) {
+    assert.expect(3);
+
+    this.onPlaceChanged = () => assert.ok('Did call `place_changed`');
+
     await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.autocomplete}}
-          <input id="pac-input">
-        {{/g.autocomplete}}
-      {{/g-map}}
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.autocomplete id="custom-id" @onPlaceChanged={{this.onPlaceChanged}} />
+      </GMap>
     `);
 
-    let { autocompletes } = this.gMapAPI.components;
+    let {
+      components: { autocompletes },
+    } = await this.waitForMap();
 
-    assert.equal(autocompletes.length, 1);
+    assert.strictEqual(autocompletes.length, 1);
 
-    let input = find('input');
+    let input = find('#custom-id');
+    let autocomplete = autocompletes[0].mapComponent;
 
     assert.ok(input, 'input rendered');
-    assert.equal(input.id, 'pac-input');
-  });
-
-  test('it returns place results on search', async function(assert) {
-    assert.expect(1);
-
-    this.onSearch = () => assert.ok(true, 'place');
-
-    await render(hbs`
-      {{#g-map lat=lat lng=lng as |g|}}
-        {{#g.autocomplete onSearch=(action onSearch)}}
-          <input>
-        {{/g.autocomplete}}
-      {{/g-map}}
-    `);
-
-    let { autocompletes } = this.gMapAPI.components;
-
-    // Fetch the initialized Autocomplete component and shim the getPlace
-    // function.
-    let autocomplete = autocompletes[0].mapComponent;
-    autocomplete.getPlace = () => { return { geometry: true }; };
 
     trigger(autocomplete, 'place_changed');
+  });
+
+  test('compat: it renders an input and binds the legacy `onSearch` event', async function (assert) {
+    assert.expect(3);
+
+    this.onSearch = () => assert.ok('Did call `onSearch`');
+
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.autocomplete id="custom-id" @onSearch={{this.onSearch}} />
+      </GMap>
+    `);
+
+    let {
+      components: { autocompletes },
+    } = await this.waitForMap();
+
+    assert.strictEqual(autocompletes.length, 1);
+
+    let input = find('#custom-id');
+    let autocomplete = autocompletes[0].mapComponent;
+
+    assert.ok(input, 'input rendered');
+
+    trigger(autocomplete, 'place_changed');
+  });
+
+  test('it registers a custom input in block form', async function (assert) {
+    assert.expect(1);
+
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+        <g.autocomplete as |autocomplete|>
+          <label for="custom-id">Custom input</label>
+          <input id="custom-id" {{g-map/did-insert autocomplete.setup}} />
+        </g.autocomplete>
+      </GMap>
+    `);
+
+    await this.waitForMap();
+
+    assert.ok('Everything seems fine');
   });
 });

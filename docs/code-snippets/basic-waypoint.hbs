@@ -1,0 +1,14 @@
+<GMap
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
+  @zoom={{12}} as |map|>
+
+  <map.directions
+    @origin="Covent Garden"
+    @destination="Clerkenwell"
+    @travelMode="WALKING" as |directions|>
+
+    <directions.waypoint @location="Holborn Station" />
+
+  </map.directions>
+</GMap>

@@ -1,0 +1,5 @@
+{{#if this.container}}
+  {{#in-element this.container}}
+    <div id={{this.id}} ...attributes {{g-map/did-insert this.getControl}}>{{yield}}</div>
+  {{/in-element}}
+{{/if}}

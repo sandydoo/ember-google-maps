@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="alerts-container">
+    {{#each this.flashMessages.queue as |flash|}}
+      <FlashMessage @flash={{flash}} />
+    {{/each}}
+  </div>
+  <div class="d-md-flex">
+    <div class="col-sidebar">
+      <NavMain @links={{this.links}} />
+    </div>
+    <div class="col flex-1">
+      <main>
+        {{outlet}}
+      </main>
+      <FooterMain />
+    </div>
+  </div>
+</div>

@@ -1,1 +1,1 @@
-export { computedPromise, position } from 'ember-google-maps/utils/helpers';
+export { toLatLng, getMapInstance } from 'ember-google-maps/utils/helpers';

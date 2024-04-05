@@ -1,41 +1,11 @@
-import MapComponent from './map-component';
-import { get, set } from '@ember/object';
-import { watch } from '../../utils/options-and-events';
-import { resolve } from 'rsvp';
+import TypicalMapComponent from './typical-map-component';
 
-/**
- * A wrapper for the google.maps.Polyline class.
- *
- * @class Polyline
- * @namespace GMap
- * @module ember-google-maps/components/g-map/polyline
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  _type: 'polyline',
+export default class Polyline extends TypicalMapComponent {
+  get name() {
+    return 'polylines';
+  }
 
-  _createOptions(options) {
-    return {
-      ...options,
-      path: get(this, 'path'),
-      map: get(this, 'map'),
-    };
-  },
-
-  _addComponent(options) {
-    return resolve(
-      set(this, 'mapComponent', new google.maps.Polyline(options))
-    );
-  },
-
-  _didAddComponent() {
-    let watched = watch(this,
-      { 'path.[]': () => this._updateOrAddComponent() }
-    );
-
-    watched
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
-
-    return this._super(...arguments);
-  },
-});
+  newMapComponent(options = {}) {
+    return new google.maps.Polyline(options);
+  }
+}

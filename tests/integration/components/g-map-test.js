@@ -4,126 +4,190 @@ import { setupMapTest, trigger } from 'ember-google-maps/test-support';
 import { setupLocations } from 'dummy/tests/helpers/locations';
 import { find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { toLatLng } from 'ember-google-maps/utils/helpers';
 
-module('Integration | Component | g map', function(hooks) {
+module('Integration | Component | g map', function (hooks) {
   setupRenderingTest(hooks);
   setupMapTest(hooks);
   setupLocations(hooks);
 
-  test('it renders a map', async function(assert) {
+  test('it renders without any coordinates or options', async function (assert) {
+    // Google Maps considers all options optional, so this should just render a
+    // gray square and not throw any errors.
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12}}
+      <GMap />
     `);
 
-    let { map } = this.gMapAPI;
+    let api = await this.waitForMap();
+
+    assert.ok(api.map);
+  });
+
+  test('it renders a map', async function (assert) {
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{12}} />
+    `);
+
+    let { map } = await this.waitForMap();
 
     assert.ok(map, 'map initialized');
   });
 
-  test('it passes attributes as options to the map', async function(assert) {
+  test('it passes arguments as options to the map', async function (assert) {
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12 zoomControl=false}}
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @zoom={{12}}
+        @zoomControl={{false}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
-  test('it accepts an options hash', async function(assert) {
+  test('it accepts an options hash', async function (assert) {
     await render(hbs`
-      {{g-map lat=lat lng=lng options=(hash zoom=12 zoomControl=false)}}
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @options={{g-map/hash zoom=12 zoomControl=false}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     assert.notOk(map.zoomControl, 'zoom control disabled');
   });
 
-  test('it updates the map when attributes are changed', async function(assert) {
-    this.zoom = 12;
+  test('it updates the map when arguments are changed', async function (assert) {
+    this.setProperties({
+      lat: this.lat,
+      lng: this.lng,
+      zoom: 12,
+    });
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=zoom}}
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{this.zoom}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
-    assert.equal(map.zoom, this.zoom);
+    assert.strictEqual(map.zoom, this.zoom);
 
     this.set('zoom', 15);
 
-    assert.equal(map.zoom, this.zoom);
+    await this.waitForMap();
+
+    assert.strictEqual(map.zoom, this.zoom, 'map zoom updated');
+
+    let newLatLng = google.maps.geometry.spherical.computeOffset(
+      toLatLng(this.lat, this.lng),
+      500,
+      0,
+    );
+
+    this.set('lat', newLatLng.lat());
+    this.set('lng', newLatLng.lng());
+
+    await this.waitForMap();
+
+    assert.ok(newLatLng.equals(map.getCenter()), 'map center updated');
   });
 
-  test('it extracts events from attributes and binds them to the map', async function(assert) {
+  test('it extracts events from the arguments and binds them to the map', async function (assert) {
     assert.expect(1);
 
     this.onZoomChanged = ({ eventName }) => {
-      assert.equal(eventName, 'zoom_changed', 'zoom changed event');
+      assert.strictEqual(eventName, 'zoom_changed', 'zoom changed event');
     };
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12 onZoomChanged=(action onZoomChanged)}}
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @zoom={{12}}
+        @onZoomChanged={{this.onZoomChanged}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
 
     map.setZoom(10);
   });
 
-  test('it accepts both an events hash and individual attribute events', async function(assert) {
-    assert.expect(2);
+  test('it supports events that trigger only once', async function (assert) {
+    assert.expect(1);
 
-    this.onClick = ({ eventName }) => {
-      assert.equal(eventName, 'click', 'click attribute event');
-    };
-
-    this.onZoomChanged = ({ eventName }) => {
-      assert.equal(eventName, 'zoom_changed', 'zoom changed event from events hash');
+    this.onLoad = ({ eventName }) => {
+      assert.strictEqual(eventName, 'idle', 'map loaded and idle');
     };
 
     await render(hbs`
-      {{g-map lat=lat lng=lng zoom=12
-        onClick=(action onClick)
-        events=(hash onZoomChanged=(action onZoomChanged))}}
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @zoom={{12}}
+        @onceOnIdle={{this.onLoad}} />
     `);
 
-    let { map } = this.gMapAPI;
+    let { map } = await this.waitForMap();
+
+    map.panBy(250, 250);
+
+    await this.waitForMap();
+  });
+
+  test('it accepts both an events hash and individual attribute events', async function (assert) {
+    assert.expect(2);
+
+    this.onClick = ({ eventName }) => {
+      assert.strictEqual(eventName, 'click', 'click attribute event');
+    };
+
+    this.onZoomChanged = ({ eventName }) => {
+      assert.strictEqual(
+        eventName,
+        'zoom_changed',
+        'zoom changed event from events hash',
+      );
+    };
+
+    await render(hbs`
+      <GMap
+        @lat={{this.lat}}
+        @lng={{this.lng}}
+        @zoom={{12}}
+        @onClick={{this.onClick}}
+        @events={{g-map/hash onZoomChanged=this.onZoomChanged}} />
+    `);
+
+    let { map } = await this.waitForMap();
 
     trigger(map, 'click');
 
     map.setZoom(10);
   });
 
-  test('it calls the `onComponentsLoad` hook when all the components are ready', async function(assert) {
-    assert.expect(2);
-
-    this.onComponentsLoad = () => {
-      assert.ok('onComponentsLoad called');
-    };
-
-    await render(hbs`
-      {{#g-map lat=lat lng=lng
-        onComponentsLoad=(action onComponentsLoad) as |g|}}
-        {{g.marker lat=lat lng=lng}}
-      {{/g-map}}
-    `);
-
-    let { components: { markers } } = this.gMapAPI;
-
-    markers[0].isInitialized.promise
-      .then(() => assert.ok('Component is actually loaded'));
-  });
-
-  /**
-   * Octane support tests
-   */
-  test('it passes attributes to the default canvas', async function(assert) {
+  test('it passes attributes to the default canvas', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" />
     `);
 
+    await this.waitForMap();
+
     assert.ok(find('.attributes-test'), 'attributes passed to default canvas');
+    assert.ok(
+      find('.ember-google-map'),
+      'default class appended to attributes',
+    );
+  });
+
+  test('it renders a default canvas in block form', async function (assert) {
+    await render(hbs`
+      <GMap @lat={{this.lat}} @lng={{this.lng}} class="attributes-test" as |g|>
+      </GMap>
+    `);
+
+    assert.ok(find('.ember-google-map'), 'default canvas rendered');
   });
 });

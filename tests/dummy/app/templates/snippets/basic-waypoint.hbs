@@ -1,8 +1,0 @@
-{{#g-map lat=london.lat lng=london.lng zoom=12 as |g|}}
-  {{#g.directions
-    origin="Covent Garden"
-    destination="Clerkenwell"
-    travelMode="WALKING" as |d|}}
-    {{d.waypoint location="Holborn Station"}}
-  {{/g.directions}}
-{{/g-map}}

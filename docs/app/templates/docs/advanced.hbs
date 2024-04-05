@@ -1,0 +1,44 @@
+<div class="col-text">
+  <section>
+    <h5>Overriding the Google Maps API URL at runtime</h5>
+
+    <p>In some cases, you may want to set the URL used to load the Google Maps API while your Ember app is actually running. For example, you could dynamically set the language parameter of the URL based on the language preferences of the current user.</p>
+
+    <p>To change the URL, overwrite the <var>buildGoogleMapsURL</var> function in the google-maps-api service. It receives all of the ember-google-maps configuration options.</p>
+
+    <CodeSnippet @name="build-google-maps-url.js" />
+
+    <p>The URL can also depend on external, asynchronously loaded data. Using the localisation example, you could fetch the language preferences of the current user from an external database. While we wait for the database to respond, we can return the request promise and make sure it resolves with the correct URL for the API.</p>
+
+    <CodeSnippet @name="build-google-maps-url-async.js" />
+  </section>
+  <section>
+    <h5 id="custom-components">Custom components</h5>
+
+    <p>Sometimes the built-in components just aren't enough. Or maybe they don't quite work work the way you want them to. That's where custom components come in. You can write your own map component and then use it the same way you'd use any of the built in ones. Custom components can be registered in your <var>ember-cli-build.js</var>.</p>
+
+    <CodeSnippet @name="adding-custom-components.js" />
+
+    <CodeSnippet @name="using-custom-components.hbs" />
+
+    <p>There aren't any guides on how to write your own components yet, so the best way to learn is to copy one of the built-in components and go from there.</p>
+  </section>
+  <section>
+    <h5 id="treeshaking">Treeshaking</h5>
+
+    <p>Ember apps that rely heavily on the addon ecosystem can eventually become quite large, negatively impacting load times. Addons, like this one, serve the needs of a diverse group of developers and include features that you may never need.</p>
+
+    <p>In your <var>ember-cli-build.js</var>, you can specify which components to include or exclude from the build using <var>only</var> and <var>except</var>.</p>
+
+    <DocDanger>
+      This is an advanced feature and may break your app. Manually excluding components from your build can be quite finicky and time-consuming. Use at your own peril.
+    </DocDanger>
+
+    <CodeSnippet @name="ember-cli-build.js" />
+  </section>
+  <section>
+    <h5>Performance issues</h5>
+
+    <p>This addon relies heavily on Ember components. Components are what makes this addon simple and enjoyable to use. However, they come at a cost. Each component brings a bit of overhead that can eventually pile up into a heafty setup cost. Normally, this should not be an issue, apart from some extreme use-cases. If you intend to display thousands of markers, you should aim to create them in Javascript, or consider displaying fewer markers in the first place.</p>
+  </section>
+</div>

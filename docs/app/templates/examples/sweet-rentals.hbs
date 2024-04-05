@@ -1,0 +1,56 @@
+<div class="navbar fixed-top navbar-light">
+  <div class="navbar-brand"><b>sweet rentals</b></div>
+  <ul class="navbar-nav">
+    <li class="nav-item"><LinkTo @route="docs.complex-ui" class="btn btn-primary">Back to docs ›</LinkTo></li>
+  </ul>
+</div>
+
+<div class="container-cover">
+  <div class="content-column">
+    {{#each this.filteredRentals key="id" as |rental|}}
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-rental-card">
+        <RentalCard
+          @rental={{rental}}
+          @onMouseEnter={{this.handleMouseEnter}}
+          @onMouseLeave={{this.handleMouseLeave}} />
+      </div>
+    {{/each}}
+  </div>
+  <div class="map-column">
+    <GMap
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
+      @zoom={{12}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-cover"
+      @scrollwheel={{false}}
+      @gestureHandling="greedy"
+      @disableDefaultUI={{true}}
+      @zoomControl={{true}}
+      @zoomControlOptions={{g-map/hash
+        position=this.google.maps.ControlPosition.TOP_LEFT}}
+      @fullscreenControl={{true}}
+      @onceOnIdle={{this.saveBounds}}
+      @onBoundsChanged={{this.saveBounds}} as |g|>
+
+      {{#each this.filteredRentals key="id" as |rental index|}}
+        <g.overlay
+          @lat={{rental.lat}}
+          @lng={{rental.lng}}
+          @zIndex={{if rental.active 1000 index}}
+          @onClick={{fn this.scrollToListing rental}}
+          @onMouseover={{fn this.handleMouseEnter rental}}
+          @onMouseleave={{fn this.handleMouseLeave rental}}>
+
+          <div class="anchor-middle-bottom">
+            <div class="tooltip {{if rental.active "active"}}">
+              £{{rental.price}}
+            </div>
+          </div>
+
+        </g.overlay>
+      {{/each}}
+
+    </GMap>
+  </div>
+</div>

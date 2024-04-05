@@ -1,0 +1,40 @@
+<GMap
+  @lat={{this.london.lat}}
+  @lng={{this.london.lng}}
+  @zoom={{12}} as |map|>
+
+  {{!-- Fetch the directions --}}
+  <map.directions
+    @origin="Covent Garden"
+    @destination="Clerkenwell"
+    @travelMode="WALKING" as |directions|>
+
+    {{!-- Display the route returned by the directions query --}}
+    <directions.route
+      @draggable={{true}}
+      @polylineOptions={{g-map/hash
+        strokeColor="green"
+        strokeWeight=8
+        strokeOpacity=0.7}} as |route|>
+
+      {{!-- Add a waypoint to make sure we grab our coffee --}}
+      <d.waypoint @location="Leather Lane" />
+
+      {{!-- Use a custom helper to process the directions --}}
+      {{#each (get-route-steps route.directions) as |step|}}
+        {{!-- Display a marker for each step of the route --}}
+        <map.marker
+          @position={{step.start_location}}
+          @onClick={{toggle "showInstructions" step}} as |marker|>
+
+          {{!-- Add an infoWindow with directions for good measure --}}
+          <marker.infoWindow
+            @content={{step.instructions}}
+            @isOpen={{step.showInstructions}} />
+
+        </map.marker>
+      {{/each}}
+
+    </directions.route>
+  </map.directions>
+</GMap>

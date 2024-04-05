@@ -1,41 +1,45 @@
 import MapComponent from './map-component';
-import layout from '../../templates/components/g-map/control';
-import { ignoredOptions, parseOptionsAndEvents } from '../../utils/options-and-events';
-import { get, getProperties, set } from '@ember/object';
-import { resolve } from 'rsvp';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 
-/**
- * @class Control
- * @namespace GMap
- * @module ember-google-maps/components/g-map/control
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  layout,
+export default class Control extends MapComponent {
+  id = `ember-google-maps-control-${guidFor(this)}`;
 
-  _type: 'control',
+  @tracked
+  container = window?.document?.createElement('div');
 
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'index', 'class']),
+  // Keep track of the current control position so that it can be removed on
+  // teardown
+  lastControlPosition = null;
 
-  _addComponent() {
-    let _elementDestination = set(this, '_elementDestination', document.createElement('div'));
-    let { map, class: classNames, index } = getProperties(this, ['map', 'class', 'index']);
+  get name() {
+    return 'controls';
+  }
 
-    if (classNames) {
-      _elementDestination.classList.add(classNames);
-    }
+  setup(options) {
+    // TODO: Support an existing control position
+    let position = google.maps.ControlPosition[options.position];
 
-    if (Number.isInteger(index)) {
-     _elementDestination.index = index;
-    }
+    this.map.controls[position].push(this.controlElement);
 
-    let controlPosition = google.maps.ControlPosition[get(this, 'position')];
-    map.controls[controlPosition].push(_elementDestination);
+    // Could use {{prop}} for this (from ember-prop-modifier)
+    this.controlElement.index = options.index;
 
-    return resolve(
-      set(this, 'mapComponent', _elementDestination)
-    );
-  },
+    this.lastControlPosition = position;
 
-  _updateComponent() {},
-});
+    return this.controlElement;
+  }
+
+  teardown() {
+    let controls = this.map.controls[this.lastControlPosition];
+    let index = controls.indexOf(this.controlElement);
+
+    controls.removeAt(index);
+  }
+
+  @action
+  getControl(element) {
+    this.controlElement = element;
+  }
+}

@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-lg-7 order-2 order-lg-1">
+    <section>
+      <h5>Creating circles</h5>
+
+      <p>Circles are pretty much markers with a radius. Use the <var>circle</var> component to create a circle.</p>
+
+      <CodeSnippet @name="basic-circles.hbs" />
+
+      <DocTip @badgeText="Test">
+        Modify the radius and fill color of the circle.
+      </DocTip>
+
+      <div class="form-group">
+          <label class="col-form-label" for="radius-input">Radius</label>
+          <input id="radius-input" name="radius" class="form-control" type="number" value={{this.radius}} step="100" min="100" max="1500" {{on "input" this.updateRadius}} />
+
+          <label class="col-form-label" for="fill-color-input">Fill color (hex)</label>
+          <input id="fill-color-input" name="fillColor" type="color" class="form-control" {{on "input" this.updateFillColor}} value={{this.fillColor}} />
+      </div>
+    </section>
+
+    <p>{{this.nextPage.text}}</p>
+    <LinkToNext @nextPage={{this.nextPage}} />
+  </div>
+  <div class="col-lg-5 order-1 order-lg-2 sticky-top sticky-map">
+    <GMap
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
+      @zoom={{14}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
+      <g.circle
+        @lat="51.507568"
+        @lng="-0.127762"
+        @radius={{this.radius}}
+        @fillColor={{this.fillColor}}
+        @fillOpacity={{0.3}}
+        @strokeColor="darkgreen"
+        @strokeOpacity={{0.5}}
+        @strokeWeight={{1}} />
+    </GMap>
+  </div>
+</div>

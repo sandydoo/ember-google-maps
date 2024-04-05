@@ -1,0 +1,7 @@
+{{#if (has-block)}}
+  {{#if this.container}}
+    {{#in-element this.container}}
+      <div id={{this.id}} ...attributes {{g-map/did-insert this.getOverlay}}>{{yield}}</div>
+    {{/in-element}}
+  {{/if}}
+{{/if}}

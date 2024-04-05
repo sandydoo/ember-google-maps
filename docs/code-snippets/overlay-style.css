@@ -1,0 +1,8 @@
+/* Not included in the addon. Just an example. */
+.anchor-middle-bottom {
+  transform: translateX(-50%) translateY(-100%);
+}
+
+.anchor-center {
+  transform: translateX(-50%) translateY(-50%);
+}

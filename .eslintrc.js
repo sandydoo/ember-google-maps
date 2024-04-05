@@ -2,77 +2,73 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true
-    }
+    requireConfigFile: false,
+    babelOptions: {
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
+    },
   },
-  plugins: [
-    'ember'
-  ],
+  plugins: ['ember'],
   extends: [
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   globals: {
-    google: false
+    google: false,
   },
-  rules: {
-    'ember/avoid-leaking-state-in-ember-objects': 'off',
-    'ember/order-in-components': 'off',
-    'ember/no-attrs-in-components': 'off',
-    'ember/no-jquery': 'error',
-    'ember/no-observers': 'off',
-
-    // TODO: Remove in 4.0
-    'ember/no-get': 'off',
-    'ember/no-mixins': 'off',
-
-    // TODO: Fix later
-    'ember/no-legacy-test-waiters': 'off',
-    'ember/no-test-import-export': 'off'
-  },
+  rules: {},
   overrides: [
     // node files
     {
       files: [
-        '.eslintrc.js',
-        'tests/.eslintrc.js',
-        '.template-lintrc.js',
-        'ember-cli-build.js',
-        'index.js',
-        'testem.js',
-        'blueprints/*/index.js',
-        'config/**/*.js',
-        '**/config/*.js',
-        'tests/dummy/config/**/*.js',
-        'build-tests/build-test.js',
-        'lib/broccoli/**/*.js',
+        './.eslintrc.js',
+        './.prettierrc.js',
+        './.stylelintrc.js',
+        './.template-lintrc.js',
+        './ember-cli-build.js',
+        './index.js',
+        './testem.js',
+        './blueprints/*/index.js',
+        './config/**/*.js',
+        './tests/dummy/config/**/*.js',
+        './build-tests/build-test.js',
+        './build-tests/**/config/**/*.js',
+        './lib/**/*.js',
       ],
       excludedFiles: [
-        'addon/**',
-        'addon-test-support/**',
-        'app/**',
-        'lib/in-repo-pin-addon/**',
-        'tests/dummy/app/**'
+        './addon/**',
+        './addon-test-support/**',
+        './app/**',
+        './tests/dummy/app/**',
+        './lib/in-repo-pin-addon/{addon,app}/**',
       ],
       parserOptions: {
-        sourceType: 'script'
+        ecmaVersion: 2018,
+        sourceType: 'script',
       },
       env: {
         browser: false,
-        node: true
+        node: true,
       },
-      plugins: ['node'],
-      rules: Object.assign({}, require('eslint-plugin-node').configs.recommended.rules, {
-        // add your custom rules and overrides for node files here
-      })
-    }
-  ]
+      extends: ['plugin:n/recommended'],
+    },
+    {
+      // test files
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
+      rules: {
+        // Disable assert.expect errors
+        'qunit/require-expect': 'off',
+      },
+    },
+  ],
 };

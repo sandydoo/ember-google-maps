@@ -1,7 +1,0 @@
-{{#if _customCanvas}}
-  {{_customCanvas}}
-{{else}}
-  {{#if this._shouldRenderDefaultCanvas}}
-    <div id={{id}} class={{computedClasses}} style={{style}} ...attributes>{{yield}}</div>
-  {{/if}}
-{{/if}}

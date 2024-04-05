@@ -1,15 +1,16 @@
 'use strict';
 
 module.exports = {
-  extends: 'octane',
+  extends: 'recommended',
 
-  // Disable this for now. Investigate what the specific rules
-  // are and decide whether to adopt. Seems to demand some
-  // really crap styling for block components...
-  ignore: [
-    'addon/templates/components/**',
-    'lib/in-repo-pin-addon/**',
-    'tests/**',
-    'dummy/templates/**'
-  ]
+  rules: {
+    // Used in g-map.hbs. This rule is overreacting.
+    'simple-unless': 'off',
+    // Used in tests
+    'no-inline-styles': 'off',
+    // Required in g-map test where we test that the canvas is inserted.
+    'no-unused-block-params': 'off',
+  },
+
+  ignore: ['docs/**'],
 };

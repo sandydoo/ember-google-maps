@@ -1,138 +1,72 @@
-import MapComponent, { MapComponentAPI, combine } from './map-component';
-import layout from '../../templates/components/g-map/directions';
-import { ignoredOptions, parseOptionsAndEvents, watch } from '../../utils/options-and-events';
+import MapComponent from './map-component';
 import { inject as service } from '@ember/service';
-import { get, getProperties, setProperties } from '@ember/object';
-import { reads } from '@ember/object/computed';
-import { A } from '@ember/array';
-import { tryInvoke } from '@ember/utils';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
-import { schedule, scheduleOnce } from '@ember/runloop';
-import { didCancel, task } from 'ember-concurrency';
-
+import { keepLatestTask } from 'ember-concurrency';
+import { TrackedSet } from 'tracked-maps-and-sets';
+import { waitFor } from '@ember/test-waiters';
+import { untrack } from '../../effects/tracking';
 
 export function DirectionsAPI(source) {
-  let mapComponentAPI = MapComponentAPI(source);
+  return {
+    get directions() {
+      return source.directions;
+    },
 
-  return combine(
-    mapComponentAPI,
-    {
-      get directions() {
-        return source.directions;
-      },
-
-      get waypoints() {
-        return source.waypoints;
-      },
-
-      actions: {
-        route: () => source.route()
-      }
-    }
-  );
+    get waypoints() {
+      return source.waypoints;
+    },
+  };
 }
 
+// TODO should this yield something like `isRunning`? That way you can handle loading states.
+export default class Directions extends MapComponent {
+  @service googleMapsApi;
 
-/**
- * A wrapper for the google.maps.directionsService API.
- *
- * @class Directions
- * @namespace GMap
- * @module ember-google-maps/components/g-map/directions
- * @extends GMap.MapComponent
- */
-export default MapComponent.extend({
-  googleMapsApi: service(),
+  get name() {
+    return 'directions';
+  }
 
-  layout,
+  get publicAPI() {
+    return DirectionsAPI(this);
+  }
 
-  _type: 'directions',
-  _pluralType: 'directions',
+  @tracked directions = null;
 
-  directionsService: reads('googleMapsApi.directionsService'),
+  waypointComponents = new TrackedSet();
 
-  _optionsAndEvents: parseOptionsAndEvents([...ignoredOptions, 'onDirectionsChanged']),
+  get waypoints() {
+    return [...(this.options.waypoints ?? []), ...this.serializedWaypoints];
+  }
 
-  _createOptions(options) {
-    return {
-      ...options,
-      ...getProperties(
-        this,
-        [
-          'origin',
-          'destination',
-          'travelMode',
-          'waypoints',
-        ]
-      ),
-    };
-  },
-
-  init() {
-    this._super(...arguments);
-
-    this.waypoints = A();
-
-    this.publicAPI = DirectionsAPI(this);
-  },
-
-  _addComponent(options) {
-    return this.route(options);
-  },
-
-  _updateComponent(_, options) {
-    return this.route(options);
-  },
-
-  _didAddComponent() {
-    let watched =
-      watch(this, {
-        'waypoints.[]': () => this._updateOrAddComponent(),
-      });
-
-    watched
-      .forEach(({ name, remove }) => this._eventListeners.set(name, remove));
-
-    return this._super(...arguments);
-  },
-
-  /**
-   * Fetch routing information from DirectionsService.
-   *
-   * @method route
-   * @public
-   */
-  route(options) {
-    return new Promise((resolve, reject) => {
-      scheduleOnce('afterRender', this, this._performRouteTask, options, resolve, reject);
+  get serializedWaypoints() {
+    return Array.from(this.waypointComponents, ({ location, stopover }) => {
+      return {
+        location,
+        stopover,
+      };
     });
-  },
+  }
 
-  _performRouteTask(options, resolve, reject) {
-    get(this, 'routeTask').perform(options)
-      .then((result) => resolve(result))
-      .catch((e) => {
-        if (!didCancel(e)) {
-          reject(e);
-        }
-      });
-  },
+  setup(options) {
+    let newOptions = { ...options, waypoints: this.waypoints };
 
-  routeTask: task(function *(options) {
-    let directions = yield get(this, 'fetchDirections').perform(options);
+    // ember-concurrency tracks its internal properties, so it ends up
+    // triggering the effect a second time once it resolves. I guess we could
+    // "changeset" the options to avoid this, but there's more. Because it runs
+    // in the same computation as this effect, you can't even check `isRunning`
+    // without triggering an error from Glimmer. That's not particularly great,
+    // and I guess the solution might have to happen upstream (scheduling or
+    // track/untrack frames). Let's see what comes out of Glimmer's effect
+    // system and revisit.
+    return untrack(() => this.fetchDirections.perform(newOptions));
+  }
 
-    setProperties(this, {
-      directions,
-      mapComponent: directions
-    });
-
-    schedule('afterRender', () => tryInvoke(this, 'onDirectionsChanged', [this.publicAPI]));
-
-    return directions;
-  }).restartable(),
-
-  fetchDirections: task(function *(options) {
-    let directionsService = yield get(this, 'directionsService');
+  @keepLatestTask
+  @waitFor
+  *fetchDirections(options = {}) {
+    let directionsService = yield this.googleMapsApi.directionsService;
 
     let request = new Promise((resolve, reject) => {
       directionsService.route(options, (response, status) => {
@@ -144,16 +78,18 @@ export default MapComponent.extend({
       });
     });
 
-    let directions = yield request;
+    this.directions = yield request;
+    this.events.onDirectionsChanged?.(this.publicAPI);
 
-    return directions;
-  }),
-
-  _registerWaypoint(waypoint) {
-    get(this, 'waypoints').pushObject(waypoint);
-  },
-
-  _unregisterWaypoint(waypoint) {
-    get(this, 'waypoints').removeObject(waypoint);
+    return this.directions;
   }
-});
+
+  // Directions can just be restarted
+  teardown() {}
+
+  @action
+  getWaypoint(waypoint) {
+    this.waypointComponents.add(waypoint);
+    return () => this.waypointComponents.delete(waypoint);
+  }
+}

@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-lg-7 order-2 order-lg-1">
+    <section>
+      <h5 id="transit-layers">Traffic, transit, and bicycling layers</h5>
+
+      <div class="btn-group" role="group" aria-label="Switch between layer">
+        <button type="button" class="btn btn-primary {{if this.isTrafficLayer "active"}}" {{on "click" (fn this.switchLayer "traffic")}}>Traffic</button>
+        <button type="button" class="btn btn-primary {{if this.isTransitLayer "active"}}" {{on "click" (fn this.switchLayer "transit")}}>Transit</button>
+        <button type="button" class="btn btn-primary {{if this.isBicyclingLayer "active"}}" {{on "click" (fn this.switchLayer "bicycling")}}>Bicycling</button>
+      </div>
+
+      <CodeSnippet @name={{this.codeSnippet}} />
+
+      <p>{{this.nextPage.text}}</p>
+      <LinkToNext @nextPage={{this.nextPage}} />
+    </section>
+
+  </div>
+  <div class="col-lg-5 order-1 order-lg-2 sticky-top sticky-map">
+    <GMap
+      @lat={{this.lat}}
+      @lng={{this.lng}}
+      @zoom={{12}}
+      @minZoom={{10}}
+      @panControl={{false}}
+      @streetViewControl={{false}}
+      class="ember-google-map-responsive" as |g|>
+      {{#if this.isTransitLayer}}
+        <g.transitLayer />
+      {{else if this.isTrafficLayer}}
+        <g.trafficLayer />
+      {{else if this.isBicyclingLayer}}
+        <g.bicyclingLayer />
+      {{/if}}
+    </GMap>
+  </div>
+</div>

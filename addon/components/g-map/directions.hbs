@@ -1,0 +1,5 @@
+{{yield (hash
+  directions=this.directions
+  route=(component "g-map/route" getContext=@getContext directions=this.directions)
+  waypoint=(component "g-map/waypoint" getContext=this.getWaypoint)
+)}}

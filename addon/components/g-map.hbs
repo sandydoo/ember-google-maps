@@ -1,0 +1,24 @@
+{{#let (component 'g-map/canvas' onCanvasReady=this.getCanvas) as |Canvas|}}
+  {{#unless (has-block-params)}}
+    <Canvas ...attributes />
+  {{/unless}}
+
+  {{yield (hash
+    map=this.map
+    canvas=Canvas
+    marker=(component 'g-map/marker' getContext=this.getComponent)
+    circle=(component 'g-map/circle' getContext=this.getComponent)
+    rectangle=(component 'g-map/rectangle' getContext=this.getComponent)
+    polyline=(component 'g-map/polyline' getContext=this.getComponent)
+    polygon=(component 'g-map/polygon' getContext=this.getComponent)
+    directions=(component 'g-map/directions' getContext=this.getComponent)
+    control=(component 'g-map/control' getContext=this.getComponent)
+    overlay=(component 'g-map/overlay' getContext=this.getComponent)
+    infoWindow=(component 'g-map/info-window' getContext=this.getComponent)
+    autocomplete=(component 'g-map/autocomplete' getContext=this.getComponent)
+    trafficLayer=(component 'g-map/traffic-layer' getContext=this.getComponent)
+    transitLayer=(component 'g-map/transit-layer' getContext=this.getComponent)
+    bicyclingLayer=(component 'g-map/bicycling-layer' getContext=this.getComponent)
+    customComponentTemplate=(component 'template' getContext=this.getComponent)
+    )}}
+{{/let}}

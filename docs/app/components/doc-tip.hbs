@@ -1,0 +1,8 @@
+<div class="doc-card {{this.cardClassNames}}">
+  <p class="m-0">
+    {{#if this.badgeText}}
+      <span class="badge {{this.badgeClassNames}}">{{this.badgeText}}</span>
+    {{/if}}
+    {{yield}}
+  </p>
+</div>

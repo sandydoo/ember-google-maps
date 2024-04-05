@@ -1,19 +1,18 @@
 import Controller from '@ember/controller';
-import CommonMapData from '../mixins/common-map-data';
-import { inject as service } from '@ember/service';
-import { get } from '@ember/object';
-import { throttle } from '@ember/runloop';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-export default Controller.extend(CommonMapData, {
-  flashMessages: service(),
+export default class ApplicationController extends Controller {
+  london = {
+    lat: '51.507568',
+    lng: '-0.127762',
+  };
 
-  actions: {
-    flashMessage(message) {
-      get(this, 'flashMessages').info(message);
-    },
+  @tracked
+  markerTooltipOpen = false;
 
-    flashMessageThrottle(message) {
-      throttle(this, 'send', 'flashMessage', message, 300, true);
-    }
+  @action
+  toggle(key, obj) {
+    obj[key] = !obj[key];
   }
-});
+}

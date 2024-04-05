@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "experimentalDecorators":true
+  },
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "vendor",
+    ".git",
+    "dist"
+  ]
+}

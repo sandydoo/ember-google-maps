@@ -1,21 +1,17 @@
-/* eslint-env node */
 'use strict';
 
-module.exports = function(environment) {
-  let ENV = {
+module.exports = function (environment) {
+  const ENV = {
     modulePrefix: 'dummy',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
     EmberENV: {
+      EXTEND_PROTOTYPES: false,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
     },
 
     APP: {
@@ -23,15 +19,11 @@ module.exports = function(environment) {
       // when it is created
     },
 
-    flashMessageDefaults: {
-      extendedTimeout: 500
-    },
-
     'ember-google-maps': {
       language: 'en',
       libraries: ['geometry', 'places'],
-      key: process.env.GOOGLE_MAPS_API_KEY
-    }
+      key: process.env.GOOGLE_MAPS_API_KEY,
+    },
   };
 
   if (environment === 'development') {

@@ -1,0 +1,22 @@
+<div class="col-text">
+  <section>
+    <h5>Installation</h5>
+
+    <CodeSnippet @name="installation.sh" @language="shell-session" />
+  </section>
+  <section>
+    <h5>Loading Google Maps</h5>
+
+    <p>You can configure the options used for loading the Google Maps API in your app’s <var>config/environment.js</var>. The <var>key</var> option is <b>required</b>. Everything else is optional, however, I strongly suggest explicitly setting the language and version options to avoid any nasty surprises.</p>
+
+    <p>As your app is built, these options will be used to generate the URL for the API. The API is automatically loaded — on-demand — only when it is needed.</p>
+
+    <CodeSnippet @name="config.js" @language="js" />
+
+    <p>If your requirements are more complex and statically building the URL is too restrictive, you can always override the URL at runtime. <LinkTo @route="docs.advanced">Learn more about the advanced options of this addon.</LinkTo></p>
+  </section>
+
+  <p>{{this.nextPage.text}}</p>
+
+  <LinkToNext @nextPage={{this.nextPage}} />
+</div>

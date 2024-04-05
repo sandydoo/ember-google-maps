@@ -1,0 +1,82 @@
+<div class="row">
+  <div class="col-lg-7 order-2 order-lg-1">
+    <section>
+      <h5>Creating info windows</h5>
+
+      <p>These are your basic, run-of-the-mill white tooltips. While the <LinkTo @route="docs.overlays">custom overlay</LinkTo> is way more customizable, these tooltips can be quite useful since they “just work”™.</p>
+
+      <p>The <var>infoWindow</var> component accepts three new arguments: <var>isOpen</var>, <var>content</var>, and <var>target</var>. For all the other options, read <GoogleDocs @section="info-window#InfoWindowOptions">InfoWindowOptions</GoogleDocs>.</p>
+
+      <p>The <var>isOpen</var> attribute can be used to control the opening and closing of the tooltip using <var>true</var> or <var>false</var>. It automatically reverts back to <var>false</var> when the user closes the info window.</p>
+
+      <p><var>content</var> lets you provide a string with text or even HTML that will be rendered in the tooltip. However, if you really want to render HTML content, I would recommend using the block form of the component. Anything defined within the block, will be rendered inside the info window.</p>
+
+      <p>The <var>target</var> attribute is used to attach the info window to a map component, like a <var>marker</var>. The <var>infoWindow</var> component yielded by the map is already attached to the map. You can override the position by overriding the <var>target</var> or setting the <var>lat</var> and <var>lng</var> coordinates manually.</p>
+
+      <p>Map components, like markers and circles, also yield their own <var>infoWindow</var>. These ones are already attached to the parent marker component, so the only thing left to do is set the <var>isOpen</var> attribute.</p>
+
+      <CodeSnippet @name="basic-info-windows.hbs" />
+
+      <DocTip @badgeText="Test">
+        Click on the marker to show / hide a tooltip or use the toggle button below.
+      </DocTip>
+
+      <div class="custom-control custom-checkbox">
+        <Input
+          id="toggle-marker-tooltip"
+          class="custom-control-input"
+          @type="checkbox"
+          @checked={{this.markerTooltipOpen}}
+          {{on "input" (toggle "markerTooltipOpen" this)}} />
+
+        <label class="custom-control-label" for="toggle-marker-tooltip">Toggle marker tooltip</label>
+      </div>
+
+      <div class="custom-control custom-checkbox">
+        <Input
+          id="toggle-map-tooltip"
+          class="custom-control-input"
+          @type="checkbox"
+          @checked={{this.mapTooltipOpen}}
+          {{on "input" (toggle "mapTooltipOpen" this)}} />
+
+        <label class="custom-control-label" for="toggle-map-tooltip">Toggle map tooltip</label>
+      </div>
+    </section>
+
+    <p>{{this.nextPage.text}}</p>
+    <LinkToNext @nextPage={{this.nextPage}} />
+  </div>
+  <div class="col-lg-5 order-1 order-lg-2 sticky-top sticky-map">
+    <GMap
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
+      @zoom={{12}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
+      <g.infoWindow
+        @lat={{this.london.lat}}
+        @lng={{this.london.lng}}
+        @isOpen={{this.mapTooltipOpen}}
+        @onCloseclick={{fn (mut this.mapTooltipOpen) false}}
+        @content="<i>Simple text tooltip</i>" />
+
+      <g.marker
+        @lat={{this.london.lat}}
+        @lng={{this.london.lng}}
+        @onClick={{toggle "markerTooltipOpen" this}} as |m|>
+
+        <m.infoWindow
+          @isOpen={{this.markerTooltipOpen}}
+          @onCloseclick={{fn (mut this.markerTooltipOpen) false}}>
+          <div class="text-center">
+            <img src="/images/doge.jpg" alt="Such doge!" width="200">
+            <div>Custom <i>HTML</i> content in infoWindow!</div>
+          </div>
+        </m.infoWindow>
+
+      </g.marker>
+    </GMap>
+  </div>
+</div>

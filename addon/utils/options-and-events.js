@@ -1,81 +1,220 @@
-import { computed } from '@ember/object';
 import { decamelize } from '@ember/string';
-import { join } from '@ember/runloop';
+import { next } from '@ember/runloop';
 
+import { HAS_NATIVE_PROXY } from './platform';
 
-const ignoredOptions = [
-  'map',
-  'lat',
-  'lng',
-  '_internalAPI',
-  'gMap',
-  'options',
-  'events',
-  '_name',
-];
+export const ignoredOptions = ['lat', 'lng', 'getContext'];
 
-function parseOptionsAndEvents(ignored = [], callback = (r) => r) {
-  let ignoredSet = new Set(ignored);
+const IGNORED = Symbol('Ignored'),
+  EVENT = Symbol('Event'),
+  OPTION = Symbol('Option'),
+  OPTIONS = Symbol('Options'),
+  EVENTS = Symbol('Events');
 
-  return computed('attrs', function() {
-    return callback(parseAttrs(ignoredSet, this.attrs));
-  });
+function isEvent(name) {
+  return name.startsWith('on');
 }
 
-function parseAttrs(ignored = new Set(), args = {}) {
-  let events = { ...args.events };
-  let options = { ...args.options };
+function isOnceEvent(name) {
+  return name.startsWith('onceOn');
+}
 
-  let entries = Object.entries(args);
+export class OptionsAndEvents {
+  whosThatProp = new Map();
 
-  entries.forEach(([k, v]) => {
-    if (isIgnored(k, ignored)) {
-      // Pass
-    } else if (isEvent(k)) {
-      events[k] = v;
+  [OPTION] = new Set();
+  [EVENT] = new Set();
+
+  constructor(args) {
+    this.args = args;
+
+    this.ignoredSet = new Set(ignoredOptions);
+
+    // Sort and cache the arguments by type.
+    this.parse();
+
+    let getFromArgs = this.getFromArgs.bind(this);
+
+    if (HAS_NATIVE_PROXY) {
+      let target = Object.create(null);
+
+      let optionsHandler = new ArgsProxyHandler(this[OPTION], getFromArgs);
+      let eventsHandler = new ArgsProxyHandler(this[EVENT], getFromArgs);
+
+      this.options = new Proxy(target, optionsHandler);
+      this.events = new Proxy(target, eventsHandler);
     } else {
-      options[k] = extractValue(v);
+      this.options = newNoProxyFallback(this[OPTION], getFromArgs);
+      this.events = newNoProxyFallback(this[EVENT], getFromArgs);
     }
+  }
+
+  getFromArgs(prop) {
+    let identity = this.whosThatProp.get(prop);
+
+    switch (identity) {
+      case OPTIONS:
+        return this.args.options[prop];
+
+      case EVENTS:
+        return this.args.events[prop];
+
+      case OPTION:
+      case EVENT:
+        return this.args[prop];
+    }
+  }
+
+  parse() {
+    for (let prop in this.args) {
+      let identity = this.identify(prop);
+
+      switch (identity) {
+        case OPTION:
+        case EVENT:
+          this[identity].add(prop);
+          this.whosThatProp.set(prop, identity);
+          break;
+
+        case OPTIONS:
+          for (let innerProp in this.args[prop]) {
+            this[OPTION].add(innerProp);
+            this.whosThatProp.set(innerProp, identity);
+          }
+          break;
+
+        case EVENTS:
+          for (let innerProp in this.args[prop]) {
+            this[EVENT].add(innerProp);
+            this.whosThatProp.set(innerProp, identity);
+          }
+          break;
+
+        case IGNORED:
+          break;
+      }
+    }
+  }
+
+  identify(prop) {
+    if (this.isIgnored(prop)) {
+      return IGNORED;
+    }
+
+    if (prop === 'options') {
+      return OPTIONS;
+    }
+
+    if (prop === 'events') {
+      return EVENTS;
+    }
+
+    if (this.isEvent(prop)) {
+      return EVENT;
+    }
+
+    return OPTION;
+  }
+
+  isEvent(prop) {
+    return isOnceEvent(prop) || isEvent(prop);
+  }
+
+  isIgnored(prop) {
+    return this.ignoredSet.has(prop);
+  }
+}
+
+class ArgsProxyHandler {
+  constructor(cache, getFromArgs) {
+    this.cache = cache;
+    this.getFromArgs = getFromArgs;
+    this.setCache = new Map();
+  }
+
+  get(_target, prop) {
+    return this.setCache.get(prop) ?? this.getFromArgs(prop);
+  }
+
+  set(_target, prop, value) {
+    if (value !== undefined) {
+      this.setCache.set(prop, value);
+    } else {
+      this.setCache.delete(prop);
+    }
+
+    // Never fail to set a value
+    return true;
+  }
+
+  has(_target, prop) {
+    return this.setCache.has(prop) || this.cache.has(prop);
+  }
+
+  ownKeys() {
+    return Array.from(
+      new Set([...this.setCache.keys(), ...this.cache.values()]),
+    );
+  }
+
+  isExtensible() {
+    return false;
+  }
+
+  getOwnPropertyDescriptor() {
+    return {
+      enumerable: true,
+      configurable: true,
+    };
+  }
+}
+
+function newNoProxyFallback(propSet, getFromArgs) {
+  let obj = {};
+
+  propSet.forEach((prop) => {
+    Object.defineProperty(obj, prop, {
+      enumerable: true,
+      configurable: true,
+      get() {
+        return obj[prop] ?? getFromArgs(prop);
+      },
+      set(prop, value) {
+        if (value === undefined) {
+          delete obj[prop];
+        } else {
+          obj[prop] = value;
+        }
+      },
+    });
   });
 
-  return { events, options };
+  return obj;
 }
-
-function isEvent(key) {
-  return key.slice(0, 2) === 'on';
-}
-
-function isIgnored(key, ignored) {
-  return ignored.has(key);
-}
-
-function extractValue(cell) {
-  if (cell && cell.constructor && Object.keys(cell).includes('value')) {
-    return cell.value;
-  }
-  return cell;
-}
-
-function watch(target, options = {}) {
-  return Object.entries(options)
-    .map(([key, callback]) => addObserver(target, key, callback));
-}
-
-function addObserver(obj, key, callback) {
-  let listener = obj.addObserver(key, callback);
-
-  return {
-    name: key,
-    listener,
-    remove: () => obj.removeObserver(key, callback)
-  };
-}
-
 
 /* Events */
 
-function addEventListener(target, originalEventName, action, payload = {}) {
-  let eventName = decamelize(originalEventName).slice(3);
+export function addEventListener(
+  target,
+  originalEventName,
+  action,
+  payload = {},
+) {
+  let isDom = target instanceof Element;
+  let isOnce = isOnceEvent(originalEventName);
+
+  let nativeListener = (target, eventName, callback) => {
+    target.addEventListener(eventName, callback, { once: isOnce });
+  };
+  let addListener = isDom
+    ? nativeListener
+    : google.maps.event[`addListener${isOnce ? 'Once' : ''}`];
+
+  let eventName = isOnce
+    ? originalEventName.slice(6) // onceOn
+    : originalEventName.slice(2); // on
+
+  eventName = decamelize(eventName);
 
   function callback(googleEvent) {
     let params = {
@@ -86,15 +225,15 @@ function addEventListener(target, originalEventName, action, payload = {}) {
       ...payload,
     };
 
-    join(target, action, params);
+    next(target, action, params);
   }
 
-  let listener = google.maps.event.addDomListener(target, eventName, callback);
+  let listener = addListener(target, eventName, callback);
 
   return {
     name: eventName,
     listener,
-    remove: () => listener.remove()
+    remove: () => listener.remove(),
   };
 }
 
@@ -109,18 +248,8 @@ function addEventListener(target, originalEventName, action, payload = {}) {
  * @return {google.maps.MapsEventListener[]} An array of bound event listeners
  *     that should be used to remove the listeners when no longer needed.
  */
-function addEventListeners(target, events, payload = {}) {
+export function addEventListeners(target, events, payload = {}) {
   return Object.entries(events).map(([originalEventName, action]) => {
     return addEventListener(target, originalEventName, action, payload);
   });
 }
-
-export {
-  addEventListener,
-  addEventListeners,
-  ignoredOptions,
-  isEvent,
-  isIgnored,
-  parseOptionsAndEvents,
-  watch
-};

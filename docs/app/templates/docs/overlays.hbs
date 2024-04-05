@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-lg-7 order-2 order-lg-1">
+    <section>
+      <h5>Custom overlays</h5>
+      <p>Now we’re getting serious. 😬 Getting your own HTML elements on the map, instead of the default markers, has always been a bit of a pain point with Google Maps. Sure, you could get away custom marker icons for some things, but what if you want to display dynamic content? Enter the humble <var>overlay</var> – the secret map-foo-voodoo passed down from one generation of front-end programmer to the next in endless StackOverflow threads. Tell me more.</p>
+    </section>
+    <section>
+    	<h5 id="about-overlays">What’s an overlay?</h5>
+
+    	<p>The Google docs actually call this an <var>OverlayView</var>. Basically, you can add any HTML element to the map as an “overlay” by messing around with DOM elements in javascript. I hope you can image that doing this manually can get messy real fast. The guides have an example where they overlay a section of a terrain map or something along those lines – very cool 🤔. What this feature is <i>way</i> more useful for are custom HTML markers! And not just plain old markers, but markers with bound data and actions and CSS animations!</p>
+
+    	<p>Let’s first talk about <i>how</i> the <var>OverlayView</var> actually works. <GoogleDocs @section="overlay-view">OverlayView</GoogleDocs> reveals that it requires us to define 3 methods: <var>onAdd</var>, <var>draw</var> and <var>onRemove</var>. Since <var>on</var>-prefixed parameters are reserved in our case, we rename the methods to <var>add</var> and <var>remove</var>. Now in <span class="ember">ember</span>-speak, these are basically equivalent to <var>insert</var>, <var>render</var> and <var>destroy</var> – three tasks <span class="ember">ember</span> components absolutely excel at! All we really have to do is wait for the map to initialise before we insert the component into the DOM and register it with the map. The <var>overlay</var> component does this and more to make it dead easy to create complex custom map elements.</p>
+    </section>
+    <section>
+    	<h5 id="creating-overlays">Creating custom overlays</h5>
+
+    	<p>Create your custom overlay using the <var>overlay</var> component. It works like most of the other components in this addon, except for one twist: you can pass a block template to the component that will be rendered on the map. This makes overlays incredibly powerful in <span class="ember">ember</span>.</p>
+
+      <p>Your imagination is the limit here. Let’s render some fake rental prices and add some fun hover effects as a start.</p>
+
+      <DocTip @badgeText="Test">
+        Hover over the overlay markers to trigger a CSS transform.
+      </DocTip>
+
+    	<CodeSnippet @name="basic-overlays.hbs" />
+    </section>
+    <section>
+      <h5>Custom options</h5>
+
+      <p>There are also two custom options:</p>
+
+      <p><var>paneName</var> – Select which map pane to render your overlay in. See <GoogleDocs @section="overlay-view#MapPanes">MapPanes</GoogleDocs> for the options. The default pane is <var>overlayMouseTarget</var>.</p>
+
+      <p><var>zIndex</var> – Set the <var>z-index</var> CSS property of the overlay. Use this to control the stack order of the order elements.</p>
+    </section>
+    <section>
+      <h5>Positioning the overlay</h5>
+
+      <DocDanger>
+        Your overlay content will not be centered over the coordinates by default. You have to do it yourself!
+      </DocDanger>
+
+      <p>While the overlay will be positioned exactly at the coordinates specified, your overlay content will expand to the bottom-right and remain <b>anchored</b> to the top-left. In other words, the top-left corner of your content will lie on the coordinates. This is probably not what you want.</p>
+
+      <p>By using the <var>transform</var> CSS property, you can move your overlay content relative to its coordinates. We’ll look at a few common examples now.</p>
+
+      <h6>Centering overlay content</h6>
+
+      <p>Let’s first center our overlay over the coordinates. To do so we will wrap our overlay content with an element and apply our transform to it.</p>
+
+      <CodeSnippet @name="overlay-centered.hbs" />
+
+      <p>Notice how the transform uses percentages. This lets us define the offset using the dimensions of the overlay content. If your content is 100px wide and 100px tall, then the above transform will move it 50px up and 50px to the left.</p>
+
+      <h6>Tooltip positioning</h6>
+
+      <p>Another common need is to center the overlay horizontally and place it above the coordinate. This is ideal for tooltips, which usually have the “tip” or “anchor” at the middle and bottom of their element.</p>
+
+      <CodeSnippet @name="overlay-tooltip.hbs" />
+
+      <p>While custom styles get the job done, you should consider adding a class to your stylesheet and use that instead. You can, of course, use other units of measurement, like pixels.</p>
+
+      <CodeSnippet @name="overlay-style.css" />
+    </section>
+
+  	<p>{{this.nextPage.text}}</p>
+
+    <LinkToNext @nextPage={{this.nextPage}} />
+  </div>
+  <div class="col-lg-5 order-1 order-lg-2 sticky-top sticky-map">
+  	<GMap
+      @lat={{this.london.lat}}
+      @lng={{this.london.lng}}
+      @zoom={{13}}
+      @styles={{this.primaryMapStyle}}
+      class="ember-google-map-responsive" as |g|>
+
+  	  {{#each this.mapData.londonLocations as |location index|}}
+    		<g.overlay
+          @lat={{location.lat}}
+          @lng={{location.lng}}
+          @zIndex={{if location.active 1000 index}}
+          @onMouseover={{fn (mut location.active) true}}
+          @onMouseleave={{fn (mut location.active) false}}>
+          <div class="anchor-middle-bottom">
+            <div class="tooltip {{if location.active "active"}}">
+      			  £{{location.price}}
+            </div>
+          </div>
+    		</g.overlay>
+  	  {{/each}}
+
+  	</GMap>
+  </div>
+</div>
