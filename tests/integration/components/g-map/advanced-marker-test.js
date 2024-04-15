@@ -125,9 +125,6 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     let isLngSame = newLatLng.lng() === newPosition.lng;
     let isLatLngSame = isLatSame && isLngSame;
 
-    assert.ok(
-      isLatLngSame,
-      'advanced marker position updated',
-    );
+    assert.ok(isLatLngSame, 'advanced marker position updated');
   });
 });
