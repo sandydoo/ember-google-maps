@@ -20,7 +20,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
 
     let {
       map,
-      components: { advancedMarkers },
+      components: { 'advanced-markers': advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
@@ -41,7 +41,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { advancedMarkers },
+      components: { 'advanced-markers': advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
@@ -57,12 +57,12 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { advancedMarkers },
+      components: { 'advanced-markers': advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
 
-    assert.true(advancedMarker.draggable);
+    assert.true(advancedMarker.gmpDraggable);
   });
 
   test('it unregisters an advanced marker on teardown', async function (assert) {
@@ -79,7 +79,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { advancedMarkers },
+      components: { 'advanced-markers': advancedMarkers },
     } = await this.waitForMap();
 
     assert.strictEqual(advancedMarkers.length, 1, 'advanced marker registered');
@@ -107,7 +107,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
 
     let newLatLng = google.maps.geometry.spherical.computeOffset(
       toLatLng(this.markerLat, this.markerLng),
-      500,
+      5000,
       0,
     );
 
@@ -117,10 +117,16 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     });
 
     let { components } = await this.waitForMap();
-    let advancedMarker = components.advancedMarkers[0].mapComponent;
+    let advancedMarker = components['advanced-markers'][0].mapComponent;
+
+    let newPosition = advancedMarker.position;
+
+    let isLatSame = newLatLng.lat() === newPosition.lat;
+    let isLngSame = newLatLng.lng() === newPosition.lng;
+    let isLatLngSame = isLatSame && isLngSame;
 
     assert.ok(
-      newLatLng.equals(advancedMarker.getPosition()),
+      isLatLngSame,
       'advanced marker position updated',
     );
   });

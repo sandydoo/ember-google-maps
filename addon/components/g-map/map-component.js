@@ -30,6 +30,7 @@ export function MapComponentAPI(source) {
 
 export default class MapComponent {
   @tracked mapComponent;
+  @tracked options;
 
   boundEvents = [];
 

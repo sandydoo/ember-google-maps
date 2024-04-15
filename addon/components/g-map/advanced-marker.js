@@ -10,6 +10,9 @@ export default class AdvancedMarker extends TypicalMapComponent {
     if (!this.args.position) {
       this.options.position = toLatLng(this.args.lat, this.args.lng);
     }
+    if (this.args.draggable) {
+      this.options.gmpDraggable = this.args.draggable;
+    }
 
     return this.options;
   }
