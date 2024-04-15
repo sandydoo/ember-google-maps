@@ -26,6 +26,7 @@ Router.map(function () {
     this.route('components');
     this.route('canvas');
     this.route('markers');
+    this.route('advanced-markers');
     this.route('circles');
     this.route('polylines');
     this.route('info-windows');

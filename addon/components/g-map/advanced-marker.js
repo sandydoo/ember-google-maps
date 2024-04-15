@@ -1,7 +1,7 @@
 import TypicalMapComponent from './typical-map-component';
 import { toLatLng } from '../../utils/helpers';
 
-export default class Marker extends TypicalMapComponent {
+export default class AdvancedMarker extends TypicalMapComponent {
   get name() {
     return 'advanced-markers';
   }
