@@ -17,6 +17,12 @@ export default class AdvancedMarker extends TypicalMapComponent {
     return this.options;
   }
 
+  update(mapComponent) {
+    super.update(mapComponent);
+    mapComponent.position = this.newOptions.position;
+    mapComponent.gmpDraggable = this.newOptions.gmpDraggable;
+  }
+
   newMapComponent(options = {}) {
     return new google.maps.marker.AdvancedMarkerElement(options);
   }
