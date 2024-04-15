@@ -57,7 +57,8 @@
     "ember-concurrency": "^3.1.1",
     "ember-modifier": "^4.1.0",
     "lodash": "^4.17.21",
-    "tracked-maps-and-sets": "^3.0.2"
+    "tracked-maps-and-sets": "^3.0.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
