@@ -28,7 +28,11 @@ export default class CodeSnippet extends Component {
 
   get code() {
     let grammar = Prism.languages[this.language];
-    let highlightedCode = Prism.highlight(this.snippet.source, grammar, this.language);
+    let highlightedCode = Prism.highlight(
+      this.snippet.source,
+      grammar,
+      this.language,
+    );
     return htmlSafe(highlightedCode);
   }
 }
