@@ -1,6 +1,7 @@
 import MapComponent from './g-map/map-component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 
 import { toLatLng } from '../utils/helpers';
 import { registerMapInstance } from '../component-managers/map-component-manager';
@@ -28,7 +29,7 @@ export default class GMap extends MapComponent {
 
   constructor(owner, args, options, events) {
     super(owner, args, options, events);
-    this.options.mapId = uuidv4();
+    this.options.mapId ??= uuidv4();
   }
 
   get publicAPI() {
