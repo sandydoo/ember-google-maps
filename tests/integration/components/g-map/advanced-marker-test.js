@@ -119,12 +119,8 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     let { components } = await this.waitForMap();
     let advancedMarker = components.advancedMarkers[0].mapComponent;
 
-    let newPosition = advancedMarker.position;
+    let newPosition = new google.maps.LatLng(advancedMarker.position);
 
-    let isLatSame = newLatLng.lat() === newPosition.lat;
-    let isLngSame = newLatLng.lng() === newPosition.lng;
-    let isLatLngSame = isLatSame && isLngSame;
-
-    assert.ok(isLatLngSame, 'advanced marker position updated');
+    assert.ok(newLatLng.equals(newPosition), 'advanced marker position updated');
   });
 });
