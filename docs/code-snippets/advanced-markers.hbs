@@ -1,0 +1,14 @@
+<GMap
+  @lat="51.507568"
+  @lng="-0.127762"
+  @zoom={{9}} as |map|>
+
+  {{#each this.londonLocations as |location|}}
+    <map.advancedMarker
+      @lat={{location.lat}}
+      @lng={{location.lng}}
+      @gmpDraggable={{true}}
+      @onClick={{this.onClick}} />
+  {{/each}}
+
+</GMap>

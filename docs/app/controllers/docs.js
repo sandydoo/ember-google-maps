@@ -65,6 +65,7 @@ export default class DocsController extends ApplicationController {
     { title: 'Components', path: 'docs.components' },
     { title: 'Canvas', path: 'docs.canvas' },
     { title: 'Markers', path: 'docs.markers' },
+    { title: 'Advanced Markers', path: 'docs.advanced-markers' },
     { title: 'Circles', path: 'docs.circles', text: 'On to circles!' },
     { title: 'Polylines', path: 'docs.polylines', text: 'Onto polylines!' },
     {
@@ -82,10 +83,7 @@ export default class DocsController extends ApplicationController {
       path: 'docs.directions',
       text: 'Let’s look at how to query and display routing information.',
     },
-    { title: 'Transit layers',
-      path: 'docs.transit-layers',
-      text: '',
-    },
+    { title: 'Transit layers', path: 'docs.transit-layers', text: '' },
     {
       title: 'Custom overlays',
       path: 'docs.overlays',

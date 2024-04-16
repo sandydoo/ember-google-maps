@@ -141,9 +141,10 @@ module('Integration | Component | g-map/info-window', function (hooks) {
           </m.infoWindow>
         </g.marker>
       </GMap>
-    `);
+  `);
 
     let infoWindow = await this.getFirstInfoWindow();
+    await waitUntil(() => isVisible(infoWindow));
 
     assert.ok(find('#info-window-test'));
     assert.ok(isVisible(infoWindow));
@@ -178,6 +179,7 @@ module('Integration | Component | g-map/info-window', function (hooks) {
     let infoWindow = await this.getFirstInfoWindow();
 
     assert.ok(find('#info-window-test'));
+    await waitUntil(() => isVisible(infoWindow));
     assert.ok(isVisible(infoWindow), 'info window is visible');
 
     trigger(infoWindow, 'closeclick');

@@ -130,7 +130,7 @@ devDependencies:
     version: file:..(ember-source@5.5.0)(webpack@5.89.0)
   ember-google-maps-markerclustererplus:
     specifier: ^1.0.1
-    version: 1.0.1(@babel/core@7.23.6)(ember-google-maps@7.0.0)(webpack@5.89.0)
+    version: 1.0.1(@babel/core@7.23.6)(ember-google-maps@7.1.0)(webpack@5.89.0)
   ember-load-initializers:
     specifier: ^2.1.2
     version: 2.1.2(@babel/core@7.23.6)
@@ -6703,7 +6703,7 @@ packages:
       - supports-color
     dev: true
 
-  /ember-google-maps-markerclustererplus@1.0.1(@babel/core@7.23.6)(ember-google-maps@7.0.0)(webpack@5.89.0):
+  /ember-google-maps-markerclustererplus@1.0.1(@babel/core@7.23.6)(ember-google-maps@7.1.0)(webpack@5.89.0):
     resolution: {integrity: sha512-vPLNBI7klqsCChbQvrvRoP5VmNB5hkMtrW9RqBXPlnAf/+42F/ZlkxfsXHWotanWnH/jkhZnOGb8DnhUdU22bw==}
     engines: {node: 10.* || >= 12}
     peerDependencies:
@@ -13182,6 +13182,11 @@ packages:
     hasBin: true
     dev: true
 
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: true
+
   /v8-compile-cache@2.4.0:
     resolution: {integrity: sha512-ocyWc3bAHBB/guyqJQVI5o4BZkPhznPYUG2ea80Gond/BgNWpap8TOmLSeeQG7bnh2KMISxskdADG59j7zruhw==}
     dev: true
@@ -13692,9 +13697,9 @@ packages:
       ember-cli-version-checker: 5.1.2
       ember-concurrency: 3.1.1(@babel/core@7.23.6)(ember-source@5.5.0)
       ember-modifier: 4.1.0(ember-source@5.5.0)
-      ember-source: 5.5.0(@babel/core@7.23.6)(@glimmer/component@1.1.2)(rsvp@4.8.5)(webpack@5.89.0)
       lodash: 4.17.21
       tracked-maps-and-sets: 3.0.2
+      uuid: 9.0.1
     transitivePeerDependencies:
       - '@glint/template'
       - ember-source

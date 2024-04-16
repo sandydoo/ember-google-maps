@@ -41,6 +41,7 @@ module.exports = function (defaults) {
         '/docs/components',
         '/docs/canvas',
         '/docs/markers',
+        '/docs/advanced-markers',
         '/docs/circles',
         '/docs/polylines',
         '/docs/info-windows',
