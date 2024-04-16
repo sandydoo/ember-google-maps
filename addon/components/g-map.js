@@ -27,9 +27,10 @@ export default class GMap extends MapComponent {
 
   components = new Set();
 
+  mapId = uuidv4();
+
   constructor(owner, args, options, events) {
     super(owner, args, options, events);
-    this.options.mapId ??= uuidv4();
   }
 
   get publicAPI() {
@@ -46,6 +47,8 @@ export default class GMap extends MapComponent {
     if (!this.args.center) {
       this.options.center = toLatLng(this.args.lat, this.args.lng);
     }
+
+    this.options.mapId ??= this.mapId;
 
     return this.options;
   }
