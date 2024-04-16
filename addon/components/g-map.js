@@ -28,10 +28,6 @@ export default class GMap extends MapComponent {
 
   mapId = uuidv4();
 
-  constructor(owner, args, options, events) {
-    super(owner, args, options, events);
-  }
-
   get publicAPI() {
     return GMapPublicAPI(this);
   }
