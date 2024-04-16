@@ -1,7 +1,6 @@
 import MapComponent from './g-map/map-component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
 
 import { toLatLng } from '../utils/helpers';
 import { registerMapInstance } from '../component-managers/map-component-manager';
