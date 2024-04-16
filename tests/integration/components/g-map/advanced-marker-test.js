@@ -20,7 +20,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
 
     let {
       map,
-      components: { 'advanced-markers': advancedMarkers },
+      components: { advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
@@ -41,7 +41,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { 'advanced-markers': advancedMarkers },
+      components: { advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
@@ -57,7 +57,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { 'advanced-markers': advancedMarkers },
+      components: { advancedMarkers },
     } = await this.waitForMap();
 
     let advancedMarker = advancedMarkers[0].mapComponent;
@@ -79,7 +79,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     `);
 
     let {
-      components: { 'advanced-markers': advancedMarkers },
+      components: { advancedMarkers },
     } = await this.waitForMap();
 
     assert.strictEqual(advancedMarkers.length, 1, 'advanced marker registered');
@@ -117,7 +117,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     });
 
     let { components } = await this.waitForMap();
-    let advancedMarker = components['advanced-markers'][0].mapComponent;
+    let advancedMarker = components.advancedMarkers[0].mapComponent;
 
     let newPosition = advancedMarker.position;
 
