@@ -3,6 +3,8 @@
     <section>
       <h5 id="markers">Creating advanced markers</h5>
 
+      <p>We encourage you to transition to these new Advanced Markers. Advanced markers provide substantial improvements over the legacy Marker class.</p>
+
       <p>You can create an advanced marker with the yielded <var>advancedMarker</var> component. Once again, you can use either <var>lat</var> and <var>lng</var>, or <var>position</var>, to set the position.</p>
 
       <p>Every attribute passed to <var>advancedMarker</var> will be passed on as an option to the advanced marker, much like with the <var>marker</var> component. Events work in the same way.</p>
@@ -30,11 +32,10 @@
       class="ember-google-map-responsive" as |g|>
 
       {{#each-in this.locations key="id" as |id location|}}
-        <g.marker
+        <g.advancedMarker
           @lat={{location.lat}}
           @lng={{location.lng}}
-          @visible={{true}}
-          @draggable={{false}}
+          @gmpDraggable={{false}}
           @onClick={{fn this.flashMessage (concat "Clicked: " location.lat ", " location.lng)}} />
       {{/each-in}}
     </GMap>
