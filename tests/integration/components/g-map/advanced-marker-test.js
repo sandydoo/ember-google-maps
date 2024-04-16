@@ -121,6 +121,9 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
 
     let newPosition = new google.maps.LatLng(advancedMarker.position);
 
-    assert.ok(newLatLng.equals(newPosition), 'advanced marker position updated');
+    assert.ok(
+      newLatLng.equals(newPosition),
+      'advanced marker position updated',
+    );
   });
 });
