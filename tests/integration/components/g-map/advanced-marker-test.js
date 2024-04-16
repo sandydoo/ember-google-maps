@@ -52,7 +52,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
   test('it sets options on an advanced marker', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
-        <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @draggable={{true}} />
+        <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @gmpDraggable={{true}} />
       </GMap>
     `);
 
@@ -73,7 +73,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
         {{#if this.showMarker}}
-          <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @draggable={{true}} />
+          <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @gmpDraggable={{true}} />
         {{/if}}
       </GMap>
     `);
