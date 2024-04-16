@@ -111,11 +111,11 @@ module('Integration | Component | g-map/info-window', function (hooks) {
   test('it attaches an info window to a marker', async function (assert) {
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
-        <g.marker @lat={{55}} @lng={{2}} as |m|>
+        <g.advancedMarker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
             @isOpen={{true}}
             @content="Testing info windows attached to markers" />
-        </g.marker>
+        </g.advancedMarker>
       </GMap>
     `);
 
@@ -132,16 +132,16 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
-        <g.marker @lat={{55}} @lng={{2}} as |m|>
+        <g.advancedMarker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
             @isOpen={{this.isOpen}}>
             <div id="info-window-test">
               An info window attached to a marker!
             </div>
           </m.infoWindow>
-        </g.marker>
+        </g.advancedMarker>
       </GMap>
-    `);
+  `);
 
     let infoWindow = await this.getFirstInfoWindow();
 
@@ -166,12 +166,12 @@ module('Integration | Component | g-map/info-window', function (hooks) {
 
     await render(hbs`
       <GMap @lat={{this.lat}} @lng={{this.lng}} @zoom={{6}} as |g|>
-        <g.marker @lat={{55}} @lng={{2}} as |m|>
+        <g.advancedMarker @lat={{55}} @lng={{2}} as |m|>
           <m.infoWindow
             @isOpen={{this.isOpen}}
             @onCloseclick={{this.closeInfoWindow}}
             @content="<div id='info-window-test'>Testing the close button!</div>"/>
-        </g.marker>
+        </g.advancedMarker>
       </GMap>
     `);
 
