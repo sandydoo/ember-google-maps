@@ -15,8 +15,8 @@ export default class AdvancedMarker extends TypicalMapComponent {
   }
 
   update(mapComponent) {
-    super.update(mapComponent);
-    mapComponent.position = this.newOptions.position;
+    Object.assign(mapComponent, this.newOptions);
+    return mapComponent;
   }
 
   newMapComponent(options = {}) {
