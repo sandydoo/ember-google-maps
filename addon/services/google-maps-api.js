@@ -18,6 +18,15 @@ export default class GoogleMapsApiService extends Service {
     return this.google.then((google) => new google.maps.DirectionsService());
   }
 
+  /**
+   * By default, this returns the config created at build time. You can
+   * use this hook to override some of the config that's used to build the URL at runtime instead.
+   *
+   * Optionally, you can return a promise that resolves with the overriden config. This
+   * allows you to use external data when building the URL. For example, you
+   * could fetch the database record for the current user for localisation
+   * purposes.
+   */
   overrideConfig(config) {
     return config;
   }
