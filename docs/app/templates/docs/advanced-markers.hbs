@@ -29,6 +29,7 @@
       @lng={{this.london.lng}}
       @zoom={{12}}
       @styles={{this.primaryMapStyle}}
+      @mapId="ember-google-maps"
       class="ember-google-map-responsive" as |g|>
 
       {{#each-in this.locations key="id" as |id location|}}
