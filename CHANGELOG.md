@@ -16,6 +16,16 @@
 
 
 
+
+## v7.2.1 (2024-04-19)
+
+#### :bug: Bug fixes
+* [#194](https://github.com/sandydoo/ember-google-maps/pull/194) Remove default mapId from the map ([@sandydoo](https://github.com/sandydoo))
+
+#### Committers: 1
+- sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v7.2.0 (2024-04-19)
 
 #### :star: Features
