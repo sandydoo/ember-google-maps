@@ -1,4 +1,5 @@
 <GMap
+  @mapId="<YOUR MAPID"
   @lat="51.507568"
   @lng="-0.127762"
   @zoom={{9}} as |map|>
@@ -7,7 +8,7 @@
     <map.advancedMarker
       @lat={{location.lat}}
       @lng={{location.lng}}
-      @gmpDraggable={{true}}
+      @gmpDraggable={{false}}
       @onClick={{this.onClick}} />
   {{/each}}
 

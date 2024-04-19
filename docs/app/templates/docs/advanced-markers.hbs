@@ -3,7 +3,11 @@
     <section>
       <h5 id="markers">Creating advanced markers</h5>
 
-      <p>The <GoogleDocs @section="advanced-markers">Advanced Marker</GoogleDocs> is Google Maps' successor to the <GoogleDocs @section="marker">Marker</GoogleDocs>.</p>
+      <p>
+        The <GoogleDocs @section="advanced-markers">Advanced Marker</GoogleDocs> is Google Maps' successor to the <GoogleDocs @section="marker">Marker</GoogleDocs>.
+        To use the advanced markers, the map must have a <GoogleDocs @type="guide" @section="get-map-id"><var>mapId</var></GoogleDocs>.
+        Legacy styling with <var>styles</var> will also be disabled.
+      </p>
 
       <p>You can create an advanced marker with the yielded <var>advancedMarker</var> component. You can use either <var>lat</var> and <var>lng</var>, or <var>position</var>, to set the position.</p>
 
@@ -28,8 +32,7 @@
       @lat={{this.london.lat}}
       @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{this.primaryMapStyle}}
-      @mapId="ember-google-maps"
+      @mapId={{this.mapId}}
       class="ember-google-map-responsive" as |g|>
 
       {{#each-in this.locations key="id" as |id location|}}
