@@ -156,7 +156,6 @@ module.exports = {
 
   config(env, config) {
     let mapConfig = config['ember-google-maps'] || {};
-    mapConfig['src'] = this.buildGoogleMapsUrl(mapConfig);
 
     return { 'ember-google-maps': mapConfig };
   },
@@ -310,82 +309,6 @@ module.exports = {
     return new Funnel(tree, {
       exclude: [this.excludeComponent],
     });
-  },
-
-  buildGoogleMapsUrl(config = {}) {
-    let {
-      baseUrl = '//maps.googleapis.com/maps/api/js',
-      channel,
-      client,
-      key,
-      language,
-      libraries,
-      protocol,
-      region,
-      version,
-      mapIds,
-    } = config;
-
-    if (!key && !client) {
-      // Since we allow configuring the URL at runtime, we don't throw an error
-      // here.
-      return '';
-    }
-
-    if (key && client) {
-      this.warn(
-        'You must specify either a Google Maps API key or a Google Maps Premium Plan Client ID, but not both. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
-      );
-    }
-
-    if (channel && !client) {
-      this.warn(
-        'The Google Maps API channel parameter is only available when using a client ID, not when using an API key. Learn more: https://ember-google-maps.sandydoo.me/docs/getting-started',
-      );
-    }
-
-    let src = baseUrl,
-      params = [];
-
-    if (version) {
-      params.push('v=' + encodeURIComponent(version));
-    }
-
-    if (client) {
-      params.push('client=' + encodeURIComponent(client));
-    }
-
-    if (channel) {
-      params.push('channel=' + encodeURIComponent(channel));
-    }
-
-    if (libraries && libraries.length) {
-      params.push('libraries=' + encodeURIComponent(libraries.join(',')));
-    }
-
-    if (region) {
-      params.push('region=' + encodeURIComponent(region));
-    }
-
-    if (language) {
-      params.push('language=' + encodeURIComponent(language));
-    }
-
-    if (key) {
-      params.push('key=' + encodeURIComponent(key));
-    }
-
-    if (mapIds) {
-      params.push('map_ids=' + encodeURIComponent(mapIds));
-    }
-
-    if (protocol) {
-      src = protocol + ':' + src;
-    }
-
-    src += '?' + params.join('&');
-
-    return src;
   },
 
   warn(message) {
