@@ -1,6 +1,6 @@
 {
   "name": "ember-google-maps",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "description": "A friendly Ember addon for working with Google Maps.",
   "keywords": [
     "ember-addon",

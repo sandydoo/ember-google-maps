@@ -15,6 +15,16 @@
 
 
 
+
+## v7.2.0 (2024-04-19)
+
+#### :star: Features
+* [#192](https://github.com/sandydoo/ember-google-maps/pull/192) feat: add advanced markers ([@colenso](https://github.com/colenso))
+
+#### Committers: 1
+- [@colenso](https://github.com/colenso)
+
+
 ## v7.1.0 (2024-02-25)
 
 #### :star: Features
