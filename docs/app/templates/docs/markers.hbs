@@ -3,7 +3,10 @@
     <section>
       <h5 id="markers">Creating markers</h5>
 
-      <p>⚠️Note: As of February 21st, 2024 (v3.56), Marker is deprecated and <LinkTo @route="docs.advanced-markers" >Advanced Marker</LinkTo> is now preferred over marker.</p>
+      <DocDanger>
+        Google Maps <a href="https://developers.google.com/maps/deprecations#googlemapsmarker_in_the_deprecated_as_of_february_2024">has deprecated the Marker</a> as of February 21st, 2024 (v3.56).
+        The "legacy" marker currently still works, but you are encouradged to switch to the new <LinkTo @route="docs.advanced-markers" >Advanced Marker</LinkTo>.
+      </DocDanger>
 
       <p>You can create a basic marker with the yielded <var>marker</var> component. Once again, you can use either <var>lat</var> and <var>lng</var>, or <var>position</var>, to set the position.</p>
 

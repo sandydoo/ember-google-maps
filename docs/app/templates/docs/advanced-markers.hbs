@@ -3,11 +3,15 @@
     <section>
       <h5 id="markers">Creating advanced markers</h5>
 
-      <p>We encourage you to transition to these new Advanced Markers. Advanced markers provide substantial improvements over the legacy Marker class.</p>
+      <p>
+        The <GoogleDocs @section="advanced-markers">Advanced Marker</GoogleDocs> is Google Maps' successor to the <GoogleDocs @section="marker">Marker</GoogleDocs>.
+        To use the advanced markers, the map must have a <GoogleDocs @type="guide" @section="get-map-id"><var>mapId</var></GoogleDocs>.
+        Legacy styling with <var>styles</var> will also be disabled.
+      </p>
 
-      <p>You can create an advanced marker with the yielded <var>advancedMarker</var> component. Once again, you can use either <var>lat</var> and <var>lng</var>, or <var>position</var>, to set the position.</p>
+      <p>You can create an advanced marker with the yielded <var>advancedMarker</var> component. You can use either <var>lat</var> and <var>lng</var>, or <var>position</var>, to set the position.</p>
 
-      <p>Every attribute passed to <var>advancedMarker</var> will be passed on as an option to the advanced marker, much like with the <var>marker</var> component. Events work in the same way.</p>
+      <p>Every attribute passed to <var>advancedMarker</var> will be passed on as an option to the advanced marker.</p>
 
       <DocTip>
         Don’t forget that these are Google Maps events, not Ember events! <LinkTo @route="docs.map">Learn about event handling ›</LinkTo>
@@ -28,7 +32,7 @@
       @lat={{this.london.lat}}
       @lng={{this.london.lng}}
       @zoom={{12}}
-      @styles={{this.primaryMapStyle}}
+      @mapId={{this.mapId}}
       class="ember-google-map-responsive" as |g|>
 
       {{#each-in this.locations key="id" as |id location|}}

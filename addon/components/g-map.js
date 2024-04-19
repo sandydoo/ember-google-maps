@@ -7,7 +7,6 @@ import { registerMapInstance } from '../component-managers/map-component-manager
 
 import { waitFor } from '@ember/test-waiters';
 import { DEBUG } from '@glimmer/env';
-import { v4 as uuidv4 } from 'uuid';
 
 function GMapPublicAPI(source) {
   return {
@@ -26,8 +25,6 @@ export default class GMap extends MapComponent {
 
   components = new Set();
 
-  mapId = uuidv4();
-
   get publicAPI() {
     return GMapPublicAPI(this);
   }
@@ -42,8 +39,6 @@ export default class GMap extends MapComponent {
     if (!this.args.center) {
       this.options.center = toLatLng(this.args.lat, this.args.lng);
     }
-
-    this.options.mapId ??= this.mapId;
 
     return this.options;
   }

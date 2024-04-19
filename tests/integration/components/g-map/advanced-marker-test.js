@@ -11,9 +11,13 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
   setupMapTest(hooks);
   setupLocations(hooks);
 
+  hooks.before(function () {
+    this.mapId = 'ember-google-maps';
+  });
+
   test('it renders an advanced-marker', async function (assert) {
     await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @mapId={{this.mapId}} as |g|>
         <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} />
       </GMap>
     `);
@@ -35,7 +39,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     this.onClick = () => assert.ok('It binds events to actions');
 
     await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @mapId={{this.mapId}} as |g|>
         <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @onClick={{this.onClick}} />
       </GMap>
     `);
@@ -51,7 +55,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
 
   test('it sets options on an advanced marker', async function (assert) {
     await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @mapId={{this.mapId}} as |g|>
         <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @gmpDraggable={{true}} />
       </GMap>
     `);
@@ -71,7 +75,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     this.set('showMarker', true);
 
     await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @mapId={{this.mapId}} as |g|>
         {{#if this.showMarker}}
           <g.advancedMarker @lat={{this.lat}} @lng={{this.lng}} @gmpDraggable={{true}} />
         {{/if}}
@@ -98,7 +102,7 @@ module('Integration | Component | g map/advanced-marker', function (hooks) {
     });
 
     await render(hbs`
-      <GMap @lat={{this.lat}} @lng={{this.lng}} as |g|>
+      <GMap @lat={{this.lat}} @lng={{this.lng}} @mapId={{this.mapId}} as |g|>
         <g.advancedMarker @lat={{this.markerLat}} @lng={{this.markerLng}}/>
       </GMap>
     `);

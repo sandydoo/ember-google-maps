@@ -130,7 +130,7 @@ devDependencies:
     version: file:..(ember-source@5.5.0)(webpack@5.89.0)
   ember-google-maps-markerclustererplus:
     specifier: ^1.0.1
-    version: 1.0.1(@babel/core@7.23.6)(ember-google-maps@7.1.0)(webpack@5.89.0)
+    version: 1.0.1(@babel/core@7.23.6)(ember-google-maps@7.2.0)(webpack@5.89.0)
   ember-load-initializers:
     specifier: ^2.1.2
     version: 2.1.2(@babel/core@7.23.6)
@@ -6703,7 +6703,7 @@ packages:
       - supports-color
     dev: true
 
-  /ember-google-maps-markerclustererplus@1.0.1(@babel/core@7.23.6)(ember-google-maps@7.1.0)(webpack@5.89.0):
+  /ember-google-maps-markerclustererplus@1.0.1(@babel/core@7.23.6)(ember-google-maps@7.2.0)(webpack@5.89.0):
     resolution: {integrity: sha512-vPLNBI7klqsCChbQvrvRoP5VmNB5hkMtrW9RqBXPlnAf/+42F/ZlkxfsXHWotanWnH/jkhZnOGb8DnhUdU22bw==}
     engines: {node: 10.* || >= 12}
     peerDependencies:
