@@ -42,10 +42,12 @@
     "test:ember-compatibility": "ember try:each",
     "test:build": "qunit build-tests/build-test.js"
   },
+  "peerDependencies": {
+    "@ember/test-helpers": ">=3.3.1"
+  },
   "dependencies": {
     "@babel/core": "^7.26.0",
     "@ember/string": "^3.1.1",
-    "@ember/test-helpers": "^3.3.1",
     "@ember/test-waiters": "^3.1.0",
     "broccoli-debug": "^0.6.5",
     "broccoli-funnel": "^3.0.8",
@@ -64,6 +66,7 @@
     "@babel/eslint-parser": "^7.25.9",
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@ember/optional-features": "^2.2.0",
+    "@ember/test-helpers": "^3.3.1",
     "@embroider/test-setup": "^3.0.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
