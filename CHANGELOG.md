@@ -17,6 +17,24 @@
 
 
 
+
+## v7.3.0 (2024-12-04)
+
+#### :bug: Bug fixes
+* [#197](https://github.com/sandydoo/ember-google-maps/pull/197) Move @ember/test-helpers to dependencies ([@glenn-vandeputte](https://github.com/glenn-vandeputte))
+
+#### :snake: Dependencies
+
+`@ember/test-helpers` was added to `peerDependencies` to fix an ember-cli warning about missing dependencies.
+
+* [#198](https://github.com/sandydoo/ember-google-maps/pull/198) deps: bump dependencies ([@sandydoo](https://github.com/sandydoo))
+* [#197](https://github.com/sandydoo/ember-google-maps/pull/197) Move @ember/test-helpers to dependencies ([@glenn-vandeputte](https://github.com/glenn-vandeputte))
+
+#### Committers: 2
+- [@glenn-vandeputte](https://github.com/glenn-vandeputte)
+- sander ([@sandydoo](https://github.com/sandydoo))
+
+
 ## v7.2.1 (2024-04-19)
 
 #### :bug: Bug fixes
