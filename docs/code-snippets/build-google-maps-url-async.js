@@ -13,10 +13,11 @@ export default GoogleMapsAPIService.extend({
   buildGoogleMapsUrl(config) {
     return this.currentUser.model()
       .then(user => {
-        return `//maps.googleapis.com/maps/api/js?key=${config.key}&language=${user.preferredLanguage}`;
+        config.language = user.preferredLanguage;
+        return config;
       })
       .catch(error => {
-        return `//maps.googleapis.com/maps/api/js?key=${config.key}`;
+        return config;
       });
   }
 });
