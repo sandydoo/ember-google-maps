@@ -71,7 +71,15 @@ export default class GMap extends MapComponent {
   @waitFor
   async pauseTestForIdle(map) {
     await new Promise((resolve) => {
-      google.maps.event.addListenerOnce(map, 'idle', () => resolve(map));
+      const abortPromise = {
+        remove: resolve,
+      };
+
+      this.boundEvents = [abortPromise, ...this.boundEvents];
+      google.maps.event.addListenerOnce(map, 'idle', () => {
+        this.boundEvents.splice(this.boundEvents.indexOf(abortPromise), 1);
+        resolve(map);
+      });
     });
   }
 
