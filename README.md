@@ -1,27 +1,21 @@
-# Ember Google Maps
+> [!IMPORTANT]
+> This project has been archived and is no longer maintained. \
+> You're encouraged to fork and maintain your own version.
+>
+> Thank you to everyone who contributed over the years! We _almost_ made it to 10 years. \
+> Most of the original Ember community has moved on to other things and so have I.
+> I'm proud of the lasting positive impact we've had on the frontend ecosystem.
+>
+> See you around!
+>
+> — sandydoo
 
-[![Latest version][npm-version-badge]][npm-url]
-[![npm][npm-downloads-badge]][npm-url]
-[![Ember Observer Score][ember-observer-badge]][ember-observer-url]
-[![Build Status][ci-badge]][ci-url]
+# Ember Google Maps
 
 A friendly [Ember][ember-url] addon for working with [Google Maps][google-maps-url].
 
 - Create and draw on your maps using Ember components.
 - Automatically load the Google Maps API on demand and safely access it across your entire app.
-
-<br>
-
-> #### Thanks for using the addon!
->
-> ember-google-maps is over 3 years old now. In that time, I’ve completely rewritten it multiple times over to support changes in both Ember and Google Maps. I’d love to keep working on this addon in my free time, but could use your support.
->
-> If you use ember-google-maps in your commercial work or find it valuable, consider leaving a donation to support on-going maintenance and API costs.
->
-> [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/sandydoo)
->
-> Thank you! 🙌🙌🙌\
-> — @sandydoo
 
 <br>
 
